@@ -12,7 +12,8 @@
     "dashboardRelevant is a role-based heuristic (client-facing sales + content + founders = true; back-office = false). Override freely.",
     "Nothing enters live metrics until confirmed=true. private=true or unresolved handles are shown in the dashboard as a labeled state, never estimated.",
     "Facebook is Pages-only in practice — personal FB profiles expose no usable public data. Leave facebook null unless the person runs a business Page.",
-    "Seeded: Manpreet Kaur handles verified against public bios. Set confirmed:true to activate the pull. All other handles await the confirm-gated resolver."
+    "TikTok is PAUSED as of 2026-07-22 by product decision. Handles are left null and the dashboard shows an \"available soon\" state rather than a zero. The TikTok adapter, normalizer and tests are untouched.",
+    "Seeded: Manpreet Kaur handles verified against public bios. 2026-07-22: six further Instagram handles supplied directly by Kirpa and marked confirmed — see sourcedFrom on each."
   ],
   "employees": [
     {
@@ -33,60 +34,65 @@
       "role": "Founder / Managing Director",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "jai.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
     },
     {
       "name": "Kamalpreet Kaur",
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "kamalpreet.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
     },
     {
       "name": "Saloni Bedi",
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "saloni.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
     },
     {
       "name": "Lipika Madan",
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "lipika.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
     },
     {
       "name": "Priyanka Jayanna",
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "priyanka.danubeproperties",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22. FLAG: the handle brands to Danube Properties, not Kirpa. Confirm this is the correct person and that the account should be counted in a Kirpa leaderboard before the next pull."
     },
     {
       "name": "Mohammad Mubeen",
@@ -429,12 +435,13 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "samaksh.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
     },
     {
       "name": "Param Singh",
