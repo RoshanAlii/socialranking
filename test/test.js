@@ -232,6 +232,47 @@ function rec(over = {}) {
     assert.ok(R.engagementRate(r) > 0);
   });
 
+  console.log('\nTIKTOK PAUSED + SUPPLIED HANDLES');
+  await t('TikTok is excluded from the default weekly pull', () => {
+    const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'src', 'ingest.js'), 'utf8');
+    const m = src.match(/arg\('--platforms',\s*'([^']+)'\)/);
+    assert.ok(m, 'default platform list should be findable');
+    assert.ok(!m[1].split(',').includes('tiktok'), 'tiktok must not be pulled while paused');
+    assert.ok(m[1].split(',').includes('instagram'), 'instagram must still be pulled');
+  });
+  await t('dashboard gates TikTok behind a flag and shows an availability notice', () => {
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    assert.ok(/const TIKTOK_ENABLED = false;/.test(html), 'flag must be present and off');
+    assert.ok(html.includes('Available soon'), 'roster must show the notice, not a bare dash');
+    assert.ok(/LIVE_PLATFORMS/.test(html), 'aggregates must run off the filtered platform list');
+    assert.ok(!/for\(const pf of \['instagram','tiktok','facebook'\]\)/.test(html),
+      'no hard-coded platform loop may bypass the flag');
+  });
+  await t('TikTok handles stay null while paused', () => {
+    const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
+    const supplied = reg.employees.filter(e => e.name !== 'Manpreet Kaur' && e.handles.instagram);
+    assert.ok(supplied.every(e => e.handles.tiktok === null), 'no new tiktok handles while paused');
+  });
+  await t('supplied Instagram handles are registered, confirmed and sourced', () => {
+    const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
+    const want = {
+      'Dr. Jai Chatha': 'jai.kirpa', 'Kamalpreet Kaur': 'kamalpreet.kirpa',
+      'Saloni Bedi': 'saloni.kirpa', 'Lipika Madan': 'lipika.kirpa',
+      'Priyanka Jayanna': 'priyanka.danubeproperties', 'Samaksh Malhotra': 'samaksh.kirpa' };
+    for (const [name, handle] of Object.entries(want)) {
+      const e = reg.employees.find(x => x.name === name);
+      assert.ok(e, name + ' must exist in the registry');
+      assert.strictEqual(e.handles.instagram, handle, name + ' handle');
+      assert.strictEqual(e.confirmed, true, name + ' must be confirm-gated open');
+      assert.ok(e.sourcedFrom, name + ' must record where the handle came from');
+    }
+  });
+  await t('a handle branded to another company is flagged, not quietly counted', () => {
+    const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
+    const e = reg.employees.find(x => x.handles.instagram === 'priyanka.danubeproperties');
+    assert.ok(/FLAG/.test(e.sourcedFrom), 'off-brand handle must carry an explicit flag');
+  });
+
   console.log(`\n${pass} passed, ${fail} failed\n`);
   process.exit(fail === 0 ? 0 : 1);
 })();
