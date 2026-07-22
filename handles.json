@@ -86,13 +86,13 @@
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": "priyanka.danubeproperties",
+        "instagram": null,
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": true,
-      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22. FLAG: the handle brands to Danube Properties, not Kirpa. Confirm this is the correct person and that the account should be counted in a Kirpa leaderboard before the next pull."
+      "confirmed": false,
+      "sourcedFrom": "REJECTED 2026-07-22. Handle supplied as Priyanka Jayanna, but the live public profile resolves to \"Priyanka Mehta\", bio: Senior sales manager @danubeproperties. Different person and a different company, so it is not counted in a Kirpa leaderboard. Supply the correct handle to re-enable."
     },
     {
       "name": "Mohammad Mubeen",
