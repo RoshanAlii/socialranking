@@ -1,0 +1,27 @@
+{
+  "_capture": {
+    "source": "clockworks/tiktok-profile-scraper",
+    "runId": "grLCu6nLNS1HHgT2F",
+    "datasetId": "MdnQ0l1Td085XbB8F",
+    "capturedAt": "2026-07-22T03:18:07.933Z",
+    "warning": "authorMeta.fans returned 0 for an account with 2183 videos and 12.8M total likes. Treated as UNRELIABLE (null), not as a real zero."
+  },
+  "username": "manpreet.kirpa",
+  "fans": 0,
+  "heart": 12800000,
+  "video": 2183,
+  "following": 0,
+  "privateAccount": false,
+  "posts": [
+    {"id":"7596634080045829384","text":"Kirpa has been awarded Top 14 H2 2025 in Dubai by Sobha Realty","createTimeISO":"2026-01-18T09:40:06.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7596634080045829384","diggCount":14800,"shareCount":367,"playCount":345100,"commentCount":325,"isPinned":true,"author":"manpreet.kirpa"},
+    {"id":"7584725657280646408","text":"Dubai is super excited to welcome Kap's Cafe","createTimeISO":"2025-12-17T07:29:23.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7584725657280646408","diggCount":9627,"shareCount":662,"playCount":363200,"commentCount":117,"isPinned":true,"author":"manpreet.kirpa"},
+    {"id":"7664965833642233089","text":"Lessons I learnt while building a business","createTimeISO":"2026-07-21T13:02:23.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7664965833642233089","diggCount":214,"shareCount":8,"playCount":4490,"commentCount":3,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7664903470389988615","text":"Would you buy this 260 Cr Penthouse in Dubai?","createTimeISO":"2026-07-21T09:00:10.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7664903470389988615","diggCount":228,"shareCount":2,"playCount":5601,"commentCount":1,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7664826184160562452","text":"Success isn't built overnight.","createTimeISO":"2026-07-21T04:00:16.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7664826184160562452","diggCount":1681,"shareCount":60,"playCount":43300,"commentCount":28,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7664594241351437569","text":"The Biggest reward for me while building a business","createTimeISO":"2026-07-20T13:00:16.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7664594241351437569","diggCount":2919,"shareCount":39,"playCount":82700,"commentCount":63,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7664487027664080148","text":"Did you know? Foreign investors have poured 86% more money into Dubai real estate","createTimeISO":"2026-07-20T06:04:15.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7664487027664080148","diggCount":75,"shareCount":1,"playCount":2082,"commentCount":1,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7664280594171399442","text":"9 days until I move to my new house","createTimeISO":"2026-07-19T16:43:10.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7664280594171399442","diggCount":1191,"shareCount":21,"playCount":53400,"commentCount":58,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7663865292405181714","text":"10 days before I shift to my new house","createTimeISO":"2026-07-18T13:51:37.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7663865292405181714","diggCount":2339,"shareCount":43,"playCount":84800,"commentCount":85,"isPinned":false,"author":"manpreet.kirpa"},
+    {"id":"7663714399256956180","text":"Proof That Men's don't listen","createTimeISO":"2026-07-18T04:06:05.000Z","webVideoUrl":"https://www.tiktok.com/@manpreet.kirpa/video/7663714399256956180","diggCount":428,"shareCount":9,"playCount":24100,"commentCount":16,"isPinned":false,"author":"manpreet.kirpa"}
+  ]
+}

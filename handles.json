@@ -1,0 +1,548 @@
+{
+  "company": "Kirpa Properties L.L.C",
+  "orn": "49046",
+  "source": "kirpaproperties.com — 'Our Team' section, captured 2026-07-21",
+  "platforms": [
+    "instagram",
+    "tiktok",
+    "facebook"
+  ],
+  "notes": [
+    "Handles are NOT published on the official site — only company social links exist. Each handle below must be resolved and confirmed before any live pull.",
+    "dashboardRelevant is a role-based heuristic (client-facing sales + content + founders = true; back-office = false). Override freely.",
+    "Nothing enters live metrics until confirmed=true. private=true or unresolved handles are shown in the dashboard as a labeled state, never estimated.",
+    "Facebook is Pages-only in practice — personal FB profiles expose no usable public data. Leave facebook null unless the person runs a business Page.",
+    "Seeded: Manpreet Kaur handles verified against public bios. Set confirmed:true to activate the pull. All other handles await the confirm-gated resolver."
+  ],
+  "employees": [
+    {
+      "name": "Manpreet Kaur",
+      "role": "Founder / CEO",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": "manpreet.kirpa",
+        "tiktok": "manpreet.kirpa",
+        "facebook": "61569944367329"
+      },
+      "private": null,
+      "confirmed": true,
+      "verifiedFromBio": "2026-07-21 verified from public bios: IG @manpreet.kirpa (723K, bio: Founder & CEO @kirpa.properties), TikTok @manpreet.kirpa (447.4K, bio: Founder & CEO @kirpa properties), Facebook Page \"Manpreet Kirpa\" id 61569944367329 (172.7K likes, bio: Founder & CEO at Kirpa Properties). FB is a Page, not a personal profile, so it is in scope."
+    },
+    {
+      "name": "Dr. Jai Chatha",
+      "role": "Founder / Managing Director",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Kamalpreet Kaur",
+      "role": "Team Leader – Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Saloni Bedi",
+      "role": "Team Leader – Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Lipika Madan",
+      "role": "Team Leader – Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Priyanka Jayanna",
+      "role": "Team Leader – Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Mohammad Mubeen",
+      "role": "Team Leader – Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Preety Vijayvargiya",
+      "role": "Senior Consultant – Secondary (Commercial)",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Puja Maheshwari",
+      "role": "Senior Consultant – Secondary Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Vaishali Arora",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sukhpreet Kaur",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Barkha Kalia",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Kirti Anil Walke",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sahil Bedi",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Riya Bhardwaj",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Geethika Sri Vyshnavi",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Kavita Choudhary",
+      "role": "Consultant – Secondary Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sarvnihal Singh",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Aasfa Wahab Shaikh",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Jagraaj Singh",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Akshay Rajendra",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Kirat Singh Sapra",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sara Banu",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Ritika Kodwani",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Jitendra Makhija",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Arbaaz Ali Khan",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sahil Mendiratta",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Nikita Lal Tekwani",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sleeja Misra",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Lovepreet Singh",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Mona Shah",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Spoorthi Hassan",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Faiyaz Mohmedfaruk",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Ameer Agha Shirazi",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Samaksh Malhotra",
+      "role": "Consultant – Offplan Sales",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Param Singh",
+      "role": "Head of Content",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Anmol Singh",
+      "role": "Content Executive",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Amandeep Singh",
+      "role": "Content Executive",
+      "dashboardRelevant": true,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Janisha Puri",
+      "role": "HR Executive",
+      "dashboardRelevant": false,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Inderjeet Kaur",
+      "role": "Accountant",
+      "dashboardRelevant": false,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Urvashi Karnani",
+      "role": "Administrator",
+      "dashboardRelevant": false,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Navjot Kaur",
+      "role": "Operations Coordinator",
+      "dashboardRelevant": false,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Sukhpreet Singh",
+      "role": "Pilot",
+      "dashboardRelevant": false,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    },
+    {
+      "name": "Farheen",
+      "role": "Front Desk Executive",
+      "dashboardRelevant": false,
+      "handles": {
+        "instagram": null,
+        "tiktok": null,
+        "facebook": null
+      },
+      "private": null,
+      "confirmed": false
+    }
+  ]
+}

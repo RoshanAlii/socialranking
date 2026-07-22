@@ -1,0 +1,31 @@
+{
+  "_capture": {
+    "source": "apify/instagram-profile-scraper",
+    "runId": "grfQYvPMS2wGmju96",
+    "datasetId": "Qjc3WN4zjoMjfQAOV",
+    "capturedAt": "2026-07-22T03:12:27.844Z",
+    "note": "Live public data. Verbatim metrics from the Apify run; media/CDN URLs and unused fields trimmed."
+  },
+  "username": "manpreet.kirpa",
+  "fullName": "Manpreet kirpa",
+  "followersCount": 724016,
+  "followsCount": 72,
+  "postsCount": 2098,
+  "private": false,
+  "verified": true,
+  "businessCategoryName": "Real Estate",
+  "latestPosts": [
+    {"shortCode":"DYmLbBqME9Z","type":"Video","productType":"clips","caption":"This is why I always say DREAM BIG... Today We Ranked No. 2 for Q1 2026 with Sobha Realty","url":"https://www.instagram.com/p/DYmLbBqME9Z/","commentsCount":222,"likesCount":12012,"videoViewCount":108943,"timestamp":"2026-05-21T10:01:34.000Z","ownerUsername":"manpreet.kirpa","isPinned":true},
+    {"shortCode":"DSWyq4tAVFR","type":"Video","productType":"clips","caption":"Dubai is super excited to welcome Kap's Cafe","url":"https://www.instagram.com/p/DSWyq4tAVFR/","commentsCount":456,"likesCount":26146,"videoViewCount":567324,"timestamp":"2025-12-17T07:27:51.000Z","ownerUsername":"manpreet.kirpa","isPinned":true},
+    {"shortCode":"DHk4hZaIQYG","type":"Video","productType":"clips","caption":"STORY TIME: Four months ago, I had the opportunity to shoot a project video on a helicopter","url":"https://www.instagram.com/p/DHk4hZaIQYG/","commentsCount":629,"likesCount":50702,"videoViewCount":1192982,"timestamp":"2025-03-24T09:01:44.000Z","ownerUsername":"manpreet.kirpa","isPinned":true},
+    {"shortCode":"DbDk2W1Ez38","type":"Video","productType":"clips","caption":"Lessons I learnt while building a business","url":"https://www.instagram.com/p/DbDk2W1Ez38/","commentsCount":12,"likesCount":1039,"videoViewCount":null,"timestamp":"2026-07-21T13:03:12.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"DbDJOM2ku2u","type":"Video","productType":"clips","caption":"Would you buy this 260 Cr Penthouse in Dubai?","url":"https://www.instagram.com/p/DbDJOM2ku2u/","commentsCount":16,"likesCount":977,"videoViewCount":null,"timestamp":"2026-07-21T09:02:34.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"DbCm14iiSLX","type":"Video","productType":"clips","caption":"Success isn't built overnight. No shortcuts. No magic formula.","url":"https://www.instagram.com/p/DbCm14iiSLX/","commentsCount":58,"likesCount":4886,"videoViewCount":null,"timestamp":"2026-07-21T04:00:41.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"DbA_2ScCO8R","type":"Video","productType":"clips","caption":"The Biggest reward for me while building a business","url":"https://www.instagram.com/p/DbA_2ScCO8R/","commentsCount":203,"likesCount":15481,"videoViewCount":null,"timestamp":"2026-07-20T13:00:41.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"DbAP7h9MlXB","type":"Video","productType":"clips","caption":"Did you know? Foreign investors have poured 86% more money into Dubai real estate","url":"https://www.instagram.com/p/DbAP7h9MlXB/","commentsCount":15,"likesCount":758,"videoViewCount":null,"timestamp":"2026-07-20T06:02:55.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"Da-0GPSMsY1","type":"Video","productType":"clips","caption":"9 days until I move to my new house, join the countdown with me","url":"https://www.instagram.com/p/Da-0GPSMsY1/","commentsCount":237,"likesCount":5217,"videoViewCount":null,"timestamp":"2026-07-19T16:40:20.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"Da9ueQmjLG3","type":"Sidecar","caption":"Thank you Sobha Realty for hosting such a delicious breakfast for Kirpa's leaders","url":"https://www.instagram.com/p/Da9ueQmjLG3/","commentsCount":14,"likesCount":3063,"videoViewCount":null,"timestamp":"2026-07-19T06:30:42.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"Da76lA_MA-f","type":"Video","productType":"clips","caption":"10 days before I shift to my new house, join the countdown me","url":"https://www.instagram.com/p/Da76lA_MA-f/","commentsCount":214,"likesCount":9190,"videoViewCount":null,"timestamp":"2026-07-18T13:41:43.000Z","ownerUsername":"manpreet.kirpa","isPinned":false},
+    {"shortCode":"Da7oOUwty2i","type":"Video","productType":"clips","caption":"This is what it looks like when your partner is also your accountability partner.","url":"https://www.instagram.com/p/Da7oOUwty2i/","commentsCount":18,"likesCount":3465,"videoViewCount":null,"timestamp":"2026-07-18T10:58:46.000Z","ownerUsername":"makingitmumkinpodcast","isPinned":false}
+  ]
+}

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kirpa Social Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --cream:#FBF6F1; --surface:#FFFFFF; --surface-2:#FFFDFB;
+    --ink:#2A2622; --muted:#8A817A; --line:#ECE3DA;
+    --coral:#F0653A;                 /* brand + interactive ONLY */
+    --green:#2E7D5B; --ochre:#C98A1B; --crimson:#B03A3A;  /* signal states */
+    --shadow:0 1px 2px rgba(42,38,34,.04), 0 8px 24px rgba(42,38,34,.06);
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:Poppins,system-ui,sans-serif;font-size:15px;line-height:1.5;
+    font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+  a{color:var(--coral);text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:24px 20px 64px}
+
+  /* header */
+  .top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;
+    padding-bottom:20px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:11px}
+  .spark{width:26px;height:26px;flex:0 0 auto}
+  .brand h1{font-size:20px;font-weight:700;margin:0;letter-spacing:-.02em}
+  .brand .sub{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:1px}
+  .stamp{text-align:right;font-size:12px;color:var(--muted);line-height:1.45}
+  .src{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:11px;
+    padding:4px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+  .src.sample{background:#FBF0D9;color:var(--ochre)}
+  .src.pending{background:#FBF0D9;color:var(--ochre)}
+  .src.live{background:#E4F1EA;color:var(--green)}
+  .setup{padding:22px;margin:16px 0}
+  .setup h2{margin:8px 0 6px;font-size:18px;font-weight:700;letter-spacing:-.01em}
+  .setup p{margin:0 0 14px;font-size:13.5px;color:var(--muted);max-width:60ch}
+  .setup ol{margin:0;padding-left:20px;font-size:13.5px}
+  .setup li{margin-bottom:7px}
+  .setup code{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;
+    padding:1px 6px;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .ready{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13px}
+  .ready b{font-weight:600}
+  .src .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+  /* controls */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 8px}
+  .pill{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+    font:inherit;font-weight:500;font-size:13.5px;padding:7px 15px;border-radius:999px;cursor:pointer;
+    transition:border-color .15s,color .15s}
+  .pill:hover{border-color:var(--coral)}
+  .pill[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:#fff}
+  .pill:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+  .hint{font-size:12px;color:var(--muted);margin-left:auto}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin:16px 0 8px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .champ{padding:20px}
+  .champ .name{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:8px 0 2px}
+  .champ .role{font-size:13px;color:var(--muted)}
+  .champ .metrics{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap}
+  .champ .metrics b{display:block;font-size:19px;font-weight:600}
+  .champ .metrics span{font-size:11.5px;color:var(--muted)}
+  .spot{padding:20px;display:flex;flex-direction:column}
+  .spot .thumb{margin-top:12px;border-radius:10px;overflow:hidden;background:var(--surface-2);
+    aspect-ratio:16/10;border:1px solid var(--line);position:relative}
+  .spot .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .spot .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .spot .play svg{width:44px;height:44px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+  .spot .cap{margin-top:12px;font-size:13px;color:var(--ink)}
+  .spot .stats{margin-top:8px;font-size:12px;color:var(--muted);display:flex;gap:14px}
+
+  /* leaderboard grid */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
+  .board{padding:18px}
+  .board h3{margin:0 0 2px;font-size:14.5px;font-weight:600}
+  .board .desc{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+  ol.rows{list-style:none;margin:0;padding:0}
+  ol.rows li{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+  ol.rows li:first-child{border-top:0}
+  .rk{flex:0 0 22px;font-weight:700;font-size:13px;color:var(--muted);text-align:center}
+  .rk.one{color:var(--coral)}
+  .who{flex:1;min-width:0}
+  .who .n{font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .who .h{font-size:11px;color:var(--muted)}
+  .val{font-weight:600;font-size:13.5px;white-space:nowrap}
+  .empty{font-size:12.5px;color:var(--muted);padding:10px 0}
+
+  /* trend */
+  .trend{margin-top:16px;padding:18px}
+  .trend .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .gain{display:inline-flex;gap:6px;align-items:center;background:#E4F1EA;color:var(--green);
+    font-size:12.5px;font-weight:500;padding:5px 11px;border-radius:999px}
+  .gain small{color:var(--muted);font-weight:400}
+
+  /* roster */
+  .roster{margin-top:28px}
+  .roster h2{font-size:16px;font-weight:600;margin:0 0 12px}
+  .tbl{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+  .tbl th,.tbl td{padding:11px 14px;text-align:left;font-size:13px;border-top:1px solid var(--line)}
+  .tbl th{background:var(--surface-2);font-weight:600;color:var(--muted);font-size:11.5px;
+    letter-spacing:.03em;text-transform:uppercase;border-top:0;cursor:pointer;user-select:none}
+  .tbl th.num,.tbl td.num{text-align:right}
+  .tbl tbody tr{cursor:pointer;transition:background .12s}
+  .tbl tbody tr:hover{background:var(--surface-2)}
+  .tbl tbody tr:focus-visible{outline:2px solid var(--coral);outline-offset:-2px}
+  .chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .chip.public{background:#E4F1EA;color:var(--green)}
+  .chip.private{background:#F6E3E3;color:var(--crimson)}
+  .chip.need{background:#FBF0D9;color:var(--ochre)}
+  .muted{color:var(--muted)}
+
+  /* drawer */
+  .scrim{position:fixed;inset:0;background:rgba(42,38,34,.32);opacity:0;pointer-events:none;
+    transition:opacity .2s;z-index:40}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);background:var(--cream);
+    box-shadow:-8px 0 32px rgba(42,38,34,.14);transform:translateX(100%);transition:transform .24s ease;
+    z-index:41;overflow:auto;padding:24px}
+  .drawer.open{transform:none}
+  .drawer .x{float:right;border:0;background:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
+  .drawer h3{margin:2px 0 0;font-size:20px;font-weight:700}
+  .drawer .role{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .post{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .post img{width:56px;height:70px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:var(--surface-2)}
+  .post .pc{font-size:12.5px}
+  .post .ps{font-size:11.5px;color:var(--muted);margin-top:4px}
+
+  footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--muted);line-height:1.6}
+  footer b{color:var(--ink);font-weight:600}
+
+  @media (max-width:720px){
+    .hero{grid-template-columns:1fr}
+    .grid{grid-template-columns:1fr}
+    .tbl .hide-sm{display:none}
+    .stamp{text-align:left}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.6 6.4 6.9.5-5.3 4.5 1.7 6.7L12 16.9 6.1 20.1l1.7-6.7L2.5 8.9l6.9-.5z" fill="#F0653A"/></svg>
+      <div>
+        <h1>Kirpa Social Leaderboard</h1>
+        <div class="sub">Public-profile performance across the Kirpa Army</div>
+      </div>
+    </div>
+    <div class="stamp" id="stamp"></div>
+  </div>
+
+  <div class="controls" id="filters" role="group" aria-label="Platform filter"></div>
+
+  <section class="hero">
+    <div class="card champ" id="champ"></div>
+    <div class="card spot" id="spotlight"></div>
+  </section>
+
+  <section class="grid" id="boards"></section>
+
+  <div class="card trend" id="trend"></div>
+
+  <section class="roster">
+    <h2>Full roster</h2>
+    <table class="tbl" id="tbl">
+      <thead><tr>
+        <th data-sort="name">Agent</th>
+        <th class="num" data-sort="ig">Instagram</th>
+        <th class="num" data-sort="tt">TikTok</th>
+        <th class="num hide-sm" data-sort="er">Best ER</th>
+        <th>Status</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" tabindex="-1"></aside>
+
+<script>
+const SAMPLE_DATA = null; // live-only: no bundled placeholder data
+
+const fmt = n => n==null ? '\u2014' : n>=1000 ? (n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k' : String(n);
+const pct = n => n==null ? '\u2014' : (n*100).toFixed(1)+'%';
+const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PLATFORMS = [['all','All'],['instagram','Instagram'],['tiktok','TikTok'],['facebook','Facebook']];
+let DATA=null, platform='instagram';
+
+async function load(){
+  try{
+    const res = await fetch('data/latest.json',{cache:'no-store'});
+    if(!res.ok) throw 0;
+    DATA = await res.json();
+  }catch(e){ DATA = SAMPLE_DATA; }
+  if(!DATA){ renderNoData(); return; }
+  if(DATA.meta.source==='pending' || DATA.meta.resolvedProfiles===0){ renderStamp(); renderPending(); return; }
+  renderStamp(); renderFilters(); renderAll();
+}
+
+// No live snapshot yet. Say so plainly and show what unblocks it. We do not
+// render placeholder charts to make the page look finished.
+function renderPending(){
+  const s=DATA.states||{}, ready=(s.awaitingPull||[]), need=(s.unconfirmed||[]);
+  const readyNames=[...new Set(ready.map(r=>r.name))];
+  document.querySelector('.hero').outerHTML=
+    `<section class="card setup">
+      <div class="eyebrow">No snapshot yet</div>
+      <h2>Waiting on the first live pull</h2>
+      <p>This dashboard shows live public profile data only. No pull has run yet, so there are no numbers to show \u2014 and it will not display placeholder figures in the meantime.</p>
+      <ol>
+        <li>Add <code>APIFY_TOKEN</code> as a repository secret.</li>
+        <li>Confirm handles in <code>handles.json</code> (set <code>confirmed: true</code>).</li>
+        <li>Run the <b>Weekly social snapshot</b> action.</li>
+      </ol>
+      <div class="ready"><b>${readyNames.length} confirmed</b>, ready to pull on the next run${readyNames.length?': '+readyNames.map(esc).join(', '):''}.
+      ${need.length?`<br><b>${need.length}</b> handle(s) still awaiting confirmation.`:''}
+      <br><span class="muted">${(s.excludedBackOffice||[]).length} back-office roles excluded \u00b7 ${DATA.meta.relevantCount} client-facing team members in scope.</span></div>
+    </section>`;
+  document.getElementById('boards').innerHTML='';
+  document.getElementById('trend').style.display='none';
+  document.querySelector('.roster').style.display='none';
+  renderFoot();
+}
+function renderNoData(){
+  document.querySelector('.hero').outerHTML=
+    `<section class="card setup"><div class="eyebrow">No data file</div>
+     <h2>Can\u2019t read data/latest.json</h2>
+     <p>Open this page over http (<code>python3 -m http.server</code>) or via GitHub Pages, then run the snapshot job.</p></section>`;
+  document.getElementById('boards').innerHTML='';
+  document.getElementById('trend').style.display='none';
+  document.querySelector('.roster').style.display='none';
+}
+
+function renderStamp(){
+  const m=DATA.meta, when=new Date(m.capturedAt);
+  const badge = m.source==='live'
+    ? '<span class="src live"><span class="dot"></span>Live \u00b7 public data</span>'
+    : m.source==='pending'
+      ? '<span class="src pending"><span class="dot"></span>Awaiting first pull</span>'
+      : '<span class="src sample"><span class="dot"></span>Sample data</span>';
+  document.getElementById('stamp').innerHTML =
+    badge+'<div style="margin-top:6px">Snapshot '+when.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})+
+    '<br>'+m.resolvedProfiles+' public profiles \u00b7 via '+esc(m.provider)+'</div>';
+}
+
+function renderFilters(){
+  const el=document.getElementById('filters');
+  el.innerHTML = PLATFORMS.map(([k,l])=>
+    `<button class="pill" data-pf="${k}" aria-pressed="${k===platform}">${l}</button>`).join('')
+    + '<span class="hint">Ranked within each platform \u2014 a TikTok view isn\u2019t an IG reach.</span>';
+  el.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{platform=b.dataset.pf;renderFilters();renderAll();});
+}
+
+function activeBoards(){
+  const L=DATA.leaderboards;
+  if(platform==='all') return {mostFollowers:L.combined.composite.map(r=>({...r,followers:null})), combined:true};
+  return L[platform]||{};
+}
+
+function renderAll(){ renderChamp(); renderSpotlight(); renderBoards(); renderTrend(); renderRoster(); renderFoot(); }
+
+function renderChamp(){
+  const c=document.getElementById('champ');
+  const comp=DATA.leaderboards.combined.composite[0];
+  if(platform==='all'){
+    if(!comp){c.innerHTML='<div class="empty">No ranked profiles yet.</div>';return;}
+    c.innerHTML=`<div class="eyebrow">Top performer \u00b7 all platforms</div>
+      <div class="name">${esc(comp.name)}</div><div class="role">${esc(comp.role||'')}</div>
+      <div class="metrics"><div><b>#1</b><span>composite rank</span></div>
+      <div><b>${esc(comp.platforms.join(' + '))}</b><span>active on</span></div>
+      <div><b>${(comp.score*100).toFixed(0)}</b><span>score / 100</span></div></div>`;
+    return;
+  }
+  const top=(activeBoards().mostFollowers||[])[0];
+  const eng=(activeBoards().engagement||[])[0];
+  if(!top){c.innerHTML='<div class="eyebrow">Most followers</div><div class="empty">No public profiles on this platform yet.</div>';return;}
+  c.innerHTML=`<div class="eyebrow">Most followers \u00b7 ${platform}</div>
+    <div class="name">${esc(top.name)}</div><div class="role">${esc(top.role||'')}</div>
+    <div class="metrics">
+      <div><b>${fmt(top.followers)}</b><span>followers</span></div>
+      ${eng?`<div><b>${pct(eng.engagementRate)}</b><span>top engagement (${esc(eng.name.split(' ')[0])})</span></div>`:''}
+    </div>`;
+}
+
+function renderSpotlight(){
+  const s=document.getElementById('spotlight');
+  const tv = platform==='all' ? bestVideoAllPlatforms() : activeBoards().topVideo;
+  if(!tv){s.innerHTML='<div class="eyebrow">Top video</div><div class="empty">No public video data yet.</div>';return;}
+  const p=tv.post;
+  s.innerHTML=`<div class="eyebrow">Top video this week</div>
+    <div class="thumb">${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
+      <div class="play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="rgba(240,101,58,.92)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></div>
+    <div class="cap"><b>${esc(tv.name)}</b> \u2014 ${esc((p.caption||'').slice(0,80))}</div>
+    <div class="stats"><span>\u25b6 ${fmt(p.views)} views</span><span>\u2661 ${fmt(p.likes)}</span><span>\ud83d\udcac ${fmt(p.comments)}</span></div>`;
+}
+function bestVideoAllPlatforms(){
+  let best=null;
+  for(const pf of ['instagram','tiktok','facebook']){
+    const tv=DATA.leaderboards[pf]&&DATA.leaderboards[pf].topVideo;
+    if(tv&&(!best||tv.post.views>best.post.views))best=tv;
+  }
+  return best;
+}
+
+function boardList(title,desc,rows,valFn){
+  if(!rows||!rows.length) return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div><div class="empty">Nothing to rank yet.</div></div>`;
+  const li=rows.slice(0,5).map(r=>`<li><span class="rk${r.rank===1?' one':''}">${r.rank}</span>
+    <span class="who"><div class="n">${esc(r.name)}</div>${r.handle?`<div class="h">@${esc(r.handle)}</div>`:''}</span>
+    <span class="val">${valFn(r)}</span></li>`).join('');
+  return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div><ol class="rows">${li}</ol></div>`;
+}
+
+function renderBoards(){
+  const b=document.getElementById('boards'), B=activeBoards();
+  if(platform==='all'){
+    b.innerHTML = boardList('Composite leaderboard','Weighted: followers 35% \u00b7 engagement 40% \u00b7 cadence 25%',
+      DATA.leaderboards.combined.composite,r=>`${(r.score*100).toFixed(0)}`)
+      + mostCommentedCard(bestCommentedAll());
+    return;
+  }
+  b.innerHTML =
+    boardList('Most followers','Public follower count',B.mostFollowers,r=>fmt(r.followers))+
+    boardList('Highest engagement','Avg interactions per post \u00f7 followers (proxy)',B.engagement,r=>pct(r.engagementRate))+
+    boardList('Most active','Posts per week, recent window',B.postingFrequency,r=>r.postsPerWeek.toFixed(1)+'/wk')+
+    mostCommentedCard(B.mostCommented);
+}
+function mostCommentedCard(mc){
+  if(!mc) return `<div class="card board"><h3>Most commented</h3><div class="desc">Single post with the most comments</div><div class="empty">Nothing to rank yet.</div></div>`;
+  return `<div class="card board"><h3>Most commented post</h3><div class="desc">Single most-discussed post</div>
+    <ol class="rows"><li><span class="rk one">\ud83d\udcac</span><span class="who"><div class="n">${esc(mc.name)}</div>
+    <div class="h">${esc((mc.post.caption||'').slice(0,42))}</div></span><span class="val">${fmt(mc.post.comments)}</span></li></ol></div>`;
+}
+function bestCommentedAll(){let best=null;for(const pf of ['instagram','tiktok','facebook']){const m=DATA.leaderboards[pf]&&DATA.leaderboards[pf].mostCommented;if(m&&(!best||m.post.comments>best.post.comments))best=m;}return best;}
+
+function renderTrend(){
+  const el=document.getElementById('trend');
+  if(!DATA.meta.trendAvailable||!DATA.trend.length){
+    el.innerHTML=`<div class="eyebrow">Follower growth</div><div class="empty" style="margin-top:8px">Collecting \u2014 growth appears once a second weekly snapshot lands.</div>`;
+    return;
+  }
+  const rows=DATA.trend.filter(t=>t.followerDelta>0 && (platform==='all'||t.platform===platform)).slice(0,8);
+  el.innerHTML=`<div class="eyebrow">Fastest follower growth \u00b7 vs last week</div>
+    <div class="chips">${rows.map(t=>`<span class="gain">\u2197 ${esc(t.name.split(' ')[0])} +${fmt(t.followerDelta)} <small>${esc(t.platform.slice(0,2))}</small></span>`).join('')||'<span class="empty">No gains on this platform this week.</span>'}</div>`;
+}
+
+function rosterRows(){
+  const people=new Map();
+  for(const r of DATA.records){
+    if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,ig:null,tt:null,er:null,state:'need',recs:[]});
+    const p=people.get(r.name); p.recs.push(r);
+    if(r.resolved&&!r.isPrivate){
+      if(r.platform==='instagram')p.ig=r.followers;
+      if(r.platform==='tiktok')p.tt=r.followers;
+      p.state=(p.state==='private')?'private':'public';
+    } else if(r.isPrivate){ if(p.state!=='public')p.state='private'; }
+  }
+  // best ER per person
+  for(const p of people.values()){
+    let best=null;
+    for(const r of p.recs){ if(r.resolved&&!r.isPrivate){ const posts=r.recentPosts||[]; if(posts.length){ const avg=posts.reduce((s,x)=>s+(x.likes||0)+(x.comments||0)+(x.shares||0),0)/posts.length; const er=r.followers?avg/r.followers:0; if(best==null||er>best)best=er; } } }
+    p.er=best;
+  }
+  return [...people.values()];
+}
+let sortKey='ig',sortDir=-1;
+function renderRoster(){
+  const rows=rosterRows().sort((a,b)=>{
+    const va=a[sortKey],vb=b[sortKey];
+    if(sortKey==='name')return sortDir*a.name.localeCompare(b.name);
+    return sortDir*(((vb==null)-(va==null))||((va||0)-(vb||0)))*-1;
+  });
+  document.getElementById('tbody').innerHTML=rows.map((p,i)=>`
+    <tr tabindex="0" data-name="${esc(p.name)}">
+      <td><b>${esc(p.name)}</b><div class="muted" style="font-size:11.5px">${esc(p.role||'')}</div></td>
+      <td class="num">${p.ig==null?'<span class="muted">\u2014</span>':fmt(p.ig)}</td>
+      <td class="num">${p.tt==null?'<span class="muted">\u2014</span>':fmt(p.tt)}</td>
+      <td class="num hide-sm">${p.er==null?'<span class="muted">\u2014</span>':pct(p.er)}</td>
+      <td>${p.state==='public'?'<span class="chip public">Public</span>':p.state==='private'?'<span class="chip private">Private</span>':'<span class="chip need">Handle needed</span>'}</td>
+    </tr>`).join('');
+  document.querySelectorAll('#tbody tr').forEach(tr=>{
+    const open=()=>openDrawer(tr.dataset.name);
+    tr.onclick=open; tr.onkeydown=e=>{if(e.key==='Enter')open();};
+  });
+  document.querySelectorAll('#tbl th').forEach(th=>th.onclick=()=>{const k=th.dataset.sort;if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=-1;}renderRoster();});
+}
+
+function openDrawer(name){
+  const recs=DATA.records.filter(r=>r.name===name);
+  const d=document.getElementById('drawer'), any=recs.find(r=>r.resolved);
+  let body='';
+  if(recs.every(r=>!r.resolved)) body='<div class="empty">No confirmed public handle yet. Add one in the registry and it appears here after the next snapshot.</div>';
+  else{
+    for(const r of recs){
+      if(!r.resolved) continue;
+      body+=`<div style="margin-top:14px" class="eyebrow">${esc(r.platform)} \u00b7 ${r.isPrivate?'private':(r.followers!=null?fmt(r.followers)+' followers':'follower count unavailable')}</div>`;
+      if((r.warnings||[]).length) body+=`<div style="font-size:12px;color:var(--ochre);margin-top:4px">${r.warnings.map(esc).join('<br>')}</div>`;
+      if(r.isPrivate){body+='<div class="empty">Private account \u2014 counts only, no post data.</div>';continue;}
+      const top=(r.recentPosts||[]).slice().sort((a,b)=>(b.views||b.likes||0)-(a.views||a.likes||0)).slice(0,3);
+      body+=top.map(p=>`<div class="post">${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
+        <div><div class="pc">${esc((p.caption||'').slice(0,70))}</div>
+        <div class="ps">${p.views!=null?'\u25b6 '+fmt(p.views)+' \u00b7 ':''}\u2661 ${fmt(p.likes)} \u00b7 \ud83d\udcac ${fmt(p.comments)}</div></div></div>`).join('');
+    }
+  }
+  d.innerHTML=`<button class="x" aria-label="Close">\u00d7</button>
+    <h3>${esc(name)}</h3><div class="role">${esc((any&&any.role)||'')}</div>${body}`;
+  d.querySelector('.x').onclick=closeDrawer;
+  d.classList.add('open');d.setAttribute('aria-hidden','false');
+  document.getElementById('scrim').classList.add('open');d.focus();
+}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer').setAttribute('aria-hidden','true');document.getElementById('scrim').classList.remove('open');}
+document.getElementById('scrim').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+
+function renderFoot(){
+  const m=DATA.meta;
+  document.getElementById('foot').innerHTML=
+    `<b>What this is.</b> ${m.source==='live'
+      ? 'Live public-surface data \u2014 the same profile and post numbers a logged-out visitor can see, read via '+esc(m.provider)+' on a weekly snapshot. It is <b>not</b> an official Instagram/TikTok API and it is a snapshot, not real-time.'
+      : m.source==='pending'
+        ? 'Nothing has been pulled yet. This build is live-only: it reads public profile data via a provider on a weekly schedule, and shows no numbers at all until that runs.'
+        : 'Sample data generated by the real pipeline with deterministic fake numbers, so the layout is honest about shape without claiming live figures.'}
+    <br><b>Honesty rules.</b> Only public accounts produce data; private ones show as <i>Private</i> and are never estimated into a ranking. People without a confirmed handle show as <i>Handle needed</i>. Engagement rate is a within-platform proxy. Facebook is Pages-only \u2014 personal profiles carry no usable public data.
+    <br><b>${esc(m.company)}</b> \u00b7 ORN ${esc(m.orn)} \u00b7 ${m.relevantCount} client-facing team members tracked.`;
+}
+
+load();
+</script>
+</body>
+</html>
