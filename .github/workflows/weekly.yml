@@ -34,7 +34,9 @@ jobs:
         run: node src/ingest.js
 
       - name: Verify generated snapshot
-        run: node src/validate-snapshot.js
+        run: |
+          node -e "const d=require('./data/latest.json'); if(d.meta.source!=='live'||d.meta.resolvedProfiles<1) process.exit(1)"
+          node test/test.js
 
       - name: Commit snapshot and source captures
         run: |
