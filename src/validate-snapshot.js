@@ -57,6 +57,18 @@ function validateSnapshot(snapshot, registry, opts = {}) {
     errors.push(`meta.resolvedProfiles is ${meta.resolvedProfiles}, but records contain ${resolved.length}`);
   }
 
+  // Overall coverage can hide a dead low-volume platform: 34 healthy Instagram
+  // profiles would otherwise let a completely failed TikTok pull pass. A green
+  // workflow must prove that every connected platform returned something.
+  for (const platform of platforms) {
+    const expectedForPlatform = relevant.filter(employee =>
+      employee.confirmed === true && employee.handles && employee.handles[platform]).length;
+    const resolvedForPlatform = resolved.filter(record => record.platform === platform).length;
+    if (expectedForPlatform > 0 && resolvedForPlatform === 0) {
+      errors.push(`${platform}: resolved 0 of ${expectedForPlatform} connected profiles`);
+    }
+  }
+
   for (const record of records.filter(r => r && r.resolved === true)) {
     if (!record.handle) errors.push(`${record.name}/${record.platform}: resolved record has no handle`);
     if (record.followers !== null &&

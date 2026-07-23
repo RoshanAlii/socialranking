@@ -77,6 +77,82 @@ const APIFY_ACTORS = {
   facebook: process.env.APIFY_FB_ACTOR || 'apify~facebook-pages-scraper',
 };
 
+function apifyInput(platform, handles) {
+  if (platform === 'instagram') return { usernames: handles, resultsLimit: 12 };
+  if (platform === 'facebook') {
+    return {
+      startUrls: handles.map(handle => ({ url: `https://www.facebook.com/${handle}` })),
+      resultsLimit: 12,
+    };
+  }
+  return {
+    profiles: handles,
+    profileScrapeSections: ['videos'],
+    profileSorting: 'latest',
+    resultsPerPage: 12,
+    excludePinnedPosts: false,
+    shouldDownloadCovers: false,
+    shouldDownloadSlideshowImages: false,
+    shouldDownloadSubtitles: false,
+    shouldDownloadVideos: false,
+  };
+}
+
+/*
+ * Actors disagree on shape. Instagram commonly returns one profile object
+ * with nested posts; TikTok returns one flat row per video and repeats profile
+ * fields under authorMeta. Collapse both into the raw profile contract expected
+ * by normalize.js. Exported for fixture tests so actor-shape changes can be
+ * caught before a paid workflow run.
+ */
+function groupApifyItems(platform, handles, items) {
+  const wanted = [...new Set((handles || []).filter(Boolean))];
+  const found = new Map();
+  if (!Array.isArray(items) || items.length === 0 || wanted.length === 0) return found;
+
+  const canonical = new Map(wanted.map(handle => [handle.toLowerCase(), handle]));
+  const groups = new Map();
+  for (const item of items) {
+    const rawHandle = item.username || item.userName || item.handle
+      || item.ownerUsername || item.authorMeta?.name || item.authorMeta?.uniqueId;
+    const handle = rawHandle && canonical.get(String(rawHandle).replace(/^@/, '').toLowerCase());
+    if (!handle) continue;
+    if (!groups.has(handle)) groups.set(handle, []);
+    groups.get(handle).push(item);
+  }
+
+  // Some Facebook Page actor responses omit the requested slug/id.
+  if (platform === 'facebook' && wanted.length === 1 && groups.size === 0) {
+    groups.set(wanted[0], items);
+  }
+
+  for (const [handle, rows] of groups) {
+    const first = rows[0];
+    const author = first.authorMeta || {};
+    const isNestedProfile = first.followersCount != null || first.followers != null
+      || first.fansCount != null || first.followers_count != null;
+
+    if (isNestedProfile) {
+      found.set(handle, Object.assign({}, first, {
+        recentPosts: first.latestPosts || first.posts || (rows.length > 1 ? rows.slice(1) : []),
+      }));
+      continue;
+    }
+
+    found.set(handle, {
+      username: handle,
+      signature: first.signature ?? author.signature ?? null,
+      followers: first.followerCount ?? first.fans ?? author.fans ?? null,
+      following: first.followingCount ?? first.following ?? author.following ?? null,
+      postCount: first.postCount ?? first.videoCount ?? first.video ?? author.video ?? null,
+      isPrivate: first.isPrivate === true || first.private === true
+        || first.privateAccount === true || author.privateAccount === true,
+      recentPosts: rows,
+    });
+  }
+  return found;
+}
+
 function apifyRunSync(actor, input, token) {
   const body = JSON.stringify(input);
   const path = `/v2/acts/${actor}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
@@ -104,25 +180,8 @@ class ApifyProvider {
   async fetchProfile(platform, handle) {
     const actor = APIFY_ACTORS[platform];
     if (!actor) return { notFound: true };
-    const input = platform === 'instagram'
-      ? { usernames: [handle], resultsLimit: 12 }
-      : platform === 'facebook'
-        ? { startUrls: [{ url: `https://www.facebook.com/${handle}` }], resultsLimit: 12 }
-        : { profiles: [handle], resultsPerPage: 12, shouldDownloadVideos: false };
-    const items = await apifyRunSync(actor, input, this.token);
-    if (!Array.isArray(items) || items.length === 0) return { notFound: true };
-    // Actors return either a profile object with nested posts, or a flat list of
-    // posts plus profile fields on each. normalize.js is tolerant of both.
-    const first = items[0];
-    if (first && (first.followersCount != null || first.followers != null || first.fansCount != null)) {
-      return Object.assign({}, first, { recentPosts: first.latestPosts || first.posts || items.slice(1) || [] });
-    }
-    // flat list: infer profile fields from the first item, posts = the list
-    return {
-      followers: first.followersCount ?? first.authorMeta?.fans ?? null,
-      isPrivate: first.private === true,
-      recentPosts: items,
-    };
+    const items = await apifyRunSync(actor, apifyInput(platform, [handle]), this.token);
+    return groupApifyItems(platform, [handle], items).get(handle) || { notFound: true };
   }
 
   // One actor run per platform, rather than one paid run per person. With more
@@ -134,44 +193,8 @@ class ApifyProvider {
     const found = new Map();
     if (!actor || wanted.length === 0) return found;
 
-    const input = platform === 'instagram'
-      ? { usernames: wanted, resultsLimit: 12 }
-      : platform === 'facebook'
-        ? { startUrls: wanted.map(handle => ({ url: `https://www.facebook.com/${handle}` })), resultsLimit: 12 }
-        : { profiles: wanted, resultsPerPage: 12, shouldDownloadVideos: false };
-    const items = await apifyRunSync(actor, input, this.token);
-    if (!Array.isArray(items) || items.length === 0) return found;
-
-    const canonical = new Map(wanted.map(handle => [handle.toLowerCase(), handle]));
-    const groups = new Map();
-    for (const item of items) {
-      const rawHandle = item.username || item.userName || item.handle
-        || item.ownerUsername || item.authorMeta?.name || item.authorMeta?.uniqueId;
-      const handle = rawHandle && canonical.get(String(rawHandle).replace(/^@/, '').toLowerCase());
-      if (!handle) continue;
-      if (!groups.has(handle)) groups.set(handle, []);
-      groups.get(handle).push(item);
-    }
-
-    // Some actors omit a username when a single Facebook Page is requested.
-    if (wanted.length === 1 && groups.size === 0) groups.set(wanted[0], items);
-
-    for (const [handle, rows] of groups) {
-      const first = rows[0];
-      if (first && (first.followersCount != null || first.followers != null
-        || first.fansCount != null || first.followers_count != null)) {
-        found.set(handle, Object.assign({}, first, {
-          recentPosts: first.latestPosts || first.posts || (rows.length > 1 ? rows.slice(1) : []),
-        }));
-      } else {
-        found.set(handle, {
-          followers: first.followersCount ?? first.authorMeta?.fans ?? null,
-          isPrivate: first.private === true,
-          recentPosts: rows,
-        });
-      }
-    }
-    return found;
+    const items = await apifyRunSync(actor, apifyInput(platform, wanted), this.token);
+    return groupApifyItems(platform, wanted, items);
   }
 }
 
@@ -191,4 +214,7 @@ class CapturedProvider {
   }
 }
 
-module.exports = { MockProvider, ApifyProvider, CapturedProvider, APIFY_ACTORS };
+module.exports = {
+  MockProvider, ApifyProvider, CapturedProvider, APIFY_ACTORS,
+  apifyInput, groupApifyItems,
+};

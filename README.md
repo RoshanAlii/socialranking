@@ -16,14 +16,18 @@ It runs on a schedule with **no logins and no passwords**. It reads only the pub
 - **The headline post board ranks interactions, not views.** Instagram reports view counts on only ~19% of videos here, and mostly older ones (median 63 days old, versus 3 days for posts without). A view-ranked board therefore crowned year-old content and made anyone posting only recently ineligible to win. Views still appear, on their own card, labelled with how little of the data they cover.
 - **Unknown is never scored as zero.** A person with a real profile but no posts yet in the window has no engagement rate — that is missing data, not bad performance. Their remaining metrics are reweighted, and if too few can be measured they are shown *unranked* with the reason, rather than placed last.
 - **Engagement rate is a within-platform proxy.** A TikTok view is not an Instagram reach, so platforms are ranked separately and the combined score is explicitly normalised, never raw-summed.
-- **TikTok is paused.** Switched off by product decision, not by capability: `TIKTOK_ENABLED = false` in `index.html` and TikTok dropped from the default `--platforms`. The tab, the roster column and the aggregates all respect the flag, and the UI reads "available soon" rather than showing a zero. The adapter, normalizer and their tests are untouched — flip the flag and pass `--platforms instagram,tiktok,facebook` to bring it back in one run.
+- **TikTok is live and confirm-gated.** The weekly run pulls TikTok alongside Instagram and Facebook, but only for TikTok handles independently verified in `handles.json`. An Instagram username is never copied to TikTok by assumption. The dashboard exposes a real TikTok tab now; unconnected people show `Handle needed`, not zero.
 - **Facebook is Pages-only.** Personal FB profiles expose no usable public data; only business Pages do. A `facebook` value in the registry must be a Page id/slug.
 
 The product brief and complete scorecard are in [`PRODUCT_PLAN.md`](PRODUCT_PLAN.md).
 
-### Confirmed so far — 34 of 38 dashboard-relevant staff
+### Current profile coverage
 
-Every confirmed handle carries an `evidenceClass` recording *why* it was accepted:
+- **Instagram:** 34 of 38 dashboard-relevant staff have verified Kirpa-facing profiles.
+- **TikTok:** 1 of 38 is verified — Manpreet Kaur (`@manpreet.kirpa`). The other 37 remain unconnected until public Kirpa evidence is found or the team confirms their handles.
+- **Facebook:** 1 Page is verified — Manpreet Kirpa. Personal Facebook profiles remain out of scope.
+
+For the completed Instagram discovery pass, every accepted match carries an `evidenceClass` recording *why* it was accepted:
 
 | class | meaning | count |
 |---|---|---|
@@ -71,7 +75,7 @@ handles.json ──► src/ingest.js ──► src/provider.js  (Apify | Mock)  
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards → write `data/latest.json` + a dated history snapshot.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
-- **`.github/workflows/weekly.yml`** — weekly cron (Mondays 06:00 UTC) plus a manual trigger. Test gate → pull → commit the JSON back. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers.
+- **`.github/workflows/weekly.yml`** — weekly cron (Mondays 06:00 UTC) plus a manual trigger. Unit-test gate → three-platform pull → live-snapshot integrity gate → commit the JSON back. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers.
 
 ---
 
@@ -96,7 +100,8 @@ All four rules are enforced by the test suite.
 ## Local preview
 
 ```bash
-node test/test.js                              # 63 assertions, the deploy gate
+node test/test.js                              # 68 assertions, the pre-pull deploy gate
+node src/validate-snapshot.js                  # live post-pull integrity gate
 export APIFY_TOKEN=...  && node src/ingest.js  # real pull
 python3 -m http.server                         # then open http://localhost:8000
 ```
@@ -106,8 +111,9 @@ python3 -m http.server                         # then open http://localhost:8000
 ## Cost
 
 The live pull is batched into one actor run per platform, avoiding one actor startup per person.
-The provider still charges according to the actor and result volume, so check the selected Apify
-actor's current pricing before increasing the weekly cadence.
+TikTok requests only the latest 12 posts per verified profile and disables video, cover, slideshow,
+and subtitle downloads. The provider still charges according to actor result volume, so check the
+selected Apify actor's current pricing before increasing coverage or the weekly cadence.
 
 ## Swapping the provider
 

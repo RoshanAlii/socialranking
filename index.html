@@ -194,13 +194,6 @@
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* --- TikTok paused: "available soon" treatment ------------------------- */
-.pill.soon{opacity:.5;cursor:not-allowed;display:inline-flex;align-items:center;gap:6px}
-.pill.soon:hover{opacity:.5}
-.soon-tag{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;
-  padding:2px 5px;border-radius:4px;background:rgba(0,0,0,.12);white-space:nowrap}
-.soon-cell{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;opacity:.45}
-th .soon-tag{margin-left:6px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -271,13 +264,13 @@ const profileUrl = r => !r||!r.handle ? null
   : r.platform==='instagram' ? `https://www.instagram.com/${encodeURIComponent(r.handle)}/`
   : r.platform==='tiktok' ? `https://www.tiktok.com/@${encodeURIComponent(r.handle)}`
   : `https://www.facebook.com/${encodeURIComponent(r.handle)}`;
-// TikTok is switched off for now by product decision, not by capability.
-// Flip this to true to re-enable the tab, the roster column and the
-// weekly pull (see --platforms in src/ingest.js). Nothing else changes.
-const TIKTOK_ENABLED = false;
+// TikTok is a first-class live platform. Accounts remain confirm-gated in
+// handles.json, so enabling the platform never turns guessed usernames into
+// measured profiles.
+const TIKTOK_ENABLED = true;
 const PLATFORMS = [['all','All'],['instagram','Instagram'],['tiktok','TikTok'],['facebook','Facebook']];
 // Platforms that may contribute numbers to any board, chart or aggregate.
-const LIVE_PLATFORMS = ['instagram','tiktok','facebook'].filter(p=>p!=='tiktok'||TIKTOK_ENABLED);
+const LIVE_PLATFORMS = ['instagram','tiktok','facebook'];
 let DATA=null, REGISTRY=null, platform='instagram';
 
 async function load(){
@@ -347,24 +340,10 @@ function renderStamp(){
 
 function renderFilters(){
   const el=document.getElementById('filters');
-// TikTok is paused: never leave the view pointed at it, and label the column.
-if(platform==='tiktok' && !TIKTOK_ENABLED) platform='instagram';
-if(!TIKTOK_ENABLED){
-  const th=document.getElementById('th-tt');
-  if(th && !th.querySelector('.soon-tag')){
-    th.removeAttribute('data-sort');
-    th.insertAdjacentHTML('beforeend','<span class="soon-tag">Soon</span>');
-  }
-}
-
-  el.innerHTML = PLATFORMS.map(([k,l])=>{
-    const soon = (k==='tiktok' && !TIKTOK_ENABLED);
-    return soon
-      ? `<button class="pill soon" data-pf="${k}" disabled aria-disabled="true" title="TikTok reporting is not switched on yet">${l}<span class="soon-tag">Available soon</span></button>`
-      : `<button class="pill" data-pf="${k}" aria-pressed="${k===platform}">${l}</button>`;
-  }).join('')
+  el.innerHTML = PLATFORMS.map(([k,l])=>
+    `<button class="pill" data-pf="${k}" aria-pressed="${k===platform}">${l}</button>`).join('')
     + '<span class="hint">Ranked within each platform \u2014 a TikTok view isn\u2019t an IG reach.</span>';
-  el.querySelectorAll('.pill:not([disabled])').forEach(b=>b.onclick=()=>{platform=b.dataset.pf;renderFilters();renderAll();});
+  el.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{platform=b.dataset.pf;renderFilters();renderAll();});
 }
 
 function activeBoards(){
@@ -553,20 +532,21 @@ function renderTrend(){
 
 function rosterRows(){
   const people=new Map();
+  const statusPlatforms=platform==='all'?LIVE_PLATFORMS:[platform];
   for(const e of registryPeople()){
-    const handles=e.handles||{},has=!!(e.confirmed&&LIVE_PLATFORMS.some(p=>handles[p]));
+    const handles=e.handles||{},has=!!(e.confirmed&&statusPlatforms.some(p=>handles[p]));
     people.set(e.name,{name:e.name,role:e.role,ig:null,tt:null,er:null,cadence:null,growth:null,
-      igHandle:handles.instagram||null,state:has?'pending':'need',recs:[]});
+      handles,igHandle:handles.instagram||null,state:has?'pending':'need',recs:[]});
   }
   for(const r of DATA.records){
-    if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,ig:null,tt:null,er:null,cadence:null,growth:null,igHandle:null,state:'need',recs:[]});
+    if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,ig:null,tt:null,er:null,cadence:null,growth:null,handles:{},igHandle:null,state:'need',recs:[]});
     const p=people.get(r.name); p.recs.push(r);
     if(r.platform==='instagram'&&r.handle)p.igHandle=r.handle;
     if(r.resolved&&!r.isPrivate){
       if(r.platform==='instagram')p.ig=r.followers;
-      if(r.platform==='tiktok'&&TIKTOK_ENABLED)p.tt=r.followers;
-      p.state=(p.state==='private')?'private':'public';
-    } else if(r.isPrivate){ if(p.state!=='public')p.state='private'; }
+      if(r.platform==='tiktok')p.tt=r.followers;
+      if(statusPlatforms.includes(r.platform))p.state=(p.state==='private')?'private':'public';
+    } else if(r.isPrivate&&statusPlatforms.includes(r.platform)){ if(p.state!=='public')p.state='private'; }
   }
   // Use the ranking engine's median, windowed definitions. Recomputing a mean
   // from raw posts here previously produced 86.9% in the roster and 1.0% in
@@ -602,7 +582,7 @@ function renderRoster(){
     <tr tabindex="0" data-name="${esc(p.name)}">
       <td><b>${esc(p.name)}</b><div class="muted" style="font-size:11.5px">${esc(p.role||'')}</div></td>
       <td class="num">${p.ig==null?'<span class="muted">\u2014</span>':fmt(p.ig)}</td>
-      <td class="num">${!TIKTOK_ENABLED?'<span class="soon-cell">Available soon</span>':p.tt==null?'<span class="muted">\u2014</span>':fmt(p.tt)}</td>
+      <td class="num">${p.tt==null?'<span class="muted">\u2014</span>':fmt(p.tt)}</td>
       <td class="num hide-sm">${p.er==null?'<span class="muted">\u2014</span>':pct(p.er)}</td>
       <td>${p.state==='public'?'<span class="chip public">Measured</span>':p.state==='private'?'<span class="chip private">Private</span>':p.state==='pending'?'<span class="chip pending">Awaiting pull</span>':'<span class="chip need">Handle needed</span>'}</td>
     </tr>`).join('');
@@ -628,13 +608,18 @@ function nextAction(person){
 }
 
 function openDrawer(name){
-  const recs=DATA.records.filter(r=>r.name===name);
+  const recs=DATA.records.filter(r=>r.name===name&&(platform==='all'||r.platform===platform));
   const d=document.getElementById('drawer'), any=recs.find(r=>r.resolved);
   const person=rosterRows().find(p=>p.name===name);
   let body='';
   if(recs.every(r=>!r.resolved)){
-    if(person&&person.state==='pending'&&person.igHandle){
-      body=`<a class="profile-link" href="https://www.instagram.com/${encodeURIComponent(person.igHandle)}/" target="_blank" rel="noopener">Open @${esc(person.igHandle)} ↗</a>
+    const pendingPlatform=platform==='all'
+      ? LIVE_PLATFORMS.find(p=>person&&person.handles&&person.handles[p])
+      : platform;
+    const pendingHandle=person&&person.handles&&person.handles[pendingPlatform];
+    if(person&&person.state==='pending'&&pendingHandle){
+      const pendingUrl=profileUrl({platform:pendingPlatform,handle:pendingHandle});
+      body=`<a class="profile-link" href="${pendingUrl}" target="_blank" rel="noopener">Open @${esc(pendingHandle)} ↗</a>
         <div class="empty">Profile verified and connected. Current metrics will appear after the next weekly snapshot.</div>`;
     }else{
       body='<div class="empty">No confirmed public handle yet. Add one in the registry and it appears here after the next snapshot.</div>';

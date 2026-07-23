@@ -4,7 +4,7 @@ const assert = require('assert');
 const { normalizeRecord } = require('../src/normalize');
 const R = require('../src/rank');
 const { propose, slugCandidates } = require('../src/resolver');
-const { MockProvider } = require('../src/provider');
+const { MockProvider, apifyInput, groupApifyItems } = require('../src/provider');
 const { run } = require('../src/ingest');
 const { validateSnapshot } = require('../src/validate-snapshot');
 
@@ -340,26 +340,83 @@ function rec(over = {}) {
     }), /captured raw payload is missing/);
   });
 
-  console.log('\nTIKTOK PAUSED + SUPPLIED HANDLES');
-  await t('TikTok is excluded from the default weekly pull', () => {
+  await t('post-ingestion validator rejects a dead connected platform', () => {
+    const capturedAt = '2026-07-23T12:00:00.000Z';
+    const registry = { employees: [{
+      name: 'A', dashboardRelevant: true, confirmed: true,
+      handles: { instagram: 'a', tiktok: 'a' },
+    }] };
+    const snapshot = {
+      meta: {
+        source: 'live', provider: 'apify', capturedAt,
+        platforms: ['instagram', 'tiktok'], relevantCount: 1, resolvedProfiles: 1,
+      },
+      records: [
+        { name: 'A', platform: 'instagram', handle: 'a', capturedAt,
+          resolved: true, isPrivate: false, followers: 10, recentPosts: [] },
+        { name: 'A', platform: 'tiktok', handle: 'a', capturedAt,
+          resolved: false, isPrivate: false, followers: null, recentPosts: [] },
+      ],
+      leaderboards: { instagram: {}, tiktok: {} },
+    };
+    assert.throws(() => validateSnapshot(snapshot, registry, {
+      now: capturedAt, minCoverage: 0.5, rawExists: () => true,
+    }), /tiktok: resolved 0 of 1 connected profiles/);
+  });
+
+  console.log('\nTIKTOK LIVE + VERIFIED HANDLES');
+  await t('TikTok is included in the default weekly pull', () => {
     const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'src', 'ingest.js'), 'utf8');
     const m = src.match(/arg\('--platforms',\s*'([^']+)'\)/);
     assert.ok(m, 'default platform list should be findable');
-    assert.ok(!m[1].split(',').includes('tiktok'), 'tiktok must not be pulled while paused');
+    assert.ok(m[1].split(',').includes('tiktok'), 'tiktok must be pulled');
     assert.ok(m[1].split(',').includes('instagram'), 'instagram must still be pulled');
+    assert.ok(m[1].split(',').includes('facebook'), 'facebook must still be pulled');
   });
-  await t('dashboard gates TikTok behind a flag and shows an availability notice', () => {
+  await t('dashboard exposes TikTok as a live selectable platform', () => {
     const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
-    assert.ok(/const TIKTOK_ENABLED = false;/.test(html), 'flag must be present and off');
-    assert.ok(html.includes('Available soon'), 'roster must show the notice, not a bare dash');
+    assert.ok(/const TIKTOK_ENABLED = true;/.test(html), 'TikTok flag must be on');
+    assert.ok(!html.includes('Available soon'), 'live TikTok must not show an availability notice');
     assert.ok(/LIVE_PLATFORMS/.test(html), 'aggregates must run off the filtered platform list');
-    assert.ok(!/for\(const pf of \['instagram','tiktok','facebook'\]\)/.test(html),
-      'no hard-coded platform loop may bypass the flag');
   });
-  await t('TikTok handles stay null while paused', () => {
+  await t('only evidence-backed TikTok handles enter the registry', () => {
     const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
     const supplied = reg.employees.filter(e => e.name !== 'Manpreet Kaur' && e.handles.instagram);
-    assert.ok(supplied.every(e => e.handles.tiktok === null), 'no new tiktok handles while paused');
+    assert.ok(supplied.every(e => e.handles.tiktok === null),
+      'Instagram username patterns must not be copied into TikTok without identity evidence');
+    const connected = reg.employees.filter(e => e.dashboardRelevant !== false && e.handles.tiktok);
+    assert.deepStrictEqual(connected.map(e => e.name), ['Manpreet Kaur']);
+  });
+  await t('TikTok actor input is batched and avoids media downloads', () => {
+    const input = apifyInput('tiktok', ['one', 'two']);
+    assert.deepStrictEqual(input.profiles, ['one', 'two']);
+    assert.strictEqual(input.resultsPerPage, 12);
+    assert.strictEqual(input.profileSorting, 'latest');
+    assert.strictEqual(input.shouldDownloadVideos, false);
+    assert.strictEqual(input.shouldDownloadCovers, false);
+  });
+  await t('flat TikTok actor rows preserve profile metadata and videos', () => {
+    const items = [
+      { id: 'v1', text: 'One', createTime: 1780000000, diggCount: 12,
+        commentCount: 3, shareCount: 2, playCount: 900,
+        authorMeta: { name: 'manpreet.kirpa', signature: 'Founder & CEO @kirpa.properties',
+          fans: 447400, following: 20, video: 2183, privateAccount: false } },
+      { id: 'v2', text: 'Two', createTime: 1780000100, diggCount: 8,
+        commentCount: 1, shareCount: 1, playCount: 500,
+        authorMeta: { name: 'manpreet.kirpa', fans: 447400 } },
+    ];
+    const raw = groupApifyItems('tiktok', ['manpreet.kirpa'], items).get('manpreet.kirpa');
+    assert.strictEqual(raw.followers, 447400);
+    assert.strictEqual(raw.following, 20);
+    assert.strictEqual(raw.postCount, 2183);
+    assert.strictEqual(raw.signature, 'Founder & CEO @kirpa.properties');
+    assert.strictEqual(raw.recentPosts.length, 2);
+    const normalized = normalizeRecord(
+      { name: 'Manpreet Kaur', role: 'Founder / CEO', platform: 'tiktok', handle: 'manpreet.kirpa' },
+      raw, now);
+    assert.strictEqual(normalized.followers, 447400);
+    assert.strictEqual(normalized.recentPosts[0].likes, 12);
+    assert.strictEqual(normalized.recentPosts[0].views, 900);
   });
   await t('supplied Instagram handles are registered, confirmed and sourced', () => {
     const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));

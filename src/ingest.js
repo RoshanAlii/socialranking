@@ -88,9 +88,10 @@ function loadPreviousHistory(dir) {
 async function main() {
   const registryPath = arg('--registry', 'handles.json');
   const outDir = arg('--out', 'data');
-  // TikTok is paused by product decision. The adapter and tests are intact;
-  // pass --platforms instagram,tiktok,facebook to bring it back in one run.
-  const platforms = (arg('--platforms', 'instagram,facebook')).split(',');
+  // Platforms stay separate throughout normalization and ranking. TikTok is
+  // live alongside Instagram and Facebook, but only verified handles are sent
+  // to its actor.
+  const platforms = (arg('--platforms', 'instagram,tiktok,facebook')).split(',');
   const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 
   // LIVE-ONLY BY DEFAULT. If there is no token we stop, we do not invent
