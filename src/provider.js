@@ -1,95 +1,88 @@
 'use strict';
 
-/*
- * provider.js — the ingestion adapter (LeadRat-style swap point).
- *
- * A provider exposes ONE method:
- *    async fetchProfile(platform, handle) -> raw payload | { notFound: true }
- *
- * Two implementations ship:
- *   MockProvider  — deterministic, offline. Drives the test suite and the
- *                   labelled SAMPLE dataset. Real code, real shapes, fake
- *                   numbers — the output is always badged source:"sample".
- *   ApifyProvider — live public-surface data via Apify actors. No login,
- *                   no OAuth: it reads the same public pages a logged-out
- *                   visitor sees. Requires APIFY_TOKEN. Never faked: if the
- *                   token is absent it throws rather than pretend.
- *
- * Swap providers in ingest.js by changing one line. To move to EnsembleData
- * or HikerAPI later, implement the same fetchProfile contract.
- */
-
 const https = require('https');
 
-/* ---------------- Mock (offline / tests / sample) ---------------- */
+const INSTAGRAM_RESULTS_LIMIT = Number(process.env.APIFY_IG_RESULTS_LIMIT || 100);
+const APIFY_ACTORS = {
+  instagram: process.env.APIFY_IG_ACTOR || 'apify~instagram-profile-scraper',
+  tiktok: process.env.APIFY_TT_ACTOR || 'clockworks~tiktok-profile-scraper',
+  facebook: process.env.APIFY_FB_ACTOR || 'apify~facebook-pages-scraper',
+};
 
-// tiny deterministic hash so the same handle always yields the same numbers
 function seed(str) {
   let h = 2166136261;
-  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
-  return (h >>> 0);
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
 }
 function rng(seedVal) {
   let x = seedVal || 1;
-  return () => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return ((x >>> 0) % 100000) / 100000; };
+  return () => {
+    x ^= x << 13;
+    x ^= x >>> 17;
+    x ^= x << 5;
+    return ((x >>> 0) % 100000) / 100000;
+  };
 }
 
 class MockProvider {
-  constructor(opts = {}) { this.privateHandles = new Set(opts.privateHandles || []); this.missing = new Set(opts.missing || []); }
+  constructor(opts = {}) {
+    this.privateHandles = new Set(opts.privateHandles || []);
+    this.missing = new Set(opts.missing || []);
+  }
   async fetchProfile(platform, handle) {
     if (!handle || this.missing.has(handle)) return { notFound: true };
-    const r = rng(seed(platform + ':' + handle));
+    const r = rng(seed(`${platform}:${handle}`));
     if (this.privateHandles.has(handle)) {
       return { isPrivate: true, followers: 800 + Math.floor(r() * 4000), following: 300, postCount: 40 };
     }
     const followers = 1500 + Math.floor(r() * 90000);
-    const postCount = 60 + Math.floor(r() * 400);
-    const nPosts = 8 + Math.floor(r() * 4);
     const now = Date.now();
-    const recentPosts = Array.from({ length: nPosts }, (_, i) => {
-      const isVideo = platform === 'tiktok' ? true : r() > 0.35;
-      const base = Math.floor(followers * (0.04 + r() * 0.25));
+    const recentPosts = Array.from({ length: 35 }, (_, i) => {
+      const base = Math.floor(followers * (0.02 + r() * 0.10));
       return {
         id: `${handle}_${i}`,
-        type: platform === 'tiktok' ? 'video' : (isVideo ? 'reel' : 'image'),
+        type: r() > 0.35 ? 'reel' : 'image',
         url: `https://example/${platform}/${handle}/${i}`,
-        thumbnailUrl: `https://picsum.photos/seed/${handle}${i}/400/500`,
-        caption: `Dubai property tour \u2014 ${['JVC','Dubai Hills','Marina','Business Bay','Palm'][i % 5]} #kirpaarmy`,
+        caption: 'Dubai property content #kirpaarmy',
         likeCount: base,
-        commentCount: Math.floor(base * (0.02 + r() * 0.08)),
-        shareCount: isVideo ? Math.floor(base * (0.01 + r() * 0.05)) : 0,
-        playCount: isVideo ? Math.floor(followers * (0.5 + r() * 6)) : undefined,
-        timestamp: now - i * (2 + Math.floor(r() * 4)) * 24 * 3600 * 1000,
+        commentCount: Math.floor(base * 0.04),
+        shareCount: Math.floor(base * 0.02),
+        playCount: Math.floor(followers * (0.5 + r() * 3)),
+        timestamp: now - i * DAY(),
+        ownerUsername: handle,
       };
     });
-    return { isPrivate: false, followers, following: 400 + Math.floor(r() * 900), postCount, recentPosts };
+    return {
+      isPrivate: false,
+      followers,
+      following: 400 + Math.floor(r() * 900),
+      postCount: recentPosts.length,
+      recentPosts,
+      _fetchLimit: INSTAGRAM_RESULTS_LIMIT,
+      _rawPostCount: recentPosts.length,
+    };
   }
 }
-
-/* ---------------- Apify (live public-surface data) ---------------- */
-
-// Default public actors. Override via env if you prefer different ones.
-const APIFY_ACTORS = {
-  instagram: process.env.APIFY_IG_ACTOR || 'apify~instagram-profile-scraper',
-  tiktok: process.env.APIFY_TT_ACTOR || 'clockworks~tiktok-profile-scraper',
-  // Facebook is PAGES ONLY. Personal profiles expose no usable public data.
-  // A facebook handle in the registry must be a Page id/slug, never a person.
-  facebook: process.env.APIFY_FB_ACTOR || 'apify~facebook-pages-scraper',
-};
+function DAY() { return 24 * 60 * 60 * 1000; }
 
 function apifyInput(platform, handles) {
-  if (platform === 'instagram') return { usernames: handles, resultsLimit: 12 };
+  if (platform === 'instagram') {
+    return { usernames: handles, resultsLimit: INSTAGRAM_RESULTS_LIMIT };
+  }
   if (platform === 'facebook') {
     return {
       startUrls: handles.map(handle => ({ url: `https://www.facebook.com/${handle}` })),
-      resultsLimit: 12,
+      resultsLimit: 30,
     };
   }
   return {
     profiles: handles,
     profileScrapeSections: ['videos'],
     profileSorting: 'latest',
-    resultsPerPage: 12,
+    resultsPerPage: 30,
     excludePinnedPosts: false,
     shouldDownloadCovers: false,
     shouldDownloadSlideshowImages: false,
@@ -98,43 +91,41 @@ function apifyInput(platform, handles) {
   };
 }
 
-/*
- * Actors disagree on shape. Instagram commonly returns one profile object
- * with nested posts; TikTok returns one flat row per video and repeats profile
- * fields under authorMeta. Collapse both into the raw profile contract expected
- * by normalize.js. Exported for fixture tests so actor-shape changes can be
- * caught before a paid workflow run.
- */
+function requestedLimit(platform) {
+  if (platform === 'instagram') return INSTAGRAM_RESULTS_LIMIT;
+  return 30;
+}
+
 function groupApifyItems(platform, handles, items) {
   const wanted = [...new Set((handles || []).filter(Boolean))];
   const found = new Map();
-  if (!Array.isArray(items) || items.length === 0 || wanted.length === 0) return found;
+  if (!Array.isArray(items) || !items.length || !wanted.length) return found;
 
-  const canonical = new Map(wanted.map(handle => [handle.toLowerCase(), handle]));
+  const canonical = new Map(wanted.map(handle => [String(handle).toLowerCase(), handle]));
   const groups = new Map();
   for (const item of items) {
-    const rawHandle = item.username || item.userName || item.handle
-      || item.ownerUsername || item.authorMeta?.name || item.authorMeta?.uniqueId;
+    const rawHandle = item.username || item.userName || item.handle || item.ownerUsername
+      || item.authorMeta?.name || item.authorMeta?.uniqueId;
     const handle = rawHandle && canonical.get(String(rawHandle).replace(/^@/, '').toLowerCase());
     if (!handle) continue;
     if (!groups.has(handle)) groups.set(handle, []);
     groups.get(handle).push(item);
   }
 
-  // Some Facebook Page actor responses omit the requested slug/id.
-  if (platform === 'facebook' && wanted.length === 1 && groups.size === 0) {
-    groups.set(wanted[0], items);
-  }
+  if (platform === 'facebook' && wanted.length === 1 && groups.size === 0) groups.set(wanted[0], items);
 
   for (const [handle, rows] of groups) {
     const first = rows[0];
     const author = first.authorMeta || {};
-    const isNestedProfile = first.followersCount != null || first.followers != null
+    const nested = first.followersCount != null || first.followers != null
       || first.fansCount != null || first.followers_count != null;
 
-    if (isNestedProfile) {
+    if (nested) {
+      const posts = first.latestPosts || first.posts || (rows.length > 1 ? rows.slice(1) : []);
       found.set(handle, Object.assign({}, first, {
-        recentPosts: first.latestPosts || first.posts || (rows.length > 1 ? rows.slice(1) : []),
+        recentPosts: posts,
+        _fetchLimit: requestedLimit(platform),
+        _rawPostCount: Array.isArray(posts) ? posts.length : 0,
       }));
       continue;
     }
@@ -148,6 +139,8 @@ function groupApifyItems(platform, handles, items) {
       isPrivate: first.isPrivate === true || first.private === true
         || first.privateAccount === true || author.privateAccount === true,
       recentPosts: rows,
+      _fetchLimit: requestedLimit(platform),
+      _rawPostCount: rows.length,
     });
   }
   return found;
@@ -156,25 +149,30 @@ function groupApifyItems(platform, handles, items) {
 function apifyRunSync(actor, input, token) {
   const body = JSON.stringify(input);
   const path = `/v2/acts/${actor}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
-  const opts = { method: 'POST', hostname: 'api.apify.com', path,
-    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } };
+  const opts = {
+    method: 'POST',
+    hostname: 'api.apify.com',
+    path,
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+  };
   return new Promise((resolve, reject) => {
     const req = https.request(opts, res => {
       let data = '';
-      res.on('data', c => data += c);
+      res.on('data', c => { data += c; });
       res.on('end', () => {
         if (res.statusCode >= 400) return reject(new Error(`Apify ${res.statusCode}: ${data.slice(0, 300)}`));
         try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
       });
     });
     req.on('error', reject);
-    req.write(body); req.end();
+    req.write(body);
+    req.end();
   });
 }
 
 class ApifyProvider {
   constructor(token = process.env.APIFY_TOKEN) {
-    if (!token) throw new Error('ApifyProvider needs APIFY_TOKEN. Set it in the environment / GitHub secret. Refusing to fabricate live data.');
+    if (!token) throw new Error('ApifyProvider needs APIFY_TOKEN. Refusing to fabricate live data.');
     this.token = token;
   }
   async fetchProfile(platform, handle) {
@@ -183,31 +181,20 @@ class ApifyProvider {
     const items = await apifyRunSync(actor, apifyInput(platform, [handle]), this.token);
     return groupApifyItems(platform, [handle], items).get(handle) || { notFound: true };
   }
-
-  // One actor run per platform, rather than one paid run per person. With more
-  // than 30 confirmed profiles this is materially faster, cheaper, and less
-  // likely to time out in GitHub Actions.
   async fetchProfiles(platform, handles) {
     const actor = APIFY_ACTORS[platform];
     const wanted = [...new Set((handles || []).filter(Boolean))];
-    const found = new Map();
-    if (!actor || wanted.length === 0) return found;
-
+    if (!actor || !wanted.length) return new Map();
     const items = await apifyRunSync(actor, apifyInput(platform, wanted), this.token);
     return groupApifyItems(platform, wanted, items);
   }
 }
 
-/* ---------------- Captured (real data, replayed) ---------------- */
-
-// Reads REAL provider payloads previously captured from Apify and stored in
-// data/raw/<platform>_<handle>.json. This is not mock data: the numbers are
-// verbatim from a live run. It exists so the pipeline can be re-run, tested,
-// and audited without re-billing an API call, and so a snapshot is reproducible.
 class CapturedProvider {
   constructor(dir) { this.dir = dir; }
   async fetchProfile(platform, handle) {
-    const fs = require('fs'), path = require('path');
+    const fs = require('fs');
+    const path = require('path');
     const file = path.join(this.dir, `${platform}_${handle}.json`);
     if (!fs.existsSync(file)) return { notFound: true };
     return JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -215,6 +202,11 @@ class CapturedProvider {
 }
 
 module.exports = {
-  MockProvider, ApifyProvider, CapturedProvider, APIFY_ACTORS,
-  apifyInput, groupApifyItems,
+  MockProvider,
+  ApifyProvider,
+  CapturedProvider,
+  APIFY_ACTORS,
+  INSTAGRAM_RESULTS_LIMIT,
+  apifyInput,
+  groupApifyItems,
 };

@@ -1,38 +1,29 @@
 'use strict';
 
-/*
- * ingest.js — the run. Reads the registry, pulls each confirmed handle,
- * normalizes, builds every leaderboard, and writes:
- *    data/latest.json          (the dashboard reads this)
- *    data/history/<date>.json  (one snapshot per run, so trends can exist)
- *
- * Provider selection is honest:
- *   APIFY_TOKEN present  -> ApifyProvider, meta.source = "live"
- *   APIFY_TOKEN absent   -> MockProvider,  meta.source = "sample"
- * The dashboard badges the source so no one mistakes sample numbers for live.
- *
- * Usage:
- *   node src/ingest.js --registry handles.json --out data
- *   node src/ingest.js --registry test/sample-registry.json --out data --force-mock
- */
-
 const fs = require('fs');
 const path = require('path');
 const { normalizeRecord } = require('./normalize');
 const { buildLeaderboards, growth } = require('./rank');
 const { MockProvider, ApifyProvider, CapturedProvider } = require('./provider');
 
-function arg(flag, def) { const i = process.argv.indexOf(flag); return i > -1 ? process.argv[i + 1] : def; }
+const DAY_MS = 24 * 60 * 60 * 1000;
+const GROWTH_TARGET_DAYS = 7;
+const GROWTH_MIN_DAYS = 5;
+const GROWTH_MAX_DAYS = 9;
+
+function arg(flag, def) {
+  const i = process.argv.indexOf(flag);
+  return i > -1 ? process.argv[i + 1] : def;
+}
 function has(flag) { return process.argv.includes(flag); }
 
 async function run(registry, provider, platforms, capturedAt, opts = {}) {
   const employees = registry.employees.filter(e => e.dashboardRelevant !== false);
   const records = [];
   const states = { private: [], unresolved: [], unconfirmed: [], excludedBackOffice: [] };
-  const prefetched = new Map(), batchErrors = new Map();
+  const prefetched = new Map();
+  const batchErrors = new Map();
 
-  // Providers that support batching can resolve a whole platform in one actor
-  // run. Other providers retain the simple fetchProfile contract.
   if (typeof provider.fetchProfiles === 'function') {
     for (const pf of platforms) {
       const handles = employees
@@ -44,118 +35,155 @@ async function run(registry, provider, platforms, capturedAt, opts = {}) {
   }
 
   for (const e of registry.employees) {
-    if (e.dashboardRelevant === false) { states.excludedBackOffice.push({ name: e.name, role: e.role }); continue; }
+    if (e.dashboardRelevant === false) {
+      states.excludedBackOffice.push({ name: e.name, role: e.role });
+      continue;
+    }
     for (const pf of platforms) {
       const handle = e.handles ? e.handles[pf] : null;
       const entry = { name: e.name, role: e.role, platform: pf, handle };
       if (!handle || e.confirmed !== true) {
-        // no confirmed handle -> record an unresolved shell, never a pull
         records.push(normalizeRecord(entry, null, capturedAt));
         if (handle && e.confirmed !== true) states.unconfirmed.push({ name: e.name, platform: pf, handle });
         continue;
       }
-      let raw = null, error = null;
+
+      let raw = null;
+      let error = null;
       try {
         if (batchErrors.has(pf)) throw new Error(batchErrors.get(pf));
         raw = prefetched.has(pf)
           ? (prefetched.get(pf).get(handle) || { notFound: true })
           : await provider.fetchProfile(pf, handle);
+      } catch (err) {
+        error = String(err.message || err);
+        raw = { notFound: true };
       }
-      catch (err) { error = String(err.message || err); raw = { notFound: true }; }
+
       if (opts.rawDir && raw && !raw.notFound) {
         fs.mkdirSync(opts.rawDir, { recursive: true });
         const safe = `${pf}_${handle}`.replace(/[^a-zA-Z0-9._-]/g, '_');
         fs.writeFileSync(path.join(opts.rawDir, `${safe}.json`), JSON.stringify(raw, null, 2));
       }
+
       const rec = normalizeRecord(entry, raw, capturedAt);
       records.push(rec);
       if (!rec.resolved) states.unresolved.push({ name: e.name, platform: pf, handle, error });
       else if (rec.isPrivate) states.private.push({ name: e.name, platform: pf, handle });
     }
   }
+
   return { records, states, relevantCount: employees.length };
 }
 
-function loadPreviousHistory(dir) {
+function parseHistoryFile(file) {
+  try {
+    const payload = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const at = payload?.meta?.capturedAt ? new Date(payload.meta.capturedAt).getTime() : NaN;
+    return Number.isFinite(at) && Array.isArray(payload.records) ? { payload, at, file } : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+/*
+ * Growth must be genuinely weekly. We accept a baseline only when it is 5–9
+ * days old and choose the snapshot closest to exactly seven days.
+ */
+function loadWeeklyBaseline(dir, currentCapturedAt) {
   const hdir = path.join(dir, 'history');
   if (!fs.existsSync(hdir)) return null;
-  const files = fs.readdirSync(hdir).filter(f => f.endsWith('.json')).sort();
-  if (files.length === 0) return null;
-  try { return JSON.parse(fs.readFileSync(path.join(hdir, files[files.length - 1]), 'utf8')); }
-  catch (_) { return null; }
+  const current = new Date(currentCapturedAt).getTime();
+  if (!Number.isFinite(current)) return null;
+
+  const candidates = fs.readdirSync(hdir)
+    .filter(f => f.endsWith('.json'))
+    .map(f => parseHistoryFile(path.join(hdir, f)))
+    .filter(Boolean)
+    .map(x => Object.assign(x, { ageDays: (current - x.at) / DAY_MS }))
+    .filter(x => x.ageDays >= GROWTH_MIN_DAYS && x.ageDays <= GROWTH_MAX_DAYS)
+    .sort((a, b) => Math.abs(a.ageDays - GROWTH_TARGET_DAYS) - Math.abs(b.ageDays - GROWTH_TARGET_DAYS));
+
+  return candidates[0] || null;
 }
 
 async function main() {
   const registryPath = arg('--registry', 'handles.json');
   const outDir = arg('--out', 'data');
-  // Platforms stay separate throughout normalization and ranking. TikTok is
-  // live alongside Instagram and Facebook, but only verified handles are sent
-  // to its actor.
-  const platforms = (arg('--platforms', 'instagram,tiktok,facebook')).split(',');
+  const platforms = arg('--platforms', 'instagram').split(',').map(x => x.trim()).filter(Boolean);
   const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 
-  // LIVE-ONLY BY DEFAULT. If there is no token we stop, we do not invent
-  // numbers. Sample data is opt-in and must be asked for explicitly.
   const allowSample = has('--allow-sample');
   const useCaptured = has('--captured');
   if (!process.env.APIFY_TOKEN && !allowSample && !useCaptured) {
-    console.error(
-      '\n[ingest] STOPPED \u2014 no APIFY_TOKEN.\n' +
-      '  This job pulls live public data only. It will not generate placeholder\n' +
-      '  numbers to fill the dashboard.\n\n' +
-      '  Fix: set APIFY_TOKEN (locally: export APIFY_TOKEN=...; in CI: repo secret).\n' +
-      '  Override for layout testing only: node src/ingest.js --allow-sample\n');
+    console.error('\n[ingest] STOPPED — no APIFY_TOKEN. Live data only; no placeholders written.\n');
     process.exit(2);
   }
+
   const useLive = !!process.env.APIFY_TOKEN && !useCaptured;
-  const provider = useCaptured ? new CapturedProvider(path.join(outDir, 'raw'))
+  const provider = useCaptured
+    ? new CapturedProvider(path.join(outDir, 'raw'))
     : useLive ? new ApifyProvider() : new MockProvider();
   const source = useCaptured ? 'live' : useLive ? 'live' : 'sample';
   const capturedAt = new Date().toISOString();
 
-  const prev = loadPreviousHistory(outDir);
+  const baseline = loadWeeklyBaseline(outDir, capturedAt);
   const { records, states, relevantCount } = await run(
-    registry, provider, platforms, capturedAt,
-    useLive ? { rawDir: path.join(outDir, 'raw') } : {}
+    registry,
+    provider,
+    platforms,
+    capturedAt,
+    useLive ? { rawDir: path.join(outDir, 'raw') } : {},
   );
+
   const leaderboards = buildLeaderboards(records, platforms);
-  const trend = prev && prev.records ? growth(prev.records, records) : [];
+  const trend = baseline ? growth(baseline.payload.records, records) : [];
+  const baselineDays = baseline ? (new Date(capturedAt).getTime() - baseline.at) / DAY_MS : null;
 
   const payload = {
     meta: {
-      company: registry.company, orn: registry.orn,
-      capturedAt, source, provider: useCaptured ? 'apify (captured run)' : useLive ? 'apify' : 'mock',
-      platforms, relevantCount,
+      company: registry.company,
+      orn: registry.orn,
+      capturedAt,
+      source,
+      provider: useCaptured ? 'apify (captured run)' : useLive ? 'apify' : 'mock',
+      platforms,
+      relevantCount,
       resolvedProfiles: records.filter(r => r.resolved && !r.isPrivate).length,
       note: source === 'sample'
-        ? 'SAMPLE data \u2014 generated by the real pipeline with deterministic fake numbers. Not live. Add confirmed handles + APIFY_TOKEN to go live.'
-        : 'Live PUBLIC-SURFACE data via Apify (the same pages a logged-out visitor sees). Not an official Instagram/TikTok API. Snapshot, not real-time.',
+        ? 'SAMPLE data for layout testing only.'
+        : 'Live Instagram public-surface snapshot via Apify. TikTok and Facebook are not yet included.',
       trendAvailable: trend.length > 0,
+      growthBaselineAt: baseline?.payload?.meta?.capturedAt || null,
+      growthBaselineDays: baselineDays,
+      growthWindowRule: 'Baseline must be 5–9 days old; nearest to 7 days is used.',
     },
-    records, leaderboards, states, trend,
+    records,
+    leaderboards,
+    states,
+    trend,
   };
 
-  // A run that resolved NOTHING is a failed run, not an empty week. Bail out
-  // before writing, so a broken provider can never wipe a good snapshot.
   const attempted = records.filter(r => r.handle).length;
   if (useLive && attempted > 0 && payload.meta.resolvedProfiles === 0) {
-    const why = (states.unresolved.find(u => u.error) || {}).error || 'no profiles returned';
-    console.error(`\n[ingest] FAILED \u2014 attempted ${attempted} handle(s), resolved 0.\n  First error: ${why}\n  Existing data/latest.json left untouched.\n`);
+    const why = states.unresolved.find(u => u.error)?.error || 'no profiles returned';
+    console.error(`\n[ingest] FAILED — attempted ${attempted} handle(s), resolved 0. First error: ${why}\n`);
     process.exit(3);
   }
 
   fs.mkdirSync(path.join(outDir, 'history'), { recursive: true });
   fs.writeFileSync(path.join(outDir, 'latest.json'), JSON.stringify(payload, null, 2));
-  // Two runs on the same day previously collided on one filename, so the second
-  // silently destroyed the first and week-over-week growth lost a data point.
-  const hdir = path.join(outDir, 'history');
-  let hfile = path.join(hdir, `${capturedAt.slice(0, 10)}.json`);
-  if (fs.existsSync(hfile)) {
-    hfile = path.join(hdir, `${capturedAt.slice(0, 10)}T${capturedAt.slice(11, 19).replace(/:/g, '')}.json`);
-  }
-  fs.writeFileSync(hfile, JSON.stringify({ meta: payload.meta, records }, null, 2));
-  console.log(`[ingest] ${source} snapshot @ ${capturedAt} \u2014 ${payload.meta.resolvedProfiles} public profiles resolved, trend=${payload.meta.trendAvailable}`);
+  const stamp = capturedAt.replace(/[:.]/g, '-');
+  fs.writeFileSync(path.join(outDir, 'history', `${stamp}.json`), JSON.stringify({ meta: payload.meta, records }, null, 2));
+  console.log(`[ingest] ${source} Instagram snapshot @ ${capturedAt} — ${payload.meta.resolvedProfiles} profiles, weeklyTrend=${payload.meta.trendAvailable}`);
 }
 
 if (require.main === module) main().catch(e => { console.error(e); process.exit(1); });
-module.exports = { run };
+
+module.exports = {
+  run,
+  loadWeeklyBaseline,
+  GROWTH_TARGET_DAYS,
+  GROWTH_MIN_DAYS,
+  GROWTH_MAX_DAYS,
+};
