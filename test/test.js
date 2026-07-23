@@ -85,22 +85,34 @@ function rec(over = {}) {
   });
 
   console.log('\nRANK - video, comments, cadence, composite');
-  await t('topVideo picks highest views among videos/reels only', () => {
+  await t('mostViewed still ranks views, and only among videos/reels', () => {
     const records = [
       rec({ name: 'A', recentPosts: [{ id: 'v', type: 'reel', views: 5000, likes: 1, comments: 1, postedAt: now }] }),
       rec({ name: 'B', recentPosts: [{ id: 'w', type: 'reel', views: 90000, likes: 1, comments: 1, postedAt: now }] }),
       rec({ name: 'C', recentPosts: [{ id: 'img', type: 'image', views: 999999, likes: 1, comments: 1, postedAt: now }] }),
     ];
-    const top = R.topVideo(records, 'instagram');
+    const top = R.mostViewed(records, 'instagram');
     assert.strictEqual(top.name, 'B'); assert.strictEqual(top.post.views, 90000);
+  });
+  await t('the headline post board ranks interactions, not view availability', () => {
+    const records = [
+      rec({ name: 'A', recentPosts: [{ id: 'v', type: 'reel', views: 900000, likes: 2, comments: 0, postedAt: now }] }),
+      rec({ name: 'B', recentPosts: [{ id: 'w', type: 'reel', views: null, likes: 5000, comments: 400, postedAt: now }] }),
+    ];
+    const top = R.topPost(records, 'instagram', Date.parse(now));
+    assert.strictEqual(top.name, 'B', 'B has far more interactions; missing views must not disqualify');
   });
   await t('mostCommented picks highest comment count', () => {
     const top = R.mostCommented([rec({ name: 'A', recentPosts: [{ comments: 5, postedAt: now }] }), rec({ name: 'B', recentPosts: [{ comments: 900, postedAt: now }] })], 'instagram');
     assert.strictEqual(top.name, 'B');
   });
-  await t('postsPerWeek reflects cadence', () => {
+  await t('postsPerWeek divides by the shared window, not the person\u2019s own span', () => {
+    const N = Date.parse('2026-07-22T00:00:00Z');
     const r = rec({ recentPosts: [{ postedAt: '2026-07-01T00:00:00Z' }, { postedAt: '2026-07-08T00:00:00Z' }, { postedAt: '2026-07-15T00:00:00Z' }] });
-    assert.ok(Math.abs(R.postsPerWeek(r) - 1.5) < 1e-9);
+    // 3 posts over a fixed 30-day window = 3 / (30/7) weeks.
+    const expected = 3 / (R.WINDOW_DAYS / 7);
+    assert.ok(Math.abs(R.postsPerWeek(r, N) - expected) < 1e-9,
+      'got ' + R.postsPerWeek(r, N) + ', expected ' + expected);
   });
   await t('composite is bounded and ranks everyone once', () => {
     const board = R.compositeLeaderboard([rec({ name: 'A', followers: 50000 }), rec({ name: 'B', followers: 1000, platform: 'tiktok' })]);
@@ -210,12 +222,19 @@ function rec(over = {}) {
     assert.strictEqual(r.recentPosts[0].id, 'a');
     assert.ok(r.warnings.some(w => /another account/.test(w)));
   });
-  await t('pinned posts are excluded from posting cadence', () => {
-    const posts = [
-      { postedAt: '2024-01-01T00:00:00Z', isPinned: true },
-      { postedAt: '2026-07-20T00:00:00Z' }, { postedAt: '2026-07-21T00:00:00Z' }];
-    const withPin = R.postsPerWeek({ recentPosts: posts });
-    assert.ok(withPin >= 2, 'an old pinned post must not stretch the window');
+  await t('pinned posts never count as recent activity', () => {
+    const N = Date.parse('2026-07-22T00:00:00Z');
+    // A pinned post sits at the top of a profile regardless of age. Counting it
+    // would credit someone for activity they did not do in this window.
+    const recentPin = [{ postedAt: '2026-07-19T00:00:00Z', isPinned: true },
+                       { postedAt: '2026-07-20T00:00:00Z' }, { postedAt: '2026-07-21T00:00:00Z' }];
+    assert.strictEqual(R.windowPosts({ recentPosts: recentPin }, N).length, 2,
+      'the pinned post must be dropped even though it falls inside the window');
+    const oldPin = [{ postedAt: '2024-01-01T00:00:00Z', isPinned: true },
+                    { postedAt: '2026-07-20T00:00:00Z' }, { postedAt: '2026-07-21T00:00:00Z' }];
+    assert.strictEqual(R.postsPerWeek({ recentPosts: oldPin }, N),
+                       R.postsPerWeek({ recentPosts: recentPin }, N),
+      'pinned age is irrelevant \u2014 the window is fixed either way');
   });
   await t('losing follower count does not erase video performance', () => {
     const r = { name: 'X', role: 'C', platform: 'tiktok', handle: 'x', resolved: true, isPrivate: false,
@@ -353,6 +372,117 @@ function rec(over = {}) {
     // but it must be visible to whoever reads the board.
     const e = REG().employees.find(x => x.handles.instagram === 'jagraaj.kirpa');
     assert.ok(/differs from roster/.test(e.sourcedFrom), 'surname discrepancy must be stated');
+  });
+
+  console.log('\nMETRIC VALIDITY \u2014 regression guards');
+  const NOW = Date.parse('2026-07-22T00:00:00Z');
+  const day = d => new Date(NOW - d * 864e5).toISOString();
+  const mk = (name, followers, posts) => ({
+    name, role: 'Agent', platform: 'instagram', handle: name.toLowerCase(),
+    capturedAt: new Date(NOW).toISOString(), resolved: true, isPrivate: false,
+    followers, following: 10, postCount: posts.length, recentPosts: posts, warnings: [],
+  });
+  const post = (d, likes, extra) => Object.assign(
+    { id: 'p' + d + '_' + likes, type: 'reel', likes, comments: 0, shares: null,
+      views: null, postedAt: day(d), isPinned: false }, extra || {});
+
+  await t('one viral post cannot distort a person\u2019s engagement rate', () => {
+    // Real case: a 51k-like reel on a 12k-follower account produced 86.87%.
+    const steady = mk('Steady', 10000, [post(2,100), post(5,100), post(9,100), post(14,100)]);
+    const viral  = mk('Viral',  10000, [post(2,100), post(5,100), post(9,100), post(14,900000)]);
+    const a = R.engagementRate(steady, NOW), b = R.engagementRate(viral, NOW);
+    assert.ok(b < 0.5, 'rate must stay plausible despite an outlier, got ' + b);
+    assert.strictEqual(a, b, 'a single outlier must not move the typical-post rate at all');
+  });
+
+  await t('engagement rate never exceeds a sane ceiling on real data', () => {
+    const snap = JSON.parse(require('fs').readFileSync(
+      require('path').join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    for (const row of R.buildLeaderboards(snap.records, ['instagram']).instagram.engagement) {
+      assert.ok(row.engagementRate < 1,
+        row.name + ' has an implausible engagement rate: ' + (row.engagementRate * 100).toFixed(2) + '%');
+    }
+  });
+
+  await t('content that out-reaches the following is surfaced, not hidden', () => {
+    const viral = mk('Viral', 1000, [post(2,50), post(4,50), post(6,900000)]);
+    assert.strictEqual(R.beyondFollowingCount(viral, NOW), 1);
+  });
+
+  await t('cadence uses one shared window, not each person\u2019s own span', () => {
+    // Before: a 4-day span and a 485-day span were compared directly.
+    const burst = mk('Burst', 1000, [post(1,10), post(2,10), post(3,10), post(4,10)]);
+    const spread = mk('Spread', 1000, [post(1,10), post(2,10), post(3,10), post(4,10), post(400,10)]);
+    // The 400-day-old post is outside the window and must not stretch the denominator.
+    assert.strictEqual(R.postsPerWeek(burst, NOW), R.postsPerWeek(spread, NOW));
+  });
+
+  await t('posts outside the window are excluded from every rate', () => {
+    const old = mk('Old', 1000, [post(200, 5000)]);
+    assert.strictEqual(R.postsPerWeek(old, NOW), null, 'no recent posts -> null, never a number');
+    assert.strictEqual(R.engagementRate(old, NOW), null);
+  });
+
+  await t('the top-post board is winnable by someone whose posts report no views', () => {
+    // Dr. Jai Chatha had 0 of 10 videos reporting views, so the old view-ranked
+    // board made him structurally ineligible however well he performed.
+    const noViews = mk('NoViews', 1000, [post(1, 9000)]);
+    const hasViews = mk('HasViews', 1000, [post(3, 10, { views: 500000 })]);
+    const top = R.topPost([noViews, hasViews], 'instagram', NOW);
+    assert.strictEqual(top.name, 'NoViews', 'interactions must decide, not view availability');
+  });
+
+  await t('the most-viewed board states how little of the data it saw', () => {
+    const snap = JSON.parse(require('fs').readFileSync(
+      require('path').join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    const mv = R.buildLeaderboards(snap.records, ['instagram']).instagram.mostViewed;
+    assert.ok(mv.coverage.videosReportingViews < mv.coverage.videosSeen, 'fixture should be partial');
+    assert.ok(/not necessarily the best video/.test(mv.caveat), 'scope must be stated on the card');
+  });
+
+  await t('an unmeasured metric is never scored as zero', () => {
+    // A real agent with real followers but no posts yet was ranked last as
+    // though assessed. Unknown must stay unknown.
+    const active = mk('Active', 10000, [post(2,100), post(5,100)]);
+    const fresh  = mk('Fresh', 9000, []);
+    const rows = R.compositeLeaderboard([active, fresh], undefined, NOW);
+    const f = rows.find(r => r.name === 'Fresh');
+    assert.strictEqual(f.rank, null, 'a person with one measurable metric must not be ranked');
+    assert.strictEqual(f.provisional, true);
+    assert.ok(f.missingMetrics.includes('engagementRate') && f.missingMetrics.includes('postsPerWeek'));
+    assert.ok(f.note && /Not ranked yet/.test(f.note), 'the reason must be shown to the reader');
+  });
+
+  await t('provisional people stay visible rather than vanishing', () => {
+    const active = mk('Active', 10000, [post(2,100), post(5,100)]);
+    const fresh  = mk('Fresh', 9000, []);
+    const rows = R.compositeLeaderboard([active, fresh], undefined, NOW);
+    assert.strictEqual(rows.length, 2, 'nobody may be silently dropped from the board');
+  });
+
+  await t('composite weights recent behaviour over accumulated followers', () => {
+    assert.ok(R.DEFAULT_WEIGHTS.followers < R.DEFAULT_WEIGHTS.engagementRate);
+    assert.ok(R.DEFAULT_WEIGHTS.followers < R.DEFAULT_WEIGHTS.postsPerWeek);
+    const sum = Object.values(R.DEFAULT_WEIGHTS).reduce((a, b) => a + b, 0);
+    assert.ok(Math.abs(sum - 1) < 1e-9, 'weights must sum to 1, got ' + sum);
+  });
+
+  await t('scoring is reproducible from the snapshot, not from wall-clock time', () => {
+    const snap = JSON.parse(require('fs').readFileSync(
+      require('path').join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    const a = R.buildLeaderboards(snap.records, ['instagram']).instagram.engagement;
+    const b = R.buildLeaderboards(snap.records, ['instagram']).instagram.engagement;
+    assert.deepStrictEqual(a, b);
+    assert.strictEqual(R.asOf(snap.records), Date.parse(snap.meta.capturedAt));
+  });
+
+  await t('every board reports the window it was measured over', () => {
+    const snap = JSON.parse(require('fs').readFileSync(
+      require('path').join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    const c = R.buildLeaderboards(snap.records, ['instagram']).instagram.coverage;
+    assert.strictEqual(c.windowDays, R.WINDOW_DAYS);
+    assert.ok(c.asOf && c.profiles > 0);
+    assert.ok(c.videoViewReporting.pct !== null, 'view-reporting coverage must be published');
   });
 
   console.log(`\n${pass} passed, ${fail} failed\n`);

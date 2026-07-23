@@ -119,7 +119,14 @@ async function main() {
 
   fs.mkdirSync(path.join(outDir, 'history'), { recursive: true });
   fs.writeFileSync(path.join(outDir, 'latest.json'), JSON.stringify(payload, null, 2));
-  fs.writeFileSync(path.join(outDir, 'history', `${capturedAt.slice(0, 10)}.json`), JSON.stringify({ meta: payload.meta, records }, null, 2));
+  // Two runs on the same day previously collided on one filename, so the second
+  // silently destroyed the first and week-over-week growth lost a data point.
+  const hdir = path.join(outDir, 'history');
+  let hfile = path.join(hdir, `${capturedAt.slice(0, 10)}.json`);
+  if (fs.existsSync(hfile)) {
+    hfile = path.join(hdir, `${capturedAt.slice(0, 10)}T${capturedAt.slice(11, 19).replace(/:/g, '')}.json`);
+  }
+  fs.writeFileSync(hfile, JSON.stringify({ meta: payload.meta, records }, null, 2));
   console.log(`[ingest] ${source} snapshot @ ${capturedAt} \u2014 ${payload.meta.resolvedProfiles} public profiles resolved, trend=${payload.meta.trendAvailable}`);
 }
 
