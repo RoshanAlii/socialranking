@@ -1,17 +1,20 @@
-# Instagram-first dashboard fix
+# Manpreet cadence correction
 
-Replace the matching files in the repository root with the files in this package, then commit/push to `main`.
+Upload these files to the matching repository paths and commit them to `main`.
 
-The included workflow runs automatically after the source/workflow files reach `main`. It will use the existing `APIFY_TOKEN`, pull Instagram only, validate the new 30-day fairness rules, and commit a refreshed `data/latest.json` snapshot.
+Correct result for the existing snapshot:
 
-## What changes
+- The snapshot captured only 8 eligible recent posts from an account with 2,105 total posts.
+- The captured feed did not reach the start of the 30-day window.
+- Therefore the valid 30-day publishing cadence is **unavailable**, not 1.9 posts/week.
 
-- Instagram is the only active platform.
-- TikTok and Facebook are displayed as **Available soon** and do not affect any total or ranking.
-- Up to 100 recent Instagram posts are pulled per profile.
-- Engagement, cadence, participation, top-post and momentum rankings require a complete common 30-day feed.
-- Engagement requires at least three posts.
-- Pinned posts are excluded.
-- Growth is shown only against a baseline 5–9 days old, nearest to seven days.
-- The audience KPI is labelled specifically as Instagram followers.
-- Automated tests cover partial feeds, small samples, pinned posts and weekly-baseline selection.
+What this package changes:
+
+1. Adds `meta.measurementVersion: 2` to refreshed snapshots.
+2. Hides engagement, cadence, momentum, top-post and weekly-growth values from older snapshots.
+3. Keeps point-in-time follower counts visible.
+4. Adds a regression test specifically preventing the 8 / 2,105 case from producing 1.9/week.
+5. Makes changes to `index.html` and tests trigger the Instagram workflow.
+6. The workflow verifies measurement schema v2 before committing refreshed data.
+
+After the commit reaches `main`, the existing `APIFY_TOKEN` workflow should pull up to 100 Instagram posts per profile and write a new `data/latest.json`.

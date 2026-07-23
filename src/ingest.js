@@ -144,6 +144,7 @@ async function main() {
     meta: {
       company: registry.company,
       orn: registry.orn,
+      measurementVersion: 2,
       capturedAt,
       source,
       provider: useCaptured ? 'apify (captured run)' : useLive ? 'apify' : 'mock',

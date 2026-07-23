@@ -65,6 +65,12 @@ function rec(over = {}) {
     const partial = rec({ postCount: 500, recentPosts: [post(0), post(1), post(2)], fetchMeta: { authoredPostCount: 3 } });
     assert.strictEqual(R.windowCoverage(partial, nowMs).complete, false);
   });
+  await t('Manpreet regression: eight recent posts from a 2,105-post account are not a 30-day average', () => {
+    const manpreetLike = rec({ name: 'Manpreet Kaur', postCount: 2105, recentPosts: Array.from({ length: 8 }, (_, i) => post(i)), fetchMeta: { authoredPostCount: 8, rawPostCount: 12, requestedLimit: 12 } });
+    assert.strictEqual(R.windowCoverage(manpreetLike, nowMs).complete, false);
+    assert.strictEqual(R.postsPerWeek(manpreetLike, nowMs), null);
+    assert.strictEqual(R.postingFrequency([manpreetLike], 'instagram', nowMs).length, 0);
+  });
   await t('partial feeds are excluded from cadence and engagement', () => {
     const partial = rec({ name: 'Partial', postCount: 500, recentPosts: [post(0), post(1), post(2)], fetchMeta: { authoredPostCount: 3 } });
     assert.strictEqual(R.engagementLeaderboard([partial], 'instagram', nowMs).length, 0);
