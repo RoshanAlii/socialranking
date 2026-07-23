@@ -379,6 +379,29 @@ function rec(over = {}) {
     assert.ok(!html.includes('Available soon'), 'live TikTok must not show an availability notice');
     assert.ok(/LIVE_PLATFORMS/.test(html), 'aggregates must run off the filtered platform list');
   });
+  await t('dashboard formats large totals with the correct compact unit', () => {
+    const vm = require('vm');
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    const source = html.match(/const compact = [\s\S]*?(?=const pct =)/);
+    assert.ok(source, 'compact formatter source should be present');
+    const sandbox = {};
+    vm.runInNewContext(`${source[0]}; result=[fmt(1136000),fmt(724000),fmt(34000),fmt(213)]`, sandbox);
+    assert.deepStrictEqual(Array.from(sandbox.result), ['1.1M', '724k', '34k', '213']);
+  });
+  await t('dashboard replaces failed social thumbnails with a usable fallback', () => {
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    assert.ok(/data-media-image/.test(html), 'social images should be registered for failure handling');
+    assert.ok(/addEventListener\('error',fail/.test(html), 'broken images need an error fallback');
+    assert.ok(/Preview unavailable/.test(html), 'the fallback should explain the missing preview');
+    assert.ok(/wireMediaFallbacks\(d\)/.test(html), 'drawer thumbnails need the same protection');
+  });
+  await t('top-post card uses a compact responsive split layout', () => {
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    assert.ok(/grid-template-areas:"label label" "thumb copy"/.test(html), 'desktop spotlight should not stack a huge preview');
+    assert.ok(/class="spot-copy"/.test(html), 'post details should occupy their own compact column');
+    assert.ok(/@media \(max-width:520px\)[\s\S]*grid-template-areas:"label" "thumb" "copy"/.test(html),
+      'spotlight should stack cleanly on narrow screens');
+  });
   await t('only evidence-backed TikTok handles enter the registry', () => {
     const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
     const supplied = reg.employees.filter(e => e.name !== 'Manpreet Kaur' && e.handles.instagram);

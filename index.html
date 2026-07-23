@@ -69,23 +69,40 @@
   .freshness:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 
   /* hero */
-  .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin:16px 0 8px}
+  .hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0 8px;
+    align-items:stretch}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
   .eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .champ{padding:20px}
+  .champ{padding:20px;min-height:238px;display:flex;flex-direction:column}
   .champ .name{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:8px 0 2px}
   .champ .role{font-size:13px;color:var(--muted)}
-  .champ .metrics{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap}
+  .champ .metrics{display:flex;gap:22px;margin-top:auto;padding-top:18px;flex-wrap:wrap}
   .champ .metrics b{display:block;font-size:19px;font-weight:600}
-  .champ .metrics span{font-size:11.5px;color:var(--muted)}
-  .spot{padding:20px;display:flex;flex-direction:column}
-  .spot .thumb{margin-top:12px;border-radius:10px;overflow:hidden;background:var(--surface-2);
-    aspect-ratio:16/10;border:1px solid var(--line);position:relative}
+  .champ .metrics span,.champ .metrics small{display:block;font-size:11.5px;color:var(--muted)}
+  .champ .metrics small{margin-top:3px;font-size:10.5px;max-width:190px}
+  .spot{padding:20px;min-height:238px;display:grid;grid-template-columns:minmax(180px,.9fr) minmax(0,1fr);
+    grid-template-areas:"label label" "thumb copy";gap:12px 16px;align-content:start}
+  .spot>.eyebrow{grid-area:label}
+  .spot .thumb{grid-area:thumb;border-radius:10px;overflow:hidden;background:var(--surface-2);
+    aspect-ratio:4/3;border:1px solid var(--line);position:relative;min-height:150px}
   .spot .thumb img{width:100%;height:100%;object-fit:cover;display:block}
   .spot .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
   .spot .play svg{width:44px;height:44px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-  .spot .cap{margin-top:12px;font-size:13px;color:var(--ink)}
-  .spot .stats{margin-top:8px;font-size:12px;color:var(--muted);display:flex;gap:14px}
+  .spot-copy{grid-area:copy;min-width:0;align-self:center}
+  .spot .cap{font-size:13px;color:var(--ink);line-height:1.45;display:-webkit-box;
+    -webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+  .spot .stats{margin-top:10px;font-size:11.5px;color:var(--muted);display:flex;gap:7px;flex-wrap:wrap}
+  .spot .stats span{background:var(--surface-2);border-radius:999px;padding:4px 8px}
+  .spot-cta{display:inline-block;margin-top:10px;font-size:11.5px;font-weight:600;color:var(--coral)}
+  .media-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:14px;background:linear-gradient(145deg,#F7E8DF,#F3EFE9);color:var(--ink)}
+  [data-media-image][hidden],
+  .media-fallback[hidden]{display:none}
+  .media-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+    background:var(--coral);color:#fff;font-size:13px;font-weight:700;letter-spacing:.04em}
+  .media-message b,.media-message span{display:block}
+  .media-message b{font-size:12.5px}
+  .media-message span{margin-top:2px;font-size:10.5px;color:var(--muted)}
 
   /* leaderboard grid */
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
@@ -169,7 +186,11 @@
   .drawer .role{color:var(--muted);font-size:13px;margin-bottom:16px}
   .post{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);color:inherit}
   a.post:hover .pc{text-decoration:underline;text-decoration-color:var(--coral)}
-  .post img{width:56px;height:70px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:var(--surface-2)}
+  .post-media{width:56px;height:70px;border-radius:8px;overflow:hidden;position:relative;flex:0 0 auto;
+    background:var(--surface-2)}
+  .post-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .post-media .media-fallback{padding:0}
+  .post-media .media-avatar{width:30px;height:30px;font-size:10px}
   .post .pc{font-size:12.5px}
   .post .ps{font-size:11.5px;color:var(--muted);margin-top:4px}
   .spot a.thumb{display:block;color:inherit}
@@ -182,15 +203,22 @@
     font-size:12px;color:var(--muted);line-height:1.6}
   footer b{color:var(--ink);font-weight:600}
 
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr}
+  }
   @media (max-width:720px){
     .kpis{grid-template-columns:repeat(2,1fr)}
-    .hero{grid-template-columns:1fr}
     .grid{grid-template-columns:1fr}
     .insight-grid{grid-template-columns:1fr}
     .tbl .hide-sm{display:none}
     .stamp{text-align:left}
     .roster-head{align-items:stretch;flex-direction:column}
     .search input{width:100%}
+  }
+  @media (max-width:520px){
+    .spot{grid-template-columns:1fr;grid-template-areas:"label" "thumb" "copy"}
+    .spot .thumb{aspect-ratio:16/9;min-height:0}
+    .champ,.spot{min-height:0}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
@@ -255,9 +283,45 @@
 <script>
 const SAMPLE_DATA = null; // live-only: no bundled placeholder data
 
-const fmt = n => n==null ? '\u2014' : n>=1000 ? (n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k' : String(n);
+const compact = (n,unit,suffix) => {
+  const value=n/unit, digits=Math.abs(value)>=100?0:1;
+  return value.toFixed(digits).replace(/\.0$/,'')+suffix;
+};
+const fmt = n => {
+  if(n==null||!Number.isFinite(Number(n))) return '\u2014';
+  n=Number(n);
+  const abs=Math.abs(n);
+  if(abs>=1e9) return compact(n,1e9,'B');
+  if(abs>=1e6) return compact(n,1e6,'M');
+  if(abs>=1e3) return compact(n,1e3,'k');
+  return n.toLocaleString();
+};
 const pct = n => n==null ? '\u2014' : (n*100).toFixed(1)+'%';
 const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const initials = s => String(s||'').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'KP';
+const excerpt = (s,limit=110) => {
+  const clean=String(s||'').replace(/\s+/g,' ').trim();
+  if(!clean) return 'Top-performing public post';
+  if(clean.length<=limit) return clean;
+  return clean.slice(0,limit).replace(/\s+\S*$/,'')+'\u2026';
+};
+const mediaContent = (name,thumb,platformName,compactMode=false) =>
+  `${thumb?`<img src="${esc(thumb)}" alt="${esc(name)} post preview" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-media-image/>`:''}
+   <span class="media-fallback"${thumb?' hidden':''} aria-hidden="true">
+     <span class="media-avatar">${esc(initials(name))}</span>
+     ${compactMode?'':`<span class="media-message"><b>Preview unavailable</b><span>Open on ${esc(platformName)}</span></span>`}
+   </span>`;
+function wireMediaFallbacks(root){
+  root.querySelectorAll('[data-media-image]').forEach(img=>{
+    const fail=()=>{
+      img.hidden=true;
+      const fallback=img.parentElement&&img.parentElement.querySelector('.media-fallback');
+      if(fallback) fallback.hidden=false;
+    };
+    img.addEventListener('error',fail,{once:true});
+    if(img.complete&&img.naturalWidth===0) fail();
+  });
+}
 const median = xs => {const a=xs.filter(x=>typeof x==='number').sort((x,y)=>x-y);if(!a.length)return null;const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2;};
 const daysOld = iso => Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/86400000));
 const profileUrl = r => !r||!r.handle ? null
@@ -443,7 +507,8 @@ function renderChamp(){
     <div class="name">${esc(top.name)}</div><div class="role">${esc(top.role||'')}</div>
     <div class="metrics">
       <div><b>${fmt(top.followers)}</b><span>followers</span></div>
-      ${eng?`<div><b>${pct(eng.engagementRate)}</b><span>top engagement (${esc(eng.name.split(' ')[0])})</span></div>`:''}
+      ${eng?`<div><b>${esc(eng.name.split(' ')[0])}</b><span>engagement leader · ${pct(eng.engagementRate)} ER</span>
+        ${eng.engagementRate>1?'<small>Interactions exceeded follower base</small>':''}</div>`:''}
     </div>`;
 }
 
@@ -454,10 +519,14 @@ function renderSpotlight(){
   const p=tv.post;
   s.innerHTML=`<div class="eyebrow">Top post · trailing 30 days</div>
     <a class="thumb" href="${esc(p.url||'#')}" target="_blank" rel="noopener" aria-label="Open ${esc(tv.name)}'s top post">
-      ${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
+      ${mediaContent(tv.name,p.thumb,platform==='all'?'social platform':platform)}
       <div class="play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="rgba(240,101,58,.92)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></a>
-    <div class="cap"><b>${esc(tv.name)}</b> \u2014 ${esc((p.caption||'').slice(0,80))}</div>
-    <div class="stats">${p.views!=null?`<span>\u25b6 ${fmt(p.views)} views</span>`:''}<span>\u2661 ${fmt(p.likes)}</span><span>\ud83d\udcac ${fmt(p.comments)}</span></div>`;
+    <div class="spot-copy">
+      <div class="cap"><b>${esc(tv.name)}</b> \u2014 ${esc(excerpt(p.caption))}</div>
+      <div class="stats">${p.views!=null?`<span>\u25b6 ${fmt(p.views)} views</span>`:''}<span>\u2661 ${fmt(p.likes)}</span><span>\ud83d\udcac ${fmt(p.comments)}</span></div>
+      <a class="spot-cta" href="${esc(p.url||'#')}" target="_blank" rel="noopener">Open post ↗</a>
+    </div>`;
+  wireMediaFallbacks(s);
 }
 function bestVideoAllPlatforms(){
   let best=null;
@@ -633,7 +702,8 @@ function openDrawer(name){
       if((r.warnings||[]).length) body+=`<div style="font-size:12px;color:var(--ochre);margin-top:4px">${r.warnings.map(esc).join('<br>')}</div>`;
       if(r.isPrivate){body+='<div class="empty">Private account \u2014 counts only, no post data.</div>';continue;}
       const top=(r.recentPosts||[]).slice().sort((a,b)=>(b.views||b.likes||0)-(a.views||a.likes||0)).slice(0,3);
-      body+=top.map(p=>`<a class="post" href="${esc(p.url||'#')}" target="_blank" rel="noopener">${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
+      body+=top.map(p=>`<a class="post" href="${esc(p.url||'#')}" target="_blank" rel="noopener">
+        <span class="post-media">${mediaContent(r.name,p.thumb,r.platform,true)}</span>
         <div><div class="pc">${esc((p.caption||'').slice(0,70))}</div>
         <div class="ps">${p.views!=null?'\u25b6 '+fmt(p.views)+' \u00b7 ':''}\u2661 ${fmt(p.likes)} \u00b7 \ud83d\udcac ${fmt(p.comments)}</div></div></a>`).join('');
     }
@@ -641,6 +711,7 @@ function openDrawer(name){
   d.innerHTML=`<button class="x" aria-label="Close">\u00d7</button>
     <h3>${esc(name)}</h3><div class="role">${esc((any&&any.role)||(person&&person.role)||'')}</div>
     <div class="next"><b>Next best action</b><br>${esc(nextAction(person))}</div>${body}`;
+  wireMediaFallbacks(d);
   d.querySelector('.x').onclick=closeDrawer;
   d.classList.add('open');d.setAttribute('aria-hidden','false');
   document.getElementById('scrim').classList.add('open');d.focus();

@@ -100,7 +100,7 @@ All four rules are enforced by the test suite.
 ## Local preview
 
 ```bash
-node test/test.js                              # 68 assertions, the pre-pull deploy gate
+node test/test.js                              # 71 assertions, the pre-pull deploy gate
 node src/validate-snapshot.js                  # live post-pull integrity gate
 export APIFY_TOKEN=...  && node src/ingest.js  # real pull
 python3 -m http.server                         # then open http://localhost:8000
