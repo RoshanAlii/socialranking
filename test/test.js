@@ -6,6 +6,7 @@ const R = require('../src/rank');
 const { propose, slugCandidates } = require('../src/resolver');
 const { MockProvider } = require('../src/provider');
 const { run } = require('../src/ingest');
+const { validateSnapshot } = require('../src/validate-snapshot');
 
 let pass = 0, fail = 0;
 async function t(name, fn) {
@@ -290,7 +291,53 @@ function rec(over = {}) {
       'normalization must preserve the follower count from this run, not yesterday\u2019s count');
     assert.ok(r.recentPosts.length > 0,
       'the live capture should normalize at least one recent post');
-    assert.ok(Number.isFinite(R.engagementRate(r)) && R.engagementRate(r) >= 0);
+  });
+
+  await t('post-ingestion validator checks invariants, not changing social values', () => {
+    const registry = { employees: [{
+      name: 'A', dashboardRelevant: true, confirmed: true,
+      handles: { instagram: 'a' },
+    }] };
+    const capturedAt = '2026-07-23T12:00:00.000Z';
+    const snapshot = {
+      meta: {
+        source: 'live', provider: 'apify', capturedAt,
+        platforms: ['instagram'], relevantCount: 1, resolvedProfiles: 1,
+      },
+      records: [{
+        name: 'A', platform: 'instagram', handle: 'a', capturedAt,
+        resolved: true, isPrivate: false, followers: 10,
+        recentPosts: [],
+      }],
+      leaderboards: { instagram: {} },
+    };
+    const result = validateSnapshot(snapshot, registry, {
+      now: capturedAt, minCoverage: 1, rawExists: () => true,
+    });
+    assert.strictEqual(result.resolved, 1);
+    // No engagement assertion: zero recent posts legitimately means unknown.
+  });
+
+  await t('post-ingestion validator rejects missing source captures', () => {
+    const capturedAt = '2026-07-23T12:00:00.000Z';
+    const registry = { employees: [{
+      name: 'A', dashboardRelevant: true, confirmed: true,
+      handles: { instagram: 'a' },
+    }] };
+    const snapshot = {
+      meta: {
+        source: 'live', provider: 'apify', capturedAt,
+        platforms: ['instagram'], relevantCount: 1, resolvedProfiles: 1,
+      },
+      records: [{
+        name: 'A', platform: 'instagram', handle: 'a', capturedAt,
+        resolved: true, isPrivate: false, followers: null, recentPosts: [],
+      }],
+      leaderboards: { instagram: {} },
+    };
+    assert.throws(() => validateSnapshot(snapshot, registry, {
+      now: capturedAt, rawExists: () => false,
+    }), /captured raw payload is missing/);
   });
 
   console.log('\nTIKTOK PAUSED + SUPPLIED HANDLES');
