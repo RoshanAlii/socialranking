@@ -1,0 +1,51 @@
+name: Weekly social snapshot
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-social-snapshot
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run pre-ingestion tests
+        run: node test/test.js
+
+      - name: Pull public social profiles
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: node src/ingest.js
+
+      - name: Verify generated snapshot
+        run: |
+          node -e "const d=require('./data/latest.json'); if(d.meta.source!=='live'||d.meta.resolvedProfiles<1) process.exit(1)"
+          node test/test.js
+
+      - name: Commit snapshot and source captures
+        run: |
+          git config user.name "kirpa-social-bot"
+          git config user.email "kirpa-social-bot@users.noreply.github.com"
+          git add data/latest.json data/history data/raw
+          if git diff --cached --quiet; then
+            echo "No snapshot changes to commit."
+          else
+            git commit -m "data: refresh weekly social snapshot"
+            git push
+          fi
