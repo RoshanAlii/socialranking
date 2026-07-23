@@ -12,15 +12,35 @@ It runs on a schedule with **no logins and no passwords**. It reads only the pub
 - **Public accounts only.** A private account shows as `Private` (counts only, no post data) and is **never estimated** into a ranking.
 - **No fabricated handles.** Name-to-handle matching is where a tool like this quietly pulls a stranger's stats. So handles are **confirm-gated**: every handle sits `confirmed: false` until a human verifies it. Nothing is pulled until then.
 - **Engagement rate is a within-platform proxy.** A TikTok view is not an Instagram reach, so platforms are ranked separately and the combined score is explicitly normalised, never raw-summed.
+- **TikTok is paused.** Switched off by product decision, not by capability: `TIKTOK_ENABLED = false` in `index.html` and TikTok dropped from the default `--platforms`. The tab, the roster column and the aggregates all respect the flag, and the UI reads "available soon" rather than showing a zero. The adapter, normalizer and their tests are untouched — flip the flag and pass `--platforms instagram,tiktok,facebook` to bring it back in one run.
 - **Facebook is Pages-only.** Personal FB profiles expose no usable public data; only business Pages do. A `facebook` value in the registry must be a Page id/slug.
 
-### Confirmed so far
+### Confirmed so far — 24 of 38 dashboard-relevant staff
 
-| Person | Instagram | TikTok | Facebook |
-|---|---|---|---|
-| Manpreet Kaur (Founder/CEO) | `manpreet.kirpa` | `manpreet.kirpa` | Page `61569944367329` |
+Every confirmed handle carries an `evidenceClass` recording *why* it was accepted:
 
-All three verified against the accounts' own public bios, which name her as Founder & CEO of Kirpa Properties. Every other handle is still `confirmed: false` and will not be pulled.
+| class | meaning | count |
+|---|---|---|
+| `bio` | the profile self-declares Kirpa — an `@kirpa.properties` tag or an `@kirpaproperties.com` address | 22 |
+| `company-tag` | the Kirpa company account tagged them, with a matching full name | 1 |
+| `posting-context` | circumstantial only (office geotags, colleague tags). Carries `needsHumanConfirmation: true` | 1 |
+
+**Handles are never accepted on pattern alone.** The `firstname.kirpa` convention is used only to
+*generate* candidates; a live public bio has to confirm them. Two illustrations of why:
+
+- `priyanka.danubeproperties` was supplied as an employee handle. It resolves to a different
+  woman — a Senior Sales Manager at Danube Properties. Rejected. The correct account,
+  `priyanka.kirpa`, was later found with a Kirpa company email in the bio.
+- `nikita.kirpa` resolves to a real account. Blank bio, 2 followers, 1 post, no mention of Kirpa.
+  Rejected — a handle matching the pattern is not evidence of employment.
+
+Both rejections stay recorded in `handles.json` so nobody re-probes and "re-discovers" them.
+
+**14 people still have no handle.** Probing found no account at their pattern. That gap closes by
+asking HR, not by guessing — see `notes` in `handles.json` for the exact list probed.
+
+> Adding a handle does **not** backfill data. A pipeline run has to happen before anyone appears
+> on the board; until then they are absent, never shown as zero.
 
 ---
 
@@ -42,7 +62,7 @@ handles.json ──► src/ingest.js ──► src/provider.js  (Apify | Mock)  
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards → write `data/latest.json` + a dated history snapshot.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json`; falls back to an inlined sample so it also opens straight from disk.
-- **`.github/workflows/snapshot.yml`** — weekly cron. Test gate → pull → commit the JSON back.
+- **`.github/workflows/weekly.yml`** — weekly cron (Mondays 06:00 UTC) plus a manual trigger. Test gate → pull → commit the JSON back. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers.
 
 ---
 

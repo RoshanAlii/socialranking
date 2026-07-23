@@ -1,0 +1,160 @@
+{
+  "followersCount": 45963,
+  "followsCount": 179,
+  "postsCount": 737,
+  "private": false,
+  "latestPosts": [
+    {
+      "id": "3872905280921306481",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 2173,
+      "commentsCount": 26,
+      "videoViewCount": 43667,
+      "timestamp": "2026-04-11T11:19:52.000Z",
+      "ownerUsername": "kirpa.properties",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3872905280921306481/"
+    },
+    {
+      "id": "3946611880274097205",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 28,
+      "commentsCount": 5,
+      "videoViewCount": null,
+      "timestamp": "2026-07-22T04:01:29.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946611880274097205/"
+    },
+    {
+      "id": "3946159180150328654",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 54,
+      "commentsCount": 3,
+      "videoViewCount": null,
+      "timestamp": "2026-07-21T13:01:35.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946159180150328654/"
+    },
+    {
+      "id": "3946038730301472879",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 37,
+      "commentsCount": 0,
+      "videoViewCount": null,
+      "timestamp": "2026-07-21T09:03:00.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946038730301472879/"
+    },
+    {
+      "id": "3945887067271768670",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 57,
+      "commentsCount": 4,
+      "videoViewCount": null,
+      "timestamp": "2026-07-21T04:00:59.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945887067271768670/"
+    },
+    {
+      "id": "3945453537444971579",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 56,
+      "commentsCount": 3,
+      "videoViewCount": null,
+      "timestamp": "2026-07-20T13:40:22.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945453537444971579/"
+    },
+    {
+      "id": "3945207934144001312",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 68,
+      "commentsCount": 4,
+      "videoViewCount": null,
+      "timestamp": "2026-07-20T05:32:17.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945207934144001312/"
+    },
+    {
+      "id": "3944734281644794225",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 3650,
+      "commentsCount": 50,
+      "videoViewCount": null,
+      "timestamp": "2026-07-19T13:50:48.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3944734281644794225/"
+    },
+    {
+      "id": "3944607293285807430",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 65,
+      "commentsCount": 4,
+      "videoViewCount": null,
+      "timestamp": "2026-07-19T09:41:11.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3944607293285807430/"
+    },
+    {
+      "id": "3944437490131840137",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 74,
+      "commentsCount": 16,
+      "videoViewCount": null,
+      "timestamp": "2026-07-19T04:00:45.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3944437490131840137/"
+    },
+    {
+      "id": "3943989558633595242",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 54,
+      "commentsCount": 17,
+      "videoViewCount": null,
+      "timestamp": "2026-07-18T13:12:46.000Z",
+      "ownerUsername": "jai.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943989558633595242/"
+    },
+    {
+      "id": "3943932392509725728",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 96,
+      "commentsCount": 3,
+      "videoViewCount": null,
+      "timestamp": "2026-07-18T11:19:34.000Z",
+      "ownerUsername": "sobhaverse",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943932392509725728/"
+    }
+  ],
+  "username": "jai.kirpa",
+  "_capture": {
+    "runId": "mLLc93drAaJRIn3hX",
+    "datasetId": "xuR4nfYBHYv8hruni",
+    "actor": "apify/instagram-profile-scraper",
+    "pulledAt": "2026-07-22T06:50:40.135Z",
+    "note": "Verbatim public-surface figures from the Apify run above. Heavy media fields (CDN urls, captions, tagged users) omitted at capture time; no metric was altered."
+  }
+}

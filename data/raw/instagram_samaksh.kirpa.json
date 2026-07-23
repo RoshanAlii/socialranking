@@ -1,0 +1,160 @@
+{
+  "followersCount": 15947,
+  "followsCount": 838,
+  "postsCount": 177,
+  "private": false,
+  "latestPosts": [
+    {
+      "id": "3931560621900423961",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 335,
+      "commentsCount": 73,
+      "videoViewCount": 9635,
+      "timestamp": "2026-07-01T09:39:37.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": true,
+      "url": "https://www.instagram.com/p/3931560621900423961/"
+    },
+    {
+      "id": "3893129439023163807",
+      "type": "Sidecar",
+      "productType": null,
+      "likesCount": 661,
+      "commentsCount": 37,
+      "videoViewCount": null,
+      "timestamp": "2026-05-09T09:00:16.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": true,
+      "url": "https://www.instagram.com/p/3893129439023163807/"
+    },
+    {
+      "id": "3946630916914209108",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 28,
+      "commentsCount": 8,
+      "videoViewCount": null,
+      "timestamp": "2026-07-22T04:41:15.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946630916914209108/"
+    },
+    {
+      "id": "3945497595672808377",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 58,
+      "commentsCount": 5,
+      "videoViewCount": null,
+      "timestamp": "2026-07-20T15:09:01.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945497595672808377/"
+    },
+    {
+      "id": "3945256330951751722",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 37,
+      "commentsCount": 6,
+      "videoViewCount": null,
+      "timestamp": "2026-07-20T07:10:17.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945256330951751722/"
+    },
+    {
+      "id": "3944791814753239415",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 74,
+      "commentsCount": 15,
+      "videoViewCount": null,
+      "timestamp": "2026-07-19T15:50:51.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3944791814753239415/"
+    },
+    {
+      "id": "3944661288482526624",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 28,
+      "commentsCount": 10,
+      "videoViewCount": null,
+      "timestamp": "2026-07-19T11:25:05.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3944661288482526624/"
+    },
+    {
+      "id": "3943962436670626477",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 75,
+      "commentsCount": 20,
+      "videoViewCount": null,
+      "timestamp": "2026-07-18T14:07:04.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943962436670626477/"
+    },
+    {
+      "id": "3943786658045792340",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 29,
+      "commentsCount": 10,
+      "videoViewCount": null,
+      "timestamp": "2026-07-18T06:29:35.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943786658045792340/"
+    },
+    {
+      "id": "3942440856525931920",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 35,
+      "commentsCount": 6,
+      "videoViewCount": null,
+      "timestamp": "2026-07-16T10:01:27.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3942440856525931920/"
+    },
+    {
+      "id": "3941597690012661157",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 77,
+      "commentsCount": 34,
+      "videoViewCount": null,
+      "timestamp": "2026-07-15T05:58:22.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3941597690012661157/"
+    },
+    {
+      "id": "3909725104988006565",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 6002,
+      "commentsCount": 147,
+      "videoViewCount": 56457,
+      "timestamp": "2026-06-01T06:33:34.000Z",
+      "ownerUsername": "samaksh.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3909725104988006565/"
+    }
+  ],
+  "username": "samaksh.kirpa",
+  "_capture": {
+    "runId": "mLLc93drAaJRIn3hX",
+    "datasetId": "xuR4nfYBHYv8hruni",
+    "actor": "apify/instagram-profile-scraper",
+    "pulledAt": "2026-07-22T06:50:40.135Z",
+    "note": "Verbatim public-surface figures from the Apify run above. Heavy media fields (CDN urls, captions, tagged users) omitted at capture time; no metric was altered."
+  }
+}

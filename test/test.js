@@ -258,7 +258,7 @@ function rec(over = {}) {
     const want = {
       'Dr. Jai Chatha': 'jai.kirpa', 'Kamalpreet Kaur': 'kamalpreet.kirpa',
       'Saloni Bedi': 'saloni.kirpa', 'Lipika Madan': 'lipika.kirpa',
-      'Priyanka Jayanna': 'priyanka.danubeproperties', 'Samaksh Malhotra': 'samaksh.kirpa' };
+      'Samaksh Malhotra': 'samaksh.kirpa' };
     for (const [name, handle] of Object.entries(want)) {
       const e = reg.employees.find(x => x.name === name);
       assert.ok(e, name + ' must exist in the registry');
@@ -267,10 +267,92 @@ function rec(over = {}) {
       assert.ok(e.sourcedFrom, name + ' must record where the handle came from');
     }
   });
-  await t('a handle branded to another company is flagged, not quietly counted', () => {
+  await t('a handle that resolves to another company is rejected, not counted', () => {
     const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
-    const e = reg.employees.find(x => x.handles.instagram === 'priyanka.danubeproperties');
-    assert.ok(/FLAG/.test(e.sourcedFrom), 'off-brand handle must carry an explicit flag');
+    // Verified against the live bio: this handle is Priyanka Mehta of Danube
+    // Properties, not Priyanka Jayanna of Kirpa. It must never reach a board.
+    // She has since been matched to a real Kirpa account (priyanka.kirpa, company
+    // email in bio). What must never come back is the Danube-branded handle.
+    const anywhere = reg.employees.some(x => x.handles.instagram === 'priyanka.danubeproperties');
+    assert.ok(!anywhere, 'the off-brand handle must not survive anywhere in the registry');
+    const claimed = reg.employees.find(x => x.name === 'Priyanka Jayanna');
+    assert.notStrictEqual(claimed.handles.instagram, 'priyanka.danubeproperties');
+    if (claimed.confirmed) {
+      assert.ok(/kirpaproperties\.com|@kirpa\.properties/.test(claimed.sourcedFrom),
+        'her replacement handle must be justified by Kirpa-owned evidence');
+    }
+  });
+  await t('no published number exists without a capture behind it', () => {
+    // A newly confirmed handle legitimately has no data until the next pipeline run.
+    // The invariant is the other direction: anything the dashboard SHOWS as resolved
+    // must trace back to a real captured payload.
+    const fs = require('fs'), path = require('path');
+    const snap = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    for (const r of snap.records.filter(x => x.resolved)) {
+      const f = path.join(__dirname, '..', 'data', 'raw', `${r.platform}_${r.handle}.json`);
+      assert.ok(fs.existsSync(f), `${r.name} is published as resolved but has no capture at ${f}`);
+    }
+  });
+  await t('handles awaiting their first pull are visible as pending, not as zero', () => {
+    const fs = require('fs'), path = require('path');
+    const reg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'handles.json'), 'utf8'));
+    const snap = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    const published = new Set(snap.records.filter(r => r.resolved).map(r => r.handle));
+    const pending = reg.employees.filter(e => e.confirmed && e.handles.instagram
+                                         && !published.has(e.handles.instagram));
+    // Pending is fine. Silently showing them with 0 followers would not be.
+    for (const e of pending) {
+      const rec = snap.records.find(r => r.name === e.name && r.platform === 'instagram');
+      if (rec) assert.strictEqual(rec.followers, null,
+        `${e.name} has not been pulled yet, so followers must be null - never 0`);
+    }
+  });
+  await t('the weekly workflow exists and is scheduled', () => {
+    const fs = require('fs'), path = require('path');
+    const f = path.join(__dirname, '..', '.github', 'workflows', 'weekly.yml');
+    assert.ok(fs.existsSync(f), 'without this file nothing ever refreshes the dashboard');
+    const y = fs.readFileSync(f, 'utf8');
+    assert.ok(/schedule:/.test(y) && /cron:/.test(y), 'must be on a cron schedule');
+    assert.ok(/APIFY_TOKEN/.test(y), 'must pass the token through to ingest');
+    assert.ok(/node test\/test\.js/.test(y), 'must gate the pull on the test suite');
+  });
+
+  console.log('\nHANDLE DISCOVERY \u2014 EVIDENCE GATE');
+  const REG = () => JSON.parse(require('fs').readFileSync(
+    require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
+  await t('every confirmed handle records the evidence it was accepted on', () => {
+    for (const e of REG().employees.filter(x => x.confirmed && x.handles.instagram)) {
+      assert.ok(e.sourcedFrom, e.name + ' has no sourcedFrom');
+      // The gate is evidence about the ACCOUNT, never the handle pattern.
+      const ALLOWED = ['bio', 'company-tag', 'posting-context'];
+      assert.ok(ALLOWED.includes(e.evidenceClass),
+        e.name + ': evidenceClass missing or unrecognised -> ' + e.evidenceClass);
+      // The weakest class is permitted, but it may never pass silently.
+      if (e.evidenceClass === 'posting-context') {
+        assert.strictEqual(e.needsHumanConfirmation, true,
+          e.name + ': circumstantial evidence must be flagged for human confirmation');
+      }
+    }
+  });
+  await t('a resolving account with no Kirpa evidence is rejected', () => {
+    // nikita.kirpa is a real, reachable account. It is still not proof of employment.
+    const e = REG().employees.find(x => x.name === 'Nikita Lal Tekwani');
+    assert.strictEqual(e.handles.instagram, null, 'pattern-only match must not be stored as a handle');
+    assert.strictEqual(e.confirmed, false);
+    assert.ok(/REJECTED/.test(e.sourcedFrom), 'the rejection must be recorded, not silent');
+  });
+  await t('no competitor-branded handle survives anywhere', () => {
+    for (const e of REG().employees) {
+      const h = e.handles.instagram;
+      if (!h) continue;
+      assert.ok(!/danube|emaar|damac|sobha/i.test(h), e.name + ': handle brands to another company -> ' + h);
+    }
+  });
+  await t('name mismatches are disclosed rather than smoothed over', () => {
+    // Several profiles show a different surname to the HR roster. That is allowed,
+    // but it must be visible to whoever reads the board.
+    const e = REG().employees.find(x => x.handles.instagram === 'jagraaj.kirpa');
+    assert.ok(/differs from roster/.test(e.sourcedFrom), 'surname discrepancy must be stated');
   });
 
   console.log(`\n${pass} passed, ${fail} failed\n`);

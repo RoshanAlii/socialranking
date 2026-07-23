@@ -1,0 +1,160 @@
+{
+  "followersCount": 12461,
+  "followsCount": 75,
+  "postsCount": 511,
+  "private": false,
+  "latestPosts": [
+    {
+      "id": "3940916552784949051",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 23508,
+      "commentsCount": 419,
+      "videoViewCount": null,
+      "timestamp": "2026-07-14T07:29:17.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": true,
+      "url": "https://www.instagram.com/p/3940916552784949051/"
+    },
+    {
+      "id": "3873548471391590322",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 16075,
+      "commentsCount": 151,
+      "videoViewCount": 125358,
+      "timestamp": "2026-04-12T08:38:04.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": true,
+      "url": "https://www.instagram.com/p/3873548471391590322/"
+    },
+    {
+      "id": "3858537691092920164",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 2938,
+      "commentsCount": 23,
+      "videoViewCount": 44983,
+      "timestamp": "2026-03-22T15:34:12.000Z",
+      "ownerUsername": "kirpa.properties",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3858537691092920164/"
+    },
+    {
+      "id": "3946662638938199817",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 5,
+      "commentsCount": 0,
+      "videoViewCount": null,
+      "timestamp": "2026-07-22T05:42:17.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946662638938199817/"
+    },
+    {
+      "id": "3946228109572273279",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 68,
+      "commentsCount": 6,
+      "videoViewCount": null,
+      "timestamp": "2026-07-21T15:18:53.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946228109572273279/"
+    },
+    {
+      "id": "3937341342039385964",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 2974,
+      "commentsCount": 75,
+      "videoViewCount": null,
+      "timestamp": "2026-07-09T09:03:37.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3937341342039385964/"
+    },
+    {
+      "id": "3937259962181708291",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 175,
+      "commentsCount": 12,
+      "videoViewCount": null,
+      "timestamp": "2026-07-09T06:20:15.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3937259962181708291/"
+    },
+    {
+      "id": "3916219243405114803",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 3194,
+      "commentsCount": 62,
+      "videoViewCount": 22458,
+      "timestamp": "2026-06-10T05:36:43.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3916219243405114803/"
+    },
+    {
+      "id": "3911464620949655203",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 7984,
+      "commentsCount": 68,
+      "videoViewCount": 57541,
+      "timestamp": "2026-06-03T16:10:01.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3911464620949655203/"
+    },
+    {
+      "id": "3932416565436391557",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 793,
+      "commentsCount": 33,
+      "videoViewCount": 13951,
+      "timestamp": "2026-07-02T13:58:14.000Z",
+      "ownerUsername": "kirpa.properties",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3932416565436391557/"
+    },
+    {
+      "id": "3900995692892891975",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 1300,
+      "commentsCount": 79,
+      "videoViewCount": 17818,
+      "timestamp": "2026-05-20T05:32:09.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3900995692892891975/"
+    },
+    {
+      "id": "3897337724190903967",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 51328,
+      "commentsCount": 762,
+      "videoViewCount": 574065,
+      "timestamp": "2026-05-15T04:22:01.000Z",
+      "ownerUsername": "lipika.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3897337724190903967/"
+    }
+  ],
+  "username": "lipika.kirpa",
+  "_capture": {
+    "runId": "mLLc93drAaJRIn3hX",
+    "datasetId": "xuR4nfYBHYv8hruni",
+    "actor": "apify/instagram-profile-scraper",
+    "pulledAt": "2026-07-22T06:50:40.135Z",
+    "note": "Verbatim public-surface figures from the Apify run above. Heavy media fields (CDN urls, captions, tagged users) omitted at capture time; no metric was altered."
+  }
+}

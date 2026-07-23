@@ -13,7 +13,9 @@
     "Nothing enters live metrics until confirmed=true. private=true or unresolved handles are shown in the dashboard as a labeled state, never estimated.",
     "Facebook is Pages-only in practice — personal FB profiles expose no usable public data. Leave facebook null unless the person runs a business Page.",
     "TikTok is PAUSED as of 2026-07-22 by product decision. Handles are left null and the dashboard shows an \"available soon\" state rather than a zero. The TikTok adapter, normalizer and tests are untouched.",
-    "Seeded: Manpreet Kaur handles verified against public bios. 2026-07-22: six further Instagram handles supplied directly by Kirpa and marked confirmed — see sourcedFrom on each."
+    "Seeded: Manpreet Kaur handles verified against public bios. 2026-07-22: six further Instagram handles supplied directly by Kirpa and marked confirmed — see sourcedFrom on each.",
+    "Handle discovery method (2026-07-23): the firstname.kirpa convention was used only to GENERATE candidates. Confirmation always came from the live public bio — an account is only counted when it self-declares Kirpa (@kirpa.properties tag or @kirpaproperties.com address) or was tagged by the Kirpa company account. A handle that merely resolves is not evidence; see Nikita Lal Tekwani for a resolving account that was rejected.",
+    "Probed and did not resolve — no account exists at these patterns, do not re-probe blindly: sukhpreet.kirpa, kavita.kirpa, sara.kirpa, sahilmendiratta.kirpa, arbaaz.kirpa, mubeen.kirpa, ameer.kirpa, amandeep.kirpa, jitendra.kirpa, puja.kirpa, param.kirpa, sleeja.kirpa, anmol.kirpa."
   ],
   "employees": [
     {
@@ -27,7 +29,9 @@
       },
       "private": null,
       "confirmed": true,
-      "verifiedFromBio": "2026-07-21 verified from public bios: IG @manpreet.kirpa (723K, bio: Founder & CEO @kirpa.properties), TikTok @manpreet.kirpa (447.4K, bio: Founder & CEO @kirpa properties), Facebook Page \"Manpreet Kirpa\" id 61569944367329 (172.7K likes, bio: Founder & CEO at Kirpa Properties). FB is a Page, not a personal profile, so it is in scope."
+      "verifiedFromBio": "2026-07-21 verified from public bios: IG @manpreet.kirpa (723K, bio: Founder & CEO @kirpa.properties), TikTok @manpreet.kirpa (447.4K, bio: Founder & CEO @kirpa properties), Facebook Page \"Manpreet Kirpa\" id 61569944367329 (172.7K likes, bio: Founder & CEO at Kirpa Properties). FB is a Page, not a personal profile, so it is in scope.",
+      "sourcedFrom": "Seeded in the original build; verified against the public bio at that time (founder account of @kirpa.properties). Re-verify on any future audit.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Dr. Jai Chatha",
@@ -40,7 +44,8 @@
       },
       "private": null,
       "confirmed": true,
-      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
+      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22, then verified against the live public profile on 2026-07-23. Evidence — bio: \"Founder & MD @kirpa.properties\", drjai@kirpaproperties.com.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Kamalpreet Kaur",
@@ -53,7 +58,8 @@
       },
       "private": null,
       "confirmed": true,
-      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
+      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22, then verified against the live public profile on 2026-07-23. Evidence — bio: \"Real estate agent @kirpa.properties\", Kamal@kirpaproperties.com, RERA 82043.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Saloni Bedi",
@@ -66,7 +72,8 @@
       },
       "private": null,
       "confirmed": true,
-      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
+      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22, then verified against the live public profile on 2026-07-23. Evidence — bio: \"Millionaires Club @kirpa.properties\", RERA licensed.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Lipika Madan",
@@ -79,20 +86,22 @@
       },
       "private": null,
       "confirmed": true,
-      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
+      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22, then verified against the live public profile on 2026-07-23. Evidence — bio: \"KirpaProperties\", lipika@kirpaproperties.com, RERA 82236.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Priyanka Jayanna",
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "priyanka.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false,
-      "sourcedFrom": "REJECTED 2026-07-22. Handle supplied as Priyanka Jayanna, but the live public profile resolves to \"Priyanka Mehta\", bio: Senior sales manager @danubeproperties. Different person and a different company, so it is not counted in a Kirpa leaderboard. Supply the correct handle to re-enable."
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Millionaires club @kirpa.properties, Priyanka@kirpaproperties.com. NOTE: SUPERSEDES the rejected priyanka.danubeproperties. Kannada-language bio is consistent with the Karnataka surname Jayanna. Company email is the decisive evidence..",
+      "evidenceClass": "bio"
     },
     {
       "name": "Mohammad Mubeen",
@@ -111,12 +120,14 @@
       "role": "Senior Consultant – Secondary (Commercial)",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "preety.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: preety@kirpaproperties.com, BRN 81246. NOTE: profile shows first name only.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Puja Maheshwari",
@@ -135,12 +146,14 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "vaishali.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Portfolio Manager @kirpa.properties, Vaishali@kirpaproperties.com.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Sukhpreet Kaur",
@@ -159,60 +172,70 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "barkha.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Millionaires club @kirpa.properties, RERA 91937. NOTE: profile surname \"kaur sapra\" differs from roster \"Kalia\" (possible married name).",
+      "evidenceClass": "bio"
     },
     {
       "name": "Kirti Anil Walke",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "kirti.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Portfolio Manager @kirpa.properties, kirti@kirpaproperties.com. NOTE: profile shows first name only.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Sahil Bedi",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "sahilbedi.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Sahil@kirpaproperties.com, RERA 82098.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Riya Bhardwaj",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "riya.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Real estate agent @kirpa.properties, riya@kirpaproperties.com.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Geethika Sri Vyshnavi",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "geethika.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — tagged by the @kirpa.properties company account on its own pinned post, returning full_name \"Geethika Sri Vyshnavi\" — exact roster match. NOTE: her own bio does NOT name Kirpa; the evidence is the company tag, not self-declaration.",
+      "evidenceClass": "company-tag"
     },
     {
       "name": "Kavita Choudhary",
@@ -231,60 +254,70 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "sarvnihal.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Property Consultant @kirpa.properties, sarv@kirpaproperties.com. NOTE: profile surname \"Chatha\" differs from roster \"Singh\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Aasfa Wahab Shaikh",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "aasfa.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Real estate consultant @kirpa.properties, RERA 87382.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Jagraaj Singh",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "jagraaj.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: @kirpa.properties, RERA 91630. NOTE: profile surname \"Jagpal\" differs from roster \"Singh\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Akshay Rajendra",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "akshay.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: @kirpa.properties, akshay@kirpaproperties.com. NOTE: profile surname \"Achar\" differs from roster \"Rajendra\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Kirat Singh Sapra",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "kirat.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Property Advisor @kirpa.properties, Kirat@kirpaproperties.com.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Sara Banu",
@@ -303,12 +336,14 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "ritika.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Real Estate Agent @kirpa.properties, ritika@kirpaproperties.com.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Jitendra Makhija",
@@ -356,7 +391,8 @@
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": false,
+      "sourcedFrom": "REJECTED Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23. The handle resolves (\"Nikita Kirpa\") but the account is an empty shell: blank bio, 2 followers, 1 post, no mention of Kirpa Properties anywhere. Matching the firstname.kirpa pattern is not evidence of employment. Supply her real handle to enable."
     },
     {
       "name": "Sleeja Misra",
@@ -375,48 +411,56 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "lovepreet.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: @kirpa.properties, RERA 89878.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Mona Shah",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "mona.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: \"Kirpa Properties | Dubai\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Spoorthi Hassan",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "spoorthi.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: @kirpa.properties, spoorthi@kirpaproperties.com.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Faiyaz Mohmedfaruk",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "faiyaz.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: @kirpa.properties, faiyaz@kirpaproperties.com. NOTE: profile surname \"Sachora\" differs from roster \"Mohmedfaruk\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Ameer Agha Shirazi",
@@ -441,7 +485,9 @@
       },
       "private": null,
       "confirmed": true,
-      "sourcedFrom": "Instagram handle supplied directly by Kirpa on 2026-07-22 (profile URL). Not yet cross-checked against the public bio; the next pull verifies it."
+      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22, then verified against the live public profile on 2026-07-23. Evidence — bio names no employer (\"Real Estate Agent | Dubai\"), so the bio gate does NOT pass. Accepted instead on posting evidence: posts geotagged to the Kirpa Properties office and captions thanking @sahilbedi.kirpa and @saloni.kirpa for bringing him to Dubai. Weaker than a self-declared bio — worth a human confirmation.",
+      "evidenceClass": "posting-context",
+      "needsHumanConfirmation": true
     },
     {
       "name": "Param Singh",

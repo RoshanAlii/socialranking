@@ -1,0 +1,160 @@
+{
+  "followersCount": 9451,
+  "followsCount": 158,
+  "postsCount": 474,
+  "private": false,
+  "latestPosts": [
+    {
+      "id": "3858151158850256914",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 8718,
+      "commentsCount": 64,
+      "videoViewCount": 136535,
+      "timestamp": "2026-03-22T02:49:09.000Z",
+      "ownerUsername": "kirpa.properties",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3858151158850256914/"
+    },
+    {
+      "id": "3946687685552719969",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 14,
+      "commentsCount": 1,
+      "videoViewCount": null,
+      "timestamp": "2026-07-22T06:31:53.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946687685552719969/"
+    },
+    {
+      "id": "3946007649170403936",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 33,
+      "commentsCount": 2,
+      "videoViewCount": null,
+      "timestamp": "2026-07-21T08:01:00.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3946007649170403936/"
+    },
+    {
+      "id": "3945914228629586795",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 202,
+      "commentsCount": 29,
+      "videoViewCount": null,
+      "timestamp": "2026-07-21T04:54:58.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945914228629586795/"
+    },
+    {
+      "id": "3945417237993039778",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 51,
+      "commentsCount": 1,
+      "videoViewCount": null,
+      "timestamp": "2026-07-20T12:31:52.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945417237993039778/"
+    },
+    {
+      "id": "3945389777549244608",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 326,
+      "commentsCount": 15,
+      "videoViewCount": null,
+      "timestamp": "2026-07-20T11:34:57.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3945389777549244608/"
+    },
+    {
+      "id": "3944030410457215582",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 59,
+      "commentsCount": 1,
+      "videoViewCount": null,
+      "timestamp": "2026-07-18T14:33:47.000Z",
+      "ownerUsername": "aasfa.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3944030410457215582/"
+    },
+    {
+      "id": "3943839938663445933",
+      "type": "Sidecar",
+      "productType": null,
+      "likesCount": 173,
+      "commentsCount": 7,
+      "videoViewCount": null,
+      "timestamp": "2026-07-18T08:12:58.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943839938663445933/"
+    },
+    {
+      "id": "3943307338619814374",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 821,
+      "commentsCount": 20,
+      "videoViewCount": null,
+      "timestamp": "2026-07-17T14:35:39.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943307338619814374/"
+    },
+    {
+      "id": "3943209287815640895",
+      "type": "Video",
+      "productType": "clips",
+      "likesCount": 72,
+      "commentsCount": 4,
+      "videoViewCount": null,
+      "timestamp": "2026-07-17T11:21:30.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3943209287815640895/"
+    },
+    {
+      "id": "3942658748175619570",
+      "type": "Sidecar",
+      "productType": null,
+      "likesCount": 277,
+      "commentsCount": 14,
+      "videoViewCount": null,
+      "timestamp": "2026-07-16T17:06:10.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3942658748175619570/"
+    },
+    {
+      "id": "3941225637344721294",
+      "type": "Sidecar",
+      "productType": null,
+      "likesCount": 447,
+      "commentsCount": 5,
+      "videoViewCount": null,
+      "timestamp": "2026-07-14T17:38:49.000Z",
+      "ownerUsername": "kamalpreet.kirpa",
+      "isPinned": false,
+      "url": "https://www.instagram.com/p/3941225637344721294/"
+    }
+  ],
+  "username": "kamalpreet.kirpa",
+  "_capture": {
+    "runId": "mLLc93drAaJRIn3hX",
+    "datasetId": "xuR4nfYBHYv8hruni",
+    "actor": "apify/instagram-profile-scraper",
+    "pulledAt": "2026-07-22T06:50:40.135Z",
+    "note": "Verbatim public-surface figures from the Apify run above. Heavy media fields (CDN urls, captions, tagged users) omitted at capture time; no metric was altered."
+  }
+}
