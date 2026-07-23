@@ -1,6 +1,6 @@
 # Kirpa Social Leaderboard
 
-A weekly leaderboard of the Kirpa team's **public** social performance across Instagram, TikTok, and Facebook — most followers, top-performing video, most-commented post, highest engagement, most active, and follower growth — ranked and drilled down per person.
+A weekly leaderboard of the Kirpa team's **public** social performance across Instagram, TikTok, and Facebook — profile coverage, audience, posting participation, follower growth, fair engagement and cadence rankings, top posts, team benchmarks, and a next action for every person.
 
 It runs on a schedule with **no logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; the weekly pull is a GitHub Action.
 
@@ -19,15 +19,17 @@ It runs on a schedule with **no logins and no passwords**. It reads only the pub
 - **TikTok is paused.** Switched off by product decision, not by capability: `TIKTOK_ENABLED = false` in `index.html` and TikTok dropped from the default `--platforms`. The tab, the roster column and the aggregates all respect the flag, and the UI reads "available soon" rather than showing a zero. The adapter, normalizer and their tests are untouched — flip the flag and pass `--platforms instagram,tiktok,facebook` to bring it back in one run.
 - **Facebook is Pages-only.** Personal FB profiles expose no usable public data; only business Pages do. A `facebook` value in the registry must be a Page id/slug.
 
-### Confirmed so far — 24 of 38 dashboard-relevant staff
+The product brief and complete scorecard are in [`PRODUCT_PLAN.md`](PRODUCT_PLAN.md).
+
+### Confirmed so far — 34 of 38 dashboard-relevant staff
 
 Every confirmed handle carries an `evidenceClass` recording *why* it was accepted:
 
 | class | meaning | count |
 |---|---|---|
-| `bio` | the profile self-declares Kirpa — an `@kirpa.properties` tag or an `@kirpaproperties.com` address | 22 |
+| `bio` | the profile self-declares Kirpa — an `@kirpa.properties` tag or an `@kirpaproperties.com` address | 29 |
 | `company-tag` | the Kirpa company account tagged them, with a matching full name | 1 |
-| `posting-context` | circumstantial only (office geotags, colleague tags). Carries `needsHumanConfirmation: true` | 1 |
+| `posting-context` | circumstantial only (office geotags, colleague tags). Carries `needsHumanConfirmation: true` | 4 |
 
 **Handles are never accepted on pattern alone.** The `firstname.kirpa` convention is used only to
 *generate* candidates; a live public bio has to confirm them. Two illustrations of why:
@@ -36,12 +38,15 @@ Every confirmed handle carries an `evidenceClass` recording *why* it was accepte
   woman — a Senior Sales Manager at Danube Properties. Rejected. The correct account,
   `priyanka.kirpa`, was later found with a Kirpa company email in the bio.
 - `nikita.kirpa` resolves to a real account. Blank bio, 2 followers, 1 post, no mention of Kirpa.
-  Rejected — a handle matching the pattern is not evidence of employment.
+  Rejected — a handle matching the pattern is not evidence of employment. A different exact-name
+  professional account was later found and recorded separately with a human-confirmation flag.
 
 Both rejections stay recorded in `handles.json` so nobody re-probes and "re-discovers" them.
 
-**14 people still have no handle.** Probing found no account at their pattern. That gap closes by
-asking HR, not by guessing — see `notes` in `handles.json` for the exact list probed.
+**4 people still have no verified professional handle:** Arbaaz Ali Khan, Ameer Agha Shirazi,
+Param Singh, and Amandeep Singh. Candidate searches found no Kirpa-facing evidence strong enough
+to connect an account. That gap closes by asking the team, not by guessing — see `notes` in
+`handles.json` for the exact candidates and rejection reasons.
 
 > Adding a handle does **not** backfill data. A pipeline run has to happen before anyone appears
 > on the board; until then they are absent, never shown as zero.
@@ -62,10 +67,10 @@ handles.json ──► src/ingest.js ──► src/provider.js  (Apify | Mock)  
 - **`handles.json`** — the roster (seeded from kirpaproperties.com). Names + roles + per-platform handles + a `confirmed` flag. Back-office roles are `dashboardRelevant: false`.
 - **`src/rank.js`** — pure ranking engine. Single source of truth, used by both ingest and the tests. No I/O.
 - **`src/normalize.js`** — maps any provider's payload into one record shape. Missing fields become `null`, never invented.
-- **`src/provider.js`** — the adapter. `MockProvider` (offline/tests/sample) and `ApifyProvider` (live). Swap to EnsembleData/HikerAPI by implementing one method: `fetchProfile(platform, handle)`.
+- **`src/provider.js`** — the adapter. `MockProvider` (offline/tests/sample) and `ApifyProvider` (live). The live provider batches all confirmed handles into one actor run per platform. Swap providers by implementing `fetchProfiles(platform, handles)` or the single-profile fallback.
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards → write `data/latest.json` + a dated history snapshot.
-- **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json`; falls back to an inlined sample so it also opens straight from disk.
+- **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
 - **`.github/workflows/weekly.yml`** — weekly cron (Mondays 06:00 UTC) plus a manual trigger. Test gate → pull → commit the JSON back. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers.
 
 ---
@@ -91,7 +96,7 @@ All four rules are enforced by the test suite.
 ## Local preview
 
 ```bash
-node test/test.js                              # 26 assertions, the deploy gate
+node test/test.js                              # 63 assertions, the deploy gate
 export APIFY_TOKEN=...  && node src/ingest.js  # real pull
 python3 -m http.server                         # then open http://localhost:8000
 ```
@@ -100,7 +105,9 @@ python3 -m http.server                         # then open http://localhost:8000
 
 ## Cost
 
-At ~40 people across Instagram + TikTok, one run fetches roughly 160–180 results. At Apify's ~$2.30–2.50 per 1,000 results that's about **$0.40 a run** — a weekly cadence sits inside Apify's free monthly credit, so effectively free at this scale. Daily would be a few dollars a month.
+The live pull is batched into one actor run per platform, avoiding one actor startup per person.
+The provider still charges according to the actor and result volume, so check the selected Apify
+actor's current pricing before increasing the weekly cadence.
 
 ## Swapping the provider
 

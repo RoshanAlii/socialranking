@@ -25,10 +25,23 @@ const { MockProvider, ApifyProvider, CapturedProvider } = require('./provider');
 function arg(flag, def) { const i = process.argv.indexOf(flag); return i > -1 ? process.argv[i + 1] : def; }
 function has(flag) { return process.argv.includes(flag); }
 
-async function run(registry, provider, platforms, capturedAt) {
+async function run(registry, provider, platforms, capturedAt, opts = {}) {
   const employees = registry.employees.filter(e => e.dashboardRelevant !== false);
   const records = [];
   const states = { private: [], unresolved: [], unconfirmed: [], excludedBackOffice: [] };
+  const prefetched = new Map(), batchErrors = new Map();
+
+  // Providers that support batching can resolve a whole platform in one actor
+  // run. Other providers retain the simple fetchProfile contract.
+  if (typeof provider.fetchProfiles === 'function') {
+    for (const pf of platforms) {
+      const handles = employees
+        .filter(e => e.confirmed === true && e.handles && e.handles[pf])
+        .map(e => e.handles[pf]);
+      try { prefetched.set(pf, await provider.fetchProfiles(pf, handles)); }
+      catch (err) { batchErrors.set(pf, String(err.message || err)); }
+    }
+  }
 
   for (const e of registry.employees) {
     if (e.dashboardRelevant === false) { states.excludedBackOffice.push({ name: e.name, role: e.role }); continue; }
@@ -42,8 +55,18 @@ async function run(registry, provider, platforms, capturedAt) {
         continue;
       }
       let raw = null, error = null;
-      try { raw = await provider.fetchProfile(pf, handle); }
+      try {
+        if (batchErrors.has(pf)) throw new Error(batchErrors.get(pf));
+        raw = prefetched.has(pf)
+          ? (prefetched.get(pf).get(handle) || { notFound: true })
+          : await provider.fetchProfile(pf, handle);
+      }
       catch (err) { error = String(err.message || err); raw = { notFound: true }; }
+      if (opts.rawDir && raw && !raw.notFound) {
+        fs.mkdirSync(opts.rawDir, { recursive: true });
+        const safe = `${pf}_${handle}`.replace(/[^a-zA-Z0-9._-]/g, '_');
+        fs.writeFileSync(path.join(opts.rawDir, `${safe}.json`), JSON.stringify(raw, null, 2));
+      }
       const rec = normalizeRecord(entry, raw, capturedAt);
       records.push(rec);
       if (!rec.resolved) states.unresolved.push({ name: e.name, platform: pf, handle, error });
@@ -90,7 +113,10 @@ async function main() {
   const capturedAt = new Date().toISOString();
 
   const prev = loadPreviousHistory(outDir);
-  const { records, states, relevantCount } = await run(registry, provider, platforms, capturedAt);
+  const { records, states, relevantCount } = await run(
+    registry, provider, platforms, capturedAt,
+    useLive ? { rawDir: path.join(outDir, 'raw') } : {}
+  );
   const leaderboards = buildLeaderboards(records, platforms);
   const trend = prev && prev.records ? growth(prev.records, records) : [];
 

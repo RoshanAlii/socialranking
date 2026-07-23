@@ -106,6 +106,15 @@ function rec(over = {}) {
     const top = R.mostCommented([rec({ name: 'A', recentPosts: [{ comments: 5, postedAt: now }] }), rec({ name: 'B', recentPosts: [{ comments: 900, postedAt: now }] })], 'instagram');
     assert.strictEqual(top.name, 'B');
   });
+  await t('mostCommented uses the same 30-day window and excludes pinned posts', () => {
+    const old = '2025-01-01T00:00:00Z';
+    const rows = [
+      rec({ name: 'Fair', recentPosts: [{ comments: 10, postedAt: now }] }),
+      rec({ name: 'Old', recentPosts: [{ comments: 9999, postedAt: old }] }),
+      rec({ name: 'Pinned', recentPosts: [{ comments: 99999, postedAt: now, isPinned: true }] }),
+    ];
+    assert.strictEqual(R.mostCommented(rows, 'instagram', Date.parse(now)).name, 'Fair');
+  });
   await t('postsPerWeek divides by the shared window, not the person\u2019s own span', () => {
     const N = Date.parse('2026-07-22T00:00:00Z');
     const r = rec({ recentPosts: [{ postedAt: '2026-07-01T00:00:00Z' }, { postedAt: '2026-07-08T00:00:00Z' }, { postedAt: '2026-07-15T00:00:00Z' }] });
@@ -160,6 +169,25 @@ function rec(over = {}) {
     assert.strictEqual(a.resolved, true); assert.ok(a.followers > 0);
     assert.strictEqual(states.excludedBackOffice.length, 1);
   });
+  await t('batch-capable providers are called once per platform', async () => {
+    let calls = 0;
+    const provider = {
+      async fetchProfiles(platform, handles) {
+        calls++;
+        return new Map(handles.map(handle => [handle, {
+          followers: 1000, recentPosts: [], isPrivate: false,
+        }]));
+      },
+      async fetchProfile() { throw new Error('per-profile fallback should not run'); },
+    };
+    const registry = { company: 'K', orn: '1', employees: [
+      { name: 'A', role: 'C', dashboardRelevant: true, handles: { instagram: 'a' }, confirmed: true },
+      { name: 'B', role: 'C', dashboardRelevant: true, handles: { instagram: 'b' }, confirmed: true },
+    ] };
+    const { records } = await run(registry, provider, ['instagram'], now);
+    assert.strictEqual(calls, 1);
+    assert.strictEqual(records.filter(r => r.resolved).length, 2);
+  });
   await t('private handle surfaces as state, not a ranking', async () => {
     const registry = { company: 'K', orn: '1', employees: [{ name: 'P', role: 'Consultant', dashboardRelevant: true, handles: { instagram: 'p', tiktok: null, facebook: null }, confirmed: true }] };
     const { records, states } = await run(registry, new MockProvider({ privateHandles: ['p'] }), ['instagram'], now);
@@ -190,6 +218,15 @@ function rec(over = {}) {
   await t('dashboard ships without a bundled sample blob', () => {
     const h = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
     assert.ok(!/const SAMPLE_DATA = \{/.test(h), 'index.html must not embed placeholder data');
+  });
+  await t('dashboard exposes coverage, insights, search, and registry-backed pending profiles', () => {
+    const h = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    assert.ok(/id="kpis"/.test(h), 'executive summary is missing');
+    assert.ok(/id="insights"/.test(h), 'team insights are missing');
+    assert.ok(/id="roster-search"/.test(h), 'roster search is missing');
+    assert.ok(/fetch\('handles\.json'/.test(h), 'the verified registry must load independently of metric snapshots');
+    assert.ok(/Awaiting pull/.test(h), 'new verified handles must not look like missing handles');
+    assert.ok(/leaderboards\[pf\].*engagement/s.test(h), 'roster ER must come from the fair ranking engine');
   });
   await t('founder handles are confirmed across all three platforms', () => {
     const reg = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'handles.json'), 'utf8'));
@@ -353,12 +390,16 @@ function rec(over = {}) {
       }
     }
   });
-  await t('a resolving account with no Kirpa evidence is rejected', () => {
-    // nikita.kirpa is a real, reachable account. It is still not proof of employment.
+  await t('a rejected pattern-only account is never confused with a later verified profile', () => {
+    // nikita.kirpa is an empty shell. A separate exact-name professional
+    // account was later found, so the rejected handle must still stay out.
     const e = REG().employees.find(x => x.name === 'Nikita Lal Tekwani');
-    assert.strictEqual(e.handles.instagram, null, 'pattern-only match must not be stored as a handle');
-    assert.strictEqual(e.confirmed, false);
-    assert.ok(/REJECTED/.test(e.sourcedFrom), 'the rejection must be recorded, not silent');
+    assert.notStrictEqual(e.handles.instagram, 'nikita.kirpa');
+    assert.strictEqual(e.handles.instagram, 'nikitaa.kirpa');
+    assert.strictEqual(e.confirmed, true);
+    assert.ok(/supersedes the rejected empty shell nikita\.kirpa/i.test(e.sourcedFrom),
+      'the old rejection and replacement evidence must remain explicit');
+    assert.strictEqual(e.needsHumanConfirmation, true);
   });
   await t('no competitor-branded handle survives anywhere', () => {
     for (const e of REG().employees) {

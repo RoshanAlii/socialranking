@@ -58,6 +58,16 @@
   .pill:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
   .hint{font-size:12px;color:var(--muted);margin-left:auto}
 
+  /* executive summary */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 8px}
+  .kpi{padding:15px 16px;min-width:0}
+  .kpi b{display:block;font-size:21px;line-height:1.2;letter-spacing:-.02em}
+  .kpi span{display:block;margin-top:4px;font-size:11.5px;color:var(--muted)}
+  .kpi.warn b{color:var(--ochre)}
+  .kpi.good b{color:var(--green)}
+  .freshness{display:inline-flex!important;align-items:center;gap:6px}
+  .freshness:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+
   /* hero */
   .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin:16px 0 8px}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
@@ -104,14 +114,37 @@
     font-size:12.5px;font-weight:500;padding:5px 11px;border-radius:999px}
   .gain small{color:var(--muted);font-weight:400}
 
+  /* management insights */
+  .insights{margin-top:16px}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:10px}
+  .section-head h2{font-size:16px;font-weight:600;margin:0}
+  .section-head p{font-size:11.5px;color:var(--muted);margin:0}
+  .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .insight{padding:17px}
+  .insight b{display:block;font-size:14px;margin:6px 0 2px}
+  .insight p{font-size:12px;color:var(--muted);margin:0}
+  .insight .big{font-size:23px;color:var(--ink);letter-spacing:-.02em}
+  .insight-list{list-style:none;margin:10px 0 0;padding:0;font-size:12px}
+  .insight-list li{padding:5px 0;border-top:1px solid var(--line)}
+
   /* roster */
   .roster{margin-top:28px}
-  .roster h2{font-size:16px;font-weight:600;margin:0 0 12px}
+  .roster-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:12px}
+  .roster h2{font-size:16px;font-weight:600;margin:0}
+  .roster-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .search{position:relative;display:block}
+  .search span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .search input{width:min(270px,42vw);border:1px solid var(--line);border-radius:999px;background:var(--surface);
+    color:var(--ink);font:inherit;font-size:13px;padding:8px 14px 8px 34px;outline:0}
+  .search:before{content:"⌕";position:absolute;left:13px;top:5px;color:var(--muted);font-size:17px;z-index:1}
+  .search input:focus{border-color:var(--coral);box-shadow:0 0 0 3px rgba(240,101,58,.12)}
+  .tbl-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow)}
   .tbl{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);
-    border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+    border-radius:var(--r);overflow:hidden}
   .tbl th,.tbl td{padding:11px 14px;text-align:left;font-size:13px;border-top:1px solid var(--line)}
   .tbl th{background:var(--surface-2);font-weight:600;color:var(--muted);font-size:11.5px;
-    letter-spacing:.03em;text-transform:uppercase;border-top:0;cursor:pointer;user-select:none}
+    letter-spacing:.03em;text-transform:uppercase;border-top:0;user-select:none}
+  .tbl th[data-sort]{cursor:pointer}
   .tbl th.num,.tbl td.num{text-align:right}
   .tbl tbody tr{cursor:pointer;transition:background .12s}
   .tbl tbody tr:hover{background:var(--surface-2)}
@@ -119,6 +152,7 @@
   .chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
   .chip.public{background:#E4F1EA;color:var(--green)}
   .chip.private{background:#F6E3E3;color:var(--crimson)}
+  .chip.pending{background:#E9EDF8;color:#48639C}
   .chip.need{background:#FBF0D9;color:var(--ochre)}
   .muted{color:var(--muted)}
 
@@ -133,20 +167,30 @@
   .drawer .x{float:right;border:0;background:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
   .drawer h3{margin:2px 0 0;font-size:20px;font-weight:700}
   .drawer .role{color:var(--muted);font-size:13px;margin-bottom:16px}
-  .post{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .post{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);color:inherit}
+  a.post:hover .pc{text-decoration:underline;text-decoration-color:var(--coral)}
   .post img{width:56px;height:70px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:var(--surface-2)}
   .post .pc{font-size:12.5px}
   .post .ps{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .spot a.thumb{display:block;color:inherit}
+  .board-link{display:block;color:inherit}
+  .board-link:hover .n{text-decoration:underline;text-decoration-color:var(--coral)}
+  .next{margin:16px 0;padding:14px;border-radius:10px;background:#FBF0D9;color:#735112;font-size:12.5px}
+  .profile-link{display:inline-flex;margin:4px 0 10px;font-size:12px;font-weight:600}
 
   footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);
     font-size:12px;color:var(--muted);line-height:1.6}
   footer b{color:var(--ink);font-weight:600}
 
   @media (max-width:720px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
     .hero{grid-template-columns:1fr}
     .grid{grid-template-columns:1fr}
+    .insight-grid{grid-template-columns:1fr}
     .tbl .hide-sm{display:none}
     .stamp{text-align:left}
+    .roster-head{align-items:stretch;flex-direction:column}
+    .search input{width:100%}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
@@ -174,6 +218,8 @@ th .soon-tag{margin-left:6px;vertical-align:middle}
 
   <div class="controls" id="filters" role="group" aria-label="Platform filter"></div>
 
+  <section class="kpis" id="kpis" aria-label="Dashboard summary"></section>
+
   <section class="hero">
     <div class="card champ" id="champ"></div>
     <div class="card spot" id="spotlight"></div>
@@ -183,18 +229,28 @@ th .soon-tag{margin-left:6px;vertical-align:middle}
 
   <div class="card trend" id="trend"></div>
 
+  <section class="insights">
+    <div class="section-head"><div><h2>Team insights</h2><p>What management and the team should act on next</p></div></div>
+    <div class="insight-grid" id="insights"></div>
+  </section>
+
   <section class="roster">
-    <h2>Full roster</h2>
-    <table class="tbl" id="tbl">
-      <thead><tr>
-        <th data-sort="name">Agent</th>
-        <th class="num" data-sort="ig">Instagram</th>
-        <th class="num" id="th-tt" data-sort="tt">TikTok</th>
-        <th class="num hide-sm" data-sort="er">Best ER</th>
-        <th>Status</th>
-      </tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
+    <div class="roster-head">
+      <div><h2>Full roster</h2><div class="roster-meta" id="roster-count"></div></div>
+      <label class="search"><span>Search agents</span><input id="roster-search" type="search" placeholder="Search name or role…" autocomplete="off" /></label>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="tbl">
+        <thead><tr>
+          <th scope="col" data-sort="name">Agent</th>
+          <th scope="col" class="num" data-sort="ig">Instagram</th>
+          <th scope="col" class="num" id="th-tt" data-sort="tt">TikTok</th>
+          <th scope="col" class="num hide-sm" data-sort="er">Best ER</th>
+          <th scope="col">Status</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
   </section>
 
   <footer id="foot"></footer>
@@ -209,6 +265,12 @@ const SAMPLE_DATA = null; // live-only: no bundled placeholder data
 const fmt = n => n==null ? '\u2014' : n>=1000 ? (n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k' : String(n);
 const pct = n => n==null ? '\u2014' : (n*100).toFixed(1)+'%';
 const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const median = xs => {const a=xs.filter(x=>typeof x==='number').sort((x,y)=>x-y);if(!a.length)return null;const m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2;};
+const daysOld = iso => Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/86400000));
+const profileUrl = r => !r||!r.handle ? null
+  : r.platform==='instagram' ? `https://www.instagram.com/${encodeURIComponent(r.handle)}/`
+  : r.platform==='tiktok' ? `https://www.tiktok.com/@${encodeURIComponent(r.handle)}`
+  : `https://www.facebook.com/${encodeURIComponent(r.handle)}`;
 // TikTok is switched off for now by product decision, not by capability.
 // Flip this to true to re-enable the tab, the roster column and the
 // weekly pull (see --platforms in src/ingest.js). Nothing else changes.
@@ -216,13 +278,17 @@ const TIKTOK_ENABLED = false;
 const PLATFORMS = [['all','All'],['instagram','Instagram'],['tiktok','TikTok'],['facebook','Facebook']];
 // Platforms that may contribute numbers to any board, chart or aggregate.
 const LIVE_PLATFORMS = ['instagram','tiktok','facebook'].filter(p=>p!=='tiktok'||TIKTOK_ENABLED);
-let DATA=null, platform='instagram';
+let DATA=null, REGISTRY=null, platform='instagram';
 
 async function load(){
   try{
-    const res = await fetch('data/latest.json',{cache:'no-store'});
-    if(!res.ok) throw 0;
-    DATA = await res.json();
+    const [dataRes,registryRes] = await Promise.all([
+      fetch('data/latest.json',{cache:'no-store'}),
+      fetch('handles.json',{cache:'no-store'})
+    ]);
+    if(!dataRes.ok) throw 0;
+    DATA = await dataRes.json();
+    if(registryRes.ok) REGISTRY = await registryRes.json();
   }catch(e){ DATA = SAMPLE_DATA; }
   if(!DATA){ renderNoData(); return; }
   if(DATA.meta.source==='pending' || DATA.meta.resolvedProfiles===0){ renderStamp(); renderPending(); return; }
@@ -249,6 +315,8 @@ function renderPending(){
       <br><span class="muted">${(s.excludedBackOffice||[]).length} back-office roles excluded \u00b7 ${DATA.meta.relevantCount} client-facing team members in scope.</span></div>
     </section>`;
   document.getElementById('boards').innerHTML='';
+  document.getElementById('kpis').style.display='none';
+  document.querySelector('.insights').style.display='none';
   document.getElementById('trend').style.display='none';
   document.querySelector('.roster').style.display='none';
   renderFoot();
@@ -259,6 +327,8 @@ function renderNoData(){
      <h2>Can\u2019t read data/latest.json</h2>
      <p>Open this page over http (<code>python3 -m http.server</code>) or via GitHub Pages, then run the snapshot job.</p></section>`;
   document.getElementById('boards').innerHTML='';
+  document.getElementById('kpis').style.display='none';
+  document.querySelector('.insights').style.display='none';
   document.getElementById('trend').style.display='none';
   document.querySelector('.roster').style.display='none';
 }
@@ -303,14 +373,84 @@ function activeBoards(){
   return L[platform]||{};
 }
 
-function renderAll(){ renderChamp(); renderSpotlight(); renderBoards(); renderTrend(); renderRoster(); renderFoot(); }
+function renderAll(){ renderKpis(); renderChamp(); renderSpotlight(); renderBoards(); renderTrend(); renderInsights(); renderRoster(); renderFoot(); }
+
+function resolvedPeople(){
+  return new Set(selectedRecords().filter(r=>r.resolved&&!r.isPrivate).map(r=>r.name));
+}
+function selectedRecords(){
+  return DATA.records.filter(r=>LIVE_PLATFORMS.includes(r.platform)&&(platform==='all'||r.platform===platform));
+}
+function registryPeople(){
+  return REGISTRY&&Array.isArray(REGISTRY.employees)
+    ? REGISTRY.employees.filter(e=>e.dashboardRelevant!==false)
+    : [];
+}
+function connectedPeople(){
+  const field=platform==='all'?null:platform;
+  const fromRegistry=registryPeople().filter(e=>e.confirmed&&(field?e.handles&&e.handles[field]:LIVE_PLATFORMS.some(p=>e.handles&&e.handles[p])));
+  if(fromRegistry.length)return new Set(fromRegistry.map(e=>e.name));
+  return new Set(selectedRecords().filter(r=>r.handle).map(r=>r.name));
+}
+function renderKpis(){
+  const el=document.getElementById('kpis'),m=DATA.meta;
+  const records=selectedRecords(),total=m.relevantCount||0,connected=connectedPeople().size,measured=resolvedPeople().size;
+  const coverage=total?Math.round(connected/total*100):0;
+  const age=daysOld(m.capturedAt),fresh=age<=7;
+  const audience=records.filter(r=>r.resolved&&!r.isPrivate)
+    .reduce((s,r)=>s+(r.followers||0),0);
+  const cutoff=new Date(m.capturedAt).getTime()-30*86400000;
+  const posts=records.filter(r=>r.resolved&&!r.isPrivate)
+    .reduce((sum,r)=>sum+(r.recentPosts||[]).filter(p=>!p.isPinned&&new Date(p.postedAt).getTime()>=cutoff).length,0);
+  el.innerHTML=
+    `<div class="card kpi ${coverage>=75?'good':'warn'}"><b>${coverage}%</b><span>profiles connected · ${connected} of ${total}; ${measured} measured</span></div>`+
+    `<div class="card kpi"><b>${fmt(audience)}</b><span>tracked audience · ${platform==='all'?'all live platforms':platform}</span></div>`+
+    `<div class="card kpi"><b>${fmt(posts)}</b><span>posts measured · trailing 30 days</span></div>`+
+    `<div class="card kpi ${fresh?'good':'warn'}"><b class="freshness">${age===0?'Today':age+'d ago'}</b><span>snapshot freshness</span></div>`;
+}
+
+function renderInsights(){
+  const el=document.getElementById('insights'),B=activeBoards();
+  const engaged=platform==='all'
+    ? LIVE_PLATFORMS.flatMap(p=>(DATA.leaderboards[p]&&DATA.leaderboards[p].engagement)||[])
+    : (B.engagement||[]);
+  const cadence=platform==='all'
+    ? LIVE_PLATFORMS.flatMap(p=>(DATA.leaderboards[p]&&DATA.leaderboards[p].postingFrequency)||[])
+    : (B.postingFrequency||[]);
+  const medER=median(engaged.map(r=>r.engagementRate)),medCad=median(cadence.map(r=>r.postsPerWeek));
+  const records=selectedRecords(),cutoff=new Date(DATA.meta.capturedAt).getTime()-30*86400000;
+  const measured=[...new Set(records.filter(r=>r.resolved&&!r.isPrivate).map(r=>r.name))];
+  const active=new Set(records.filter(r=>r.resolved&&!r.isPrivate)
+    .filter(r=>(r.recentPosts||[]).some(p=>!p.isPinned&&new Date(p.postedAt).getTime()>=cutoff))
+    .map(r=>r.name));
+  const inactive=measured.filter(n=>!active.has(n));
+  const pending=[...connectedPeople()].filter(n=>!resolvedPeople().has(n));
+  const missing=registryPeople().filter(e=>{
+    const handles=e.handles||{};
+    return platform==='all'
+      ? !LIVE_PLATFORMS.some(p=>handles[p])
+      : !handles[platform];
+  }).map(e=>e.name);
+  const participation=measured.length?Math.round(100*active.size/measured.length):0;
+  const seen=new Set(),attention=[
+    ...inactive.map(name=>({name,note:'no posts in window'})),
+    ...pending.map(name=>({name,note:'snapshot pending'})),
+    ...missing.map(name=>({name,note:'handle needed'}))
+  ].filter(x=>!seen.has(x.name)&&seen.add(x.name));
+  el.innerHTML=
+    `<div class="card insight"><div class="eyebrow">Participation</div><b class="big">${participation}%</b><p>${active.size} of ${measured.length} measured people posted in the window.</p></div>`+
+    `<div class="card insight"><div class="eyebrow">Team benchmark</div><b>${medER==null?'\u2014':pct(medER)} typical engagement</b><p>${medCad==null?'\u2014':medCad.toFixed(1)+'/week'} median publishing cadence. Beat your own baseline first, then the team median.</p></div>`+
+    `<div class="card insight"><div class="eyebrow">Needs attention</div><b>${attention.length?attention.length:'None'} visible issue${attention.length===1?'':'s'}</b>`+
+      (attention.length?`<ul class="insight-list">${attention.slice(0,4).map(x=>`<li>${esc(x.name)} <span class="muted">\u00b7 ${esc(x.note)}</span></li>`).join('')}</ul>`:'<p>All measured profiles have recent activity and usable data.</p>')+
+    `</div>`;
+}
 
 function renderChamp(){
   const c=document.getElementById('champ');
   const comp=DATA.leaderboards.combined.composite[0];
   if(platform==='all'){
     if(!comp){c.innerHTML='<div class="empty">No ranked profiles yet.</div>';return;}
-    c.innerHTML=`<div class="eyebrow">Top performer \u00b7 all platforms</div>
+    c.innerHTML=`<div class="eyebrow">Overall momentum leader \u00b7 all platforms</div>
       <div class="name">${esc(comp.name)}</div><div class="role">${esc(comp.role||'')}</div>
       <div class="metrics"><div><b>#1</b><span>composite rank</span></div>
       <div><b>${esc(comp.platforms.join(' + '))}</b><span>active on</span></div>
@@ -331,19 +471,20 @@ function renderChamp(){
 function renderSpotlight(){
   const s=document.getElementById('spotlight');
   const tv = platform==='all' ? bestVideoAllPlatforms() : activeBoards().topVideo;
-  if(!tv){s.innerHTML='<div class="eyebrow">Top video</div><div class="empty">No public video data yet.</div>';return;}
+  if(!tv){s.innerHTML='<div class="eyebrow">Top post</div><div class="empty">No public post data in the trailing 30-day window.</div>';return;}
   const p=tv.post;
-  s.innerHTML=`<div class="eyebrow">Top video this week</div>
-    <div class="thumb">${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
-      <div class="play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="rgba(240,101,58,.92)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></div>
+  s.innerHTML=`<div class="eyebrow">Top post · trailing 30 days</div>
+    <a class="thumb" href="${esc(p.url||'#')}" target="_blank" rel="noopener" aria-label="Open ${esc(tv.name)}'s top post">
+      ${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
+      <div class="play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="rgba(240,101,58,.92)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></a>
     <div class="cap"><b>${esc(tv.name)}</b> \u2014 ${esc((p.caption||'').slice(0,80))}</div>
-    <div class="stats"><span>\u25b6 ${fmt(p.views)} views</span><span>\u2661 ${fmt(p.likes)}</span><span>\ud83d\udcac ${fmt(p.comments)}</span></div>`;
+    <div class="stats">${p.views!=null?`<span>\u25b6 ${fmt(p.views)} views</span>`:''}<span>\u2661 ${fmt(p.likes)}</span><span>\ud83d\udcac ${fmt(p.comments)}</span></div>`;
 }
 function bestVideoAllPlatforms(){
   let best=null;
   for(const pf of LIVE_PLATFORMS){
     const tv=DATA.leaderboards[pf]&&DATA.leaderboards[pf].topVideo;
-    if(tv&&(!best||tv.post.views>best.post.views))best=tv;
+    if(tv&&(!best||tv.engagement>best.engagement))best=tv;
   }
   return best;
 }
@@ -357,10 +498,11 @@ function boardList(title,desc,rows,valFn){
     const unranked = (r.rank===null||r.rank===undefined);
     const rk = unranked ? '\u2013' : r.rank;
     const val = unranked ? '\u2014' : valFn(r);
+    const href=r.handle&&platform!=='all'?profileUrl({platform,handle:r.handle}):null;
     return `<li${unranked?' class="prov"':''}><span class="rk${r.rank===1?' one':''}">${rk}</span>
-    <span class="who"><div class="n">${esc(r.name)}</div>${
+    <span class="who">${href?`<a class="board-link" href="${href}" target="_blank" rel="noopener">`:''}<div class="n">${esc(r.name)}</div>${
       unranked && r.note ? `<div class="h">${esc(r.note)}</div>`
-                         : (r.handle?`<div class="h">@${esc(r.handle)}</div>`:'')}</span>
+                         : (r.handle?`<div class="h">@${esc(r.handle)}</div>`:'')}${href?'</a>':''}</span>
     <span class="val">${val}</span></li>`;}).join('');
   const scroll = rows.length>8 ? ' scroll' : '';
   const pend = rows.filter(r=>r.rank===null||r.rank===undefined).length;
@@ -377,7 +519,7 @@ function renderBoards(){
     const W=(DATA.leaderboards.combined&&DATA.leaderboards.combined.weights)||null;
     const wtxt=W?`Weighted: followers ${Math.round(W.followers*100)}% \u00b7 engagement ${Math.round(W.engagementRate*100)}% \u00b7 cadence ${Math.round(W.postsPerWeek*100)}%`
                :'Weighted composite across platforms';
-    b.innerHTML = boardList('Composite leaderboard',wtxt,
+    b.innerHTML = boardList('Overall momentum',wtxt,
       DATA.leaderboards.combined.composite,r=>`${(r.score*100).toFixed(0)}`)
       + mostCommentedCard(bestCommentedAll());
     return;
@@ -391,8 +533,9 @@ function renderBoards(){
 function mostCommentedCard(mc){
   if(!mc) return `<div class="card board"><h3>Most commented</h3><div class="desc">Single post with the most comments</div><div class="empty">Nothing to rank yet.</div></div>`;
   return `<div class="card board"><h3>Most commented post</h3><div class="desc">Single most-discussed post</div>
+    <a class="board-link" href="${esc(mc.post.url||'#')}" target="_blank" rel="noopener" aria-label="Open most commented post by ${esc(mc.name)}">
     <ol class="rows"><li><span class="rk one">\ud83d\udcac</span><span class="who"><div class="n">${esc(mc.name)}</div>
-    <div class="h">${esc((mc.post.caption||'').slice(0,42))}</div></span><span class="val">${fmt(mc.post.comments)}</span></li></ol></div>`;
+    <div class="h">${esc((mc.post.caption||'').slice(0,42))}</div></span><span class="val">${fmt(mc.post.comments)}</span></li></ol></a></div>`;
 }
 function bestCommentedAll(){let best=null;for(const pf of LIVE_PLATFORMS){const m=DATA.leaderboards[pf]&&DATA.leaderboards[pf].mostCommented;if(m&&(!best||m.post.comments>best.post.comments))best=m;}return best;}
 
@@ -402,71 +545,117 @@ function renderTrend(){
     el.innerHTML=`<div class="eyebrow">Follower growth</div><div class="empty" style="margin-top:8px">Collecting \u2014 growth appears once a second weekly snapshot lands.</div>`;
     return;
   }
-  const rows=DATA.trend.filter(t=>t.followerDelta>0 && LIVE_PLATFORMS.includes(t.platform) && (platform==='all'||t.platform===platform)).slice(0,8);
+  const rows=DATA.trend.filter(t=>t.followerDelta>0 && LIVE_PLATFORMS.includes(t.platform) && (platform==='all'||t.platform===platform))
+    .sort((a,b)=>(b.followerPct||0)-(a.followerPct||0)).slice(0,8);
   el.innerHTML=`<div class="eyebrow">Fastest follower growth \u00b7 vs last week</div>
-    <div class="chips">${rows.map(t=>`<span class="gain">\u2197 ${esc(t.name.split(' ')[0])} +${fmt(t.followerDelta)} <small>${esc(t.platform.slice(0,2))}</small></span>`).join('')||'<span class="empty">No gains on this platform this week.</span>'}</div>`;
+    <div class="chips">${rows.map(t=>`<span class="gain">\u2197 ${esc(t.name.split(' ')[0])} ${pct(t.followerPct)} <small>+${fmt(t.followerDelta)} \u00b7 ${esc(t.platform.slice(0,2))}</small></span>`).join('')||'<span class="empty">No gains on this platform this week.</span>'}</div>`;
 }
 
 function rosterRows(){
   const people=new Map();
+  for(const e of registryPeople()){
+    const handles=e.handles||{},has=!!(e.confirmed&&LIVE_PLATFORMS.some(p=>handles[p]));
+    people.set(e.name,{name:e.name,role:e.role,ig:null,tt:null,er:null,cadence:null,growth:null,
+      igHandle:handles.instagram||null,state:has?'pending':'need',recs:[]});
+  }
   for(const r of DATA.records){
-    if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,ig:null,tt:null,er:null,state:'need',recs:[]});
+    if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,ig:null,tt:null,er:null,cadence:null,growth:null,igHandle:null,state:'need',recs:[]});
     const p=people.get(r.name); p.recs.push(r);
+    if(r.platform==='instagram'&&r.handle)p.igHandle=r.handle;
     if(r.resolved&&!r.isPrivate){
       if(r.platform==='instagram')p.ig=r.followers;
       if(r.platform==='tiktok'&&TIKTOK_ENABLED)p.tt=r.followers;
       p.state=(p.state==='private')?'private':'public';
     } else if(r.isPrivate){ if(p.state!=='public')p.state='private'; }
   }
-  // best ER per person
-  for(const p of people.values()){
-    let best=null;
-    for(const r of p.recs){ if(r.resolved&&!r.isPrivate){ const posts=r.recentPosts||[]; if(posts.length){ const avg=posts.reduce((s,x)=>s+(x.likes||0)+(x.comments||0)+(x.shares||0),0)/posts.length; const er=r.followers?avg/r.followers:0; if(best==null||er>best)best=er; } } }
-    p.er=best;
+  // Use the ranking engine's median, windowed definitions. Recomputing a mean
+  // from raw posts here previously produced 86.9% in the roster and 1.0% in
+  // the leaderboard for the same person.
+  for(const pf of LIVE_PLATFORMS){
+    for(const r of ((DATA.leaderboards[pf]||{}).engagement||[])){
+      const p=people.get(r.name);if(p&&(p.er==null||r.engagementRate>p.er))p.er=r.engagementRate;
+    }
+    for(const r of ((DATA.leaderboards[pf]||{}).postingFrequency||[])){
+      const p=people.get(r.name);if(p&&(p.cadence==null||r.postsPerWeek>p.cadence))p.cadence=r.postsPerWeek;
+    }
+  }
+  for(const r of (DATA.trend||[])){
+    const p=people.get(r.name);if(p&&(p.growth==null||r.followerPct>p.growth))p.growth=r.followerPct;
   }
   return [...people.values()];
 }
-let sortKey='ig',sortDir=-1;
+let sortKey='ig',sortDir=-1,rosterQuery='';
+function compareRoster(a,b){
+  const va=a[sortKey],vb=b[sortKey];
+  if(sortKey==='name')return sortDir*a.name.localeCompare(b.name);
+  if(va==null&&vb==null)return a.name.localeCompare(b.name);
+  if(va==null)return 1;
+  if(vb==null)return -1;
+  return sortDir*(va-vb);
+}
 function renderRoster(){
-  const rows=rosterRows().sort((a,b)=>{
-    const va=a[sortKey],vb=b[sortKey];
-    if(sortKey==='name')return sortDir*a.name.localeCompare(b.name);
-    return sortDir*(((vb==null)-(va==null))||((va||0)-(vb||0)))*-1;
-  });
+  const all=rosterRows();
+  const q=rosterQuery.trim().toLowerCase();
+  const rows=all.filter(p=>!q||(p.name+' '+(p.role||'')).toLowerCase().includes(q)).sort(compareRoster);
+  document.getElementById('roster-count').textContent=q?`${rows.length} of ${all.length} people`:`${all.length} people · select a row for details`;
   document.getElementById('tbody').innerHTML=rows.map((p,i)=>`
     <tr tabindex="0" data-name="${esc(p.name)}">
       <td><b>${esc(p.name)}</b><div class="muted" style="font-size:11.5px">${esc(p.role||'')}</div></td>
       <td class="num">${p.ig==null?'<span class="muted">\u2014</span>':fmt(p.ig)}</td>
       <td class="num">${!TIKTOK_ENABLED?'<span class="soon-cell">Available soon</span>':p.tt==null?'<span class="muted">\u2014</span>':fmt(p.tt)}</td>
       <td class="num hide-sm">${p.er==null?'<span class="muted">\u2014</span>':pct(p.er)}</td>
-      <td>${p.state==='public'?'<span class="chip public">Public</span>':p.state==='private'?'<span class="chip private">Private</span>':'<span class="chip need">Handle needed</span>'}</td>
+      <td>${p.state==='public'?'<span class="chip public">Measured</span>':p.state==='private'?'<span class="chip private">Private</span>':p.state==='pending'?'<span class="chip pending">Awaiting pull</span>':'<span class="chip need">Handle needed</span>'}</td>
     </tr>`).join('');
   document.querySelectorAll('#tbody tr').forEach(tr=>{
     const open=()=>openDrawer(tr.dataset.name);
     tr.onclick=open; tr.onkeydown=e=>{if(e.key==='Enter')open();};
   });
-  document.querySelectorAll('#tbl th').forEach(th=>th.onclick=()=>{const k=th.dataset.sort;if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=-1;}renderRoster();});
+  document.querySelectorAll('#tbl th[data-sort]').forEach(th=>{
+    th.setAttribute('aria-sort',th.dataset.sort===sortKey?(sortDir===-1?'descending':'ascending'):'none');
+    th.onclick=()=>{const k=th.dataset.sort;if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=-1;}renderRoster();};
+  });
+}
+
+function nextAction(person){
+  if(person.state==='need')return 'Verify a Kirpa-facing public handle so this person can enter the competition.';
+  if(person.state==='pending')return 'This profile is connected. Run the weekly snapshot to add current metrics and enter the rankings.';
+  if(person.cadence==null)return 'Publish at least two original posts in the next 30 days to establish a fair baseline.';
+  const ers=rosterRows().map(p=>p.er).filter(x=>x!=null),cads=rosterRows().map(p=>p.cadence).filter(x=>x!=null);
+  const erMid=median(ers),cadMid=median(cads);
+  if(person.cadence<cadMid)return `Increase consistency toward the team median of ${cadMid.toFixed(1)} posts per week.`;
+  if(person.er<erMid)return `Test a stronger opening hook and one clear question or CTA; current typical engagement is below the ${pct(erMid)} team median.`;
+  return 'Maintain the cadence and turn the strongest recent post into a repeatable content series.';
 }
 
 function openDrawer(name){
   const recs=DATA.records.filter(r=>r.name===name);
   const d=document.getElementById('drawer'), any=recs.find(r=>r.resolved);
+  const person=rosterRows().find(p=>p.name===name);
   let body='';
-  if(recs.every(r=>!r.resolved)) body='<div class="empty">No confirmed public handle yet. Add one in the registry and it appears here after the next snapshot.</div>';
+  if(recs.every(r=>!r.resolved)){
+    if(person&&person.state==='pending'&&person.igHandle){
+      body=`<a class="profile-link" href="https://www.instagram.com/${encodeURIComponent(person.igHandle)}/" target="_blank" rel="noopener">Open @${esc(person.igHandle)} ↗</a>
+        <div class="empty">Profile verified and connected. Current metrics will appear after the next weekly snapshot.</div>`;
+    }else{
+      body='<div class="empty">No confirmed public handle yet. Add one in the registry and it appears here after the next snapshot.</div>';
+    }
+  }
   else{
     for(const r of recs){
       if(!r.resolved) continue;
       body+=`<div style="margin-top:14px" class="eyebrow">${esc(r.platform)} \u00b7 ${r.isPrivate?'private':(r.followers!=null?fmt(r.followers)+' followers':'follower count unavailable')}</div>`;
+      if(profileUrl(r))body+=`<a class="profile-link" href="${profileUrl(r)}" target="_blank" rel="noopener">Open @${esc(r.handle)} ↗</a>`;
       if((r.warnings||[]).length) body+=`<div style="font-size:12px;color:var(--ochre);margin-top:4px">${r.warnings.map(esc).join('<br>')}</div>`;
       if(r.isPrivate){body+='<div class="empty">Private account \u2014 counts only, no post data.</div>';continue;}
       const top=(r.recentPosts||[]).slice().sort((a,b)=>(b.views||b.likes||0)-(a.views||a.likes||0)).slice(0,3);
-      body+=top.map(p=>`<div class="post">${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
+      body+=top.map(p=>`<a class="post" href="${esc(p.url||'#')}" target="_blank" rel="noopener">${p.thumb?`<img src="${esc(p.thumb)}" alt="" loading="lazy"/>`:''}
         <div><div class="pc">${esc((p.caption||'').slice(0,70))}</div>
-        <div class="ps">${p.views!=null?'\u25b6 '+fmt(p.views)+' \u00b7 ':''}\u2661 ${fmt(p.likes)} \u00b7 \ud83d\udcac ${fmt(p.comments)}</div></div></div>`).join('');
+        <div class="ps">${p.views!=null?'\u25b6 '+fmt(p.views)+' \u00b7 ':''}\u2661 ${fmt(p.likes)} \u00b7 \ud83d\udcac ${fmt(p.comments)}</div></div></a>`).join('');
     }
   }
   d.innerHTML=`<button class="x" aria-label="Close">\u00d7</button>
-    <h3>${esc(name)}</h3><div class="role">${esc((any&&any.role)||'')}</div>${body}`;
+    <h3>${esc(name)}</h3><div class="role">${esc((any&&any.role)||(person&&person.role)||'')}</div>
+    <div class="next"><b>Next best action</b><br>${esc(nextAction(person))}</div>${body}`;
   d.querySelector('.x').onclick=closeDrawer;
   d.classList.add('open');d.setAttribute('aria-hidden','false');
   document.getElementById('scrim').classList.add('open');d.focus();
@@ -474,6 +663,7 @@ function openDrawer(name){
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer').setAttribute('aria-hidden','true');document.getElementById('scrim').classList.remove('open');}
 document.getElementById('scrim').onclick=closeDrawer;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+document.getElementById('roster-search').addEventListener('input',e=>{rosterQuery=e.target.value;renderRoster();});
 
 function cov(){
   const lb=DATA.leaderboards||{};

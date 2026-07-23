@@ -15,7 +15,8 @@
     "TikTok is PAUSED as of 2026-07-22 by product decision. Handles are left null and the dashboard shows an \"available soon\" state rather than a zero. The TikTok adapter, normalizer and tests are untouched.",
     "Seeded: Manpreet Kaur handles verified against public bios. 2026-07-22: six further Instagram handles supplied directly by Kirpa and marked confirmed — see sourcedFrom on each.",
     "Handle discovery method (2026-07-23): the firstname.kirpa convention was used only to GENERATE candidates. Confirmation always came from the live public bio — an account is only counted when it self-declares Kirpa (@kirpa.properties tag or @kirpaproperties.com address) or was tagged by the Kirpa company account. A handle that merely resolves is not evidence; see Nikita Lal Tekwani for a resolving account that was rejected.",
-    "Probed and did not resolve — no account exists at these patterns, do not re-probe blindly: sukhpreet.kirpa, kavita.kirpa, sara.kirpa, sahilmendiratta.kirpa, arbaaz.kirpa, mubeen.kirpa, ameer.kirpa, amandeep.kirpa, jitendra.kirpa, puja.kirpa, param.kirpa, sleeja.kirpa, anmol.kirpa."
+    "Discovery pass 2026-07-23 used exact-name web results, live public Instagram metadata, company-email/bio evidence, and Kirpa-owned tags. Four relevant staff still have no verified Kirpa-facing public handle: Arbaaz Ali Khan, Ameer Agha Shirazi, Param Singh, and Amandeep Singh.",
+    "Rejected pattern-only handles remain rejected. In particular nikita.kirpa was an empty shell; Nikita's verified working profile is nikitaa.kirpa."
   ],
   "employees": [
     {
@@ -108,12 +109,14 @@
       "role": "Team Leader – Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "mubeen.iqbal.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile and Kirpa-owned Instagram posts. Evidence: handle mubeen.iqbal.kirpa, public profile name \"Memon Property Wala\", bio exposes mubeen@kirpaproperties.com, and the @kirpa.properties account repeatedly tags the same handle as Mubeen.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Preety Vijayvargiya",
@@ -134,12 +137,14 @@
       "role": "Senior Consultant – Secondary Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "dxb.pooja.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: exact full name Puja Maheshwari, bio email puja@kirpaproperties.com and BRN 82097; the same person is listed under Kirpa Properties by Dubai Land Department.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Vaishali Arora",
@@ -160,12 +165,14 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "sukhpreetbal.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: exact public name Sukhpreet Kaur Bal and bio \"Real Estate Agent @kirpa.properties\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Barkha Kalia",
@@ -242,12 +249,14 @@
       "role": "Consultant – Secondary Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "kavita.kirpa.dxb",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: exact public name Kavita Choudhary and bio \"realtor @kirpa.properties\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Sarvnihal Singh",
@@ -324,12 +333,15 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "sarafaisal.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 through the public profile and its linked Threads identity. Evidence: sarafaisal.kirpa publicly describes the Kirpa leadership and tags @kirpa.properties; 26K-follower Instagram profile is live. Roster-to-profile surname is not displayed, so this match should be rechecked during the next HR roster audit.",
+      "evidenceClass": "posting-context",
+      "needsHumanConfirmation": true
     },
     {
       "name": "Ritika Kodwani",
@@ -350,12 +362,14 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "jeet.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: exact public name \"Jitendra Makhija (Jeet)\" and bio \"Dubai Real estate agent @kirpa.properties\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Arbaaz Ali Khan",
@@ -374,37 +388,44 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "sahil.kirpaa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: exact full name Sahil Mendiratta and bio \"Real Estate Agent @kirpa.properties\".",
+      "evidenceClass": "bio"
     },
     {
       "name": "Nikita Lal Tekwani",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "nikitaa.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false,
-      "sourcedFrom": "REJECTED Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23. The handle resolves (\"Nikita Kirpa\") but the account is an empty shell: blank bio, 2 followers, 1 post, no mention of Kirpa Properties anywhere. Matching the firstname.kirpa pattern is not evidence of employment. Supply her real handle to enable."
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from live public Instagram metadata and Kirpa-related posts. Evidence: exact public profile name \"Nikita Lal Tekwani | Dubai Real Estate\"; posts explicitly reference Kirpa Properties and @kirpa.properties. This supersedes the rejected empty shell nikita.kirpa.",
+      "evidenceClass": "posting-context",
+      "needsHumanConfirmation": true
     },
     {
       "name": "Sleeja Misra",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "sleeja.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from indexed public Instagram posts. Evidence: exact name Sleeja Misra, handle sleeja.kirpa, Dubai property content, and consistent public contact details across the profile's posts.",
+      "evidenceClass": "posting-context",
+      "needsHumanConfirmation": true
     },
     {
       "name": "Lovepreet Singh",
@@ -506,12 +527,14 @@
       "role": "Content Executive",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": null,
+        "instagram": "anmoll.dxb",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: public name \"Anmol Singh | Dubai Creator\" and bio \"Content Executive @kirpa.properties\". A second personal account exists; anmoll.dxb is selected because it is the Kirpa-facing creator profile.",
+      "evidenceClass": "bio"
     },
     {
       "name": "Amandeep Singh",

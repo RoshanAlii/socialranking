@@ -124,6 +124,55 @@ class ApifyProvider {
       recentPosts: items,
     };
   }
+
+  // One actor run per platform, rather than one paid run per person. With more
+  // than 30 confirmed profiles this is materially faster, cheaper, and less
+  // likely to time out in GitHub Actions.
+  async fetchProfiles(platform, handles) {
+    const actor = APIFY_ACTORS[platform];
+    const wanted = [...new Set((handles || []).filter(Boolean))];
+    const found = new Map();
+    if (!actor || wanted.length === 0) return found;
+
+    const input = platform === 'instagram'
+      ? { usernames: wanted, resultsLimit: 12 }
+      : platform === 'facebook'
+        ? { startUrls: wanted.map(handle => ({ url: `https://www.facebook.com/${handle}` })), resultsLimit: 12 }
+        : { profiles: wanted, resultsPerPage: 12, shouldDownloadVideos: false };
+    const items = await apifyRunSync(actor, input, this.token);
+    if (!Array.isArray(items) || items.length === 0) return found;
+
+    const canonical = new Map(wanted.map(handle => [handle.toLowerCase(), handle]));
+    const groups = new Map();
+    for (const item of items) {
+      const rawHandle = item.username || item.userName || item.handle
+        || item.ownerUsername || item.authorMeta?.name || item.authorMeta?.uniqueId;
+      const handle = rawHandle && canonical.get(String(rawHandle).replace(/^@/, '').toLowerCase());
+      if (!handle) continue;
+      if (!groups.has(handle)) groups.set(handle, []);
+      groups.get(handle).push(item);
+    }
+
+    // Some actors omit a username when a single Facebook Page is requested.
+    if (wanted.length === 1 && groups.size === 0) groups.set(wanted[0], items);
+
+    for (const [handle, rows] of groups) {
+      const first = rows[0];
+      if (first && (first.followersCount != null || first.followers != null
+        || first.fansCount != null || first.followers_count != null)) {
+        found.set(handle, Object.assign({}, first, {
+          recentPosts: first.latestPosts || first.posts || (rows.length > 1 ? rows.slice(1) : []),
+        }));
+      } else {
+        found.set(handle, {
+          followers: first.followersCount ?? first.authorMeta?.fans ?? null,
+          isPrivate: first.private === true,
+          recentPosts: rows,
+        });
+      }
+    }
+    return found;
+  }
 }
 
 /* ---------------- Captured (real data, replayed) ---------------- */

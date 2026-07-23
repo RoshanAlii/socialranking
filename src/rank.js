@@ -218,10 +218,11 @@ function topVideo(records, platform, now, days) {
 }
 
 
-function mostCommented(records, platform) {
+function mostCommented(records, platform, now, days = WINDOW_DAYS) {
+  const n = now === undefined ? asOf(records) : now;
   let best = null;
   for (const r of forPlatform(records, platform).filter(isUsable)) {
-    for (const p of (r.recentPosts || [])) {
+    for (const p of windowPosts(r, n, days)) {
       if (typeof p.comments !== 'number') continue;
       if (!best || p.comments > best.post.comments) best = { name: r.name, role: r.role, handle: r.handle, post: p };
     }
@@ -341,7 +342,7 @@ function buildLeaderboards(records, platforms = ['instagram', 'tiktok', 'faceboo
       topPost: topPost(records, pf, now, days),
       topVideo: topPost(records, pf, now, days),   // legacy key, same fair board
       mostViewed: mostViewed(records, pf),
-      mostCommented: mostCommented(records, pf),
+      mostCommented: mostCommented(records, pf, now, days),
       // The dashboard should be able to state the shape of its own blind spots.
       coverage: {
         windowDays: days,
