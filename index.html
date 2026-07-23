@@ -87,6 +87,10 @@
   ol.rows li:first-child{border-top:0}
   .rk{flex:0 0 22px;font-weight:700;font-size:13px;color:var(--muted);text-align:center}
   .rk.one{color:var(--coral)}
+  ol.rows.scroll{max-height:340px;overflow-y:auto;padding-right:4px}
+  ol.rows li.prov{opacity:.62}
+  ol.rows li.prov .rk{color:var(--muted)}
+  .cnt{margin-top:8px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
   .who{flex:1;min-width:0}
   .who .n{font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .who .h{font-size:11px;color:var(--muted)}
@@ -346,24 +350,42 @@ function bestVideoAllPlatforms(){
 
 function boardList(title,desc,rows,valFn){
   if(!rows||!rows.length) return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div><div class="empty">Nothing to rank yet.</div></div>`;
-  const li=rows.slice(0,5).map(r=>`<li><span class="rk${r.rank===1?' one':''}">${r.rank}</span>
-    <span class="who"><div class="n">${esc(r.name)}</div>${r.handle?`<div class="h">@${esc(r.handle)}</div>`:''}</span>
-    <span class="val">${valFn(r)}</span></li>`).join('');
-  return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div><ol class="rows">${li}</ol></div>`;
+  // Show EVERYONE. This used to slice to the top 5, which was invisible while one
+  // person had data and would hide most of the team once the roster filled up.
+  // A board meant to help people improve has to show them their own line.
+  const li=rows.map(r=>{
+    const unranked = (r.rank===null||r.rank===undefined);
+    const rk = unranked ? '\u2013' : r.rank;
+    const val = unranked ? '\u2014' : valFn(r);
+    return `<li${unranked?' class="prov"':''}><span class="rk${r.rank===1?' one':''}">${rk}</span>
+    <span class="who"><div class="n">${esc(r.name)}</div>${
+      unranked && r.note ? `<div class="h">${esc(r.note)}</div>`
+                         : (r.handle?`<div class="h">@${esc(r.handle)}</div>`:'')}</span>
+    <span class="val">${val}</span></li>`;}).join('');
+  const scroll = rows.length>8 ? ' scroll' : '';
+  const pend = rows.filter(r=>r.rank===null||r.rank===undefined).length;
+  const cnt = pend ? `${rows.length-pend} ranked \u00b7 ${pend} awaiting data` : `${rows.length} ranked`;
+  return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div>
+    <ol class="rows${scroll}">${li}</ol>
+    <div class="cnt">${cnt}</div></div>`;
 }
 
+function winTxt(){const c=cov();return c?` \u00b7 last ${c.windowDays} days`:'';}
 function renderBoards(){
   const b=document.getElementById('boards'), B=activeBoards();
   if(platform==='all'){
-    b.innerHTML = boardList('Composite leaderboard','Weighted: followers 35% \u00b7 engagement 40% \u00b7 cadence 25%',
+    const W=(DATA.leaderboards.combined&&DATA.leaderboards.combined.weights)||null;
+    const wtxt=W?`Weighted: followers ${Math.round(W.followers*100)}% \u00b7 engagement ${Math.round(W.engagementRate*100)}% \u00b7 cadence ${Math.round(W.postsPerWeek*100)}%`
+               :'Weighted composite across platforms';
+    b.innerHTML = boardList('Composite leaderboard',wtxt,
       DATA.leaderboards.combined.composite,r=>`${(r.score*100).toFixed(0)}`)
       + mostCommentedCard(bestCommentedAll());
     return;
   }
   b.innerHTML =
     boardList('Most followers','Public follower count',B.mostFollowers,r=>fmt(r.followers))+
-    boardList('Highest engagement','Avg interactions per post \u00f7 followers (proxy)',B.engagement,r=>pct(r.engagementRate))+
-    boardList('Most active','Posts per week, recent window',B.postingFrequency,r=>r.postsPerWeek.toFixed(1)+'/wk')+
+    boardList('Highest engagement',`Median interactions per post \u00f7 followers${winTxt()}`,B.engagement,r=>pct(r.engagementRate))+
+    boardList('Most active',`Posts per week${winTxt()}`,B.postingFrequency,r=>r.postsPerWeek.toFixed(1)+'/wk')+
     mostCommentedCard(B.mostCommented);
 }
 function mostCommentedCard(mc){

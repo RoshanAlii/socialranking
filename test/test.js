@@ -485,6 +485,27 @@ function rec(over = {}) {
     assert.ok(c.videoViewReporting.pct !== null, 'view-reporting coverage must be published');
   });
 
+  console.log('\nDASHBOARD RENDERING');
+  await t('leaderboards are not capped \u2014 everyone can find their own line', () => {
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    // A slice(0,N) here silently hid most of the roster: with 6 people only 5
+    // showed, and with 24 confirmed agents 19 would never see themselves.
+    const fn = html.slice(html.indexOf('function boardList('), html.indexOf('function renderBoards('));
+    assert.ok(!/rows\.slice\(/.test(fn), 'boardList must not slice the rows it was given');
+    assert.ok(/rows\.map\(/.test(fn), 'boardList should map over every row');
+  });
+  await t('the composite card reads its weights from the data, never hardcoded', () => {
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    assert.ok(!/followers 35%/.test(html), 'a hardcoded weight label goes stale the moment weights change');
+    assert.ok(/combined\.weights/.test(html), 'weights must come from the snapshot');
+  });
+  await t('unranked people render as pending, not as rank null or score 0', () => {
+    const html = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
+    const fn = html.slice(html.indexOf('function boardList('), html.indexOf('function renderBoards('));
+    assert.ok(/r\.rank===null\|\|r\.rank===undefined/.test(fn), 'must detect the unranked state');
+    assert.ok(/prov/.test(fn), 'unranked rows need their own styling hook');
+  });
+
   console.log(`\n${pass} passed, ${fail} failed\n`);
   process.exit(fail === 0 ? 0 : 1);
 })();
