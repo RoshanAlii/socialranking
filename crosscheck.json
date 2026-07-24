@@ -1,0 +1,65 @@
+{
+  "now": "2026-07-24T00:00:00.000Z",
+  "rows": [
+    {
+      "rank": 1,
+      "name": "Profile 31",
+      "role": "C",
+      "handle": "p31",
+      "postsPerWeek": 7.233333333333333,
+      "postsInWindow": 31,
+      "windowDays": 30,
+      "windowComplete": true,
+      "coverageReason": "date-bounded posts query completed without truncation",
+      "formula": "31 × 7 ÷ 30"
+    },
+    {
+      "rank": 2,
+      "name": "Profile 8",
+      "role": "C",
+      "handle": "p8",
+      "postsPerWeek": 1.8666666666666667,
+      "postsInWindow": 8,
+      "windowDays": 30,
+      "windowComplete": true,
+      "coverageReason": "date-bounded posts query completed without truncation",
+      "formula": "8 × 7 ÷ 30"
+    },
+    {
+      "rank": 3,
+      "name": "Profile 4",
+      "role": "C",
+      "handle": "p4",
+      "postsPerWeek": 0.9333333333333333,
+      "postsInWindow": 4,
+      "windowDays": 30,
+      "windowComplete": true,
+      "coverageReason": "date-bounded posts query completed without truncation",
+      "formula": "4 × 7 ÷ 30"
+    },
+    {
+      "rank": 4,
+      "name": "Profile 1",
+      "role": "C",
+      "handle": "p1",
+      "postsPerWeek": 0.23333333333333334,
+      "postsInWindow": 1,
+      "windowDays": 30,
+      "windowComplete": true,
+      "coverageReason": "date-bounded posts query completed without truncation",
+      "formula": "1 × 7 ÷ 30"
+    },
+    {
+      "rank": 5,
+      "name": "Profile 0",
+      "role": "C",
+      "handle": "p0",
+      "postsPerWeek": 0,
+      "postsInWindow": 0,
+      "windowDays": 30,
+      "windowComplete": true,
+      "coverageReason": "date-bounded posts query completed without truncation",
+      "formula": "0 × 7 ÷ 30"
+    }
+  ]
+}

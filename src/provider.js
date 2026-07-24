@@ -2,12 +2,11 @@
 
 const https = require('https');
 
-const INSTAGRAM_RESULTS_LIMIT = Number(process.env.APIFY_IG_RESULTS_LIMIT || 100);
-const APIFY_ACTORS = {
-  instagram: process.env.APIFY_IG_ACTOR || 'apify~instagram-profile-scraper',
-  tiktok: process.env.APIFY_TT_ACTOR || 'clockworks~tiktok-profile-scraper',
-  facebook: process.env.APIFY_FB_ACTOR || 'apify~facebook-pages-scraper',
-};
+const PROFILE_ACTOR = process.env.APIFY_IG_PROFILE_ACTOR || 'apify~instagram-profile-scraper';
+const POSTS_ACTOR = process.env.APIFY_IG_POSTS_ACTOR || 'apify~instagram-scraper';
+const INSTAGRAM_POST_RESULTS_LIMIT = Number(process.env.APIFY_IG_POST_RESULTS_LIMIT || 200);
+const INSTAGRAM_POST_LOOKBACK_DAYS = Number(process.env.APIFY_IG_POST_LOOKBACK_DAYS || 31);
+const POST_FETCH_CONCURRENCY = Number(process.env.APIFY_IG_POST_CONCURRENCY || 5);
 
 function seed(str) {
   let h = 2166136261;
@@ -20,11 +19,148 @@ function seed(str) {
 function rng(seedVal) {
   let x = seedVal || 1;
   return () => {
-    x ^= x << 13;
-    x ^= x >>> 17;
-    x ^= x << 5;
+    x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
     return ((x >>> 0) % 100000) / 100000;
   };
+}
+function dayMs() { return 24 * 60 * 60 * 1000; }
+function canonicalHandle(value) {
+  return value == null ? null : String(value).replace(/^@/, '').trim().toLowerCase();
+}
+function profileUrl(handle) { return `https://www.instagram.com/${handle}/`; }
+
+function instagramProfileInput(handles) {
+  return { usernames: [...new Set((handles || []).filter(Boolean))] };
+}
+function instagramPostsInput(handle) {
+  return {
+    directUrls: [profileUrl(handle)],
+    resultsType: 'posts',
+    resultsLimit: INSTAGRAM_POST_RESULTS_LIMIT,
+    onlyPostsNewerThan: `${INSTAGRAM_POST_LOOKBACK_DAYS} days`,
+    addParentData: true,
+  };
+}
+
+function groupProfileItems(handles, items) {
+  const wanted = new Map((handles || []).filter(Boolean).map(h => [canonicalHandle(h), h]));
+  const out = new Map();
+  for (const item of Array.isArray(items) ? items : []) {
+    const key = canonicalHandle(item.username || item.userName || item.handle);
+    const handle = wanted.get(key);
+    if (handle && !out.has(handle)) out.set(handle, item);
+  }
+  return out;
+}
+
+function postOwner(item) {
+  return canonicalHandle(
+    item && (item.ownerUsername || item.username || item.authorMeta_name ||
+      item.authorMeta?.name || item.owner?.username || item.owner?.userName)
+  );
+}
+function groupPostItems(handle, items) {
+  const expected = canonicalHandle(handle);
+  return (Array.isArray(items) ? items : []).filter(item => {
+    const owner = postOwner(item);
+    return !owner || owner === expected;
+  });
+}
+
+function apifyRunSync(actor, input, token) {
+  const body = JSON.stringify(input);
+  const requestPath = `/v2/acts/${actor}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
+  const opts = {
+    method: 'POST', hostname: 'api.apify.com', path: requestPath,
+    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+  };
+  return new Promise((resolve, reject) => {
+    const req = https.request(opts, res => {
+      let data = '';
+      res.on('data', c => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 400) return reject(new Error(`Apify ${res.statusCode}: ${data.slice(0, 500)}`));
+        try { resolve(JSON.parse(data)); } catch (error) { reject(error); }
+      });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
+
+async function mapLimit(items, limit, worker) {
+  const values = Array.from(items || []);
+  const results = new Array(values.length);
+  let next = 0;
+  async function runner() {
+    while (true) {
+      const index = next++;
+      if (index >= values.length) return;
+      results[index] = await worker(values[index], index);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.max(1, Math.min(limit, values.length || 1)) }, runner));
+  return results;
+}
+
+class ApifyProvider {
+  constructor(token = process.env.APIFY_TOKEN, opts = {}) {
+    if (!token) throw new Error('ApifyProvider needs APIFY_TOKEN. Refusing to fabricate live data.');
+    this.token = token;
+    this.runSync = opts.runSync || apifyRunSync;
+    this.postConcurrency = opts.postConcurrency || POST_FETCH_CONCURRENCY;
+  }
+
+  async fetchProfiles(platform, handles) {
+    const wanted = [...new Set((handles || []).filter(Boolean))];
+    if (platform !== 'instagram' || !wanted.length) return new Map();
+
+    const profileItems = await this.runSync(PROFILE_ACTOR, instagramProfileInput(wanted), this.token);
+    const profiles = groupProfileItems(wanted, profileItems);
+    const out = new Map();
+
+    await mapLimit(wanted, this.postConcurrency, async handle => {
+      const details = profiles.get(handle);
+      if (!details) {
+        out.set(handle, { notFound: true });
+        return;
+      }
+
+      try {
+        const rows = await this.runSync(POSTS_ACTOR, instagramPostsInput(handle), this.token);
+        const posts = groupPostItems(handle, rows);
+        out.set(handle, Object.assign({}, details, {
+          recentPosts: posts,
+          _profileSource: PROFILE_ACTOR,
+          _postSource: POSTS_ACTOR,
+          _postsQuerySucceeded: true,
+          _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
+          _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
+          _postsTruncated: posts.length >= INSTAGRAM_POST_RESULTS_LIMIT,
+          _rawPostCount: posts.length,
+        }));
+      } catch (error) {
+        out.set(handle, Object.assign({}, details, {
+          recentPosts: [],
+          _profileSource: PROFILE_ACTOR,
+          _postSource: POSTS_ACTOR,
+          _postsQuerySucceeded: false,
+          _postsQueryError: String(error.message || error),
+          _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
+          _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
+          _postsTruncated: false,
+          _rawPostCount: 0,
+        }));
+      }
+    });
+
+    return out;
+  }
+
+  async fetchProfile(platform, handle) {
+    return (await this.fetchProfiles(platform, [handle])).get(handle) || { notFound: true };
+  }
 }
 
 class MockProvider {
@@ -34,159 +170,42 @@ class MockProvider {
   }
   async fetchProfile(platform, handle) {
     if (!handle || this.missing.has(handle)) return { notFound: true };
+    if (platform !== 'instagram') return { notFound: true };
     const r = rng(seed(`${platform}:${handle}`));
     if (this.privateHandles.has(handle)) {
-      return { isPrivate: true, followers: 800 + Math.floor(r() * 4000), following: 300, postCount: 40 };
+      return { private: true, followersCount: 1000, followsCount: 300, postsCount: 40 };
     }
     const followers = 1500 + Math.floor(r() * 90000);
     const now = Date.now();
-    const recentPosts = Array.from({ length: 35 }, (_, i) => {
-      const base = Math.floor(followers * (0.02 + r() * 0.10));
-      return {
-        id: `${handle}_${i}`,
-        type: r() > 0.35 ? 'reel' : 'image',
-        url: `https://example/${platform}/${handle}/${i}`,
-        caption: 'Dubai property content #kirpaarmy',
-        likeCount: base,
-        commentCount: Math.floor(base * 0.04),
-        shareCount: Math.floor(base * 0.02),
-        playCount: Math.floor(followers * (0.5 + r() * 3)),
-        timestamp: now - i * DAY(),
-        ownerUsername: handle,
-      };
-    });
+    const recentPosts = Array.from({ length: 35 }, (_, i) => ({
+      id: `${handle}_${i}`,
+      type: r() > 0.35 ? 'Video' : 'Image',
+      url: `https://instagram.com/p/${handle}_${i}/`,
+      caption: 'Dubai property content #kirpaarmy',
+      likesCount: Math.floor(followers * (0.02 + r() * 0.10)),
+      commentsCount: Math.floor(followers * 0.002),
+      timestamp: new Date(now - i * dayMs()).toISOString(),
+      ownerUsername: handle,
+    }));
     return {
-      isPrivate: false,
-      followers,
-      following: 400 + Math.floor(r() * 900),
-      postCount: recentPosts.length,
+      username: handle,
+      followersCount: followers,
+      followsCount: 400 + Math.floor(r() * 900),
+      postsCount: 200,
       recentPosts,
-      _fetchLimit: INSTAGRAM_RESULTS_LIMIT,
+      _profileSource: PROFILE_ACTOR,
+      _postSource: POSTS_ACTOR,
+      _postsQuerySucceeded: true,
+      _postsLookbackDays: 31,
+      _postsResultLimit: 200,
+      _postsTruncated: false,
       _rawPostCount: recentPosts.length,
     };
   }
-}
-function DAY() { return 24 * 60 * 60 * 1000; }
-
-function apifyInput(platform, handles) {
-  if (platform === 'instagram') {
-    return { usernames: handles, resultsLimit: INSTAGRAM_RESULTS_LIMIT };
-  }
-  if (platform === 'facebook') {
-    return {
-      startUrls: handles.map(handle => ({ url: `https://www.facebook.com/${handle}` })),
-      resultsLimit: 30,
-    };
-  }
-  return {
-    profiles: handles,
-    profileScrapeSections: ['videos'],
-    profileSorting: 'latest',
-    resultsPerPage: 30,
-    excludePinnedPosts: false,
-    shouldDownloadCovers: false,
-    shouldDownloadSlideshowImages: false,
-    shouldDownloadSubtitles: false,
-    shouldDownloadVideos: false,
-  };
-}
-
-function requestedLimit(platform) {
-  if (platform === 'instagram') return INSTAGRAM_RESULTS_LIMIT;
-  return 30;
-}
-
-function groupApifyItems(platform, handles, items) {
-  const wanted = [...new Set((handles || []).filter(Boolean))];
-  const found = new Map();
-  if (!Array.isArray(items) || !items.length || !wanted.length) return found;
-
-  const canonical = new Map(wanted.map(handle => [String(handle).toLowerCase(), handle]));
-  const groups = new Map();
-  for (const item of items) {
-    const rawHandle = item.username || item.userName || item.handle || item.ownerUsername
-      || item.authorMeta?.name || item.authorMeta?.uniqueId;
-    const handle = rawHandle && canonical.get(String(rawHandle).replace(/^@/, '').toLowerCase());
-    if (!handle) continue;
-    if (!groups.has(handle)) groups.set(handle, []);
-    groups.get(handle).push(item);
-  }
-
-  if (platform === 'facebook' && wanted.length === 1 && groups.size === 0) groups.set(wanted[0], items);
-
-  for (const [handle, rows] of groups) {
-    const first = rows[0];
-    const author = first.authorMeta || {};
-    const nested = first.followersCount != null || first.followers != null
-      || first.fansCount != null || first.followers_count != null;
-
-    if (nested) {
-      const posts = first.latestPosts || first.posts || (rows.length > 1 ? rows.slice(1) : []);
-      found.set(handle, Object.assign({}, first, {
-        recentPosts: posts,
-        _fetchLimit: requestedLimit(platform),
-        _rawPostCount: Array.isArray(posts) ? posts.length : 0,
-      }));
-      continue;
-    }
-
-    found.set(handle, {
-      username: handle,
-      signature: first.signature ?? author.signature ?? null,
-      followers: first.followerCount ?? first.fans ?? author.fans ?? null,
-      following: first.followingCount ?? first.following ?? author.following ?? null,
-      postCount: first.postCount ?? first.videoCount ?? first.video ?? author.video ?? null,
-      isPrivate: first.isPrivate === true || first.private === true
-        || first.privateAccount === true || author.privateAccount === true,
-      recentPosts: rows,
-      _fetchLimit: requestedLimit(platform),
-      _rawPostCount: rows.length,
-    });
-  }
-  return found;
-}
-
-function apifyRunSync(actor, input, token) {
-  const body = JSON.stringify(input);
-  const path = `/v2/acts/${actor}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
-  const opts = {
-    method: 'POST',
-    hostname: 'api.apify.com',
-    path,
-    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
-  };
-  return new Promise((resolve, reject) => {
-    const req = https.request(opts, res => {
-      let data = '';
-      res.on('data', c => { data += c; });
-      res.on('end', () => {
-        if (res.statusCode >= 400) return reject(new Error(`Apify ${res.statusCode}: ${data.slice(0, 300)}`));
-        try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
-      });
-    });
-    req.on('error', reject);
-    req.write(body);
-    req.end();
-  });
-}
-
-class ApifyProvider {
-  constructor(token = process.env.APIFY_TOKEN) {
-    if (!token) throw new Error('ApifyProvider needs APIFY_TOKEN. Refusing to fabricate live data.');
-    this.token = token;
-  }
-  async fetchProfile(platform, handle) {
-    const actor = APIFY_ACTORS[platform];
-    if (!actor) return { notFound: true };
-    const items = await apifyRunSync(actor, apifyInput(platform, [handle]), this.token);
-    return groupApifyItems(platform, [handle], items).get(handle) || { notFound: true };
-  }
   async fetchProfiles(platform, handles) {
-    const actor = APIFY_ACTORS[platform];
-    const wanted = [...new Set((handles || []).filter(Boolean))];
-    if (!actor || !wanted.length) return new Map();
-    const items = await apifyRunSync(actor, apifyInput(platform, wanted), this.token);
-    return groupApifyItems(platform, wanted, items);
+    const out = new Map();
+    for (const handle of handles || []) out.set(handle, await this.fetchProfile(platform, handle));
+    return out;
   }
 }
 
@@ -202,11 +221,19 @@ class CapturedProvider {
 }
 
 module.exports = {
-  MockProvider,
   ApifyProvider,
+  MockProvider,
   CapturedProvider,
-  APIFY_ACTORS,
-  INSTAGRAM_RESULTS_LIMIT,
-  apifyInput,
-  groupApifyItems,
+  PROFILE_ACTOR,
+  POSTS_ACTOR,
+  INSTAGRAM_POST_RESULTS_LIMIT,
+  INSTAGRAM_POST_LOOKBACK_DAYS,
+  POST_FETCH_CONCURRENCY,
+  instagramProfileInput,
+  instagramPostsInput,
+  groupProfileItems,
+  groupPostItems,
+  canonicalHandle,
+  apifyRunSync,
+  mapLimit,
 };

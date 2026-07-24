@@ -1,0 +1,12 @@
+Validation completed
+====================
+
+JavaScript test suite: 17 passed, 0 failed
+Independent Python formula cross-check: 5 passed, 0 failed
+JavaScript syntax checks: provider, normalize, rank, ingest, validator and dashboard script passed
+
+Formula checked:
+postsPerWeek = postsInWindow * 7 / 30
+
+Live limitation:
+The existing repository snapshot is based on the profile scraper's 12-post payload and cannot be accurately recalculated. The new workflow must run once with APIFY_TOKEN to create the correct values for all profiles. Until that succeeds, the updated dashboard hides old cadence values rather than showing estimates.
