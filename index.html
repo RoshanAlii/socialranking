@@ -1,50 +1,1870 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kirpa Instagram Leaderboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#fbf6f1;--card:#fff;--ink:#292521;--muted:#847b74;--line:#ebe1d8;--brand:#f0653a;--green:#25765a;--amber:#b77a13;--red:#ad4141;--shadow:0 10px 30px rgba(50,38,29,.06);--r:16px}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Poppins,system-ui,sans-serif;font-variant-numeric:tabular-nums}a{color:inherit}.wrap{max-width:1160px;margin:auto;padding:26px 20px 60px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}.brand{display:flex;gap:12px;align-items:center}.logo{width:34px;height:34px;border-radius:11px;background:var(--brand);display:grid;place-items:center;color:#fff;font-weight:700}.brand h1{font-size:20px;line-height:1.2;margin:0}.brand p,.stamp{margin:3px 0 0;color:var(--muted);font-size:12px}.stamp{text-align:right}.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:99px;background:#e4f1ea;color:var(--green);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.05em}
-.platforms{display:flex;gap:9px;align-items:center;margin:22px 0 12px;flex-wrap:wrap}.platform{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 15px;font:inherit;font-weight:600}.platform.active{background:var(--brand);border-color:var(--brand);color:#fff}.platform.soon{color:var(--muted)}.platform small{font-size:9px;margin-left:5px;text-transform:uppercase}.notice{margin-left:auto;color:var(--muted);font-size:11px}
-.formula{padding:14px 17px;margin-bottom:12px;display:flex;justify-content:space-between;gap:16px;align-items:center}.formula b{font-size:13px}.formula code{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;background:#faf6f2;border:1px solid var(--line);border-radius:8px;padding:7px 10px}.formula span{color:var(--muted);font-size:10.5px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kpi{padding:16px}.kpi b{display:block;font-size:22px}.kpi span{display:block;color:var(--muted);font-size:11px;margin-top:5px}.good{color:var(--green)}.warn{color:var(--amber)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}.board{padding:18px}.board h3{font-size:14px;margin:0}.desc{font-size:10.5px;color:var(--muted);margin:3px 0 11px}.rows{list-style:none;margin:0;padding:0;max-height:350px;overflow:auto}.rows li{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line)}.rows li:first-child{border-top:0}.rank{width:22px;text-align:center;color:var(--muted);font-weight:700}.rank.first{color:var(--brand)}.who{min-width:0;flex:1}.who b,.who small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.who b{font-size:12.5px;font-weight:500}.who small{color:var(--muted);font-size:10px}.value{font-weight:600;white-space:nowrap;font-size:12.5px}.empty{color:var(--muted);font-size:12px;padding:12px 0}.count{font-size:9px;color:var(--muted);text-transform:uppercase;margin-top:8px}
-.audit{margin-top:16px;padding:18px}.audit-head{display:flex;justify-content:space-between;gap:12px}.audit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.audit-item{border:1px solid var(--line);border-radius:12px;padding:12px}.audit-item b{display:block;font-size:12px}.audit-item span{display:block;color:var(--muted);font-size:10px;margin-top:3px}.ok{color:var(--green)}.held{color:var(--amber)}
-.roster{margin-top:26px}.roster-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:10px}.roster h2{font-size:16px;margin:0}.roster p{color:var(--muted);font-size:11px;margin:2px 0}.search{border:1px solid var(--line);border-radius:99px;background:#fff;padding:8px 13px;font:inherit;width:min(280px,45vw)}.table-wrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;background:#fff}.tbl th,.tbl td{padding:11px 13px;border-top:1px solid var(--line);text-align:left;font-size:11.5px}.tbl th{border-top:0;color:var(--muted);font-size:10px;text-transform:uppercase}.tbl .num{text-align:right}.status{display:inline-block;border-radius:99px;padding:3px 8px;font-size:9px;font-weight:600}.measured{background:#e4f1ea;color:var(--green)}.withheld{background:#fbefd9;color:var(--amber)}.private{background:#f5e3e3;color:var(--red)}
-.method,footer{margin-top:16px;color:var(--muted);font-size:10.5px;line-height:1.7}.method{padding:15px 17px}.method b{color:var(--ink)}
-@media(max-width:850px){.kpis,.audit-grid{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.notice{width:100%;margin:0}.stamp{display:none}.formula{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.wrap{padding:18px 12px 40px}.kpis,.audit-grid{grid-template-columns:1fr}.roster-head{align-items:stretch;flex-direction:column}.search{width:100%}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171310">
+  <meta name="description" content="Kirpa Properties public Instagram performance dashboard.">
+  <title>Kirpa Social Performance Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #171310;
+      --ink-soft: #2a221e;
+      --canvas: #f4eee7;
+      --paper: #fffdfb;
+      --paper-warm: #faf5ef;
+      --orange: #f0653a;
+      --orange-deep: #c94720;
+      --orange-soft: #ffb08f;
+      --champagne: #d9b06f;
+      --emerald: #2d8062;
+      --amber: #a86b14;
+      --crimson: #a94545;
+      --blue: #496698;
+      --dust: #796f68;
+      --line: #e8ddd2;
+      --line-dark: rgba(255, 255, 255, .12);
+      --shadow: 0 18px 50px rgba(52, 35, 25, .09);
+      --shadow-soft: 0 8px 24px rgba(52, 35, 25, .06);
+      --radius: 20px;
+      --radius-sm: 13px;
+      --ease: cubic-bezier(.2, .72, .2, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 88% 8%, rgba(240, 101, 58, .08), transparent 27rem),
+        var(--canvas);
+      color: var(--ink);
+      font: 14px/1.55 Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink);
+      transform: translateY(-160%);
+      transition: transform 180ms var(--ease);
+    }
+    .skip-link:focus { transform: none; }
+    :focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    .command {
+      position: relative;
+      overflow: hidden;
+      min-height: 192px;
+      color: #fff;
+      background: var(--ink);
+      border-bottom: 5px solid var(--orange);
+    }
+    .command::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -120px;
+      top: -245px;
+      border-radius: 50%;
+      background: rgba(240, 101, 58, .24);
+      box-shadow: 0 0 80px rgba(240, 101, 58, .2);
+      pointer-events: none;
+    }
+    .command-inner,
+    .main,
+    .footer-inner {
+      width: min(1240px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+    .command-inner { position: relative; z-index: 1; padding: 22px 0 42px; }
+    .command-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(240, 101, 58, .28);
+    }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-name {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -.025em;
+    }
+    .brand-sub {
+      margin-top: 3px;
+      color: rgba(255, 255, 255, .58);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .stamp {
+      min-width: 250px;
+      text-align: right;
+      color: rgba(255, 255, 255, .7);
+      font-size: 11px;
+    }
+    .source-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 4px;
+      padding: 5px 10px;
+      border: 1px solid var(--line-dark);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(255, 255, 255, .06);
+      font-weight: 800;
+      font-size: 9px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 0 4px rgba(45, 128, 98, .16);
+    }
+    .source-status.warning .status-dot {
+      background: var(--amber);
+      box-shadow: 0 0 0 4px rgba(185, 120, 24, .16);
+    }
+    .source-status.sample .status-dot {
+      background: var(--orange-soft);
+      box-shadow: 0 0 0 4px rgba(255, 176, 143, .16);
+    }
+    .source-status.live .status-dot { animation: livePulse 2.2s ease-out infinite; }
+
+    .command-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-top: 27px;
+    }
+    .command-copy { max-width: 690px; }
+    .command-kicker {
+      color: var(--orange-soft);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .command-title {
+      margin: 5px 0 0;
+      max-width: 760px;
+      font: 400 clamp(29px, 4vw, 47px)/.98 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.025em;
+    }
+    .platforms {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .platform {
+      min-height: 36px;
+      padding: 7px 13px;
+      border: 1px solid var(--line-dark);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .055);
+      color: rgba(255, 255, 255, .72);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .platform[aria-pressed="true"] {
+      border-color: var(--orange);
+      background: var(--orange);
+      color: #fff;
+    }
+    .platform:disabled { cursor: not-allowed; opacity: .58; }
+    .platform small {
+      margin-left: 4px;
+      font-size: 7px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .main { position: relative; z-index: 2; margin-top: -23px; padding-bottom: 72px; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .data-ready .reveal {
+      animation: reveal 560ms var(--ease) forwards;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .kpi {
+      position: relative;
+      min-width: 0;
+      padding: 18px 20px;
+      border-right: 1px solid var(--line);
+    }
+    .kpi:last-child { border-right: 0; }
+    .kpi::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20px;
+      width: 34px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--orange);
+    }
+    .kpi b {
+      display: block;
+      margin-top: 2px;
+      font-size: clamp(21px, 2.2vw, 29px);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+    }
+    .kpi span {
+      display: block;
+      margin-top: 6px;
+      color: var(--dust);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+    .kpi .micro {
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .kpi.attention b { color: var(--amber); }
+    .kpi.healthy b { color: var(--emerald); }
+
+    .section { margin-top: 27px; }
+    .section-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 11px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      font: 400 25px/1.1 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.015em;
+    }
+    .section-heading p {
+      max-width: 600px;
+      margin: 3px 0 0;
+      color: var(--dust);
+      font-size: 11px;
+    }
+    .section-label {
+      color: var(--orange-deep);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .section-note {
+      color: var(--dust);
+      font-size: 9px;
+      text-align: right;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(340px, .84fr);
+      gap: 16px;
+    }
+    .champ {
+      position: relative;
+      isolation: isolate;
+      min-height: 344px;
+      overflow: hidden;
+      padding: 27px;
+      border-color: rgba(255, 255, 255, .08);
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 22px 60px rgba(34, 23, 17, .2);
+    }
+    .champ::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 390px;
+      height: 390px;
+      right: -135px;
+      bottom: -230px;
+      border-radius: 50%;
+      background: rgba(240, 101, 58, .55);
+      filter: blur(2px);
+    }
+    .champ::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 56%, rgba(255, 255, 255, .05));
+      pointer-events: none;
+    }
+    .champ-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .stage-number {
+      color: rgba(255, 255, 255, .1);
+      font: 400 72px/.75 "DM Serif Display", Georgia, serif;
+    }
+    .stage-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--orange-soft);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .stage-name {
+      max-width: 600px;
+      margin: 17px 0 4px;
+      font: 400 clamp(34px, 5vw, 55px)/.94 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.03em;
+    }
+    .stage-role { color: rgba(255, 255, 255, .58); font-size: 12px; }
+    .stage-reason {
+      max-width: 600px;
+      margin: 17px 0 0;
+      color: rgba(255, 255, 255, .72);
+      font-size: 12px;
+    }
+    .stage-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .stage-metric {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .045);
+    }
+    .stage-metric b { display: block; font-size: 17px; line-height: 1.1; }
+    .stage-metric span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, .52);
+      font-size: 8px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .readiness {
+      margin-top: 29px;
+      max-width: 560px;
+    }
+    .readiness-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, .64);
+      font-size: 10px;
+    }
+    .readiness-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .09);
+    }
+    .readiness-fill {
+      width: var(--progress, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--orange);
+      transition: width 480ms var(--ease);
+    }
+
+    .spot {
+      min-height: 344px;
+      overflow: hidden;
+    }
+    .spot-media {
+      position: relative;
+      min-height: 176px;
+      overflow: hidden;
+      background: var(--paper-warm);
+      border-bottom: 1px solid var(--line);
+    }
+    .spot-media img {
+      width: 100%;
+      height: 210px;
+      display: block;
+      object-fit: cover;
+    }
+    .media-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 25% 20%, rgba(240, 101, 58, .22), transparent 42%),
+        var(--paper-warm);
+      text-align: center;
+    }
+    .fallback-mark {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 9px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    .media-fallback b { display: block; font-size: 12px; }
+    .media-fallback span { color: var(--dust); font-size: 9px; }
+    .spot-body { padding: 21px; }
+    .spot-kicker {
+      color: var(--orange-deep);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .spot-title {
+      margin: 7px 0 4px;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    .spot-copy {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--dust);
+      font-size: 10px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .spot-stats {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 14px;
+      color: var(--dust);
+      font-size: 10px;
+    }
+    .spot-stats b { color: var(--ink); font-size: 13px; }
+    .spot-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 13px;
+      color: var(--orange-deep);
+      font-size: 10px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .readiness-spot {
+      min-height: 342px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      background: var(--paper);
+    }
+    .readiness-orbit {
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--paper-warm);
+      box-shadow: inset 0 0 0 18px rgba(240, 101, 58, .06);
+    }
+    .readiness-orbit span {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+    }
+    .readiness-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .readiness-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      color: var(--dust);
+      font-size: 10px;
+    }
+    .readiness-item b { color: var(--ink); font-size: 11px; }
+
+    .boards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .board { min-width: 0; overflow: hidden; }
+    .board-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 19px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .board h3 {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.3;
+      letter-spacing: -.015em;
+    }
+    .board-desc { margin-top: 3px; color: var(--dust); font-size: 9px; }
+    .board-count {
+      flex: 0 0 auto;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .rows {
+      max-height: 405px;
+      overflow: auto;
+      margin: 0;
+      padding: 5px 18px 9px;
+      list-style: none;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange-soft) transparent;
+    }
+    .rows li {
+      position: relative;
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+      isolation: isolate;
+    }
+    .rows li:first-child { border-top: 0; }
+    .rows li::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: -18px;
+      bottom: 0;
+      width: var(--bar, 0%);
+      height: 2px;
+      background: var(--orange-soft);
+      opacity: .55;
+    }
+    .rank {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--dust);
+      background: var(--paper-warm);
+      font-size: 9px;
+      font-weight: 800;
+    }
+    .rows li:first-child .rank {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(240, 101, 58, .2);
+    }
+    .who { min-width: 0; }
+    .person-link {
+      display: block;
+      min-width: 0;
+      color: inherit;
+      text-decoration: none;
+    }
+    .person-link:hover .person-name { color: var(--orange-deep); }
+    .person-name {
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color 180ms var(--ease);
+    }
+    .person-sub {
+      overflow: hidden;
+      margin-top: 2px;
+      color: var(--dust);
+      font-size: 8.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .metric-value { text-align: right; font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .metric-value small { display: block; color: var(--dust); font-size: 8px; font-weight: 500; }
+    .empty-state {
+      min-height: 236px;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      color: var(--dust);
+      text-align: center;
+    }
+    .empty-state b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 13px; }
+    .empty-state p { max-width: 35ch; margin: 0; font-size: 10px; }
+
+    .trend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 56px;
+      margin-top: 16px;
+      padding: 11px 14px;
+      overflow-x: auto;
+    }
+    .trend-label {
+      flex: 0 0 auto;
+      padding: 0 8px 0 3px;
+      color: var(--dust);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .movement {
+      flex: 0 0 auto;
+      padding: 7px 11px;
+      border: 1px solid #dce9e3;
+      border-radius: 999px;
+      background: #f0f7f3;
+      color: var(--emerald);
+      font-size: 9px;
+      font-weight: 800;
+    }
+    .movement small { margin-left: 4px; color: var(--dust); font-weight: 500; }
+    .trend-empty { color: var(--dust); font-size: 10px; }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .insight {
+      min-height: 160px;
+      padding: 19px;
+    }
+    .insight-icon {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(240, 101, 58, .11);
+      color: var(--orange-deep);
+      font-weight: 800;
+    }
+    .insight h3 { margin: 12px 0 2px; font-size: 12px; }
+    .insight-value {
+      font: 400 27px/1.08 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.02em;
+    }
+    .insight p { margin: 7px 0 0; color: var(--dust); font-size: 9px; }
+    .attention-list {
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .attention-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 9px;
+      padding: 5px 0;
+      border-top: 1px solid var(--line);
+      color: var(--dust);
+      font-size: 8.5px;
+    }
+    .attention-list b { color: var(--ink); }
+    .coverage-detail {
+      margin-top: 14px;
+      overflow: hidden;
+    }
+    .coverage-detail summary {
+      cursor: pointer;
+      padding: 14px 17px;
+      font-size: 10px;
+      font-weight: 800;
+      list-style-position: inside;
+    }
+    .audit { padding: 0 17px 15px; }
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .audit-item {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper-warm);
+    }
+    .audit-item b { display: block; font-size: 9px; }
+    .audit-item span { display: block; margin-top: 3px; color: var(--dust); font-size: 8px; }
+    .audit-item.ok b { color: var(--emerald); }
+    .audit-item.held b { color: var(--amber); }
+
+    .roster-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-end;
+      margin-bottom: 12px;
+    }
+    .roster-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .field { position: relative; }
+    .field-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .search,
+    .filter {
+      min-height: 39px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      color: var(--ink);
+      outline: 0;
+    }
+    .search {
+      width: min(280px, 34vw);
+      padding: 8px 12px 8px 35px;
+    }
+    .field.search-field::before {
+      content: "⌕";
+      position: absolute;
+      left: 13px;
+      top: 6px;
+      z-index: 1;
+      color: var(--dust);
+      font-size: 17px;
+      pointer-events: none;
+    }
+    .filter { padding: 8px 32px 8px 11px; }
+    .search:focus,
+    .filter:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(240, 101, 58, .12); }
+    .roster-result { margin-top: 4px; color: var(--dust); font-size: 9px; }
+    .table-wrap { overflow-x: auto; }
+    .tbl {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+    }
+    .tbl th,
+    .tbl td {
+      padding: 12px 13px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 10px;
+    }
+    .tbl thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      border-top: 0;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 8px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .tbl tbody tr { transition: background 180ms var(--ease); }
+    .tbl tbody tr:hover { background: #fff8f4; }
+    .tbl .num { text-align: right; white-space: nowrap; }
+    .agent-name { font-weight: 800; }
+    .agent-role,
+    .agent-handle { display: block; margin-top: 2px; color: var(--dust); font-size: 8px; }
+    .agent-handle { color: var(--orange-deep); text-decoration: none; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      max-width: 190px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 8px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .status::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .status.measured { background: #e8f3ed; color: var(--emerald); }
+    .status.private { background: #f7e8e8; color: var(--crimson); }
+    .status.awaiting { background: #e9eef7; color: var(--blue); }
+    .status.attention,
+    .status.unranked,
+    .status.incomplete { background: #fbf0df; color: var(--amber); }
+    .next-move { max-width: 190px; color: var(--dust); font-size: 9px; }
+    .no-results { padding: 30px !important; color: var(--dust); text-align: center !important; }
+
+    .method {
+      margin-top: 18px;
+      overflow: hidden;
+    }
+    .method summary {
+      cursor: pointer;
+      padding: 17px 20px;
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+    .method-item {
+      min-height: 142px;
+      padding: 17px;
+      border-right: 1px solid var(--line);
+    }
+    .method-item:last-child { border-right: 0; }
+    .method-item b { display: block; margin-bottom: 6px; font-size: 10px; }
+    .method-item p { margin: 0; color: var(--dust); font-size: 9px; }
+
+    .site-footer {
+      border-top: 1px solid #ddd0c4;
+      background: #eee5dc;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-block: 22px;
+      color: var(--dust);
+      font-size: 9px;
+    }
+    .footer-inner b { color: var(--ink); }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes livePulse {
+      0%, 60%, 100% { box-shadow: 0 0 0 4px rgba(45, 128, 98, .16); }
+      30% { box-shadow: 0 0 0 7px rgba(45, 128, 98, .04); }
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(310px, .78fr); }
+      .method-grid { grid-template-columns: repeat(2, 1fr); }
+      .method-item:nth-child(2) { border-right: 0; }
+      .method-item:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .next-move { max-width: 145px; }
+    }
+    @media (max-width: 820px) {
+      .command-inner,
+      .main,
+      .footer-inner { width: min(100% - 28px, 1240px); }
+      .command-top { align-items: flex-start; }
+      .command-row { align-items: flex-start; flex-direction: column; margin-top: 23px; }
+      .platforms { justify-content: flex-start; }
+      .kpis { grid-template-columns: repeat(2, 1fr); }
+      .kpi:nth-child(2) { border-right: 0; }
+      .kpi:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .hero-grid,
+      .boards { grid-template-columns: 1fr; }
+      .hero-grid { gap: 14px; }
+      .insight-grid { grid-template-columns: 1fr; }
+      .insight { min-height: 0; }
+      .audit-grid { grid-template-columns: repeat(2, 1fr); }
+      .roster-head { align-items: stretch; flex-direction: column; }
+      .roster-tools { width: 100%; }
+      .search { width: 100%; }
+      .search-field { flex: 1; }
+      .method-grid { grid-template-columns: 1fr; }
+      .method-item,
+      .method-item:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .method-item:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 620px) {
+      .command { min-height: 238px; }
+      .command-inner { padding-top: 17px; }
+      .command-top { gap: 12px; }
+      .brand-mark { width: 37px; height: 37px; border-radius: 11px; }
+      .brand-name { font-size: 14px; }
+      .brand-sub { font-size: 8px; }
+      .stamp { min-width: 0; max-width: 145px; font-size: 9px; }
+      .source-status { font-size: 7px; }
+      .command-title { font-size: 31px; }
+      .platform { padding-inline: 10px; }
+      .main { margin-top: -18px; padding-bottom: 48px; }
+      .kpi { padding: 15px 14px; }
+      .kpi b { font-size: 22px; }
+      .section { margin-top: 23px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .section-heading h2 { font-size: 22px; }
+      .section-note { text-align: left; }
+      .champ { min-height: 375px; padding: 22px; }
+      .stage-name { font-size: 39px; }
+      .stage-metrics { grid-template-columns: 1fr; margin-top: 22px; }
+      .stage-metric { display: flex; align-items: center; justify-content: space-between; }
+      .stage-metric span { margin-top: 0; text-align: right; }
+      .spot-media img { height: 190px; }
+      .audit-grid { grid-template-columns: 1fr; }
+      .roster-tools { align-items: stretch; flex-direction: column; }
+      .filter { width: 100%; }
+      .table-wrap { overflow: visible; background: transparent; border: 0; box-shadow: none; }
+      .tbl,
+      .tbl tbody,
+      .tbl tr,
+      .tbl td { display: block; width: 100%; }
+      .tbl { background: transparent; }
+      .tbl thead { display: none; }
+      .tbl tbody { display: grid; gap: 10px; }
+      .tbl tbody tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: var(--paper);
+        box-shadow: var(--shadow-soft);
+      }
+      .tbl td {
+        min-width: 0;
+        padding: 10px 12px;
+        border-top: 1px solid var(--line);
+        text-align: left !important;
+      }
+      .tbl td:first-child {
+        grid-column: 1 / -1;
+        border-top: 0;
+        background: var(--paper-warm);
+      }
+      .tbl td:last-child { grid-column: 1 / -1; }
+      .tbl td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 3px;
+        color: var(--dust);
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .tbl td:first-child::before { display: none; }
+      .status { max-width: 100%; white-space: normal; }
+      .next-move { max-width: none; }
+      .footer-inner { flex-direction: column; }
+    }
+    @media (max-width: 390px) {
+      .command-inner,
+      .main,
+      .footer-inner { width: calc(100% - 22px); }
+      .brand-sub { display: none; }
+      .stamp > div { display: none; }
+      .command-title { max-width: 300px; }
+      .platform small { display: none; }
+      .kpi span { font-size: 8px; }
+      .champ { min-height: 395px; }
+      .stage-number { font-size: 58px; }
+      .rows { padding-inline: 13px; }
+      .rows li::after { left: -13px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .source-status.live .status-dot { animation: none; }
+    }
+  </style>
 </head>
-<body><div class="wrap">
-<header><div class="brand"><div class="logo">K</div><div><h1>Kirpa Social Leaderboard</h1><p>Comparable public Instagram performance</p></div></div><div class="stamp" id="stamp"></div></header>
-<div class="platforms"><button class="platform active">Instagram</button><button class="platform soon" disabled>TikTok <small>Available soon</small></button><button class="platform soon" disabled>Facebook <small>Available soon</small></button><span class="notice">Only Instagram contributes to rankings.</span></div>
-<section class="card formula"><div><b>Publishing cadence formula</b><br><span>One fixed 30-day window for every profile</span></div><code>posts/week = unique posts × 7 ÷ 30</code></section>
-<div class="kpis" id="kpis"></div><div class="grid" id="boards"></div><section class="card audit" id="audit"></section>
-<section class="roster"><div class="roster-head"><div><h2>Instagram roster</h2><p>Followers remain visible; performance values appear only after their input audit passes.</p></div><input class="search" id="search" placeholder="Search team member"></div><div class="card table-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Role</th><th>Input status</th><th class="num">Followers</th><th class="num">30-day posts</th><th class="num">Posts/week</th><th class="num">Typical ER</th></tr></thead><tbody id="tbody"></tbody></table></div></section>
-<section class="card method"><b>Inputs and accuracy</b><br>The follower count comes from the public Instagram profile surface. Cadence comes from a separate posts query filtered to 31 days. The calculation counts unique posts authored by the profile inside the exact 30-day snapshot window. A recent pinned post counts; an old pinned post does not. Duplicate rows and posts owned by another account are removed. When a query fails or reaches its result limit before the cutoff, the dashboard shows “—” instead of estimating.</section>
-<footer id="foot"></footer></div>
-<script>
-'use strict';
-let DATA=null,REGISTRY=null;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=n=>typeof n==='number'?Intl.NumberFormat('en',{notation:n>=10000?'compact':'standard',maximumFractionDigits:1}).format(n):'—';
-const pct=n=>typeof n==='number'?(n*100).toFixed(n*100>=10?1:2)+'%':'—';
-const igRecords=()=>DATA?.records?.filter(r=>r.platform==='instagram')||[];
-const board=()=>DATA?.leaderboards?.instagram||{};
-const ready=()=>DATA?.meta?.measurementVersion===3&&board().coverage?.formula;
-const audits=()=>new Map((ready()?board().coverage.cadenceAudit:[]).map(a=>[a.handle,a]));
-async function load(){try{const[d,r]=await Promise.all([fetch('data/latest.json',{cache:'no-store'}),fetch('handles.json',{cache:'no-store'})]);if(!d.ok)throw new Error();DATA=await d.json();if(r.ok)REGISTRY=await r.json();render();}catch(e){document.getElementById('kpis').innerHTML='<div class="card kpi"><b>Data unavailable</b><span>Snapshot could not be loaded.</span></div>';}}
-function rowList(rows,value,sub){if(!rows?.length)return'<div class="empty">No audited values available yet.</div>';return`<ol class="rows">${rows.slice(0,15).map((r,i)=>`<li><span class="rank ${i===0?'first':''}">${r.rank}</span><span class="who"><b>${esc(r.name)}</b><small>${esc(sub(r))}</small></span><span class="value">${esc(value(r))}</span></li>`).join('')}</ol><div class="count">${rows.length} audited profiles</div>`;}
-function render(){const m=DATA.meta,c=ready()?board().coverage:{},records=igRecords(),publicRows=records.filter(r=>r.resolved&&!r.isPrivate),audience=publicRows.reduce((s,r)=>s+(r.followers||0),0);document.getElementById('stamp').innerHTML=`<span class="badge">${ready()?'Audited':'Refreshing'}</span><div>${new Date(m.capturedAt).toLocaleString()}<br>${publicRows.length} public profiles</div>`;document.getElementById('kpis').innerHTML=`<div class="card kpi"><b>${publicRows.length}</b><span>public Instagram profiles</span></div><div class="card kpi"><b>${fmt(audience)}</b><span>combined Instagram followers · non-unique</span></div><div class="card kpi"><b class="${ready()?'good':'warn'}">${ready()?c.completeWindowProfiles:'—'}</b><span>profiles with verified 30-day inputs</span></div><div class="card kpi"><b>${ready()?fmt(c.postsInWindow):'—'}</b><span>unique posts included</span></div>`;renderBoards();renderAudit();renderRoster();document.getElementById('foot').textContent=`Source: ${m.provider||'Apify'} public surfaces. ${ready()?'Every displayed cadence row was independently recomputed by the snapshot validator.':'The current file predates measurement version 3; old performance figures are intentionally hidden.'}`;}
-function renderBoards(){const b=ready()?board():{mostFollowers:board().mostFollowers||[],postingFrequency:[],engagement:[]};document.getElementById('boards').innerHTML=`<section class="card board"><h3>Most followers</h3><div class="desc">Point-in-time public count</div>${rowList(b.mostFollowers||[],r=>fmt(r.followers),r=>'@'+r.handle)}</section><section class="card board"><h3>Publishing cadence</h3><div class="desc">N unique posts × 7 ÷ 30</div>${rowList(b.postingFrequency||[],r=>r.postsPerWeek.toFixed(1)+'/wk',r=>`${r.postsInWindow} posts · ${r.formula}`)}</section><section class="card board"><h3>Typical engagement rate</h3><div class="desc">Median public interactions ÷ followers · minimum 3 posts</div>${rowList(b.engagement||[],r=>pct(r.engagementRate),r=>`${r.postsInWindow} posts`)}</section><section class="card board"><h3>Weekly follower growth</h3><div class="desc">Only against a baseline 5–9 days old</div>${rowList((ready()&&DATA.meta.trendAvailable?DATA.trend:[]).filter(r=>r.platform==='instagram'),r=>(r.followerDelta>=0?'+':'')+fmt(r.followerDelta),r=>pct(r.followerPct))}</section>`;}
-function renderAudit(){const rows=ready()?board().coverage.cadenceAudit:[];const held=rows.filter(r=>!r.complete);document.getElementById('audit').innerHTML=`<div class="audit-head"><div><b>Cadence input audit</b><div class="desc">${ready()?`${rows.length-held.length} passed · ${held.length} withheld`:'Waiting for the first version-3 pull'}</div></div></div><div class="audit-grid">${rows.slice(0,9).map(r=>`<div class="audit-item"><b class="${r.complete?'ok':'held'}">${esc(r.name)} · ${r.complete?'Verified':'Withheld'}</b><span>${esc(r.complete?`${r.postsInWindow} × 7 ÷ 30 = ${r.postsPerWeek.toFixed(2)}/week`:r.reason)}</span></div>`).join('')}</div>`;}
-function rosterPeople(){const people=new Map();for(const e of (REGISTRY?.employees||[]).filter(e=>e.dashboardRelevant!==false))people.set(e.name,{name:e.name,role:e.role,handle:e.handles?.instagram||null,followers:null,private:false});for(const r of igRecords()){if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,handle:r.handle,followers:null,private:false});const p=people.get(r.name);p.handle=r.handle||p.handle;p.followers=r.followers;p.private=r.isPrivate;}return[...people.values()];}
-function renderRoster(){const q=document.getElementById('search').value.toLowerCase(),a=audits(),eng=new Map((ready()?board().engagement:[]).map(r=>[r.handle,r]));const rows=rosterPeople().filter(p=>(p.name+' '+p.role+' '+(p.handle||'')).toLowerCase().includes(q)).sort((x,y)=>(y.followers||-1)-(x.followers||-1));document.getElementById('tbody').innerHTML=rows.map(p=>{const audit=a.get(p.handle),er=eng.get(p.handle);const state=p.private?'Private':audit?.complete?'Verified':p.followers!=null?'Followers only':'Pending';return`<tr><td><b>${esc(p.name)}</b><br><small style="color:var(--muted)">${p.handle?'@'+esc(p.handle):'Handle needed'}</small></td><td>${esc(p.role||'')}</td><td><span class="status ${p.private?'private':audit?.complete?'measured':'withheld'}">${state}</span></td><td class="num">${fmt(p.followers)}</td><td class="num">${audit?.complete?audit.postsInWindow:'—'}</td><td class="num">${audit?.complete?audit.postsPerWeek.toFixed(1):'—'}</td><td class="num">${pct(er?.engagementRate)}</td></tr>`;}).join('');}
-document.getElementById('search').addEventListener('input',renderRoster);load();
-</script></body></html>
+<body>
+  <a class="skip-link" href="#main-content">Skip to dashboard</a>
+
+  <header class="command">
+    <div class="command-inner">
+      <div class="command-top">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M6 4v16M7 12l8-8M8 12l9 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="18.5" cy="5.5" r="2" fill="currentColor"/>
+            </svg>
+          </span>
+          <div>
+            <h1 class="brand-name">Kirpa Social Arena</h1>
+            <div class="brand-sub">Public performance room</div>
+          </div>
+        </div>
+        <div class="stamp" id="stamp" aria-live="polite">
+          <span class="source-status warning"><span class="status-dot"></span>Loading snapshot</span>
+        </div>
+      </div>
+
+      <div class="command-row">
+        <div class="command-copy">
+          <div class="command-kicker">Kirpa Army · healthy competition</div>
+          <p class="command-title">Momentum, made visible.</p>
+        </div>
+        <nav class="platforms" aria-label="Platform availability">
+          <button class="platform" type="button" aria-pressed="true">Instagram</button>
+          <button class="platform" type="button" disabled aria-label="TikTok, available soon">TikTok <small>Soon</small></button>
+          <button class="platform" type="button" disabled aria-label="Facebook, available soon">Facebook <small>Soon</small></button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" id="main-content">
+    <section class="kpis reveal" id="kpis" aria-label="Executive pulse" style="--delay:40ms">
+      <article class="kpi"><span class="micro">Coverage</span><b>—</b><span>Loading confirmed roster</span></article>
+      <article class="kpi"><span class="micro">Audience</span><b>—</b><span>Loading measured profiles</span></article>
+      <article class="kpi"><span class="micro">Activity</span><b>—</b><span>Loading 30-day window</span></article>
+      <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
+    </section>
+
+    <section class="section reveal" aria-labelledby="arena-title" style="--delay:100ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Performance stage</div>
+          <h2 id="arena-title">Who is moving the room?</h2>
+          <p>Improvement and repeatable performance lead. Audience size stays visible as context.</p>
+        </div>
+        <div class="section-note">One shared trailing 30-day window</div>
+      </div>
+      <div class="hero-grid">
+        <article class="panel champ" id="champ" aria-live="polite">
+          <div class="stage-eyebrow"><span>●</span> Preparing fair momentum leader</div>
+        </article>
+        <article class="panel spot" id="spot" aria-live="polite">
+          <div class="readiness-spot">
+            <div class="readiness-orbit"><span>K</span></div>
+            <div>
+              <div class="spot-kicker">Content spotlight</div>
+              <h3 class="spot-title">Loading verified post data</h3>
+              <p class="spot-copy">Top content appears only when its comparison window passes the data audit.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" aria-labelledby="leaderboards-title" style="--delay:160ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Fair lanes</div>
+          <h2 id="leaderboards-title">Different ways to lead</h2>
+          <p>Growth, typical engagement, cadence, and participation are kept separate so one large account cannot dominate every story.</p>
+        </div>
+        <div class="section-note">Bars are relative within each lane, not percentages</div>
+      </div>
+      <div class="boards" id="boards"></div>
+      <div class="panel trend" id="trend" aria-label="Weekly movement"></div>
+    </section>
+
+    <section class="section reveal" aria-labelledby="insights-title" style="--delay:220ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Team pulse</div>
+          <h2 id="insights-title">What needs action next?</h2>
+          <p>Benchmarks describe the team; coverage warnings explain who is not yet comparable.</p>
+        </div>
+      </div>
+      <div id="insights"></div>
+      <details class="panel coverage-detail">
+        <summary>Open the 30-day input audit</summary>
+        <div class="audit" id="audit"></div>
+      </details>
+    </section>
+
+    <section class="section reveal" aria-labelledby="roster-title" style="--delay:280ms">
+      <div class="roster-head">
+        <div>
+          <div class="section-label">Roster explorer</div>
+          <h2 id="roster-title" style="margin:2px 0 0;font:400 25px/1.1 'DM Serif Display',Georgia,serif">Every person. Every state.</h2>
+          <div class="roster-result" id="roster-result" aria-live="polite">Loading roster</div>
+        </div>
+        <div class="roster-tools">
+          <label class="field search-field">
+            <span class="field-label">Search the Kirpa roster</span>
+            <input class="search" id="search" type="search" autocomplete="off" placeholder="Search team member">
+          </label>
+          <label class="field">
+            <span class="field-label">Filter by measurement status</span>
+            <select class="filter" id="status-filter">
+              <option value="all">All statuses</option>
+              <option value="measured">Measured</option>
+              <option value="unranked">Unranked</option>
+              <option value="attention">Needs attention</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="panel table-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th scope="col">Agent</th>
+              <th scope="col">Input status</th>
+              <th scope="col" class="num">Followers</th>
+              <th scope="col" class="num">30-day posts</th>
+              <th scope="col" class="num">Cadence</th>
+              <th scope="col" class="num">Typical ER</th>
+              <th scope="col">Next move</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="7" class="no-results">Loading verified roster…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <details class="panel method reveal" style="--delay:320ms">
+      <summary>How this snapshot stays fair and honest</summary>
+      <div class="method-grid">
+        <div class="method-item">
+          <b>Public snapshot, not Insights</b>
+          <p>Numbers come from public profile and post surfaces through the named provider. They are point-in-time observations, not official Instagram Insights or real-time telemetry.</p>
+        </div>
+        <div class="method-item">
+          <b>One comparable window</b>
+          <p>Cadence and engagement require the same trailing 30 days. A profile is withheld when the post query cannot prove complete coverage of that window.</p>
+        </div>
+        <div class="method-item">
+          <b>Typical engagement</b>
+          <p>The median supported interactions per eligible post is divided by followers. At least three comparable posts are required, so a single viral post cannot define typical performance.</p>
+        </div>
+        <div class="method-item">
+          <b>Current pinned-post rule</b>
+          <p>The version-3 cadence engine counts a pinned post only when its actual publication date is inside the window; old pins fall outside by date. Missing values remain unknown, never zero.</p>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner" id="foot">
+      <span><b>Kirpa Properties L.L.C</b> · ORN 49046</span>
+      <span>Public-surface data · snapshot, not real-time</span>
+    </div>
+  </footer>
+
+  <script>
+    'use strict';
+
+    let DATA = null;
+    let REGISTRY = null;
+
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[char]);
+
+    const byId = id => document.getElementById(id);
+    const isNumber = value => typeof value === 'number' && Number.isFinite(value);
+    const fmt = value => isNumber(value)
+      ? Intl.NumberFormat('en', {
+          notation: Math.abs(value) >= 10000 ? 'compact' : 'standard',
+          maximumFractionDigits: 1
+        }).format(value)
+      : '—';
+    const pct = value => isNumber(value)
+      ? `${(value * 100).toFixed(Math.abs(value * 100) >= 10 ? 1 : 2)}%`
+      : '—';
+    const median = values => {
+      const sorted = values.filter(isNumber).sort((a, b) => a - b);
+      if (!sorted.length) return null;
+      const middle = Math.floor(sorted.length / 2);
+      return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+    };
+    const safeUrl = raw => {
+      try {
+        const url = new URL(raw);
+        return url.protocol === 'https:' ? url.href : '';
+      } catch (_) {
+        return '';
+      }
+    };
+    const profileUrl = handle => handle
+      ? `https://www.instagram.com/${encodeURIComponent(String(handle).replace(/^@/, ''))}/`
+      : '';
+    const igRecords = () => DATA?.records?.filter(record => record.platform === 'instagram') || [];
+    const board = () => DATA?.leaderboards?.instagram || {};
+    const isAudited = () => (
+      DATA?.meta?.measurementVersion === 3 &&
+      typeof board()?.coverage?.formula === 'string' &&
+      board().coverage.formula.includes('7 ÷ 30')
+    );
+    const auditMap = () => new Map(
+      (isAudited() ? board().coverage?.cadenceAudit || [] : []).map(row => [row.handle, row])
+    );
+
+    function snapshotAge() {
+      const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
+      if (!Number.isFinite(timestamp)) {
+        return { short: 'Unknown', detail: 'Snapshot time unavailable', tone: 'attention' };
+      }
+      const hours = Math.max(0, (Date.now() - timestamp) / 3600000);
+      if (hours < 1) return { short: 'Now', detail: 'Captured less than one hour ago', tone: 'healthy' };
+      if (hours < 24) return { short: `${Math.floor(hours)}h`, detail: `Snapshot ${Math.floor(hours)} hours old`, tone: 'healthy' };
+      const days = Math.floor(hours / 24);
+      return {
+        short: `${days}d`,
+        detail: `Snapshot ${days} day${days === 1 ? '' : 's'} old`,
+        tone: days <= 3 ? 'attention' : 'stale'
+      };
+    }
+
+    function relevantEmployees() {
+      return (REGISTRY?.employees || []).filter(employee => employee.dashboardRelevant !== false);
+    }
+
+    function rosterPeople() {
+      const people = new Map();
+      for (const employee of relevantEmployees()) {
+        people.set(employee.name, {
+          name: employee.name,
+          role: employee.role || '',
+          handle: employee.handles?.instagram || null,
+          confirmed: employee.confirmed === true,
+          registryPrivate: employee.private === true,
+          record: null
+        });
+      }
+      for (const record of igRecords()) {
+        if (!people.has(record.name)) {
+          people.set(record.name, {
+            name: record.name,
+            role: record.role || '',
+            handle: record.handle || null,
+            confirmed: true,
+            registryPrivate: false,
+            record: null
+          });
+        }
+        const person = people.get(record.name);
+        person.handle = record.handle || person.handle;
+        person.record = record;
+      }
+      return [...people.values()];
+    }
+
+    function statusFor(person, audit, engagementRow) {
+      const record = person.record;
+      if (!person.handle) return { key: 'attention', className: 'attention', label: 'Handle needed' };
+      if (person.registryPrivate || record?.isPrivate === true) return { key: 'attention', className: 'private', label: 'Private' };
+      if (!record) return { key: 'attention', className: 'awaiting', label: 'Awaiting pull' };
+      if (record.resolved !== true) return { key: 'attention', className: 'attention', label: 'Unresolved' };
+      if (!isAudited() || !audit?.complete) {
+        return { key: 'attention', className: 'incomplete', label: 'Incomplete 30-day coverage' };
+      }
+      if (!engagementRow) {
+        return { key: 'unranked', className: 'unranked', label: 'Unranked — insufficient comparable data' };
+      }
+      return { key: 'measured', className: 'measured', label: 'Measured' };
+    }
+
+    function renderStamp() {
+      const meta = DATA.meta || {};
+      const age = snapshotAge();
+      const audited = isAudited();
+      const sample = meta.source === 'sample';
+      let label = 'Awaiting audited pull';
+      let mode = 'warning';
+      if (sample) {
+        label = 'Sample data';
+        mode = 'sample';
+      } else if (audited && age.tone === 'healthy') {
+        label = 'Verified snapshot';
+        mode = 'live';
+      } else if (audited) {
+        label = age.tone === 'stale' ? 'Stale snapshot' : 'Verified · aging';
+        mode = 'warning';
+      }
+      const captured = meta.capturedAt
+        ? new Date(meta.capturedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+        : 'Time unavailable';
+      byId('stamp').innerHTML = `
+        <span class="source-status ${mode}"><span class="status-dot"></span>${esc(label)}</span>
+        <div>${esc(captured)} · ${esc(age.detail)}</div>
+      `;
+    }
+
+    function renderKpis() {
+      const people = relevantEmployees();
+      const connected = people.filter(person => person.confirmed && person.handles?.instagram).length;
+      const publicRows = igRecords().filter(record => record.resolved === true && record.isPrivate === false);
+      const audience = publicRows.reduce((sum, record) => sum + (isNumber(record.followers) ? record.followers : 0), 0);
+      const coverage = board().coverage || {};
+      const age = snapshotAge();
+      const coveragePct = people.length ? Math.round(connected * 100 / people.length) : null;
+      const activity = isAudited() ? coverage.postsInWindow : null;
+      byId('kpis').innerHTML = `
+        <article class="kpi ${coveragePct >= 85 ? 'healthy' : 'attention'}">
+          <span class="micro">Profile coverage</span>
+          <b>${isNumber(coveragePct) ? `${coveragePct}%` : '—'}</b>
+          <span>${connected} of ${people.length || '—'} verified Instagram handles</span>
+        </article>
+        <article class="kpi">
+          <span class="micro">Measured audience</span>
+          <b>${fmt(audience)}</b>
+          <span>Non-unique public Instagram followers</span>
+        </article>
+        <article class="kpi ${isAudited() ? 'healthy' : 'attention'}">
+          <span class="micro">30-day activity</span>
+          <b>${isAudited() ? fmt(activity) : 'Pending'}</b>
+          <span>${isAudited() ? `${coverage.completeWindowProfiles} complete profile windows` : 'Waiting for a version-3 audited pull'}</span>
+        </article>
+        <article class="kpi ${age.tone === 'healthy' ? 'healthy' : 'attention'}">
+          <span class="micro">Snapshot freshness</span>
+          <b>${esc(age.short)}</b>
+          <span>${esc(age.detail)}</span>
+        </article>
+      `;
+    }
+
+    function metricFor(handle, rows, key) {
+      const row = (rows || []).find(item => item.handle === handle);
+      return row && isNumber(row[key]) ? row[key] : null;
+    }
+
+    function renderChampion() {
+      const combined = DATA?.leaderboards?.combined?.composite || [];
+      const leader = isAudited()
+        ? combined.find(row => row.provisional !== true && isNumber(row.score))
+        : null;
+      const coverage = board().coverage || {};
+      if (!leader) {
+        const complete = isAudited() && isNumber(coverage.completeWindowProfiles)
+          ? coverage.completeWindowProfiles
+          : 0;
+        const total = isNumber(coverage.profiles)
+          ? coverage.profiles
+          : igRecords().filter(record => record.resolved && !record.isPrivate).length;
+        const progress = total ? Math.min(100, complete * 100 / total) : 0;
+        byId('champ').innerHTML = `
+          <div class="champ-top">
+            <div class="stage-eyebrow"><span>●</span> Data readiness</div>
+            <div class="stage-number" aria-hidden="true">01</div>
+          </div>
+          <h3 class="stage-name">Fair ranking<br>is paused.</h3>
+          <p class="stage-role">No one is being scored from incomplete inputs.</p>
+          <p class="stage-reason">The next verified version-3 pull must prove a complete 30-day post window before momentum, engagement, or cadence can be ranked.</p>
+          <div class="readiness">
+            <div class="readiness-line"><span>Audited profile windows</span><b>${complete} / ${total || '—'}</b></div>
+            <div class="readiness-track"><div class="readiness-fill" style="--progress:${progress.toFixed(1)}%"></div></div>
+          </div>
+        `;
+        return;
+      }
+      const engagement = metricFor(leader.handle, board().engagement, 'engagementRate');
+      const cadence = metricFor(leader.handle, board().postingFrequency, 'postsPerWeek');
+      const followers = metricFor(leader.handle, board().mostFollowers, 'followers');
+      byId('champ').innerHTML = `
+        <div class="champ-top">
+          <div class="stage-eyebrow"><span>●</span> Momentum leader</div>
+          <div class="stage-number" aria-hidden="true">01</div>
+        </div>
+        <h3 class="stage-name">${esc(leader.name)}</h3>
+        <p class="stage-role">${esc(leader.role || 'Kirpa team member')}</p>
+        <p class="stage-reason">Leads the normalized Instagram momentum score using only complete, comparable inputs.</p>
+        <div class="stage-metrics">
+          <div class="stage-metric"><b>${Math.round(leader.score * 100)}</b><span>Momentum points</span></div>
+          <div class="stage-metric"><b>${pct(engagement)}</b><span>Typical engagement</span></div>
+          <div class="stage-metric"><b>${isNumber(cadence) ? cadence.toFixed(1) : '—'}</b><span>Posts per week · ${fmt(followers)} followers</span></div>
+        </div>
+      `;
+    }
+
+    function initials(name) {
+      return String(name || 'K').split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+    }
+
+    function renderSpotlight() {
+      const top = isAudited() ? board().topPost : null;
+      if (!top?.post) {
+        const coverage = board().coverage || {};
+        byId('spot').innerHTML = `
+          <div class="readiness-spot">
+            <div class="readiness-orbit"><span>K</span></div>
+            <div>
+              <div class="spot-kicker">Content spotlight</div>
+              <h3 class="spot-title">Unlocks after the input audit</h3>
+              <p class="spot-copy">No post is crowned while its comparison window is incomplete. This keeps old, pinned, or partially fetched content from becoming a decorative winner.</p>
+              <div class="readiness-list">
+                <div class="readiness-item"><span>Complete 30-day windows</span><b>${isAudited() ? fmt(coverage.completeWindowProfiles) : 'Pending'}</b></div>
+                <div class="readiness-item"><span>Minimum engagement sample</span><b>3 posts</b></div>
+                <div class="readiness-item"><span>Unsupported values</span><b>Shown as —</b></div>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      const postUrl = safeUrl(top.post.url);
+      const thumb = safeUrl(top.post.thumb);
+      const interactions = isNumber(top.engagement)
+        ? top.engagement
+        : [top.post.likes, top.post.comments, top.post.shares].filter(isNumber).reduce((sum, value) => sum + value, 0);
+      byId('spot').innerHTML = `
+        <div class="spot-media">
+          ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${top.name} top post preview`)}">` : ''}
+          <div class="media-fallback" ${thumb ? 'hidden' : ''}>
+            <div>
+              <span class="fallback-mark">${esc(initials(top.name))}</span>
+              <b>Preview unavailable</b>
+              <span>The post link still opens the public source.</span>
+            </div>
+          </div>
+        </div>
+        <div class="spot-body">
+          <div class="spot-kicker">Top supported interactions · 30 days</div>
+          <h3 class="spot-title">${esc(top.name)}</h3>
+          <p class="spot-copy">${esc(top.post.caption || 'Public Instagram post')}</p>
+          <div class="spot-stats">
+            <span><b>${fmt(interactions)}</b> interactions</span>
+            <span><b>${fmt(top.post.comments)}</b> comments</span>
+            <span><b>${fmt(top.post.shares)}</b> shares</span>
+          </div>
+          ${postUrl ? `<a class="spot-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open public post ↗</a>` : ''}
+        </div>
+      `;
+      document.querySelectorAll('.post-image').forEach(image => {
+        image.addEventListener('error', () => {
+          image.hidden = true;
+          const fallback = image.nextElementSibling;
+          if (fallback) fallback.hidden = false;
+        }, { once: true });
+      });
+    }
+
+    function rankBy(rows, key) {
+      const sorted = rows.slice().sort((a, b) => (b[key] || 0) - (a[key] || 0));
+      let prior = null;
+      let priorRank = 0;
+      return sorted.map((row, index) => {
+        const value = row[key];
+        const rank = value === prior ? priorRank : index + 1;
+        prior = value;
+        priorRank = rank;
+        return { ...row, rank };
+      });
+    }
+
+    function boardMarkup({ title, description, rows, key, value, sub, unavailable }) {
+      if (!rows?.length) {
+        return `
+          <article class="panel board">
+            <div class="board-head">
+              <div><h3>${esc(title)}</h3><div class="board-desc">${esc(description)}</div></div>
+              <span class="board-count">Unavailable</span>
+            </div>
+            <div class="empty-state"><div><b>Not ranked yet</b><p>${esc(unavailable)}</p></div></div>
+          </article>
+        `;
+      }
+      const values = rows.map(row => row[key]).filter(isNumber);
+      const maximum = values.length ? Math.max(...values.map(Math.abs)) : 0;
+      return `
+        <article class="panel board">
+          <div class="board-head">
+            <div><h3>${esc(title)}</h3><div class="board-desc">${esc(description)}</div></div>
+            <span class="board-count">${rows.length} eligible</span>
+          </div>
+          <ol class="rows">
+            ${rows.slice(0, 15).map((row, index) => {
+              const raw = row[key];
+              const bar = maximum && isNumber(raw) ? Math.max(2, Math.abs(raw) * 100 / maximum) : 0;
+              const url = profileUrl(row.handle);
+              return `
+                <li style="--bar:${bar.toFixed(1)}%">
+                  <span class="rank">${esc(row.rank ?? index + 1)}</span>
+                  <span class="who">
+                    ${url
+                      ? `<a class="person-link" href="${esc(url)}" target="_blank" rel="noopener"><span class="person-name">${esc(row.name)}</span><span class="person-sub">${esc(sub(row))}</span></a>`
+                      : `<span class="person-name">${esc(row.name)}</span><span class="person-sub">${esc(sub(row))}</span>`
+                    }
+                  </span>
+                  <span class="metric-value">${esc(value(row))}</span>
+                </li>
+              `;
+            }).join('')}
+          </ol>
+        </article>
+      `;
+    }
+
+    function renderBoards() {
+      const audited = isAudited();
+      const unavailable = 'A complete, audited 30-day window is required before this lane can be compared.';
+      const growthRows = audited && DATA.meta?.trendAvailable
+        ? (DATA.trend || []).filter(row => row.platform === 'instagram')
+        : [];
+      const engagementRows = audited ? board().engagement || [] : [];
+      const cadenceRows = audited ? board().postingFrequency || [] : [];
+      const participationRows = audited
+        ? rankBy((board().coverage?.cadenceAudit || []).filter(row => row.complete), 'postsInWindow')
+        : [];
+
+      byId('boards').innerHTML = [
+        boardMarkup({
+          title: 'Weekly audience growth',
+          description: 'Only against a valid baseline approximately 5–9 days old',
+          rows: growthRows,
+          key: 'followerDelta',
+          value: row => `${row.followerDelta >= 0 ? '+' : ''}${fmt(row.followerDelta)}`,
+          sub: row => `${pct(row.followerPct)} · @${row.handle}`,
+          unavailable: audited ? 'No valid weekly baseline is attached to this snapshot.' : unavailable
+        }),
+        boardMarkup({
+          title: 'Typical engagement',
+          description: 'Median supported interactions ÷ followers · minimum 3 posts',
+          rows: engagementRows,
+          key: 'engagementRate',
+          value: row => pct(row.engagementRate),
+          sub: row => `${row.postsInWindow} comparable posts · @${row.handle}`,
+          unavailable
+        }),
+        boardMarkup({
+          title: 'Publishing cadence',
+          description: 'Unique authored posts × 7 ÷ 30 · complete windows only',
+          rows: cadenceRows,
+          key: 'postsPerWeek',
+          value: row => `${row.postsPerWeek.toFixed(1)}/wk`,
+          sub: row => `${row.postsInWindow} posts · ${row.formula}`,
+          unavailable
+        }),
+        boardMarkup({
+          title: '30-day participation',
+          description: 'Eligible profiles ordered by posts published in the shared window',
+          rows: participationRows,
+          key: 'postsInWindow',
+          value: row => `${row.postsInWindow} post${row.postsInWindow === 1 ? '' : 's'}`,
+          sub: row => `${row.postsInWindow ? 'Participated' : 'No post in window'} · @${row.handle}`,
+          unavailable
+        })
+      ].join('');
+    }
+
+    function renderTrend() {
+      const rows = isAudited() && DATA.meta?.trendAvailable
+        ? (DATA.trend || []).filter(row => row.platform === 'instagram').slice(0, 6)
+        : [];
+      byId('trend').innerHTML = rows.length
+        ? `<span class="trend-label">Movement tape</span>${rows.map(row => `
+            <span class="movement">↗ ${esc(row.name)} ${esc(pct(row.followerPct))}<small>${row.followerDelta >= 0 ? '+' : ''}${esc(fmt(row.followerDelta))}</small></span>
+          `).join('')}`
+        : `<span class="trend-label">Movement tape</span><span class="trend-empty">A valid 5–9 day baseline will unlock verified weekly movement.</span>`;
+    }
+
+    function attentionItems() {
+      const audits = auditMap();
+      const engagement = new Map((isAudited() ? board().engagement || [] : []).map(row => [row.handle, row]));
+      return rosterPeople().map(person => ({
+        person,
+        audit: audits.get(person.handle),
+        engagement: engagement.get(person.handle)
+      })).map(item => ({
+        name: item.person.name,
+        state: statusFor(item.person, item.audit, item.engagement)
+      })).filter(item => item.state.key !== 'measured');
+    }
+
+    function renderInsights() {
+      const coverage = board().coverage || {};
+      const engagementRows = isAudited() ? board().engagement || [] : [];
+      const cadenceRows = isAudited() ? board().postingFrequency || [] : [];
+      const engagementMedian = median(engagementRows.map(row => row.engagementRate));
+      const cadenceMedian = median(cadenceRows.map(row => row.postsPerWeek));
+      const complete = isAudited() && isNumber(coverage.completeWindowProfiles) ? coverage.completeWindowProfiles : 0;
+      const active = isAudited() && isNumber(coverage.profilesWithPostsInWindow) ? coverage.profilesWithPostsInWindow : 0;
+      const participation = complete ? active / complete : null;
+      const attention = attentionItems();
+      byId('insights').innerHTML = `
+        <div class="insight-grid">
+          <article class="panel insight">
+            <span class="insight-icon" aria-hidden="true">↗</span>
+            <h3>Participation</h3>
+            <div class="insight-value">${isNumber(participation) ? pct(participation) : 'Pending'}</div>
+            <p>${isAudited() ? `${active} of ${complete} profiles with complete inputs posted in the window.` : 'The verified pull must complete before participation is reported.'}</p>
+          </article>
+          <article class="panel insight">
+            <span class="insight-icon" aria-hidden="true">≈</span>
+            <h3>Team benchmark</h3>
+            <div class="insight-value">${isNumber(engagementMedian) ? pct(engagementMedian) : 'Pending'}</div>
+            <p>${isNumber(cadenceMedian) ? `${cadenceMedian.toFixed(1)} posts/week median cadence. Engagement is the team median of individual typical rates.` : 'Typical engagement and cadence remain withheld until inputs pass.'}</p>
+          </article>
+          <article class="panel insight">
+            <span class="insight-icon" aria-hidden="true">!</span>
+            <h3>Coverage attention</h3>
+            <div class="insight-value">${attention.length}</div>
+            <p>People who are private, unconnected, unresolved, incomplete, awaiting a pull, or not yet rankable.</p>
+            <ul class="attention-list">
+              ${attention.slice(0, 3).map(item => `<li><b>${esc(item.name)}</b><span>${esc(item.state.label)}</span></li>`).join('')}
+            </ul>
+          </article>
+        </div>
+      `;
+    }
+
+    function renderAudit() {
+      if (!isAudited()) {
+        byId('audit').innerHTML = `
+          <div class="audit-grid">
+            <div class="audit-item held"><b>Version-3 pull required</b><span>The current snapshot cannot prove complete 30-day post coverage.</span></div>
+            <div class="audit-item held"><b>Performance withheld</b><span>Engagement, cadence, momentum, and participation remain unranked.</span></div>
+            <div class="audit-item ok"><b>Follower context retained</b><span>Known public follower counts remain visible as point-in-time context only.</span></div>
+          </div>
+        `;
+        return;
+      }
+      const rows = board().coverage?.cadenceAudit || [];
+      byId('audit').innerHTML = `
+        <div class="audit-grid">
+          ${rows.map(row => `
+            <div class="audit-item ${row.complete ? 'ok' : 'held'}">
+              <b>${esc(row.name)} · ${row.complete ? 'Complete' : 'Withheld'}</b>
+              <span>${esc(row.complete ? `${row.postsInWindow} × 7 ÷ 30 = ${row.postsPerWeek.toFixed(2)}/week` : row.reason)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function nextMove(person, state, audit, engagementRow, benchmarks) {
+      if (state.label === 'Handle needed') return 'Confirm the correct public Instagram handle.';
+      if (state.label === 'Private') return 'A public account is required to participate.';
+      if (state.label === 'Awaiting pull') return 'Wait for the next verified snapshot.';
+      if (state.label === 'Unresolved') return 'Re-check the confirmed handle and public profile.';
+      if (state.className === 'incomplete') return 'Retry the complete 30-day posts query.';
+      if (state.key === 'unranked') {
+        return audit?.postsInWindow === 0
+          ? 'Publish once this week to restart momentum.'
+          : `Reach ${board().coverage?.minimumEngagementPosts || 3} comparable posts in 30 days.`;
+      }
+      if (isNumber(audit?.postsPerWeek) && isNumber(benchmarks.cadence) && audit.postsPerWeek < benchmarks.cadence) {
+        return 'Build a more consistent publishing rhythm.';
+      }
+      if (isNumber(engagementRow?.engagementRate) && isNumber(benchmarks.engagement) && engagementRow.engagementRate < benchmarks.engagement) {
+        return 'Strengthen hooks and conversation prompts.';
+      }
+      return 'Protect the rhythm and repeat what works.';
+    }
+
+    function renderRoster() {
+      const query = byId('search').value.trim().toLowerCase();
+      const filter = byId('status-filter').value;
+      const audits = auditMap();
+      const engagementRows = isAudited() ? board().engagement || [] : [];
+      const engagement = new Map(engagementRows.map(row => [row.handle, row]));
+      const benchmarks = {
+        engagement: median(engagementRows.map(row => row.engagementRate)),
+        cadence: median((isAudited() ? board().postingFrequency || [] : []).map(row => row.postsPerWeek))
+      };
+      const rows = rosterPeople().map(person => {
+        const audit = audits.get(person.handle);
+        const engagementRow = engagement.get(person.handle);
+        const state = statusFor(person, audit, engagementRow);
+        return { person, audit, engagementRow, state };
+      }).filter(row => {
+        const haystack = `${row.person.name} ${row.person.role} ${row.person.handle || ''}`.toLowerCase();
+        const matchesQuery = haystack.includes(query);
+        const matchesFilter = filter === 'all'
+          || row.state.key === filter
+          || (filter === 'attention' && row.state.key === 'attention');
+        return matchesQuery && matchesFilter;
+      }).sort((a, b) => {
+        const followerA = isNumber(a.person.record?.followers) ? a.person.record.followers : -1;
+        const followerB = isNumber(b.person.record?.followers) ? b.person.record.followers : -1;
+        return followerB - followerA || a.person.name.localeCompare(b.person.name);
+      });
+
+      byId('roster-result').textContent = `${rows.length} of ${rosterPeople().length} people shown`;
+      byId('tbody').innerHTML = rows.length ? rows.map(({ person, audit, engagementRow, state }) => {
+        const handleUrl = profileUrl(person.handle);
+        const action = nextMove(person, state, audit, engagementRow, benchmarks);
+        return `
+          <tr>
+            <td data-label="Agent">
+              <span class="agent-name">${esc(person.name)}</span>
+              <span class="agent-role">${esc(person.role)}</span>
+              ${handleUrl
+                ? `<a class="agent-handle" href="${esc(handleUrl)}" target="_blank" rel="noopener">@${esc(person.handle)}</a>`
+                : `<span class="agent-handle">Handle needed</span>`
+              }
+            </td>
+            <td data-label="Input status"><span class="status ${esc(state.className)}">${esc(state.label)}</span></td>
+            <td class="num" data-label="Followers">${fmt(person.record?.followers)}</td>
+            <td class="num" data-label="30-day posts">${audit?.complete ? fmt(audit.postsInWindow) : '—'}</td>
+            <td class="num" data-label="Cadence">${audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—'}</td>
+            <td class="num" data-label="Typical ER">${pct(engagementRow?.engagementRate)}</td>
+            <td data-label="Next move"><span class="next-move">${esc(action)}</span></td>
+          </tr>
+        `;
+      }).join('') : `<tr><td colspan="7" class="no-results">No roster entries match this search and status filter.</td></tr>`;
+    }
+
+    function renderFooter() {
+      const meta = DATA.meta || {};
+      byId('foot').innerHTML = `
+        <span><b>${esc(meta.company || 'Kirpa Properties L.L.C')}</b> · ORN ${esc(meta.orn || '49046')}</span>
+        <span>Source: ${esc(meta.provider || 'public provider')} · public surfaces · snapshot, not real-time</span>
+      `;
+    }
+
+    function render() {
+      renderStamp();
+      renderKpis();
+      renderChampion();
+      renderSpotlight();
+      renderBoards();
+      renderTrend();
+      renderInsights();
+      renderAudit();
+      renderRoster();
+      renderFooter();
+      requestAnimationFrame(() => document.body.classList.add('data-ready'));
+    }
+
+    function renderFailure() {
+      byId('stamp').innerHTML = '<span class="source-status warning"><span class="status-dot"></span>Data unavailable</span><div>The snapshot could not be loaded</div>';
+      byId('kpis').innerHTML = `
+        <article class="kpi attention" style="grid-column:1/-1">
+          <span class="micro">Snapshot error</span>
+          <b>Data unavailable</b>
+          <span>The snapshot could not be loaded. Refresh the page or check that data/latest.json and handles.json are published beside this file.</span>
+        </article>
+      `;
+      byId('champ').innerHTML = `
+        <div class="stage-eyebrow"><span>●</span> Loading failure</div>
+        <h3 class="stage-name">No snapshot.<br>No invented score.</h3>
+        <p class="stage-reason">The dashboard has stopped instead of replacing unknown performance with zeros.</p>
+      `;
+      byId('spot').innerHTML = '<div class="empty-state"><div><b>Content unavailable</b><p>Post data could not be loaded from the published snapshot.</p></div></div>';
+      byId('boards').innerHTML = '';
+      byId('trend').innerHTML = '<span class="trend-label">Movement tape</span><span class="trend-empty">Unavailable until the snapshot loads.</span>';
+      byId('insights').innerHTML = '<div class="panel empty-state"><div><b>Team pulse unavailable</b><p>No conclusions are shown without the source snapshot.</p></div></div>';
+      byId('audit').innerHTML = '<div class="audit-item held"><b>Audit unavailable</b><span>The source files did not load.</span></div>';
+      byId('tbody').innerHTML = '<tr><td colspan="7" class="no-results">Roster unavailable because the source files did not load.</td></tr>';
+      byId('roster-result').textContent = 'Roster unavailable';
+      requestAnimationFrame(() => document.body.classList.add('data-ready'));
+    }
+
+    async function load() {
+      try {
+        const [snapshotResponse, rosterResponse] = await Promise.all([
+          fetch('data/latest.json', { cache: 'no-store' }),
+          fetch('handles.json', { cache: 'no-store' })
+        ]);
+        if (!snapshotResponse.ok) throw new Error('Snapshot request failed');
+        DATA = await snapshotResponse.json();
+        REGISTRY = rosterResponse.ok ? await rosterResponse.json() : { employees: [] };
+        render();
+      } catch (_) {
+        renderFailure();
+      }
+    }
+
+    byId('search').addEventListener('input', () => DATA && renderRoster());
+    byId('status-filter').addEventListener('change', () => DATA && renderRoster());
+    load();
+  </script>
+</body>
+</html>
