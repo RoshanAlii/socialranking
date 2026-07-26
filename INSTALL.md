@@ -1,20 +1,24 @@
-# Manpreet cadence correction
+# Kirpa Social Performance release
 
-Upload these files to the matching repository paths and commit them to `main`.
+The dashboard is now version 3 and Instagram-only.
 
-Correct result for the existing snapshot:
+## What the release changes
 
-- The snapshot captured only 8 eligible recent posts from an account with 2,105 total posts.
-- The captured feed did not reach the start of the 30-day window.
-- Therefore the valid 30-day publishing cadence is **unavailable**, not 1.9 posts/week.
+1. Pulls profile details in one batch and a date-bounded 31-day post feed for each confirmed Instagram handle.
+2. Excludes contextual candidate handles until a human confirms them.
+3. Requires verifiable post ownership, complete window coverage, and comparable public likes plus comments.
+4. Normalizes follower growth to a seven-day equivalent from a baseline 5–9 days old.
+5. Recomputes every leaderboard, growth row and content winner before stamping a snapshot as validated.
+6. Keeps the previous snapshot live when a pull or validation step fails.
+7. Shows old or unstamped snapshots as follower context only.
 
-What this package changes:
+## Release steps
 
-1. Adds `meta.measurementVersion: 2` to refreshed snapshots.
-2. Hides engagement, cadence, momentum, top-post and weekly-growth values from older snapshots.
-3. Keeps point-in-time follower counts visible.
-4. Adds a regression test specifically preventing the 8 / 2,105 case from producing 1.9/week.
-5. Makes changes to `index.html` and tests trigger the Instagram workflow.
-6. The workflow verifies measurement schema v2 before committing refreshed data.
+1. Copy this package into the repository root.
+2. Confirm the GitHub secret `APIFY_TOKEN` exists.
+3. Commit the source and workflow to `main`.
+4. Run **Weekly social snapshot** manually once.
+5. Confirm the workflow reaches “Validate and stamp every published answer.”
 
-After the commit reaches `main`, the existing `APIFY_TOKEN` workflow should pull up to 100 Instagram posts per profile and write a new `data/latest.json`.
+The first successful run writes a validated version-3 `data/latest.json`. Until
+then, the bundled legacy snapshot remains intentionally unranked.

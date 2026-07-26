@@ -86,6 +86,8 @@ function normalizeRecord(entry, raw, capturedAt) {
       postsLookbackDays: null,
       postsResultLimit: null,
       postsTruncated: null,
+      postsOwnershipComplete: false,
+      missingOwnerCount: 0,
       rawPostCount: 0,
       authoredPostCount: 0,
       duplicatePostCount: 0,
@@ -107,6 +109,8 @@ function normalizeRecord(entry, raw, capturedAt) {
     postsLookbackDays: n(raw._postsLookbackDays),
     postsResultLimit: n(raw._postsResultLimit),
     postsTruncated: raw._postsTruncated === true,
+    postsOwnershipComplete: raw._postsOwnershipComplete === true,
+    missingOwnerCount: n(raw._missingOwnerCount) ?? 0,
   });
   if (base.isPrivate) return base;
 
@@ -119,14 +123,14 @@ function normalizeRecord(entry, raw, capturedAt) {
   const expected = canonicalHandle(entry.handle);
   const authored = rawPosts
     .map(post => normalizePost(post, entry.platform))
-    .filter(post => !post.ownerUsername || !expected || post.ownerUsername === expected);
+    .filter(post => !expected || post.ownerUsername === expected);
   const unique = dedupePosts(authored);
   base.recentPosts = unique;
   base.fetchMeta.authoredPostCount = unique.length;
   base.fetchMeta.duplicatePostCount = authored.length - unique.length;
 
   const foreign = rawPosts.length - authored.length;
-  if (foreign > 0) base.warnings.push(`${foreign} post(s) excluded because another account authored them`);
+  if (foreign > 0) base.warnings.push(`${foreign} post(s) excluded because ownership could not be tied to this account`);
   if (base.fetchMeta.duplicatePostCount > 0) base.warnings.push(`${base.fetchMeta.duplicatePostCount} duplicate post row(s) removed`);
   if (!base.fetchMeta.postsQuerySucceeded) base.warnings.push('date-bounded Instagram post query did not complete');
 

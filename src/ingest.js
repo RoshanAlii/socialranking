@@ -117,7 +117,7 @@ async function main() {
   const provider = useCaptured
     ? new CapturedProvider(path.join(outDir, 'raw'))
     : useLive ? new ApifyProvider() : new MockProvider();
-  const source = useCaptured || useLive ? 'live' : 'sample';
+  const source = useLive ? 'live' : useCaptured ? 'captured' : 'sample';
   const capturedAt = new Date().toISOString();
   const baseline = loadWeeklyBaseline(outDir, capturedAt);
   const { records, states, relevantCount } = await run(
@@ -126,8 +126,8 @@ async function main() {
   );
 
   const leaderboards = buildLeaderboards(records, platforms, { now: new Date(capturedAt).getTime(), windowDays: WINDOW_DAYS });
-  const trend = baseline ? growth(baseline.payload.records, records) : [];
   const baselineDays = baseline ? (new Date(capturedAt).getTime() - baseline.at) / DAY_MS : null;
+  const trend = baseline ? growth(baseline.payload.records, records, { baselineDays }) : [];
   const payload = {
     meta: {
       company: registry.company,
@@ -145,9 +145,16 @@ async function main() {
       postResultsLimitPerProfile: INSTAGRAM_POST_RESULTS_LIMIT,
       profileActor: PROFILE_ACTOR,
       postsActor: POSTS_ACTOR,
+      validation: {
+        status: 'pending',
+        validatorVersion: 1,
+        snapshotCapturedAt: capturedAt,
+      },
       note: source === 'sample'
         ? 'SAMPLE data for layout testing only.'
-        : 'Live public Instagram profile details plus a dedicated date-bounded posts pull. TikTok and Facebook are available soon.',
+        : source === 'captured'
+          ? 'Captured-data replay for diagnostics. This is not a fresh live snapshot.'
+          : 'Live public Instagram profile details plus a dedicated date-bounded posts pull. TikTok and Facebook are available soon.',
       trendAvailable: trend.length > 0,
       growthBaselineAt: baseline?.payload?.meta?.capturedAt || null,
       growthBaselineDays: baselineDays,
@@ -167,7 +174,10 @@ async function main() {
   }
 
   fs.mkdirSync(path.join(outDir, 'history'), { recursive: true });
-  fs.writeFileSync(path.join(outDir, 'latest.json'), JSON.stringify(payload, null, 2));
+  const latestPath = path.join(outDir, 'latest.json');
+  const pendingPath = path.join(outDir, '.latest.pending.json');
+  fs.writeFileSync(pendingPath, JSON.stringify(payload, null, 2));
+  fs.renameSync(pendingPath, latestPath);
   const stamp = capturedAt.replace(/[:.]/g, '-');
   fs.writeFileSync(path.join(outDir, 'history', `${stamp}.json`), JSON.stringify({ meta: payload.meta, records }, null, 2));
   const coverage = payload.leaderboards.instagram?.coverage;

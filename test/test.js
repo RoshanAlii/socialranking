@@ -56,6 +56,8 @@ function rec(over = {}) {
       postsLookbackDays: 31,
       postsResultLimit: 200,
       postsTruncated: false,
+      postsOwnershipComplete: true,
+      missingOwnerCount: 0,
       rawPostCount: 31,
       authoredPostCount: 31,
       duplicatePostCount: 0,
@@ -83,6 +85,17 @@ function rec(over = {}) {
     const r = rec({ recentPosts: [duplicate, Object.assign({}, duplicate)] });
     assert.strictEqual(R.windowPosts(r, nowMs).length, 1);
     assert.ok(Math.abs(R.postsPerWeek(r, nowMs) - 7 / 30) < 1e-12);
+  });
+  await test('missing public interaction values stay unknown', () => {
+    assert.strictEqual(R.postEngagement(post(1, { likes: null })), null);
+    const r = rec({ recentPosts: [
+      post(1),
+      post(2),
+      post(3),
+      post(4, { comments: null }),
+    ] });
+    assert.strictEqual(R.comparableWindowPosts(r, nowMs).length, 3);
+    assert.strictEqual(R.engagementRate(r, nowMs), 110 / 10000);
   });
 
   console.log('\nACCURACY GATE');
@@ -113,6 +126,10 @@ function rec(over = {}) {
     const r = rec({ recentPosts: rows, fetchMeta: Object.assign({}, rec().fetchMeta, { postsTruncated: true, postsResultLimit: 200, authoredPostCount: 200 }) });
     assert.strictEqual(R.windowCoverage(r, nowMs).complete, true);
   });
+  await test('post coverage is rejected when ownership is incomplete', () => {
+    const r = rec({ fetchMeta: Object.assign({}, rec().fetchMeta, { postsOwnershipComplete: false }) });
+    assert.strictEqual(R.windowCoverage(r, nowMs).complete, false);
+  });
 
   console.log('\nNORMALIZATION');
   await test('takenAtTimestamp is normalized', () => {
@@ -122,7 +139,8 @@ function rec(over = {}) {
   await test('foreign authors and duplicates are removed', () => {
     const raw = {
       followersCount: 1000, postsCount: 100,
-      _postsQuerySucceeded: true, _postsLookbackDays: 31, _postsResultLimit: 200,
+      _postsQuerySucceeded: true, _postsOwnershipComplete: true,
+      _postsLookbackDays: 31, _postsResultLimit: 200,
       recentPosts: [rawPost(1), rawPost(1), rawPost(2, { ownerUsername: 'other' })],
     };
     const r = N.normalizeRecord({ name: 'A', role: 'C', platform: 'instagram', handle: 'a' }, raw, now);
@@ -152,6 +170,16 @@ function rec(over = {}) {
     assert.strictEqual(raw._postsQuerySucceeded, true);
     assert.strictEqual(calls.filter(c => c.actor === P.POSTS_ACTOR).length, 1);
   });
+  await test('provider rejects post rows with unverifiable owners', async () => {
+    const runSync = async actor => actor === P.PROFILE_ACTOR
+      ? [{ username: 'a', followersCount: 1000, postsCount: 50 }]
+      : [rawPost(1, { ownerUsername: null })];
+    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
+    const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
+    assert.strictEqual(raw._postsQuerySucceeded, false);
+    assert.strictEqual(raw._postsOwnershipComplete, false);
+    assert.strictEqual(raw.recentPosts.length, 0);
+  });
 
   console.log('\nLEADERBOARD CROSS-CHECK');
   await test('postingFrequency stores the explicit formula inputs', () => {
@@ -160,13 +188,21 @@ function rec(over = {}) {
     assert.strictEqual(board[0].formula, '31 × 7 ÷ 30');
     assert.ok(Math.abs(board[0].postsPerWeek - (31 * 7 / 30)) < 1e-12);
   });
+  await test('topVideo ignores higher-interaction images', () => {
+    const r = rec({ recentPosts: [
+      post(1, { id: 'image', type: 'image', likes: 1000 }),
+      post(2, { id: 'video', type: 'video', likes: 100 }),
+      post(3, { id: 'reel', type: 'reel', likes: 200 }),
+    ] });
+    assert.strictEqual(R.topVideo([r], 'instagram', nowMs).post.id, 'reel');
+  });
   await test('snapshot validator independently recomputes every cadence row', () => {
     const records = [rec()];
     const leaderboards = R.buildLeaderboards(records, ['instagram'], { now: nowMs });
     const snapshot = {
       meta: {
         source: 'live', provider: 'Apify', measurementVersion: 3, platforms: ['instagram'],
-        capturedAt: now, relevantCount: 1, resolvedProfiles: 1,
+        capturedAt: now, relevantCount: 1, resolvedProfiles: 1, trendAvailable: false,
         cadenceFormula: 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30',
       },
       records, leaderboards,
@@ -180,11 +216,22 @@ function rec(over = {}) {
     const leaderboards = R.buildLeaderboards(records, ['instagram'], { now: nowMs });
     leaderboards.instagram.postingFrequency[0].postsPerWeek = 999;
     const snapshot = {
-      meta: { source: 'live', provider: 'Apify', measurementVersion: 3, platforms: ['instagram'], capturedAt: now, relevantCount: 1, resolvedProfiles: 1, cadenceFormula: 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30' },
+      meta: { source: 'live', provider: 'Apify', measurementVersion: 3, platforms: ['instagram'], capturedAt: now, relevantCount: 1, resolvedProfiles: 1, trendAvailable: false, cadenceFormula: 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30' },
       records, leaderboards,
     };
     const registry = { employees: [{ name: 'A', dashboardRelevant: true, confirmed: true, handles: { instagram: 'a' } }] };
-    assert.throws(() => validateSnapshot(snapshot, registry, { now, maxAgeHours: null, rawExists: () => true }), /stored cadence/);
+    assert.throws(() => validateSnapshot(snapshot, registry, { now, maxAgeHours: null, rawExists: () => true }), /stored leaderboards/);
+  });
+  await test('validator catches a tampered momentum score', () => {
+    const records = [rec()];
+    const leaderboards = R.buildLeaderboards(records, ['instagram'], { now: nowMs });
+    leaderboards.combined.composite[0].score = 999;
+    const snapshot = {
+      meta: { source: 'live', provider: 'Apify', measurementVersion: 3, platforms: ['instagram'], capturedAt: now, relevantCount: 1, resolvedProfiles: 1, trendAvailable: false, cadenceFormula: 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30' },
+      records, leaderboards, trend: [],
+    };
+    const registry = { employees: [{ name: 'A', dashboardRelevant: true, confirmed: true, handles: { instagram: 'a' } }] };
+    assert.throws(() => validateSnapshot(snapshot, registry, { now, maxAgeHours: null }), /stored leaderboards/);
   });
 
   console.log('\nINGEST AND GROWTH');
@@ -201,6 +248,42 @@ function rec(over = {}) {
     }
     const baseline = loadWeeklyBaseline(dir, now);
     assert.ok(Math.abs(baseline.ageDays - 7.2) < 0.001);
+  });
+  await test('growth is normalized to a seven-day equivalent and ranked by percentage', () => {
+    const previous = [
+      rec({ name: 'Large', handle: 'large', followers: 10000 }),
+      rec({ name: 'Small', handle: 'small', followers: 100 }),
+    ];
+    const current = [
+      rec({ name: 'Large', handle: 'large', followers: 10100 }),
+      rec({ name: 'Small', handle: 'small', followers: 110 }),
+    ];
+    const rows = R.growth(previous, current, { baselineDays: 5 });
+    assert.strictEqual(rows[0].name, 'Small');
+    assert.strictEqual(rows[0].baselineDays, 5);
+    assert.ok(Math.abs(rows.find(row => row.name === 'Large').followerDelta - 140) < 1e-12);
+  });
+
+  console.log('\nRELEASE GUARDS');
+  await test('published workflow runs and stamps the full validator', () => {
+    const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'weekly.yml'), 'utf8');
+    assert.match(workflow, /node src\/validate-snapshot\.js --stamp/);
+  });
+  await test('dashboard requires a passed validator marker', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+    assert.match(html, /validation\?\.status === 'passed'/);
+    assert.match(html, /needsHumanConfirmation/);
+  });
+  await test('legacy snapshots are rejected instead of ranked', () => {
+    const records = [rec()];
+    const snapshot = {
+      meta: { source: 'live', provider: 'Apify', platforms: ['instagram'], capturedAt: now, relevantCount: 1, resolvedProfiles: 1, trendAvailable: false },
+      records,
+      leaderboards: R.buildLeaderboards(records, ['instagram'], { now: nowMs }),
+      trend: [],
+    };
+    const registry = { employees: [{ name: 'A', dashboardRelevant: true, confirmed: true, handles: { instagram: 'a' } }] };
+    assert.throws(() => validateSnapshot(snapshot, registry, { maxAgeHours: null }), /measurementVersion must be 3/);
   });
 
   console.log(`\n${passed} passed, ${failed} failed`);

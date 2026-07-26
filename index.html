@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#171310">
+  <meta name="theme-color" content="#f15a29">
   <meta name="description" content="Kirpa Properties public Instagram performance dashboard.">
-  <title>Kirpa Social Performance Arena</title>
+  <title>Kirpa Properties · Social Performance</title>
+  <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #171310;
-      --ink-soft: #2a221e;
-      --canvas: #f4eee7;
-      --paper: #fffdfb;
-      --paper-warm: #faf5ef;
-      --orange: #f0653a;
-      --orange-deep: #c94720;
-      --orange-soft: #ffb08f;
+      --ink: #171717;
+      --ink-soft: #292929;
+      --canvas: #f6f3ee;
+      --paper: #ffffff;
+      --paper-warm: #fbf7f2;
+      --orange: #f15a29;
+      --orange-deep: #b93614;
+      --orange-soft: #ffb195;
       --champagne: #d9b06f;
       --emerald: #2d8062;
       --amber: #a86b14;
@@ -75,8 +76,9 @@
       overflow: hidden;
       min-height: 192px;
       color: #fff;
-      background: var(--ink);
-      border-bottom: 5px solid var(--orange);
+      background: var(--orange);
+      color: var(--ink);
+      border-bottom: 5px solid var(--ink);
     }
     .command::after {
       content: "";
@@ -86,8 +88,8 @@
       right: -120px;
       top: -245px;
       border-radius: 50%;
-      background: rgba(240, 101, 58, .24);
-      box-shadow: 0 0 80px rgba(240, 101, 58, .2);
+      background: rgba(255, 255, 255, .14);
+      box-shadow: 0 0 80px rgba(255, 255, 255, .1);
       pointer-events: none;
     }
     .command-inner,
@@ -115,12 +117,17 @@
       flex: 0 0 auto;
       display: grid;
       place-items: center;
-      border-radius: 13px;
-      background: var(--orange);
+      border-radius: 50%;
+      background: var(--ink);
       color: #fff;
-      box-shadow: 0 8px 25px rgba(240, 101, 58, .28);
+      box-shadow: 0 8px 25px rgba(23, 23, 23, .18);
     }
-    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-mark::before {
+      content: "✦";
+      font-size: 24px;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
     .brand-name {
       margin: 0;
       font-size: 17px;
@@ -130,7 +137,7 @@
     }
     .brand-sub {
       margin-top: 3px;
-      color: rgba(255, 255, 255, .58);
+      color: rgba(23, 23, 23, .68);
       font-size: 10px;
       letter-spacing: .12em;
       text-transform: uppercase;
@@ -138,7 +145,7 @@
     .stamp {
       min-width: 250px;
       text-align: right;
-      color: rgba(255, 255, 255, .7);
+      color: rgba(23, 23, 23, .72);
       font-size: 11px;
     }
     .source-status {
@@ -147,10 +154,10 @@
       gap: 7px;
       margin-bottom: 4px;
       padding: 5px 10px;
-      border: 1px solid var(--line-dark);
+      border: 1px solid rgba(23, 23, 23, .18);
       border-radius: 999px;
-      color: #fff;
-      background: rgba(255, 255, 255, .06);
+      color: var(--ink);
+      background: rgba(255, 255, 255, .22);
       font-weight: 800;
       font-size: 9px;
       letter-spacing: .09em;
@@ -182,7 +189,7 @@
     }
     .command-copy { max-width: 690px; }
     .command-kicker {
-      color: var(--orange-soft);
+      color: var(--ink);
       font-size: 10px;
       font-weight: 800;
       letter-spacing: .14em;
@@ -204,16 +211,16 @@
     .platform {
       min-height: 36px;
       padding: 7px 13px;
-      border: 1px solid var(--line-dark);
+      border: 1px solid rgba(23, 23, 23, .2);
       border-radius: 999px;
-      background: rgba(255, 255, 255, .055);
-      color: rgba(255, 255, 255, .72);
+      background: rgba(255, 255, 255, .18);
+      color: var(--ink);
       font-size: 11px;
       font-weight: 700;
     }
     .platform[aria-pressed="true"] {
-      border-color: var(--orange);
-      background: var(--orange);
+      border-color: var(--ink);
+      background: var(--ink);
       color: #fff;
     }
     .platform:disabled { cursor: not-allowed; opacity: .58; }
@@ -225,6 +232,43 @@
     }
 
     .main { position: relative; z-index: 2; margin-top: -23px; padding-bottom: 72px; }
+    .truth-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, .62);
+    }
+    .truth-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-height: 52px;
+      padding: 10px 14px;
+      border-right: 1px solid var(--line);
+      color: var(--dust);
+      font-size: 9px;
+    }
+    .truth-item:last-child { border-right: 0; }
+    .truth-item b {
+      color: var(--ink);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .truth-index {
+      width: 23px;
+      height: 23px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: 8px;
+      font-weight: 800;
+    }
     .panel {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -891,6 +935,7 @@
     .status.attention,
     .status.unranked,
     .status.incomplete { background: #fbf0df; color: var(--amber); }
+    .status.unconfirmed { background: #fce9e2; color: var(--orange-deep); }
     .next-move { max-width: 190px; color: var(--dust); font-size: 9px; }
     .no-results { padding: 30px !important; color: var(--dust); text-align: center !important; }
 
@@ -956,6 +1001,9 @@
       .command-row { align-items: flex-start; flex-direction: column; margin-top: 23px; }
       .platforms { justify-content: flex-start; }
       .kpis { grid-template-columns: repeat(2, 1fr); }
+      .truth-strip { grid-template-columns: 1fr; }
+      .truth-item { border-right: 0; border-bottom: 1px solid var(--line); }
+      .truth-item:last-child { border-bottom: 0; }
       .kpi:nth-child(2) { border-right: 0; }
       .kpi:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
       .hero-grid,
@@ -1078,15 +1126,10 @@
     <div class="command-inner">
       <div class="command-top">
         <div class="brand">
-          <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M6 4v16M7 12l8-8M8 12l9 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="18.5" cy="5.5" r="2" fill="currentColor"/>
-            </svg>
-          </span>
+          <span class="brand-mark" aria-hidden="true"></span>
           <div>
-            <h1 class="brand-name">Kirpa Social Arena</h1>
-            <div class="brand-sub">Public performance room</div>
+            <h1 class="brand-name">KIRPA</h1>
+            <div class="brand-sub">Properties · Social performance</div>
           </div>
         </div>
         <div class="stamp" id="stamp" aria-live="polite">
@@ -1096,8 +1139,8 @@
 
       <div class="command-row">
         <div class="command-copy">
-          <div class="command-kicker">Kirpa Army · healthy competition</div>
-          <p class="command-title">Momentum, made visible.</p>
+          <div class="command-kicker">Kirpa Army · public performance</div>
+          <p class="command-title">Fair competition.<br>Clear next moves.</p>
         </div>
         <nav class="platforms" aria-label="Platform availability">
           <button class="platform" type="button" aria-pressed="true">Instagram</button>
@@ -1115,12 +1158,17 @@
       <article class="kpi"><span class="micro">Activity</span><b>—</b><span>Loading 30-day window</span></article>
       <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
     </section>
+    <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
+      <div class="truth-item"><span class="truth-index">01</span><b>30-day window</b><span>One shared period for every profile.</span></div>
+      <div class="truth-item"><span class="truth-index">02</span><b>3-post minimum</b><span>Typical engagement needs a real sample.</span></div>
+      <div class="truth-item"><span class="truth-index">03</span><b>Validated only</b><span>No ranking appears before the full audit passes.</span></div>
+    </aside>
 
     <section class="section reveal" aria-labelledby="arena-title" style="--delay:100ms">
       <div class="section-heading">
         <div>
           <div class="section-label">Performance stage</div>
-          <h2 id="arena-title">Who is moving the room?</h2>
+          <h2 id="arena-title">Who is building momentum?</h2>
           <p>Improvement and repeatable performance lead. Audience size stays visible as context.</p>
         </div>
         <div class="section-note">One shared trailing 30-day window</div>
@@ -1174,7 +1222,7 @@
       <div class="roster-head">
         <div>
           <div class="section-label">Roster explorer</div>
-          <h2 id="roster-title" style="margin:2px 0 0;font:400 25px/1.1 'DM Serif Display',Georgia,serif">Every person. Every state.</h2>
+          <h2 id="roster-title" style="margin:2px 0 0;font:400 25px/1.1 'DM Serif Display',Georgia,serif">The full Kirpa team</h2>
           <div class="roster-result" id="roster-result" aria-live="polite">Loading roster</div>
         </div>
         <div class="roster-tools">
@@ -1197,7 +1245,7 @@
         <table class="tbl">
           <thead>
             <tr>
-              <th scope="col">Agent</th>
+              <th scope="col">Team member</th>
               <th scope="col">Input status</th>
               <th scope="col" class="num">Followers</th>
               <th scope="col" class="num">30-day posts</th>
@@ -1226,7 +1274,7 @@
         </div>
         <div class="method-item">
           <b>Typical engagement</b>
-          <p>The median supported interactions per eligible post is divided by followers. At least three comparable posts are required, so a single viral post cannot define typical performance.</p>
+          <p>The median public likes plus comments per eligible post is divided by followers. At least three comparable posts are required, so a single viral post cannot define typical performance.</p>
         </div>
         <div class="method-item">
           <b>Current pinned-post rule</b>
@@ -1288,9 +1336,18 @@
     const igRecords = () => DATA?.records?.filter(record => record.platform === 'instagram') || [];
     const board = () => DATA?.leaderboards?.instagram || {};
     const isAudited = () => (
+      DATA?.meta?.source === 'live' &&
+      /apify/i.test(DATA?.meta?.provider || '') &&
       DATA?.meta?.measurementVersion === 3 &&
+      Array.isArray(DATA?.meta?.platforms) &&
+      DATA.meta.platforms.length === 1 &&
+      DATA.meta.platforms[0] === 'instagram' &&
+      DATA?.meta?.validation?.status === 'passed' &&
+      DATA.meta.validation.validatorVersion === 1 &&
+      DATA.meta.validation.snapshotCapturedAt === DATA.meta.capturedAt &&
       typeof board()?.coverage?.formula === 'string' &&
-      board().coverage.formula.includes('7 ÷ 30')
+      board().coverage.formula.includes('7 ÷ 30') &&
+      Array.isArray(board().coverage?.cadenceAudit)
     );
     const auditMap = () => new Map(
       (isAudited() ? board().coverage?.cadenceAudit || [] : []).map(row => [row.handle, row])
@@ -1301,7 +1358,8 @@
       if (!Number.isFinite(timestamp)) {
         return { short: 'Unknown', detail: 'Snapshot time unavailable', tone: 'attention' };
       }
-      const hours = Math.max(0, (Date.now() - timestamp) / 3600000);
+      const hours = (Date.now() - timestamp) / 3600000;
+      if (hours < -0.1) return { short: 'Future', detail: 'Snapshot time is ahead of this device', tone: 'stale' };
       if (hours < 1) return { short: 'Now', detail: 'Captured less than one hour ago', tone: 'healthy' };
       if (hours < 24) return { short: `${Math.floor(hours)}h`, detail: `Snapshot ${Math.floor(hours)} hours old`, tone: 'healthy' };
       const days = Math.floor(hours / 24);
@@ -1324,6 +1382,7 @@
           role: employee.role || '',
           handle: employee.handles?.instagram || null,
           confirmed: employee.confirmed === true,
+          needsHumanConfirmation: employee.needsHumanConfirmation === true,
           registryPrivate: employee.private === true,
           record: null
         });
@@ -1335,6 +1394,7 @@
             role: record.role || '',
             handle: record.handle || null,
             confirmed: true,
+            needsHumanConfirmation: false,
             registryPrivate: false,
             record: null
           });
@@ -1349,6 +1409,9 @@
     function statusFor(person, audit, engagementRow) {
       const record = person.record;
       if (!person.handle) return { key: 'attention', className: 'attention', label: 'Handle needed' };
+      if (!person.confirmed || person.needsHumanConfirmation) {
+        return { key: 'attention', className: 'unconfirmed', label: 'Handle confirmation needed' };
+      }
       if (person.registryPrivate || record?.isPrivate === true) return { key: 'attention', className: 'private', label: 'Private' };
       if (!record) return { key: 'attention', className: 'awaiting', label: 'Awaiting pull' };
       if (record.resolved !== true) return { key: 'attention', className: 'attention', label: 'Unresolved' };
@@ -1371,11 +1434,14 @@
       if (sample) {
         label = 'Sample data';
         mode = 'sample';
+      } else if (meta.validation?.status === 'legacy') {
+        label = 'Legacy context only';
+        mode = 'warning';
       } else if (audited && age.tone === 'healthy') {
-        label = 'Verified snapshot';
+        label = 'Validated snapshot';
         mode = 'live';
       } else if (audited) {
-        label = age.tone === 'stale' ? 'Stale snapshot' : 'Verified · aging';
+        label = age.tone === 'stale' ? 'Validated · stale' : 'Validated · aging';
         mode = 'warning';
       }
       const captured = meta.capturedAt
@@ -1389,23 +1455,41 @@
 
     function renderKpis() {
       const people = relevantEmployees();
-      const connected = people.filter(person => person.confirmed && person.handles?.instagram).length;
-      const publicRows = igRecords().filter(record => record.resolved === true && record.isPrivate === false);
-      const audience = publicRows.reduce((sum, record) => sum + (isNumber(record.followers) ? record.followers : 0), 0);
+      const verified = people.filter(person => (
+        person.confirmed &&
+        person.handles?.instagram &&
+        person.needsHumanConfirmation !== true
+      )).length;
+      const candidates = people.filter(person => (
+        person.handles?.instagram &&
+        person.needsHumanConfirmation === true
+      )).length;
+      const confirmedNames = new Set(people.filter(person => (
+        person.confirmed &&
+        person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      const publicRows = igRecords().filter(record => (
+        record.resolved === true &&
+        record.isPrivate === false &&
+        confirmedNames.has(record.name)
+      ));
+      const knownAudienceRows = publicRows.filter(record => isNumber(record.followers));
+      const audience = knownAudienceRows.reduce((sum, record) => sum + record.followers, 0);
+      const missingAudience = publicRows.length - knownAudienceRows.length;
       const coverage = board().coverage || {};
       const age = snapshotAge();
-      const coveragePct = people.length ? Math.round(connected * 100 / people.length) : null;
+      const coveragePct = people.length ? Math.round(verified * 100 / people.length) : null;
       const activity = isAudited() ? coverage.postsInWindow : null;
       byId('kpis').innerHTML = `
         <article class="kpi ${coveragePct >= 85 ? 'healthy' : 'attention'}">
           <span class="micro">Profile coverage</span>
           <b>${isNumber(coveragePct) ? `${coveragePct}%` : '—'}</b>
-          <span>${connected} of ${people.length || '—'} verified Instagram handles</span>
+          <span>${verified} of ${people.length || '—'} verified · ${candidates} awaiting confirmation</span>
         </article>
         <article class="kpi">
           <span class="micro">Measured audience</span>
-          <b>${fmt(audience)}</b>
-          <span>Non-unique public Instagram followers</span>
+          <b>${missingAudience ? '≥' : ''}${fmt(audience)}</b>
+          <span>Known non-unique followers · ${knownAudienceRows.length}/${publicRows.length || 0} reporting</span>
         </article>
         <article class="kpi ${isAudited() ? 'healthy' : 'attention'}">
           <span class="micro">30-day activity</span>
@@ -1608,14 +1692,14 @@
           title: 'Weekly audience growth',
           description: 'Only against a valid baseline approximately 5–9 days old',
           rows: growthRows,
-          key: 'followerDelta',
-          value: row => `${row.followerDelta >= 0 ? '+' : ''}${fmt(row.followerDelta)}`,
-          sub: row => `${pct(row.followerPct)} · @${row.handle}`,
+          key: 'followerPct',
+          value: row => pct(row.followerPct),
+          sub: row => `${row.followerDelta >= 0 ? '+' : ''}${fmt(Math.round(row.followerDelta))} weekly-equivalent · @${row.handle}`,
           unavailable: audited ? 'No valid weekly baseline is attached to this snapshot.' : unavailable
         }),
         boardMarkup({
           title: 'Typical engagement',
-          description: 'Median supported interactions ÷ followers · minimum 3 posts',
+          description: 'Median public likes + comments ÷ followers · minimum 3 posts',
           rows: engagementRows,
           key: 'engagementRate',
           value: row => pct(row.engagementRate),
@@ -1649,7 +1733,7 @@
         : [];
       byId('trend').innerHTML = rows.length
         ? `<span class="trend-label">Movement tape</span>${rows.map(row => `
-            <span class="movement">↗ ${esc(row.name)} ${esc(pct(row.followerPct))}<small>${row.followerDelta >= 0 ? '+' : ''}${esc(fmt(row.followerDelta))}</small></span>
+            <span class="movement">${row.followerDelta >= 0 ? '↗' : '↘'} ${esc(row.name)} ${esc(pct(row.followerPct))}<small>${row.followerDelta >= 0 ? '+' : ''}${esc(fmt(Math.round(row.followerDelta)))}/wk</small></span>
           `).join('')}`
         : `<span class="trend-label">Movement tape</span><span class="trend-empty">A valid 5–9 day baseline will unlock verified weekly movement.</span>`;
     }
@@ -1708,7 +1792,7 @@
       if (!isAudited()) {
         byId('audit').innerHTML = `
           <div class="audit-grid">
-            <div class="audit-item held"><b>Version-3 pull required</b><span>The current snapshot cannot prove complete 30-day post coverage.</span></div>
+            <div class="audit-item held"><b>Validated version-3 pull required</b><span>The current snapshot cannot prove complete 30-day post coverage.</span></div>
             <div class="audit-item held"><b>Performance withheld</b><span>Engagement, cadence, momentum, and participation remain unranked.</span></div>
             <div class="audit-item ok"><b>Follower context retained</b><span>Known public follower counts remain visible as point-in-time context only.</span></div>
           </div>
@@ -1730,6 +1814,7 @@
 
     function nextMove(person, state, audit, engagementRow, benchmarks) {
       if (state.label === 'Handle needed') return 'Confirm the correct public Instagram handle.';
+      if (state.label === 'Handle confirmation needed') return 'Verify this candidate handle with Kirpa-owned evidence.';
       if (state.label === 'Private') return 'A public account is required to participate.';
       if (state.label === 'Awaiting pull') return 'Wait for the next verified snapshot.';
       if (state.label === 'Unresolved') return 'Re-check the confirmed handle and public profile.';
@@ -1771,8 +1856,8 @@
           || (filter === 'attention' && row.state.key === 'attention');
         return matchesQuery && matchesFilter;
       }).sort((a, b) => {
-        const followerA = isNumber(a.person.record?.followers) ? a.person.record.followers : -1;
-        const followerB = isNumber(b.person.record?.followers) ? b.person.record.followers : -1;
+        const followerA = a.person.confirmed && isNumber(a.person.record?.followers) ? a.person.record.followers : -1;
+        const followerB = b.person.confirmed && isNumber(b.person.record?.followers) ? b.person.record.followers : -1;
         return followerB - followerA || a.person.name.localeCompare(b.person.name);
       });
 
@@ -1780,9 +1865,10 @@
       byId('tbody').innerHTML = rows.length ? rows.map(({ person, audit, engagementRow, state }) => {
         const handleUrl = profileUrl(person.handle);
         const action = nextMove(person, state, audit, engagementRow, benchmarks);
+        const mayShowMetrics = person.confirmed && !person.needsHumanConfirmation;
         return `
           <tr>
-            <td data-label="Agent">
+            <td data-label="Team member">
               <span class="agent-name">${esc(person.name)}</span>
               <span class="agent-role">${esc(person.role)}</span>
               ${handleUrl
@@ -1791,10 +1877,10 @@
               }
             </td>
             <td data-label="Input status"><span class="status ${esc(state.className)}">${esc(state.label)}</span></td>
-            <td class="num" data-label="Followers">${fmt(person.record?.followers)}</td>
-            <td class="num" data-label="30-day posts">${audit?.complete ? fmt(audit.postsInWindow) : '—'}</td>
-            <td class="num" data-label="Cadence">${audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—'}</td>
-            <td class="num" data-label="Typical ER">${pct(engagementRow?.engagementRate)}</td>
+            <td class="num" data-label="Followers">${mayShowMetrics ? fmt(person.record?.followers) : '—'}</td>
+            <td class="num" data-label="30-day posts">${mayShowMetrics && audit?.complete ? fmt(audit.postsInWindow) : '—'}</td>
+            <td class="num" data-label="Cadence">${mayShowMetrics && audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—'}</td>
+            <td class="num" data-label="Typical ER">${mayShowMetrics ? pct(engagementRow?.engagementRate) : '—'}</td>
             <td data-label="Next move"><span class="next-move">${esc(action)}</span></td>
           </tr>
         `;

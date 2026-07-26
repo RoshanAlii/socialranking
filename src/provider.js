@@ -63,7 +63,7 @@ function groupPostItems(handle, items) {
   const expected = canonicalHandle(handle);
   return (Array.isArray(items) ? items : []).filter(item => {
     const owner = postOwner(item);
-    return !owner || owner === expected;
+    return owner === expected;
   });
 }
 
@@ -130,15 +130,23 @@ class ApifyProvider {
       try {
         const rows = await this.runSync(POSTS_ACTOR, instagramPostsInput(handle), this.token);
         const posts = groupPostItems(handle, rows);
+        const rawRows = Array.isArray(rows) ? rows : [];
+        const missingOwnerCount = rawRows.filter(item => !postOwner(item)).length;
+        const postsOwnershipComplete = missingOwnerCount === 0;
         out.set(handle, Object.assign({}, details, {
           recentPosts: posts,
           _profileSource: PROFILE_ACTOR,
           _postSource: POSTS_ACTOR,
-          _postsQuerySucceeded: true,
+          _postsQuerySucceeded: postsOwnershipComplete,
+          _postsQueryError: postsOwnershipComplete
+            ? null
+            : `${missingOwnerCount} post row(s) had no verifiable owner`,
           _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
           _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
-          _postsTruncated: posts.length >= INSTAGRAM_POST_RESULTS_LIMIT,
-          _rawPostCount: posts.length,
+          _postsTruncated: rawRows.length >= INSTAGRAM_POST_RESULTS_LIMIT,
+          _postsOwnershipComplete: postsOwnershipComplete,
+          _missingOwnerCount: missingOwnerCount,
+          _rawPostCount: rawRows.length,
         }));
       } catch (error) {
         out.set(handle, Object.assign({}, details, {
@@ -150,6 +158,8 @@ class ApifyProvider {
           _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
           _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
           _postsTruncated: false,
+          _postsOwnershipComplete: false,
+          _missingOwnerCount: 0,
           _rawPostCount: 0,
         }));
       }
@@ -199,6 +209,8 @@ class MockProvider {
       _postsLookbackDays: 31,
       _postsResultLimit: 200,
       _postsTruncated: false,
+      _postsOwnershipComplete: true,
+      _missingOwnerCount: 0,
       _rawPostCount: recentPosts.length,
     };
   }
@@ -214,7 +226,8 @@ class CapturedProvider {
   async fetchProfile(platform, handle) {
     const fs = require('fs');
     const path = require('path');
-    const file = path.join(this.dir, `${platform}_${handle}.json`);
+    const safe = `${platform}_${handle}`.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const file = path.join(this.dir, `${safe}.json`);
     if (!fs.existsSync(file)) return { notFound: true };
     return JSON.parse(fs.readFileSync(file, 'utf8'));
   }

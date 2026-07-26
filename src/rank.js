@@ -19,7 +19,16 @@ function asOf(records) {
   const times = (records || []).map(record => record?.capturedAt ? new Date(record.capturedAt).getTime() : NaN).filter(Number.isFinite);
   return times.length ? Math.max(...times) : Date.now();
 }
-function postEngagement(post) { return num(post?.likes) + num(post?.comments) + num(post?.shares); }
+/*
+ * Instagram does not expose public share counts consistently. To keep every
+ * profile comparable, "supported interactions" means public likes + comments.
+ * A post missing either value is unknown and is not silently scored as zero.
+ */
+function postEngagement(post) {
+  if (typeof post?.likes !== 'number' || !Number.isFinite(post.likes)) return null;
+  if (typeof post?.comments !== 'number' || !Number.isFinite(post.comments)) return null;
+  return post.likes + post.comments;
+}
 function median(values) {
   if (!values.length) return null;
   const sorted = values.slice().sort((a, b) => a - b);
@@ -57,6 +66,9 @@ function windowPosts(record, now, days = WINDOW_DAYS) {
     return Number.isFinite(time) && time >= cutoff && time <= now;
   });
 }
+function comparableWindowPosts(record, now, days = WINDOW_DAYS) {
+  return windowPosts(record, now, days).filter(post => postEngagement(post) !== null);
+}
 
 /*
  * New snapshots use a dedicated date-bounded Instagram posts query. Coverage is
@@ -73,6 +85,7 @@ function windowCoverage(record, now, days = WINDOW_DAYS) {
   const oldestFetchedAt = dated[0]?.postedAt || null;
   const reachesCutoff = dated.length > 0 && ts(dated[0]) <= cutoff;
   const querySucceeded = meta.postsQuerySucceeded === true;
+  const ownershipComplete = meta.postsOwnershipComplete !== false;
   const lookbackDays = typeof meta.postsLookbackDays === 'number' ? meta.postsLookbackDays : null;
   const resultLimit = typeof meta.postsResultLimit === 'number' ? meta.postsResultLimit : null;
   const authoredCount = typeof meta.authoredPostCount === 'number' ? meta.authoredPostCount : dated.length;
@@ -80,6 +93,9 @@ function windowCoverage(record, now, days = WINDOW_DAYS) {
 
   if (!querySucceeded) {
     return { complete: false, reason: 'dedicated posts query did not complete', oldestFetchedAt, truncated };
+  }
+  if (!ownershipComplete) {
+    return { complete: false, reason: 'one or more post rows could not be tied to the profile owner', oldestFetchedAt, truncated };
   }
   if (lookbackDays === null || lookbackDays < days) {
     return { complete: false, reason: 'posts query lookback is shorter than the metric window', oldestFetchedAt, truncated };
@@ -96,22 +112,22 @@ function windowCoverage(record, now, days = WINDOW_DAYS) {
 }
 
 function typicalEngagement(record, now, days = WINDOW_DAYS) {
-  const posts = windowPosts(record, now, days);
+  const posts = comparableWindowPosts(record, now, days);
   return posts.length ? median(posts.map(postEngagement)) : null;
 }
 function avgEngagementPerPost(record, now = asOf([record]), days = WINDOW_DAYS) {
-  const posts = windowPosts(record, now, days);
+  const posts = comparableWindowPosts(record, now, days);
   return posts.length ? posts.reduce((sum, post) => sum + postEngagement(post), 0) / posts.length : null;
 }
 function engagementRate(record, now = asOf([record]), days = WINDOW_DAYS) {
-  const posts = windowPosts(record, now, days);
+  const posts = comparableWindowPosts(record, now, days);
   if (!record?.followers || posts.length < MIN_ENGAGEMENT_POSTS) return null;
   const typical = median(posts.map(postEngagement));
   return typical === null ? null : typical / record.followers;
 }
 function beyondFollowingCount(record, now = asOf([record]), days = WINDOW_DAYS) {
   if (!record?.followers) return null;
-  return windowPosts(record, now, days).filter(post => postEngagement(post) > record.followers).length;
+  return comparableWindowPosts(record, now, days).filter(post => postEngagement(post) > record.followers).length;
 }
 function postsPerWeek(record, now = asOf([record]), days = WINDOW_DAYS) {
   if (!windowCoverage(record, now, days).complete) return null;
@@ -136,7 +152,8 @@ function mostFollowers(records, platform) {
 }
 function engagementLeaderboard(records, platform, now = asOf(records), days = WINDOW_DAYS) {
   const rows = forPlatform(records, platform).filter(isRankable).map(record => {
-    const posts = windowPosts(record, now, days);
+    const window = windowPosts(record, now, days);
+    const posts = comparableWindowPosts(record, now, days);
     const coverage = windowCoverage(record, now, days);
     const enough = coverage.complete && posts.length >= MIN_ENGAGEMENT_POSTS;
     return {
@@ -147,12 +164,13 @@ function engagementLeaderboard(records, platform, now = asOf(records), days = WI
       engagementRate: enough ? engagementRate(record, now, days) : null,
       typicalEngagement: enough ? median(posts.map(postEngagement)) : null,
       avgEngagement: enough ? posts.reduce((sum, post) => sum + postEngagement(post), 0) / posts.length : null,
-      postsInWindow: posts.length,
+      postsInWindow: window.length,
+      comparablePosts: posts.length,
       minimumPosts: MIN_ENGAGEMENT_POSTS,
       windowComplete: coverage.complete,
       coverageReason: coverage.reason,
       beyondFollowing: enough ? beyondFollowingCount(record, now, days) : null,
-      basis: `median public interactions per post ÷ followers; minimum ${MIN_ENGAGEMENT_POSTS} posts`,
+      basis: `median public likes + comments per post ÷ followers; minimum ${MIN_ENGAGEMENT_POSTS} comparable posts`,
     };
   }).filter(row => row.engagementRate !== null);
   return rankRows(rows, 'engagementRate');
@@ -181,12 +199,27 @@ function topPost(records, platform, now = asOf(records), days = WINDOW_DAYS) {
     if (!windowCoverage(record, now, days).complete) continue;
     for (const post of windowPosts(record, now, days)) {
       const engagement = postEngagement(post);
+      if (engagement === null) continue;
       if (!best || engagement > best.engagement) best = { name: record.name, role: record.role, handle: record.handle, post, engagement };
     }
   }
   return best;
 }
-function topVideo(records, platform, now, days) { return topPost(records, platform, now, days); }
+function topVideo(records, platform, now = asOf(records), days = WINDOW_DAYS) {
+  let best = null;
+  for (const record of forPlatform(records, platform).filter(isUsable)) {
+    if (!windowCoverage(record, now, days).complete) continue;
+    for (const post of windowPosts(record, now, days)) {
+      if (post.type !== 'video' && post.type !== 'reel') continue;
+      const engagement = postEngagement(post);
+      if (engagement === null) continue;
+      if (!best || engagement > best.engagement) {
+        best = { name: record.name, role: record.role, handle: record.handle, post, engagement };
+      }
+    }
+  }
+  return best;
+}
 function mostCommented(records, platform, now = asOf(records), days = WINDOW_DAYS) {
   let best = null;
   for (const record of forPlatform(records, platform).filter(isUsable)) {
@@ -253,23 +286,35 @@ function compositeLeaderboard(records, weights = DEFAULT_WEIGHTS, now = asOf(rec
   return ranked.concat(held);
 }
 function keyOf(record) { return `${record.name}::${record.platform}::${record.handle}`; }
-function growth(previousRecords, currentRecords) {
+function growth(previousRecords, currentRecords, opts = {}) {
   if (!Array.isArray(previousRecords) || !previousRecords.length) return [];
+  const baselineDays = typeof opts.baselineDays === 'number' && opts.baselineDays > 0
+    ? opts.baselineDays
+    : 7;
+  const weeklyFactor = 7 / baselineDays;
   const previous = new Map(previousRecords.filter(isRankable).map(record => [keyOf(record), record]));
   const rows = [];
   for (const current of (currentRecords || []).filter(isRankable)) {
     const old = previous.get(keyOf(current));
-    if (!old) continue;
+    if (!old || !old.followers) continue;
+    const periodFollowerDelta = current.followers - old.followers;
+    const periodFollowerPct = periodFollowerDelta / old.followers;
+    const followerPct = current.followers >= 0
+      ? Math.pow(current.followers / old.followers, weeklyFactor) - 1
+      : null;
     rows.push({
       name: current.name,
       role: current.role,
       platform: current.platform,
       handle: current.handle,
-      followerDelta: current.followers - old.followers,
-      followerPct: old.followers ? (current.followers - old.followers) / old.followers : null,
+      followerDelta: periodFollowerDelta * weeklyFactor,
+      followerPct,
+      periodFollowerDelta,
+      periodFollowerPct,
+      baselineDays,
     });
   }
-  return rankRows(rows, 'followerDelta');
+  return rankRows(rows, 'followerPct');
 }
 function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
   const days = opts.windowDays || WINDOW_DAYS;
@@ -293,8 +338,8 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
         postsTruncated: coverage.truncated === true,
       };
     });
-    const completeNames = new Set(audits.filter(audit => audit.complete).map(audit => audit.name));
-    const completeRecords = pool.filter(record => completeNames.has(record.name));
+    const completeHandles = new Set(audits.filter(audit => audit.complete).map(audit => audit.handle));
+    const completeRecords = pool.filter(record => completeHandles.has(record.handle));
     const completePosts = completeRecords.flatMap(record => windowPosts(record, now, days));
     const videos = completePosts.filter(post => post.type === 'video' || post.type === 'reel');
     const videosWithViews = videos.filter(post => typeof post.views === 'number');
@@ -303,7 +348,7 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
       engagement: engagementLeaderboard(records, platform, now, days),
       postingFrequency: postingFrequency(records, platform, now, days),
       topPost: topPost(records, platform, now, days),
-      topVideo: topPost(records, platform, now, days),
+      topVideo: topVideo(records, platform, now, days),
       mostViewed: mostViewed(records, platform, now, days),
       mostCommented: mostCommented(records, platform, now, days),
       coverage: {
@@ -314,7 +359,10 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
         completeWindowProfiles: audits.filter(audit => audit.complete).length,
         incompleteWindowProfiles: audits.filter(audit => !audit.complete).map(audit => audit.name),
         profilesWithPostsInWindow: audits.filter(audit => audit.complete && audit.postsInWindow > 0).length,
-        eligibleEngagementProfiles: audits.filter(audit => audit.complete && audit.postsInWindow >= MIN_ENGAGEMENT_POSTS).length,
+        eligibleEngagementProfiles: pool.filter(record => (
+          windowCoverage(record, now, days).complete &&
+          comparableWindowPosts(record, now, days).length >= MIN_ENGAGEMENT_POSTS
+        )).length,
         postsInWindow: audits.filter(audit => audit.complete).reduce((sum, audit) => sum + audit.postsInWindow, 0),
         minimumEngagementPosts: MIN_ENGAGEMENT_POSTS,
         cadenceAudit: audits,
@@ -327,7 +375,7 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
     };
   }
   out.combined = {
-    note: 'Instagram momentum score: 15% followers, 45% typical engagement rate, 40% posting cadence. Profiles need complete 30-day coverage and at least three posts.',
+    note: 'Instagram momentum score: 15% followers, 45% typical engagement rate, 40% posting cadence. Profiles need complete 30-day coverage and at least three comparable posts.',
     composite: compositeLeaderboard(records, opts.weights || DEFAULT_WEIGHTS, now, days),
     weights: opts.weights || DEFAULT_WEIGHTS,
     windowDays: days,
@@ -337,7 +385,7 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
 
 module.exports = {
   isRankable, isUsable, postEngagement, engagementRate, avgEngagementPerPost,
-  postsPerWeek, typicalEngagement, beyondFollowingCount, windowPosts,
+  postsPerWeek, typicalEngagement, beyondFollowingCount, windowPosts, comparableWindowPosts,
   windowCoverage, uniquePosts, median, asOf, mostFollowers,
   engagementLeaderboard, postingFrequency, topPost, topVideo, mostViewed,
   mostCommented, compositeLeaderboard, growth, buildLeaderboards,

@@ -65,7 +65,7 @@ audience size—and give every team member a practical next step.
 
 - Use one trailing 30-day window for all recent-performance metrics.
 - Use median interactions per post for typical engagement.
-- Exclude pinned posts from recent activity and current-performance rankings.
+- Count a pinned post only when its actual publication timestamp falls inside the shared window; old pinned posts remain excluded by date.
 - Keep platforms separate unless metrics are normalized.
 - Treat missing and private data as unknown, never zero.
 - Require enough measured inputs before assigning an overall rank.

@@ -5,13 +5,19 @@
     "capturedAt": "2026-07-23T18:56:54.206Z",
     "source": "live",
     "provider": "apify",
+    "validation": {
+      "status": "legacy",
+      "validatorVersion": 1,
+      "snapshotCapturedAt": "2026-07-23T18:56:54.206Z",
+      "reason": "Legacy fixed-size post payload cannot prove complete 30-day coverage."
+    },
     "platforms": [
       "instagram",
       "facebook"
     ],
     "relevantCount": 38,
     "resolvedProfiles": 35,
-    "note": "Live PUBLIC-SURFACE data via Apify (the same pages a logged-out visitor sees). Not an official Instagram/TikTok API. Snapshot, not real-time.",
+    "note": "Legacy public-surface capture retained for follower context only. Performance answers are withheld until a validated version-3 Instagram pull succeeds.",
     "trendAvailable": true
   },
   "records": [

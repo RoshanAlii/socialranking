@@ -31,9 +31,9 @@ The profile actor returns only the latest 12 posts in its profile payload. `resu
 
 ## Validation
 
-- 17 JavaScript tests passed.
+- 26 JavaScript tests passed.
 - Independent Python recomputation matched 5/5 test rows exactly.
-- The post-ingestion validator independently recomputes every stored cadence row and rejects altered values.
+- The post-ingestion validator independently recomputes every leaderboard, verifies the declared growth baseline, checks raw-to-normalized records, and stamps the snapshot only after all answers match.
 
 ## Installation
 
