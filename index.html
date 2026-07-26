@@ -703,6 +703,7 @@
     }
     .person-link:hover .person-name { color: var(--orange-deep); }
     .person-name {
+      display: block;
       overflow: hidden;
       font-size: 11px;
       font-weight: 700;
@@ -711,6 +712,7 @@
       transition: color 180ms var(--ease);
     }
     .person-sub {
+      display: block;
       overflow: hidden;
       margin-top: 2px;
       color: var(--dust);
@@ -935,9 +937,30 @@
     .status.attention,
     .status.unranked,
     .status.incomplete { background: #fbf0df; color: var(--amber); }
+    .status.context { background: #fff0e9; color: var(--orange-deep); }
     .status.unconfirmed { background: #fce9e2; color: var(--orange-deep); }
     .next-move { max-width: 190px; color: var(--dust); font-size: 9px; }
     .no-results { padding: 30px !important; color: var(--dust); text-align: center !important; }
+    .roster-more {
+      display: flex;
+      justify-content: center;
+      padding-top: 12px;
+    }
+    .roster-more[hidden] { display: none; }
+    .roster-more button {
+      min-height: 38px;
+      padding: 8px 16px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .roster-more button:hover { background: var(--orange-deep); border-color: var(--orange-deep); }
+    .roster-more button:focus-visible { outline: 3px solid rgba(240, 101, 58, .28); outline-offset: 2px; }
 
     .method {
       margin-top: 18px;
@@ -1159,19 +1182,19 @@
       <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
     </section>
     <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
-      <div class="truth-item"><span class="truth-index">01</span><b>30-day window</b><span>One shared period for every profile.</span></div>
-      <div class="truth-item"><span class="truth-index">02</span><b>3-post minimum</b><span>Typical engagement needs a real sample.</span></div>
-      <div class="truth-item"><span class="truth-index">03</span><b>Validated only</b><span>No ranking appears before the full audit passes.</span></div>
+      <div class="truth-item"><span class="truth-index">01</span><b>Context is labeled</b><span>Legacy observations never masquerade as a fair ranking.</span></div>
+      <div class="truth-item"><span class="truth-index">02</span><b>Unknown stays unknown</b><span>Missing values are shown as —, never invented as zero.</span></div>
+      <div class="truth-item"><span class="truth-index">03</span><b>Fair ranking gate</b><span>Official scores still require one audited 30-day window.</span></div>
     </aside>
 
     <section class="section reveal" aria-labelledby="arena-title" style="--delay:100ms">
       <div class="section-heading">
         <div>
           <div class="section-label">Performance stage</div>
-          <h2 id="arena-title">Who is building momentum?</h2>
-          <p>Improvement and repeatable performance lead. Audience size stays visible as context.</p>
+          <h2 id="arena-title">What do we know right now?</h2>
+          <p>Usable signals stay visible while incomplete comparisons remain clearly withheld.</p>
         </div>
-        <div class="section-note">One shared trailing 30-day window</div>
+        <div class="section-note">Latest captured public data</div>
       </div>
       <div class="hero-grid">
         <article class="panel champ" id="champ" aria-live="polite">
@@ -1194,8 +1217,8 @@
       <div class="section-heading">
         <div>
           <div class="section-label">Fair lanes</div>
-          <h2 id="leaderboards-title">Different ways to lead</h2>
-          <p>Growth, typical engagement, cadence, and participation are kept separate so one large account cannot dominate every story.</p>
+          <h2 id="leaderboards-title">Available signals, separated</h2>
+          <p>Audience and recent-post observations are shown independently, with confidence limits attached.</p>
         </div>
         <div class="section-note">Bars are relative within each lane, not percentages</div>
       </div>
@@ -1208,7 +1231,7 @@
         <div>
           <div class="section-label">Team pulse</div>
           <h2 id="insights-title">What needs action next?</h2>
-          <p>Benchmarks describe the team; coverage warnings explain who is not yet comparable.</p>
+          <p>Start with the strongest available evidence, then repair the gaps blocking a fair comparison.</p>
         </div>
       </div>
       <div id="insights"></div>
@@ -1248,9 +1271,9 @@
               <th scope="col">Team member</th>
               <th scope="col">Input status</th>
               <th scope="col" class="num">Followers</th>
-              <th scope="col" class="num">30-day posts</th>
-              <th scope="col" class="num">Cadence</th>
-              <th scope="col" class="num">Typical ER</th>
+              <th scope="col" class="num" id="posts-heading">Observed posts</th>
+              <th scope="col" class="num" id="cadence-heading">Latest post</th>
+              <th scope="col" class="num" id="engagement-heading">Sample ER</th>
               <th scope="col">Next move</th>
             </tr>
           </thead>
@@ -1258,6 +1281,9 @@
             <tr><td colspan="7" class="no-results">Loading verified roster…</td></tr>
           </tbody>
         </table>
+      </div>
+      <div class="roster-more" id="roster-more" hidden>
+        <button id="roster-toggle" type="button" aria-controls="tbody" aria-expanded="false">Show full roster</button>
       </div>
     </section>
 
@@ -1296,6 +1322,7 @@
 
     let DATA = null;
     let REGISTRY = null;
+    let ROSTER_EXPANDED = false;
 
     const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
       '&': '&amp;',
@@ -1335,6 +1362,7 @@
       : '';
     const igRecords = () => DATA?.records?.filter(record => record.platform === 'instagram') || [];
     const board = () => DATA?.leaderboards?.instagram || {};
+    const isLegacy = () => DATA?.meta?.validation?.status === 'legacy';
     const isAudited = () => (
       DATA?.meta?.source === 'live' &&
       /apify/i.test(DATA?.meta?.provider || '') &&
@@ -1352,6 +1380,63 @@
     const auditMap = () => new Map(
       (isAudited() ? board().coverage?.cadenceAudit || [] : []).map(row => [row.handle, row])
     );
+    const observedPosts = record => {
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const seen = new Set();
+      return (record?.recentPosts || [])
+        .filter(post => post && post.isPinned !== true)
+        .filter(post => {
+          const identity = post.id || post.url;
+          if (!identity || seen.has(identity)) return false;
+          seen.add(identity);
+          const postedAt = Date.parse(post.postedAt || '');
+          return Number.isFinite(postedAt) && (!Number.isFinite(capturedAt) || postedAt <= capturedAt);
+        })
+        .sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
+    };
+    const interactionRateForPost = (post, followers) => {
+      if (!isNumber(followers) || followers <= 0 || !isNumber(post?.likes) || !isNumber(post?.comments)) return null;
+      return (post.likes + post.comments) / followers;
+    };
+    const legacySignalRows = () => {
+      const confirmedNames = new Set(relevantEmployees().filter(person => (
+        person.confirmed &&
+        person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      return igRecords().filter(record => (
+        confirmedNames.has(record.name) &&
+        record.resolved === true &&
+        record.isPrivate === false
+      )).map(record => {
+        const posts = observedPosts(record);
+        const sample = posts.slice(0, 3);
+        const rates = sample.map(post => interactionRateForPost(post, record.followers)).filter(isNumber);
+        return {
+          name: record.name,
+          role: record.role || '',
+          handle: record.handle,
+          followers: isNumber(record.followers) ? record.followers : null,
+          observedPosts: posts.length,
+          sampleSize: rates.length,
+          sampleEngagementRate: median(rates),
+          latestPostAt: posts[0]?.postedAt || null,
+          latestPostTime: posts[0]?.postedAt ? Date.parse(posts[0].postedAt) : null,
+          record,
+          posts
+        };
+      });
+    };
+    const legacySignalMap = () => new Map(legacySignalRows().map(row => [row.handle, row]));
+    const relativeAge = raw => {
+      const timestamp = Date.parse(raw || '');
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      if (!Number.isFinite(timestamp) || !Number.isFinite(capturedAt)) return '—';
+      const hours = Math.max(0, (capturedAt - timestamp) / 3600000);
+      if (hours < 1) return '<1h';
+      if (hours < 24) return `${Math.floor(hours)}h`;
+      const days = Math.floor(hours / 24);
+      return `${days}d`;
+    };
 
     function snapshotAge() {
       const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
@@ -1415,6 +1500,7 @@
       if (person.registryPrivate || record?.isPrivate === true) return { key: 'attention', className: 'private', label: 'Private' };
       if (!record) return { key: 'attention', className: 'awaiting', label: 'Awaiting pull' };
       if (record.resolved !== true) return { key: 'attention', className: 'attention', label: 'Unresolved' };
+      if (isLegacy()) return { key: 'measured', className: 'context', label: 'Directional sample' };
       if (!isAudited() || !audit?.complete) {
         return { key: 'attention', className: 'incomplete', label: 'Incomplete 30-day coverage' };
       }
@@ -1480,6 +1566,9 @@
       const age = snapshotAge();
       const coveragePct = people.length ? Math.round(verified * 100 / people.length) : null;
       const activity = isAudited() ? coverage.postsInWindow : null;
+      const observed = isLegacy()
+        ? legacySignalRows().reduce((sum, row) => sum + row.observedPosts, 0)
+        : null;
       byId('kpis').innerHTML = `
         <article class="kpi ${coveragePct >= 85 ? 'healthy' : 'attention'}">
           <span class="micro">Profile coverage</span>
@@ -1491,10 +1580,10 @@
           <b>${missingAudience ? '≥' : ''}${fmt(audience)}</b>
           <span>Known non-unique followers · ${knownAudienceRows.length}/${publicRows.length || 0} reporting</span>
         </article>
-        <article class="kpi ${isAudited() ? 'healthy' : 'attention'}">
-          <span class="micro">30-day activity</span>
-          <b>${isAudited() ? fmt(activity) : 'Pending'}</b>
-          <span>${isAudited() ? `${coverage.completeWindowProfiles} complete profile windows` : 'Waiting for a version-3 audited pull'}</span>
+        <article class="kpi ${isAudited() || isNumber(observed) ? 'healthy' : 'attention'}">
+          <span class="micro">${isLegacy() ? 'Observed content' : '30-day activity'}</span>
+          <b>${isLegacy() ? fmt(observed) : (isAudited() ? fmt(activity) : 'Pending')}</b>
+          <span>${isLegacy() ? 'Non-pinned posts returned · incomplete sample' : (isAudited() ? `${coverage.completeWindowProfiles} complete profile windows` : 'Waiting for a version-3 audited pull')}</span>
         </article>
         <article class="kpi ${age.tone === 'healthy' ? 'healthy' : 'attention'}">
           <span class="micro">Snapshot freshness</span>
@@ -1515,6 +1604,28 @@
         ? combined.find(row => row.provisional !== true && isNumber(row.score))
         : null;
       const coverage = board().coverage || {};
+      if (!leader && isLegacy()) {
+        const audienceLeader = legacySignalRows()
+          .filter(row => isNumber(row.followers))
+          .sort((a, b) => b.followers - a.followers)[0];
+        if (audienceLeader) {
+          byId('champ').innerHTML = `
+            <div class="champ-top">
+              <div class="stage-eyebrow"><span>●</span> Audience context</div>
+              <div class="stage-number" aria-hidden="true">01</div>
+            </div>
+            <h3 class="stage-name">${esc(audienceLeader.name)}</h3>
+            <p class="stage-role">${esc(audienceLeader.role || 'Kirpa team member')}</p>
+            <p class="stage-reason">Largest known public audience in this snapshot. This is reach context—not a performance winner or momentum score.</p>
+            <div class="stage-metrics">
+              <div class="stage-metric"><b>${fmt(audienceLeader.followers)}</b><span>Public followers</span></div>
+              <div class="stage-metric"><b>${audienceLeader.observedPosts}</b><span>Non-pinned posts observed</span></div>
+              <div class="stage-metric"><b>${pct(audienceLeader.sampleEngagementRate)}</b><span>Latest ${audienceLeader.sampleSize || 0}-post reaction sample</span></div>
+            </div>
+          `;
+          return;
+        }
+      }
       if (!leader) {
         const complete = isAudited() && isNumber(coverage.completeWindowProfiles)
           ? coverage.completeWindowProfiles
@@ -1563,6 +1674,46 @@
 
     function renderSpotlight() {
       const top = isAudited() ? board().topPost : null;
+      if (!top?.post && isLegacy()) {
+        const candidates = legacySignalRows().flatMap(row => row.posts.slice(0, 3).map(post => ({
+          name: row.name,
+          handle: row.handle,
+          post,
+          interactions: isNumber(post.likes) && isNumber(post.comments) ? post.likes + post.comments : null
+        }))).filter(item => isNumber(item.interactions));
+        const sampleTop = candidates.sort((a, b) => b.interactions - a.interactions)[0];
+        if (sampleTop) {
+          const postUrl = safeUrl(sampleTop.post.url);
+          const thumb = safeUrl(sampleTop.post.thumb);
+          byId('spot').innerHTML = `
+            <div class="spot-media">
+              ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${sampleTop.name} observed post preview`)}">` : ''}
+              <div class="media-fallback" ${thumb ? 'hidden' : ''}>
+                <div><span class="fallback-mark">${esc(initials(sampleTop.name))}</span><b>Preview unavailable</b><span>The public post link may still be available.</span></div>
+              </div>
+            </div>
+            <div class="spot-body">
+              <div class="spot-kicker">Observed sample highlight · not an official winner</div>
+              <h3 class="spot-title">${esc(sampleTop.name)}</h3>
+              <p class="spot-copy">${esc(sampleTop.post.caption || 'Public Instagram post')}</p>
+              <div class="spot-stats">
+                <span><b>${fmt(sampleTop.interactions)}</b> likes + comments</span>
+                <span><b>${fmt(sampleTop.post.likes)}</b> likes</span>
+                <span><b>${fmt(sampleTop.post.comments)}</b> comments</span>
+              </div>
+              ${postUrl ? `<a class="spot-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open public post ↗</a>` : ''}
+            </div>
+          `;
+          document.querySelectorAll('.post-image').forEach(image => {
+            image.addEventListener('error', () => {
+              image.hidden = true;
+              const fallback = image.nextElementSibling;
+              if (fallback) fallback.hidden = false;
+            }, { once: true });
+          });
+          return;
+        }
+      }
       if (!top?.post) {
         const coverage = board().coverage || {};
         byId('spot').innerHTML = `
@@ -1678,6 +1829,54 @@
     function renderBoards() {
       const audited = isAudited();
       const unavailable = 'A complete, audited 30-day window is required before this lane can be compared.';
+      if (isLegacy()) {
+        const signals = legacySignalRows();
+        const audienceRows = rankBy(signals.filter(row => isNumber(row.followers)), 'followers');
+        const reactionRows = rankBy(signals.filter(row => (
+          row.sampleSize >= 3 && isNumber(row.sampleEngagementRate)
+        )), 'sampleEngagementRate');
+        const observedRows = rankBy(signals.filter(row => row.observedPosts > 0), 'observedPosts');
+        const recentRows = rankBy(signals.filter(row => isNumber(row.latestPostTime)), 'latestPostTime');
+        byId('boards').innerHTML = [
+          boardMarkup({
+            title: 'Audience reach',
+            description: 'Known public followers at capture time · reach context only',
+            rows: audienceRows,
+            key: 'followers',
+            value: row => fmt(row.followers),
+            sub: row => `Public followers · @${row.handle}`,
+            unavailable: 'No public follower counts are available.'
+          }),
+          boardMarkup({
+            title: 'Recent reaction sample',
+            description: 'Median likes + comments ÷ followers · latest 3 returned non-pinned posts',
+            rows: reactionRows,
+            key: 'sampleEngagementRate',
+            value: row => pct(row.sampleEngagementRate),
+            sub: row => `${row.sampleSize}-post directional sample · @${row.handle}`,
+            unavailable: 'No profiles have three supported recent posts.'
+          }),
+          boardMarkup({
+            title: 'Posts returned',
+            description: 'Non-pinned posts present in the fixed-size provider response · not cadence',
+            rows: observedRows,
+            key: 'observedPosts',
+            value: row => `${row.observedPosts} observed`,
+            sub: row => `Incomplete provider sample · @${row.handle}`,
+            unavailable: 'No recent post samples were returned.'
+          }),
+          boardMarkup({
+            title: 'Latest observed activity',
+            description: 'Recency within the captured sample · not a complete activity window',
+            rows: recentRows,
+            key: 'latestPostTime',
+            value: row => `${relativeAge(row.latestPostAt)} before capture`,
+            sub: row => `Latest returned non-pinned post · @${row.handle}`,
+            unavailable: 'No supported post timestamps are available.'
+          })
+        ].join('');
+        return;
+      }
       const growthRows = audited && DATA.meta?.trendAvailable
         ? (DATA.trend || []).filter(row => row.platform === 'instagram')
         : [];
@@ -1728,6 +1927,13 @@
     }
 
     function renderTrend() {
+      if (isLegacy()) {
+        byId('trend').innerHTML = `
+          <span class="trend-label">Confidence note</span>
+          <span class="trend-empty">Follower totals are point-in-time context. Recent reaction and post counts are directional samples only. Official growth, cadence, participation, and momentum remain withheld.</span>
+        `;
+        return;
+      }
       const rows = isAudited() && DATA.meta?.trendAvailable
         ? (DATA.trend || []).filter(row => row.platform === 'instagram').slice(0, 6)
         : [];
@@ -1761,6 +1967,41 @@
       const active = isAudited() && isNumber(coverage.profilesWithPostsInWindow) ? coverage.profilesWithPostsInWindow : 0;
       const participation = complete ? active / complete : null;
       const attention = attentionItems();
+      if (isLegacy()) {
+        const signals = legacySignalRows();
+        const withThreePosts = signals.filter(row => row.sampleSize >= 3).length;
+        const withRecentPost = signals.filter(row => {
+          const timestamp = Date.parse(row.latestPostAt || '');
+          const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+          return Number.isFinite(timestamp) && Number.isFinite(capturedAt) && capturedAt - timestamp <= 7 * 86400000;
+        }).length;
+        byId('insights').innerHTML = `
+          <div class="insight-grid">
+            <article class="panel insight">
+              <span class="insight-icon" aria-hidden="true">◎</span>
+              <h3>Usable public context</h3>
+              <div class="insight-value">${signals.length}</div>
+              <p>Confirmed public profiles with a resolved follower count or recent-post sample.</p>
+            </article>
+            <article class="panel insight">
+              <span class="insight-icon" aria-hidden="true">≈</span>
+              <h3>Recent sample coverage</h3>
+              <div class="insight-value">${withThreePosts}</div>
+              <p>Profiles with three supported returned posts; ${withRecentPost} had an observed post within seven days of capture.</p>
+            </article>
+            <article class="panel insight">
+              <span class="insight-icon" aria-hidden="true">!</span>
+              <h3>Identity and access queue</h3>
+              <div class="insight-value">${attention.length}</div>
+              <p>Profiles still blocked by an unconfirmed handle, missing pull, private account, or unresolved public page.</p>
+              <ul class="attention-list">
+                ${attention.slice(0, 3).map(item => `<li><b>${esc(item.name)}</b><span>${esc(item.state.label)}</span></li>`).join('')}
+              </ul>
+            </article>
+          </div>
+        `;
+        return;
+      }
       byId('insights').innerHTML = `
         <div class="insight-grid">
           <article class="panel insight">
@@ -1790,11 +2031,14 @@
 
     function renderAudit() {
       if (!isAudited()) {
+        const signals = isLegacy() ? legacySignalRows() : [];
+        const supportedSamples = signals.filter(row => row.sampleSize >= 3).length;
         byId('audit').innerHTML = `
           <div class="audit-grid">
             <div class="audit-item held"><b>Validated version-3 pull required</b><span>The current snapshot cannot prove complete 30-day post coverage.</span></div>
-            <div class="audit-item held"><b>Performance withheld</b><span>Engagement, cadence, momentum, and participation remain unranked.</span></div>
-            <div class="audit-item ok"><b>Follower context retained</b><span>Known public follower counts remain visible as point-in-time context only.</span></div>
+            <div class="audit-item held"><b>Official scores withheld</b><span>Growth, cadence, momentum, and participation are not claimed from this fixed-size response.</span></div>
+            <div class="audit-item ok"><b>Follower context retained</b><span>${signals.length || 'Known'} confirmed public profiles remain visible as point-in-time context.</span></div>
+            <div class="audit-item ok"><b>Recent samples labeled</b><span>${supportedSamples} profiles have a three-post directional reaction sample; none is presented as a verified 30-day benchmark.</span></div>
           </div>
         `;
         return;
@@ -1812,12 +2056,21 @@
       `;
     }
 
-    function nextMove(person, state, audit, engagementRow, benchmarks) {
+    function nextMove(person, state, audit, engagementRow, benchmarks, legacySignal) {
       if (state.label === 'Handle needed') return 'Confirm the correct public Instagram handle.';
       if (state.label === 'Handle confirmation needed') return 'Verify this candidate handle with Kirpa-owned evidence.';
       if (state.label === 'Private') return 'A public account is required to participate.';
       if (state.label === 'Awaiting pull') return 'Wait for the next verified snapshot.';
       if (state.label === 'Unresolved') return 'Re-check the confirmed handle and public profile.';
+      if (isLegacy()) {
+        if (!legacySignal?.observedPosts) return 'Refresh this profile in the complete 30-day pull.';
+        if (legacySignal.sampleSize < 3) return 'Collect at least three supported posts in the next pull.';
+        const teamSampleMedian = median(legacySignalRows().map(row => row.sampleEngagementRate));
+        if (isNumber(teamSampleMedian) && legacySignal.sampleEngagementRate < teamSampleMedian) {
+          return 'Review recent hooks; confirm the signal after the full pull.';
+        }
+        return 'Keep as directional context; confirm with the full pull.';
+      }
       if (state.className === 'incomplete') return 'Retry the complete 30-day posts query.';
       if (state.key === 'unranked') {
         return audit?.postsInWindow === 0
@@ -1837,6 +2090,7 @@
       const query = byId('search').value.trim().toLowerCase();
       const filter = byId('status-filter').value;
       const audits = auditMap();
+      const legacySignals = legacySignalMap();
       const engagementRows = isAudited() ? board().engagement || [] : [];
       const engagement = new Map(engagementRows.map(row => [row.handle, row]));
       const benchmarks = {
@@ -1846,8 +2100,9 @@
       const rows = rosterPeople().map(person => {
         const audit = audits.get(person.handle);
         const engagementRow = engagement.get(person.handle);
+        const legacySignal = legacySignals.get(person.handle);
         const state = statusFor(person, audit, engagementRow);
-        return { person, audit, engagementRow, state };
+        return { person, audit, engagementRow, legacySignal, state };
       }).filter(row => {
         const haystack = `${row.person.name} ${row.person.role} ${row.person.handle || ''}`.toLowerCase();
         const matchesQuery = haystack.includes(query);
@@ -1861,10 +2116,20 @@
         return followerB - followerA || a.person.name.localeCompare(b.person.name);
       });
 
-      byId('roster-result').textContent = `${rows.length} of ${rosterPeople().length} people shown`;
-      byId('tbody').innerHTML = rows.length ? rows.map(({ person, audit, engagementRow, state }) => {
+      byId('posts-heading').textContent = isAudited() ? '30-day posts' : 'Observed posts';
+      byId('cadence-heading').textContent = isAudited() ? 'Cadence' : 'Latest post';
+      byId('engagement-heading').textContent = isAudited() ? 'Typical ER' : 'Sample ER';
+      const shouldLimit = !ROSTER_EXPANDED && !query && filter === 'all';
+      const visibleRows = shouldLimit ? rows.slice(0, 12) : rows;
+      const more = byId('roster-more');
+      const toggle = byId('roster-toggle');
+      more.hidden = rows.length <= 12 || Boolean(query) || filter !== 'all';
+      toggle.textContent = ROSTER_EXPANDED ? 'Show first 12' : `Show all ${rows.length}`;
+      toggle.setAttribute('aria-expanded', String(ROSTER_EXPANDED));
+      byId('roster-result').textContent = `${visibleRows.length} of ${rosterPeople().length} people shown${rows.length !== rosterPeople().length ? ` · ${rows.length} match filters` : ''}`;
+      byId('tbody').innerHTML = visibleRows.length ? visibleRows.map(({ person, audit, engagementRow, legacySignal, state }) => {
         const handleUrl = profileUrl(person.handle);
-        const action = nextMove(person, state, audit, engagementRow, benchmarks);
+        const action = nextMove(person, state, audit, engagementRow, benchmarks, legacySignal);
         const mayShowMetrics = person.confirmed && !person.needsHumanConfirmation;
         return `
           <tr>
@@ -1878,9 +2143,9 @@
             </td>
             <td data-label="Input status"><span class="status ${esc(state.className)}">${esc(state.label)}</span></td>
             <td class="num" data-label="Followers">${mayShowMetrics ? fmt(person.record?.followers) : '—'}</td>
-            <td class="num" data-label="30-day posts">${mayShowMetrics && audit?.complete ? fmt(audit.postsInWindow) : '—'}</td>
-            <td class="num" data-label="Cadence">${mayShowMetrics && audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—'}</td>
-            <td class="num" data-label="Typical ER">${mayShowMetrics ? pct(engagementRow?.engagementRate) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? '30-day posts' : 'Observed posts'}">${mayShowMetrics ? (isLegacy() ? fmt(legacySignal?.observedPosts) : (audit?.complete ? fmt(audit.postsInWindow) : '—')) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Cadence' : 'Latest post'}">${mayShowMetrics ? (isLegacy() ? relativeAge(legacySignal?.latestPostAt) : (audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—')) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(legacySignal?.sampleEngagementRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
             <td data-label="Next move"><span class="next-move">${esc(action)}</span></td>
           </tr>
         `;
@@ -1950,6 +2215,10 @@
 
     byId('search').addEventListener('input', () => DATA && renderRoster());
     byId('status-filter').addEventListener('change', () => DATA && renderRoster());
+    byId('roster-toggle').addEventListener('click', () => {
+      ROSTER_EXPANDED = !ROSTER_EXPANDED;
+      if (DATA) renderRoster();
+    });
     load();
   </script>
 </body>
