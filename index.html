@@ -764,6 +764,323 @@
     .movement small { margin-left: 4px; color: var(--dust); font-weight: 500; }
     .trend-empty { color: var(--dust); font-size: 10px; }
 
+    .records-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .record-card {
+      min-width: 0;
+      min-height: 190px;
+      padding: 17px;
+      overflow: hidden;
+    }
+    .record-card.featured {
+      background: var(--ink);
+      color: #fff;
+    }
+    .record-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .record-icon {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: rgba(240, 101, 58, .12);
+      color: var(--orange-deep);
+      font-size: 9px;
+      font-weight: 900;
+    }
+    .record-card.featured .record-icon {
+      background: rgba(255, 255, 255, .1);
+      color: var(--orange-soft);
+    }
+    .record-basis {
+      max-width: 120px;
+      color: var(--dust);
+      font-size: 7.5px;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .record-card.featured .record-basis { color: rgba(255,255,255,.55); }
+    .record-card h3 {
+      margin: 16px 0 2px;
+      font-size: 11px;
+    }
+    .record-value {
+      margin-top: 2px;
+      font: 400 29px/1 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.03em;
+    }
+    .record-person {
+      margin-top: 10px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .record-caption {
+      display: -webkit-box;
+      margin-top: 4px;
+      overflow: hidden;
+      color: var(--dust);
+      font-size: 8.5px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .record-card.featured .record-caption { color: rgba(255,255,255,.62); }
+    .record-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--orange-deep);
+      font-size: 8.5px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .record-card.featured .record-link { color: var(--orange-soft); }
+    .record-empty {
+      color: var(--dust);
+      font-size: 9px;
+    }
+    .format-panel {
+      margin-top: 14px;
+      overflow: hidden;
+    }
+    .format-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 17px 19px;
+      border-bottom: 1px solid var(--line);
+    }
+    .format-head h3 { margin: 0; font-size: 13px; }
+    .format-head p { margin: 3px 0 0; color: var(--dust); font-size: 8.5px; }
+    .format-head > span {
+      align-self: flex-start;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 7.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .format-card {
+      min-width: 0;
+      padding: 16px 18px;
+      border-right: 1px solid var(--line);
+    }
+    .format-card:last-child { border-right: 0; }
+    .format-type {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+    .format-type span:last-child { color: var(--dust); font-size: 8px; }
+    .format-metric {
+      margin-top: 13px;
+      font: 400 23px/1 "DM Serif Display", Georgia, serif;
+    }
+    .format-card > p { margin: 4px 0 0; color: var(--dust); font-size: 8px; }
+    .format-bars {
+      display: grid;
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .format-bar {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 6px;
+      align-items: center;
+      color: var(--dust);
+      font-size: 7.5px;
+    }
+    .format-track {
+      height: 4px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--paper-warm);
+    }
+    .format-fill { display: block; width: var(--fill); height: 100%; border-radius: inherit; background: var(--orange); }
+
+    .analytics-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 7px;
+      padding: 5px 9px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .analytics-button:hover { background: var(--ink); color: #fff; }
+    .analytics-button:focus-visible { outline: 3px solid rgba(240, 101, 58, .25); outline-offset: 2px; }
+    .analytics-dialog {
+      width: min(900px, calc(100% - 28px));
+      max-height: min(88vh, 940px);
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 22px;
+      background: var(--canvas);
+      color: var(--ink);
+      box-shadow: 0 30px 90px rgba(20, 14, 10, .32);
+    }
+    .analytics-dialog::backdrop {
+      background: rgba(15, 12, 10, .7);
+      backdrop-filter: blur(7px);
+    }
+    .dialog-shell { max-height: inherit; overflow: auto; }
+    .analytics-hero {
+      position: relative;
+      padding: 28px 30px 25px;
+      overflow: hidden;
+      background: var(--ink);
+      color: #fff;
+    }
+    .analytics-hero::after {
+      content: "";
+      position: absolute;
+      right: -55px;
+      bottom: -85px;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: rgba(240, 101, 58, .42);
+    }
+    .analytics-status {
+      display: inline-flex;
+      position: relative;
+      z-index: 1;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      color: var(--orange-soft);
+      font-size: 7.5px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .analytics-hero h2 {
+      position: relative;
+      z-index: 1;
+      max-width: 650px;
+      margin: 13px 0 3px;
+      font: 400 36px/1 "DM Serif Display", Georgia, serif;
+    }
+    .analytics-hero p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+    }
+    .analytics-body { padding: 20px 22px 24px; }
+    .analytics-note {
+      margin-bottom: 14px;
+      padding: 11px 13px;
+      border: 1px solid #efc8b8;
+      border-radius: 12px;
+      background: #fff2ec;
+      color: #83452f;
+      font-size: 9px;
+    }
+    .person-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .person-kpi {
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    .person-kpi span { display: block; color: var(--dust); font-size: 7.5px; text-transform: uppercase; letter-spacing: .06em; }
+    .person-kpi b { display: block; margin-top: 5px; font-size: 17px; }
+    .person-kpi small { display: block; margin-top: 3px; color: var(--dust); font-size: 7.5px; }
+    .analytics-subhead {
+      margin: 22px 0 10px;
+      font: 400 21px/1.1 "DM Serif Display", Georgia, serif;
+    }
+    .person-formats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .person-format {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+    }
+    .person-format b { display: block; font-size: 10px; text-transform: capitalize; }
+    .person-format span { display: block; margin-top: 4px; color: var(--dust); font-size: 8px; }
+    .person-posts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+    .person-post {
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    .person-post time { color: var(--dust); font-size: 7.5px; }
+    .person-post p {
+      display: -webkit-box;
+      min-height: 32px;
+      margin: 8px 0;
+      overflow: hidden;
+      font-size: 8.5px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+    .post-metrics { display: flex; flex-wrap: wrap; gap: 7px; color: var(--dust); font-size: 7.5px; }
+    .person-post a { display: inline-block; margin-top: 9px; color: var(--orange-deep); font-size: 8px; font-weight: 800; text-decoration: none; }
+    .dialog-close-row {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px 22px;
+      border-top: 1px solid var(--line);
+      background: rgba(246, 243, 238, .94);
+      backdrop-filter: blur(10px);
+    }
+    .dialog-close {
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     .insight-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -854,7 +1171,8 @@
       white-space: nowrap;
     }
     .search,
-    .filter {
+    .filter,
+    .export-button {
       min-height: 39px;
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -877,8 +1195,21 @@
       pointer-events: none;
     }
     .filter { padding: 8px 32px 8px 11px; }
+    .export-button {
+      padding: 8px 12px;
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .export-button:hover { border-color: var(--orange-deep); background: var(--orange-deep); }
     .search:focus,
-    .filter:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(240, 101, 58, .12); }
+    .filter:focus,
+    .export-button:focus-visible { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(240, 101, 58, .12); }
     .roster-result { margin-top: 4px; color: var(--dust); font-size: 9px; }
     .table-wrap { overflow-x: auto; }
     .tbl {
@@ -1011,6 +1342,10 @@
 
     @media (max-width: 1024px) {
       .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(310px, .78fr); }
+      .records-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .format-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .format-card:nth-child(2) { border-right: 0; }
+      .format-card:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
       .method-grid { grid-template-columns: repeat(2, 1fr); }
       .method-item:nth-child(2) { border-right: 0; }
       .method-item:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
@@ -1031,6 +1366,8 @@
       .kpi:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
       .hero-grid,
       .boards { grid-template-columns: 1fr; }
+      .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .person-posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .hero-grid { gap: 14px; }
       .insight-grid { grid-template-columns: 1fr; }
       .insight { min-height: 0; }
@@ -1068,9 +1405,23 @@
       .stage-metric { display: flex; align-items: center; justify-content: space-between; }
       .stage-metric span { margin-top: 0; text-align: right; }
       .spot-media img { height: 190px; }
+      .records-grid,
+      .format-grid,
+      .person-formats,
+      .person-posts { grid-template-columns: 1fr; }
+      .format-card,
+      .format-card:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .format-card:last-child { border-bottom: 0; }
+      .format-head { align-items: flex-start; flex-direction: column; }
+      .analytics-dialog { width: calc(100% - 16px); max-height: 92vh; border-radius: 17px; }
+      .analytics-hero { padding: 23px 20px 21px; }
+      .analytics-hero h2 { font-size: 30px; }
+      .analytics-body { padding: 15px 13px 20px; }
+      .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .audit-grid { grid-template-columns: 1fr; }
       .roster-tools { align-items: stretch; flex-direction: column; }
       .filter { width: 100%; }
+      .export-button { width: 100%; }
       .table-wrap { overflow: visible; background: transparent; border: 0; box-shadow: none; }
       .tbl,
       .tbl tbody,
@@ -1226,6 +1577,28 @@
       <div class="panel trend" id="trend" aria-label="Weekly movement"></div>
     </section>
 
+    <section class="section reveal" aria-labelledby="records-title" style="--delay:190ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Content intelligence</div>
+          <h2 id="records-title">Records and format performance</h2>
+          <p>Likes, comments, views, and interaction totals stay separate so each record answers one clear question.</p>
+        </div>
+        <div class="section-note" id="records-note">Metric availability follows public reporting</div>
+      </div>
+      <div class="records-grid" id="records" aria-live="polite"></div>
+      <div class="format-panel panel">
+        <div class="format-head">
+          <div>
+            <h3>What formats are working?</h3>
+            <p>Median performance protects the comparison from one viral outlier.</p>
+          </div>
+          <span id="format-confidence">Checking coverage</span>
+        </div>
+        <div class="format-grid" id="formats"></div>
+      </div>
+    </section>
+
     <section class="section reveal" aria-labelledby="insights-title" style="--delay:220ms">
       <div class="section-heading">
         <div>
@@ -1262,6 +1635,18 @@
               <option value="attention">Needs attention</option>
             </select>
           </label>
+          <label class="field">
+            <span class="field-label">Sort analytics</span>
+            <select class="filter" id="sort-by">
+              <option value="followers">Sort: followers</option>
+              <option value="interaction">Sort: interaction rate</option>
+              <option value="comments">Sort: median comments</option>
+              <option value="posts">Sort: post count</option>
+              <option value="latest">Sort: latest post</option>
+              <option value="name">Sort: name</option>
+            </select>
+          </label>
+          <button class="export-button" id="export-analytics" type="button">Export all analytics</button>
         </div>
       </div>
       <div class="panel table-wrap">
@@ -1300,7 +1685,7 @@
         </div>
         <div class="method-item">
           <b>Typical engagement</b>
-          <p>The median public likes plus comments per eligible post is divided by followers. At least three comparable posts are required, so a single viral post cannot define typical performance.</p>
+          <p>The median public likes plus comments per eligible post is divided by followers. At least three comparable posts are required. The ratio can exceed 100% when content reaches people beyond the follower base.</p>
         </div>
         <div class="method-item">
           <b>Current pinned-post rule</b>
@@ -1316,6 +1701,15 @@
       <span>Public-surface data · snapshot, not real-time</span>
     </div>
   </footer>
+
+  <dialog class="analytics-dialog" id="analytics-dialog" aria-labelledby="analytics-title">
+    <div class="dialog-shell">
+      <div id="analytics-content"></div>
+      <form method="dialog" class="dialog-close-row">
+        <button class="dialog-close" type="submit">Close analytics</button>
+      </form>
+    </div>
+  </dialog>
 
   <script>
     'use strict';
@@ -1427,6 +1821,105 @@
       });
     };
     const legacySignalMap = () => new Map(legacySignalRows().map(row => [row.handle, row]));
+    const average = values => {
+      const numbers = values.filter(isNumber);
+      return numbers.length ? numbers.reduce((sum, value) => sum + value, 0) / numbers.length : null;
+    };
+    const bestPostBy = (posts, metric) => {
+      return (posts || []).map(post => ({ post, value: metric(post) }))
+        .filter(item => isNumber(item.value))
+        .sort((a, b) => b.value - a.value)[0] || null;
+    };
+    const postInteractions = post => (
+      isNumber(post?.likes) && isNumber(post?.comments) ? post.likes + post.comments : null
+    );
+    const detailedAnalytics = (record, posts, complete, reason) => {
+      const comparable = posts.filter(post => isNumber(post.likes) && isNumber(post.comments));
+      const likes = posts.map(post => post.likes).filter(isNumber);
+      const comments = posts.map(post => post.comments).filter(isNumber);
+      const shares = posts.map(post => post.shares).filter(isNumber);
+      const videos = posts.filter(post => post.type === 'video' || post.type === 'reel');
+      const views = videos.map(post => post.views).filter(isNumber);
+      const interactions = comparable.map(postInteractions);
+      const times = posts.map(post => Date.parse(post.postedAt || '')).filter(Number.isFinite).sort((a, b) => a - b);
+      const gaps = times.slice(1).map((time, index) => (time - times[index]) / 3600000);
+      const byType = ['image', 'carousel', 'video', 'reel'].map(type => {
+        const typePosts = posts.filter(post => post.type === type);
+        const typeInteractions = typePosts.map(postInteractions).filter(isNumber);
+        return {
+          type,
+          posts: typePosts.length,
+          comparablePosts: typeInteractions.length,
+          medianInteractions: median(typeInteractions),
+          averageInteractions: average(typeInteractions)
+        };
+      }).filter(row => row.posts > 0);
+      const latest = posts.slice().sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt))[0] || null;
+      return {
+        name: record?.name,
+        role: record?.role,
+        handle: record?.handle,
+        resolved: record?.resolved === true,
+        isPrivate: record?.isPrivate === true,
+        followers: record?.followers,
+        following: record?.following,
+        lifetimePosts: record?.postCount,
+        windowComplete: complete,
+        coverageReason: reason,
+        postsInWindow: posts.length,
+        comparablePosts: comparable.length,
+        postsPerWeek: complete ? posts.length * 7 / 30 : null,
+        activeDays: new Set(posts.map(post => post.postedAt?.slice(0, 10)).filter(Boolean)).size,
+        medianGapHours: median(gaps),
+        latestPostAt: latest?.postedAt || null,
+        likesReporting: likes.length,
+        commentsReporting: comments.length,
+        sharesReporting: shares.length,
+        viewsReporting: views.length,
+        totalLikes: likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
+        totalComments: comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
+        totalShares: shares.length ? shares.reduce((sum, value) => sum + value, 0) : null,
+        totalViews: views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+        medianLikes: median(likes),
+        medianComments: median(comments),
+        medianViews: median(views),
+        averageLikes: average(likes),
+        averageComments: average(comments),
+        averageViews: average(views),
+        medianInteractions: median(interactions),
+        averageInteractions: average(interactions),
+        interactionRate: record?.followers > 0 && comparable.length >= 3 ? median(interactions) / record.followers : null,
+        commentRate: record?.followers > 0 && comments.length >= 3 ? median(comments) / record.followers : null,
+        videoCount: videos.length,
+        carouselCount: posts.filter(post => post.type === 'carousel').length,
+        imageCount: posts.filter(post => post.type === 'image').length,
+        formatPerformance: byType,
+        bestPost: bestPostBy(posts, postInteractions)?.post || null,
+        mostLikedPost: bestPostBy(posts, post => post.likes)?.post || null,
+        mostCommentedPost: bestPostBy(posts, post => post.comments)?.post || null,
+        mostViewedPost: bestPostBy(videos, post => post.views)?.post || null,
+        metricCoverage: {
+          posts: posts.length,
+          likes: likes.length,
+          comments: comments.length,
+          shares: shares.length,
+          videos: videos.length,
+          videoViews: views.length
+        }
+      };
+    };
+    const analyticsForPerson = person => {
+      if (!person?.record) return null;
+      if (isAudited()) {
+        return (board().analytics || []).find(row => row.handle === person.handle) || null;
+      }
+      return detailedAnalytics(
+        person.record,
+        observedPosts(person.record),
+        false,
+        'Fixed-size legacy response; this is directional account context, not a complete 30-day window.'
+      );
+    };
     const relativeAge = raw => {
       const timestamp = Date.parse(raw || '');
       const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
@@ -1693,7 +2186,7 @@
               </div>
             </div>
             <div class="spot-body">
-              <div class="spot-kicker">Observed sample highlight · not an official winner</div>
+              <div class="spot-kicker">Equal-sample highlight · latest 3 per profile</div>
               <h3 class="spot-title">${esc(sampleTop.name)}</h3>
               <p class="spot-copy">${esc(sampleTop.post.caption || 'Public Instagram post')}</p>
               <div class="spot-stats">
@@ -1768,6 +2261,155 @@
           if (fallback) fallback.hidden = false;
         }, { once: true });
       });
+    }
+
+    function contentRows() {
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const cutoff = capturedAt - 30 * 86400000;
+      const completeHandles = new Set((board().analytics || []).filter(row => row.windowComplete).map(row => row.handle));
+      const confirmedNames = new Set(relevantEmployees().filter(person => (
+        person.confirmed && person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      return igRecords().filter(record => confirmedNames.has(record.name)).flatMap(record => {
+        const posts = isAudited()
+          ? (completeHandles.has(record.handle) ? (record.recentPosts || []).filter(post => {
+              const timestamp = Date.parse(post.postedAt || '');
+              return Number.isFinite(timestamp) && timestamp >= cutoff && timestamp <= capturedAt;
+            }) : [])
+          : observedPosts(record);
+        return posts.map(post => ({
+          name: record.name,
+          role: record.role,
+          handle: record.handle,
+          followers: record.followers,
+          post,
+          interactions: postInteractions(post)
+        }));
+      });
+    }
+
+    function contentRecordCard({ title, value, item, basis, icon, featured = false }) {
+      const postUrl = safeUrl(item?.post?.url);
+      return `
+        <article class="panel record-card ${featured ? 'featured' : ''}">
+          <div class="record-top">
+            <span class="record-icon" aria-hidden="true">${esc(icon)}</span>
+            <span class="record-basis">${esc(basis)}</span>
+          </div>
+          <h3>${esc(title)}</h3>
+          ${item ? `
+            <div class="record-value">${esc(value)}</div>
+            <div class="record-person">${esc(item.name)}</div>
+            <div class="record-caption">${esc(item.post?.caption || `${item.post?.type || 'Instagram'} post`)}</div>
+            ${postUrl ? `<a class="record-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open post ↗</a>` : ''}
+          ` : `<div class="record-empty">This metric is not publicly reported in the current snapshot.</div>`}
+        </article>
+      `;
+    }
+
+    function renderRecords() {
+      const rows = contentRows();
+      const basis = isAudited() ? 'Validated 30-day window' : 'Observed legacy sample';
+      const mostInteractions = rows.filter(row => isNumber(row.interactions)).sort((a, b) => b.interactions - a.interactions)[0];
+      const mostLikes = rows.filter(row => isNumber(row.post.likes)).sort((a, b) => b.post.likes - a.post.likes)[0];
+      const mostComments = rows.filter(row => isNumber(row.post.comments)).sort((a, b) => b.post.comments - a.post.comments)[0];
+      const mostViews = rows.filter(row => (
+        (row.post.type === 'video' || row.post.type === 'reel') && isNumber(row.post.views)
+      )).sort((a, b) => b.post.views - a.post.views)[0];
+      const topVideo = rows.filter(row => (
+        (row.post.type === 'video' || row.post.type === 'reel') && isNumber(row.interactions)
+      )).sort((a, b) => b.interactions - a.interactions)[0];
+      const latest = rows.filter(row => Number.isFinite(Date.parse(row.post.postedAt || '')))
+        .sort((a, b) => Date.parse(b.post.postedAt) - Date.parse(a.post.postedAt))[0];
+      byId('records-note').textContent = isAudited()
+        ? 'Verified against complete profile windows'
+        : 'Directional records inside the returned sample';
+      byId('records').innerHTML = [
+        contentRecordCard({
+          title: 'Highest supported interactions',
+          value: fmt(mostInteractions?.interactions),
+          item: mostInteractions,
+          basis,
+          icon: 'Σ',
+          featured: true
+        }),
+        contentRecordCard({
+          title: 'Most liked post',
+          value: fmt(mostLikes?.post?.likes),
+          item: mostLikes,
+          basis,
+          icon: '♥'
+        }),
+        contentRecordCard({
+          title: 'Highest comments',
+          value: fmt(mostComments?.post?.comments),
+          item: mostComments,
+          basis,
+          icon: '↳'
+        }),
+        contentRecordCard({
+          title: 'Most viewed video',
+          value: fmt(mostViews?.post?.views),
+          item: mostViews,
+          basis: mostViews ? `${basis} · public views` : basis,
+          icon: '▶'
+        }),
+        contentRecordCard({
+          title: 'Top video interactions',
+          value: fmt(topVideo?.interactions),
+          item: topVideo,
+          basis,
+          icon: 'V'
+        }),
+        contentRecordCard({
+          title: 'Latest observed post',
+          value: latest ? `${relativeAge(latest.post.postedAt)} before capture` : '—',
+          item: latest,
+          basis,
+          icon: '●'
+        })
+      ].join('');
+      renderFormats(rows);
+    }
+
+    function renderFormats(content) {
+      const rows = isAudited() ? (board().formatAnalytics || []) : ['image', 'carousel', 'video', 'reel'].map(type => {
+        const posts = content.filter(row => row.post.type === type);
+        const interactions = posts.map(row => row.interactions).filter(isNumber);
+        const comments = posts.map(row => row.post.comments).filter(isNumber);
+        const views = posts.map(row => row.post.views).filter(isNumber);
+        return {
+          type,
+          posts: posts.length,
+          profiles: new Set(posts.map(row => row.handle)).size,
+          comparablePosts: interactions.length,
+          medianInteractions: median(interactions),
+          medianComments: median(comments),
+          viewsReporting: views.length,
+          medianViews: median(views)
+        };
+      }).filter(row => row.posts > 0);
+      const maxInteractions = Math.max(0, ...rows.map(row => row.medianInteractions || 0));
+      const maxComments = Math.max(0, ...rows.map(row => row.medianComments || 0));
+      const maxViews = Math.max(0, ...rows.map(row => row.medianViews || 0));
+      byId('format-confidence').textContent = isAudited() ? 'Validated 30-day formats' : 'Directional sample';
+      byId('formats').innerHTML = rows.length ? rows.map(row => {
+        const interactionFill = maxInteractions ? 100 * (row.medianInteractions || 0) / maxInteractions : 0;
+        const commentFill = maxComments ? 100 * (row.medianComments || 0) / maxComments : 0;
+        const viewFill = maxViews ? 100 * (row.medianViews || 0) / maxViews : 0;
+        return `
+          <article class="format-card">
+            <div class="format-type"><span>${esc(row.type)}</span><span>${fmt(row.posts)} posts · ${fmt(row.profiles)} profiles</span></div>
+            <div class="format-metric">${fmt(row.medianInteractions)}</div>
+            <p>Median supported interactions · ${fmt(row.comparablePosts)}/${fmt(row.posts)} reporting</p>
+            <div class="format-bars">
+              <div class="format-bar"><span>Interactions</span><span class="format-track"><span class="format-fill" style="--fill:${interactionFill.toFixed(1)}%"></span></span><b>${fmt(row.medianInteractions)}</b></div>
+              <div class="format-bar"><span>Comments</span><span class="format-track"><span class="format-fill" style="--fill:${commentFill.toFixed(1)}%"></span></span><b>${fmt(row.medianComments)}</b></div>
+              <div class="format-bar"><span>Views</span><span class="format-track"><span class="format-fill" style="--fill:${viewFill.toFixed(1)}%"></span></span><b>${fmt(row.medianViews)}</b></div>
+            </div>
+          </article>
+        `;
+      }).join('') : '<div class="empty-state"><div><b>Format analysis unavailable</b><p>No supported post types are present in this snapshot.</p></div></div>';
     }
 
     function rankBy(rows, key) {
@@ -2086,9 +2728,166 @@
       return 'Protect the rhythm and repeat what works.';
     }
 
+    function formatDuration(hours) {
+      if (!isNumber(hours)) return '—';
+      return hours < 48 ? `${hours.toFixed(hours < 10 ? 1 : 0)}h` : `${(hours / 24).toFixed(1)}d`;
+    }
+
+    function analyticsKpi(label, value, note = '') {
+      return `<div class="person-kpi"><span>${esc(label)}</span><b>${esc(value)}</b>${note ? `<small>${esc(note)}</small>` : ''}</div>`;
+    }
+
+    function renderPersonAnalytics(handle) {
+      const person = rosterPeople().find(item => item.handle === handle);
+      const dialog = byId('analytics-dialog');
+      const container = byId('analytics-content');
+      if (!person) return;
+      const analytics = analyticsForPerson(person);
+      const record = person.record;
+      const state = statusFor(person, auditMap().get(handle), (board().engagement || []).find(row => row.handle === handle));
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const cutoff = capturedAt - 30 * 86400000;
+      const posts = record ? (isAudited()
+        ? (record.recentPosts || []).filter(post => {
+            const timestamp = Date.parse(post.postedAt || '');
+            return Number.isFinite(timestamp) && timestamp >= cutoff && timestamp <= capturedAt;
+          }).sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt))
+        : observedPosts(record)) : [];
+      const sourceLabel = isAudited() && analytics?.windowComplete
+        ? 'Validated 30-day analytics'
+        : isLegacy() && record?.resolved
+          ? 'Directional legacy analytics'
+          : state.label;
+      const complete = isAudited() && analytics?.windowComplete;
+      const note = complete
+        ? 'All performance metrics below were recomputed from a complete, owner-verified 30-day public-post window.'
+        : analytics?.coverageReason || 'Performance analytics are unavailable until this profile has a complete verified pull.';
+      const formats = analytics?.formatPerformance || [];
+      container.innerHTML = `
+        <div class="analytics-hero">
+          <span class="analytics-status">${esc(sourceLabel)}</span>
+          <h2 id="analytics-title">${esc(person.name)}</h2>
+          <p>${esc(person.role || 'Kirpa team member')} · ${person.handle ? `@${esc(person.handle)}` : 'Instagram handle required'}</p>
+        </div>
+        <div class="analytics-body">
+          <div class="analytics-note">${esc(note)} ${isLegacy() ? 'Use it to inspect this account, not to declare a team winner.' : ''}</div>
+          <div class="person-kpis">
+            ${analyticsKpi('Followers', fmt(analytics?.followers), 'Point-in-time public count')}
+            ${analyticsKpi('Following', fmt(analytics?.following), 'Public profile count')}
+            ${analyticsKpi('Lifetime posts', fmt(analytics?.lifetimePosts), 'Public profile count')}
+            ${analyticsKpi(complete ? '30-day posts' : 'Posts observed', fmt(analytics?.postsInWindow), complete ? 'Complete window' : 'Incomplete provider sample')}
+            ${analyticsKpi('Publishing cadence', isNumber(analytics?.postsPerWeek) ? `${analytics.postsPerWeek.toFixed(1)}/wk` : '—', complete ? 'Posts × 7 ÷ 30' : 'Withheld')}
+            ${analyticsKpi('Active days', fmt(analytics?.activeDays), complete ? 'Distinct UTC publishing dates' : 'Inside observed sample')}
+            ${analyticsKpi('Median interaction rate', pct(analytics?.interactionRate), 'Median likes + comments ÷ followers')}
+            ${analyticsKpi('Median comment rate', pct(analytics?.commentRate), 'Median comments ÷ followers')}
+            ${analyticsKpi('Median likes', fmt(analytics?.medianLikes), `${fmt(analytics?.likesReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
+            ${analyticsKpi('Median comments', fmt(analytics?.medianComments), `${fmt(analytics?.commentsReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
+            ${analyticsKpi('Median video views', fmt(analytics?.medianViews), `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
+            ${analyticsKpi('Median post gap', formatDuration(analytics?.medianGapHours), 'Time between observed posts')}
+            ${analyticsKpi('Total likes', fmt(analytics?.totalLikes), 'Supported values only')}
+            ${analyticsKpi('Total comments', fmt(analytics?.totalComments), 'Supported values only')}
+            ${analyticsKpi('Total video views', fmt(analytics?.totalViews), 'Reporting videos only')}
+            ${analyticsKpi('Latest post', analytics?.latestPostAt ? `${relativeAge(analytics.latestPostAt)} before capture` : '—', 'Relative to snapshot time')}
+          </div>
+          <h3 class="analytics-subhead">Content mix</h3>
+          <div class="person-formats">
+            ${formats.length ? formats.map(row => `
+              <div class="person-format">
+                <b>${esc(row.type)}</b>
+                <span>${fmt(row.posts)} posts · ${fmt(row.comparablePosts)} with supported interactions</span>
+                <span>Median interactions: ${fmt(row.medianInteractions)}</span>
+              </div>
+            `).join('') : '<div class="record-empty">No supported content mix is available.</div>'}
+          </div>
+          <h3 class="analytics-subhead">${complete ? 'Posts in the verified window' : 'Recent posts returned'}</h3>
+          <div class="person-posts">
+            ${posts.length ? posts.slice(0, 9).map(post => {
+              const url = safeUrl(post.url);
+              const date = post.postedAt
+                ? new Date(post.postedAt).toLocaleDateString([], { dateStyle: 'medium' })
+                : 'Date unavailable';
+              return `
+                <article class="person-post">
+                  <time>${esc(date)} · ${esc(post.type || 'post')}</time>
+                  <p>${esc(post.caption || 'Instagram post')}</p>
+                  <div class="post-metrics">
+                    <span>${fmt(post.likes)} likes</span>
+                    <span>${fmt(post.comments)} comments</span>
+                    <span>${fmt(post.views)} views</span>
+                  </div>
+                  ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">Open post ↗</a>` : ''}
+                </article>
+              `;
+            }).join('') : '<div class="record-empty">No public posts were returned for this profile.</div>'}
+          </div>
+        </div>
+      `;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    }
+
+    function exportAnalyticsCsv() {
+      const audits = auditMap();
+      const engagement = new Map((board().engagement || []).map(row => [row.handle, row]));
+      const headings = [
+        'Name', 'Role', 'Instagram handle', 'Status', 'Confidence', 'Followers', 'Following',
+        'Lifetime posts', 'Posts in view', 'Posts per week', 'Active days', 'Median post gap hours',
+        'Median interaction rate', 'Median comment rate', 'Median likes', 'Median comments',
+        'Median video views', 'Total likes', 'Total comments', 'Total video views',
+        'Latest post at', 'Likes coverage', 'Comments coverage', 'View coverage', 'Coverage note'
+      ];
+      const rows = rosterPeople().map(person => {
+        const analytics = analyticsForPerson(person);
+        const state = statusFor(person, audits.get(person.handle), engagement.get(person.handle));
+        return [
+          person.name,
+          person.role,
+          person.handle ? `@${person.handle}` : '',
+          state.label,
+          isAudited() && analytics?.windowComplete ? 'validated 30-day' : (analytics ? 'directional sample' : 'unavailable'),
+          analytics?.followers,
+          analytics?.following,
+          analytics?.lifetimePosts,
+          analytics?.postsInWindow,
+          analytics?.postsPerWeek,
+          analytics?.activeDays,
+          analytics?.medianGapHours,
+          analytics?.interactionRate,
+          analytics?.commentRate,
+          analytics?.medianLikes,
+          analytics?.medianComments,
+          analytics?.medianViews,
+          analytics?.totalLikes,
+          analytics?.totalComments,
+          analytics?.totalViews,
+          analytics?.latestPostAt,
+          analytics?.metricCoverage ? `${analytics.metricCoverage.likes}/${analytics.metricCoverage.posts}` : '',
+          analytics?.metricCoverage ? `${analytics.metricCoverage.comments}/${analytics.metricCoverage.posts}` : '',
+          analytics?.metricCoverage ? `${analytics.metricCoverage.videoViews}/${analytics.metricCoverage.videos}` : '',
+          analytics?.coverageReason || ''
+        ];
+      });
+      const csvCell = value => {
+        const text = value === null || value === undefined ? '' : String(value);
+        return `"${text.replace(/"/g, '""')}"`;
+      };
+      const csv = [headings, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      const date = String(DATA?.meta?.capturedAt || '').slice(0, 10) || 'snapshot';
+      anchor.href = url;
+      anchor.download = `kirpa-instagram-analytics-${date}.csv`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
     function renderRoster() {
       const query = byId('search').value.trim().toLowerCase();
       const filter = byId('status-filter').value;
+      const sortMode = byId('sort-by').value;
       const audits = auditMap();
       const legacySignals = legacySignalMap();
       const engagementRows = isAudited() ? board().engagement || [] : [];
@@ -2101,8 +2900,9 @@
         const audit = audits.get(person.handle);
         const engagementRow = engagement.get(person.handle);
         const legacySignal = legacySignals.get(person.handle);
+        const analytics = analyticsForPerson(person);
         const state = statusFor(person, audit, engagementRow);
-        return { person, audit, engagementRow, legacySignal, state };
+        return { person, audit, engagementRow, legacySignal, analytics, state };
       }).filter(row => {
         const haystack = `${row.person.name} ${row.person.role} ${row.person.handle || ''}`.toLowerCase();
         const matchesQuery = haystack.includes(query);
@@ -2111,9 +2911,19 @@
           || (filter === 'attention' && row.state.key === 'attention');
         return matchesQuery && matchesFilter;
       }).sort((a, b) => {
-        const followerA = a.person.confirmed && isNumber(a.person.record?.followers) ? a.person.record.followers : -1;
-        const followerB = b.person.confirmed && isNumber(b.person.record?.followers) ? b.person.record.followers : -1;
-        return followerB - followerA || a.person.name.localeCompare(b.person.name);
+        if (sortMode === 'name') return a.person.name.localeCompare(b.person.name);
+        const key = sortMode === 'interaction' ? 'interactionRate'
+          : sortMode === 'comments' ? 'medianComments'
+            : sortMode === 'posts' ? 'postsInWindow'
+              : sortMode === 'latest' ? 'latestPostAt'
+                : 'followers';
+        const rawA = a.analytics?.[key];
+        const rawB = b.analytics?.[key];
+        const valueA = key === 'latestPostAt' ? Date.parse(rawA || '') : rawA;
+        const valueB = key === 'latestPostAt' ? Date.parse(rawB || '') : rawB;
+        const safeA = isNumber(valueA) ? valueA : -1;
+        const safeB = isNumber(valueB) ? valueB : -1;
+        return safeB - safeA || a.person.name.localeCompare(b.person.name);
       });
 
       byId('posts-heading').textContent = isAudited() ? '30-day posts' : 'Observed posts';
@@ -2127,7 +2937,7 @@
       toggle.textContent = ROSTER_EXPANDED ? 'Show first 12' : `Show all ${rows.length}`;
       toggle.setAttribute('aria-expanded', String(ROSTER_EXPANDED));
       byId('roster-result').textContent = `${visibleRows.length} of ${rosterPeople().length} people shown${rows.length !== rosterPeople().length ? ` · ${rows.length} match filters` : ''}`;
-      byId('tbody').innerHTML = visibleRows.length ? visibleRows.map(({ person, audit, engagementRow, legacySignal, state }) => {
+      byId('tbody').innerHTML = visibleRows.length ? visibleRows.map(({ person, audit, engagementRow, legacySignal, analytics, state }) => {
         const handleUrl = profileUrl(person.handle);
         const action = nextMove(person, state, audit, engagementRow, benchmarks, legacySignal);
         const mayShowMetrics = person.confirmed && !person.needsHumanConfirmation;
@@ -2143,10 +2953,13 @@
             </td>
             <td data-label="Input status"><span class="status ${esc(state.className)}">${esc(state.label)}</span></td>
             <td class="num" data-label="Followers">${mayShowMetrics ? fmt(person.record?.followers) : '—'}</td>
-            <td class="num" data-label="${isAudited() ? '30-day posts' : 'Observed posts'}">${mayShowMetrics ? (isLegacy() ? fmt(legacySignal?.observedPosts) : (audit?.complete ? fmt(audit.postsInWindow) : '—')) : '—'}</td>
-            <td class="num" data-label="${isAudited() ? 'Cadence' : 'Latest post'}">${mayShowMetrics ? (isLegacy() ? relativeAge(legacySignal?.latestPostAt) : (audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—')) : '—'}</td>
-            <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(legacySignal?.sampleEngagementRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
-            <td data-label="Next move"><span class="next-move">${esc(action)}</span></td>
+            <td class="num" data-label="${isAudited() ? '30-day posts' : 'Observed posts'}">${mayShowMetrics ? (isLegacy() ? fmt(analytics?.postsInWindow) : (audit?.complete ? fmt(audit.postsInWindow) : '—')) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Cadence' : 'Latest post'}">${mayShowMetrics ? (isLegacy() ? relativeAge(analytics?.latestPostAt) : (audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—')) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(analytics?.interactionRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
+            <td data-label="Next move">
+              <span class="next-move">${esc(action)}</span>
+              ${person.handle ? `<button class="analytics-button" type="button" data-analytics-handle="${esc(person.handle)}">View analytics</button>` : ''}
+            </td>
           </tr>
         `;
       }).join('') : `<tr><td colspan="7" class="no-results">No roster entries match this search and status filter.</td></tr>`;
@@ -2167,6 +2980,7 @@
       renderSpotlight();
       renderBoards();
       renderTrend();
+      renderRecords();
       renderInsights();
       renderAudit();
       renderRoster();
@@ -2191,6 +3005,8 @@
       byId('spot').innerHTML = '<div class="empty-state"><div><b>Content unavailable</b><p>Post data could not be loaded from the published snapshot.</p></div></div>';
       byId('boards').innerHTML = '';
       byId('trend').innerHTML = '<span class="trend-label">Movement tape</span><span class="trend-empty">Unavailable until the snapshot loads.</span>';
+      byId('records').innerHTML = '<div class="panel empty-state"><div><b>Content records unavailable</b><p>No post data could be loaded.</p></div></div>';
+      byId('formats').innerHTML = '<div class="empty-state"><div><b>Format analysis unavailable</b><p>No post data could be loaded.</p></div></div>';
       byId('insights').innerHTML = '<div class="panel empty-state"><div><b>Team pulse unavailable</b><p>No conclusions are shown without the source snapshot.</p></div></div>';
       byId('audit').innerHTML = '<div class="audit-item held"><b>Audit unavailable</b><span>The source files did not load.</span></div>';
       byId('tbody').innerHTML = '<tr><td colspan="7" class="no-results">Roster unavailable because the source files did not load.</td></tr>';
@@ -2215,10 +3031,16 @@
 
     byId('search').addEventListener('input', () => DATA && renderRoster());
     byId('status-filter').addEventListener('change', () => DATA && renderRoster());
+    byId('sort-by').addEventListener('change', () => DATA && renderRoster());
     byId('roster-toggle').addEventListener('click', () => {
       ROSTER_EXPANDED = !ROSTER_EXPANDED;
       if (DATA) renderRoster();
     });
+    byId('tbody').addEventListener('click', event => {
+      const button = event.target.closest('[data-analytics-handle]');
+      if (button && DATA) renderPersonAnalytics(button.dataset.analyticsHandle);
+    });
+    byId('export-analytics').addEventListener('click', () => DATA && exportAnalyticsCsv());
     load();
   </script>
 </body>

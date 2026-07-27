@@ -35,6 +35,28 @@ function median(values) {
   const middle = sorted.length >> 1;
   return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
 }
+function average(values) {
+  const numbers = values.filter(value => typeof value === 'number' && Number.isFinite(value));
+  return numbers.length ? numbers.reduce((sum, value) => sum + value, 0) / numbers.length : null;
+}
+function supported(posts, key) {
+  return (posts || []).map(post => post?.[key]).filter(value => typeof value === 'number' && Number.isFinite(value));
+}
+function bestPost(posts, key, predicate = () => true) {
+  let best = null;
+  for (const post of posts || []) {
+    if (!predicate(post)) continue;
+    const value = typeof key === 'function' ? key(post) : post?.[key];
+    if (typeof value !== 'number' || !Number.isFinite(value)) continue;
+    if (!best || value > best.value) best = { post, value };
+  }
+  return best;
+}
+function medianGapHours(posts) {
+  const times = (posts || []).map(ts).filter(Number.isFinite).sort((a, b) => a - b);
+  if (times.length < 2) return null;
+  return median(times.slice(1).map((time, index) => (time - times[index]) / 3600000));
+}
 function postKey(post) {
   if (post?.id) return `id:${post.id}`;
   if (post?.url) return `url:${post.url}`;
@@ -220,6 +242,17 @@ function topVideo(records, platform, now = asOf(records), days = WINDOW_DAYS) {
   }
   return best;
 }
+function mostLiked(records, platform, now = asOf(records), days = WINDOW_DAYS) {
+  let best = null;
+  for (const record of forPlatform(records, platform).filter(isUsable)) {
+    if (!windowCoverage(record, now, days).complete) continue;
+    for (const post of windowPosts(record, now, days)) {
+      if (typeof post.likes !== 'number') continue;
+      if (!best || post.likes > best.post.likes) best = { name: record.name, role: record.role, handle: record.handle, post };
+    }
+  }
+  return best;
+}
 function mostCommented(records, platform, now = asOf(records), days = WINDOW_DAYS) {
   let best = null;
   for (const record of forPlatform(records, platform).filter(isUsable)) {
@@ -229,6 +262,22 @@ function mostCommented(records, platform, now = asOf(records), days = WINDOW_DAY
       if (!best || post.comments > best.post.comments) best = { name: record.name, role: record.role, handle: record.handle, post };
     }
   }
+  return best;
+}
+function mostShared(records, platform, now = asOf(records), days = WINDOW_DAYS) {
+  let best = null;
+  let postsSeen = 0;
+  let postsReportingShares = 0;
+  for (const record of forPlatform(records, platform).filter(isUsable)) {
+    if (!windowCoverage(record, now, days).complete) continue;
+    for (const post of windowPosts(record, now, days)) {
+      postsSeen++;
+      if (typeof post.shares !== 'number') continue;
+      postsReportingShares++;
+      if (!best || post.shares > best.post.shares) best = { name: record.name, role: record.role, handle: record.handle, post };
+    }
+  }
+  if (best) best.coverage = { postsSeen, postsReportingShares };
   return best;
 }
 function mostViewed(records, platform, now = asOf(records), days = WINDOW_DAYS) {
@@ -250,6 +299,120 @@ function mostViewed(records, platform, now = asOf(records), days = WINDOW_DAYS) 
     best.caveat = `Best of ${eligible} of ${considered} recent videos that publicly reported views.`;
   }
   return best;
+}
+function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_DAYS) {
+  return forPlatform(records, platform).map(record => {
+    const coverage = windowCoverage(record, now, days);
+    const posts = isUsable(record) ? windowPosts(record, now, days) : [];
+    const comparable = posts.filter(post => postEngagement(post) !== null);
+    const likes = supported(posts, 'likes');
+    const comments = supported(posts, 'comments');
+    const shares = supported(posts, 'shares');
+    const videos = posts.filter(post => post.type === 'video' || post.type === 'reel');
+    const views = supported(videos, 'views');
+    const interactions = comparable.map(postEngagement);
+    const complete = coverage.complete;
+    const byType = ['image', 'carousel', 'video', 'reel'].map(type => {
+      const typePosts = posts.filter(post => post.type === type);
+      const typeInteractions = typePosts.map(postEngagement).filter(value => value !== null);
+      return {
+        type,
+        posts: complete ? typePosts.length : null,
+        comparablePosts: complete ? typeInteractions.length : null,
+        medianInteractions: complete ? median(typeInteractions) : null,
+        averageInteractions: complete ? average(typeInteractions) : null,
+      };
+    });
+    const bestInteractions = bestPost(posts, postEngagement);
+    const bestLikes = bestPost(posts, 'likes');
+    const bestComments = bestPost(posts, 'comments');
+    const bestViews = bestPost(videos, 'views');
+    const latest = posts.slice().sort((a, b) => ts(b) - ts(a))[0] || null;
+    return {
+      name: record.name,
+      role: record.role,
+      handle: record.handle,
+      resolved: record.resolved === true,
+      isPrivate: record.isPrivate === true,
+      followers: typeof record.followers === 'number' ? record.followers : null,
+      following: typeof record.following === 'number' ? record.following : null,
+      lifetimePosts: typeof record.postCount === 'number' ? record.postCount : null,
+      windowComplete: complete,
+      coverageReason: coverage.reason,
+      postsInWindow: complete ? posts.length : null,
+      comparablePosts: complete ? comparable.length : null,
+      postsPerWeek: complete ? posts.length * 7 / days : null,
+      activeDays: complete ? new Set(posts.map(post => post.postedAt?.slice(0, 10)).filter(Boolean)).size : null,
+      medianGapHours: complete ? medianGapHours(posts) : null,
+      latestPostAt: complete ? latest?.postedAt || null : null,
+      likesReporting: complete ? likes.length : null,
+      commentsReporting: complete ? comments.length : null,
+      sharesReporting: complete ? shares.length : null,
+      viewsReporting: complete ? views.length : null,
+      totalLikes: complete && likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
+      totalComments: complete && comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
+      totalShares: complete && shares.length ? shares.reduce((sum, value) => sum + value, 0) : null,
+      totalViews: complete && views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+      medianLikes: complete ? median(likes) : null,
+      medianComments: complete ? median(comments) : null,
+      medianViews: complete ? median(views) : null,
+      averageLikes: complete ? average(likes) : null,
+      averageComments: complete ? average(comments) : null,
+      averageViews: complete ? average(views) : null,
+      medianInteractions: complete ? median(interactions) : null,
+      averageInteractions: complete ? average(interactions) : null,
+      interactionRate: complete && record.followers > 0 && comparable.length >= MIN_ENGAGEMENT_POSTS
+        ? median(interactions) / record.followers
+        : null,
+      commentRate: complete && record.followers > 0 && comments.length >= MIN_ENGAGEMENT_POSTS
+        ? median(comments) / record.followers
+        : null,
+      videoCount: complete ? videos.length : null,
+      carouselCount: complete ? posts.filter(post => post.type === 'carousel').length : null,
+      imageCount: complete ? posts.filter(post => post.type === 'image').length : null,
+      formatPerformance: complete ? byType : null,
+      bestPost: complete && bestInteractions ? Object.assign({ interactions: bestInteractions.value }, bestInteractions.post) : null,
+      mostLikedPost: complete && bestLikes ? bestLikes.post : null,
+      mostCommentedPost: complete && bestComments ? bestComments.post : null,
+      mostViewedPost: complete && bestViews ? bestViews.post : null,
+      metricCoverage: complete ? {
+        posts: posts.length,
+        likes: likes.length,
+        comments: comments.length,
+        shares: shares.length,
+        videos: videos.length,
+        videoViews: views.length,
+      } : null,
+    };
+  });
+}
+function formatAnalytics(records, platform, now = asOf(records), days = WINDOW_DAYS) {
+  const completeRecords = forPlatform(records, platform).filter(record => (
+    isUsable(record) && windowCoverage(record, now, days).complete
+  ));
+  const posts = completeRecords.flatMap(record => windowPosts(record, now, days).map(post => ({
+    post,
+    handle: record.handle,
+  })));
+  return ['image', 'carousel', 'video', 'reel'].map(type => {
+    const rows = posts.filter(row => row.post.type === type);
+    const interactions = rows.map(row => postEngagement(row.post)).filter(value => value !== null);
+    const comments = rows.map(row => row.post.comments).filter(value => typeof value === 'number');
+    const views = rows.map(row => row.post.views).filter(value => typeof value === 'number');
+    return {
+      type,
+      posts: rows.length,
+      profiles: new Set(rows.map(row => row.handle)).size,
+      comparablePosts: interactions.length,
+      medianInteractions: median(interactions),
+      averageInteractions: average(interactions),
+      medianComments: median(comments),
+      averageComments: average(comments),
+      viewsReporting: views.length,
+      medianViews: median(views),
+      averageViews: average(views),
+    };
+  }).filter(row => row.posts > 0);
 }
 function minMax(values) {
   const numbers = values.filter(value => typeof value === 'number' && Number.isFinite(value));
@@ -349,8 +512,12 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
       postingFrequency: postingFrequency(records, platform, now, days),
       topPost: topPost(records, platform, now, days),
       topVideo: topVideo(records, platform, now, days),
+      mostLiked: mostLiked(records, platform, now, days),
       mostViewed: mostViewed(records, platform, now, days),
       mostCommented: mostCommented(records, platform, now, days),
+      mostShared: mostShared(records, platform, now, days),
+      analytics: profileAnalytics(records, platform, now, days),
+      formatAnalytics: formatAnalytics(records, platform, now, days),
       coverage: {
         windowDays: days,
         asOf: new Date(now).toISOString(),
@@ -388,6 +555,7 @@ module.exports = {
   postsPerWeek, typicalEngagement, beyondFollowingCount, windowPosts, comparableWindowPosts,
   windowCoverage, uniquePosts, median, asOf, mostFollowers,
   engagementLeaderboard, postingFrequency, topPost, topVideo, mostViewed,
-  mostCommented, compositeLeaderboard, growth, buildLeaderboards,
+  mostLiked, mostCommented, mostShared, profileAnalytics, formatAnalytics,
+  compositeLeaderboard, growth, buildLeaderboards,
   DEFAULT_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MEASURED,
 };

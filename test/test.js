@@ -9,6 +9,7 @@ const R = require('../src/rank');
 const P = require('../src/provider');
 const { run, loadWeeklyBaseline } = require('../src/ingest');
 const { validateSnapshot } = require('../src/validate-snapshot');
+const { rebuildDerived } = require('../src/rebuild-derived');
 
 let passed = 0;
 let failed = 0;
@@ -132,6 +133,11 @@ function rec(over = {}) {
   });
 
   console.log('\nNORMALIZATION');
+  await test('negative provider count sentinels stay unknown', () => {
+    const normalized = N.normalizePost(rawPost(1, { likesCount: -1, commentsCount: 5 }), 'instagram');
+    assert.strictEqual(normalized.likes, null);
+    assert.strictEqual(normalized.comments, 5);
+  });
   await test('takenAtTimestamp is normalized', () => {
     const normalized = N.normalizePost({ id: 'x', takenAtTimestamp: Math.floor(nowMs / 1000) }, 'instagram');
     assert.strictEqual(normalized.postedAt, now);
@@ -149,6 +155,10 @@ function rec(over = {}) {
   });
 
   console.log('\nPROVIDER');
+  await test('default post concurrency stays below Apify account memory capacity', () => {
+    assert.ok(P.POST_FETCH_CONCURRENCY <= 3);
+    assert.strictEqual(new P.ApifyProvider('token').postConcurrency, P.POST_FETCH_CONCURRENCY);
+  });
   await test('post actor input uses dedicated posts mode and 31-day filter', () => {
     const input = P.instagramPostsInput('a');
     assert.strictEqual(input.resultsType, 'posts');
@@ -195,6 +205,79 @@ function rec(over = {}) {
       post(3, { id: 'reel', type: 'reel', likes: 200 }),
     ] });
     assert.strictEqual(R.topVideo([r], 'instagram', nowMs).post.id, 'reel');
+  });
+  await test('content records keep likes, comments, and views as separate facts', () => {
+    const r = rec({ recentPosts: [
+      post(1, { id: 'liked', type: 'image', likes: 900, comments: 20 }),
+      post(2, { id: 'commented', type: 'carousel', likes: 100, comments: 250 }),
+      post(3, { id: 'viewed', type: 'reel', likes: 80, comments: 10, views: 5000 }),
+    ] });
+    assert.strictEqual(R.mostLiked([r], 'instagram', nowMs).post.id, 'liked');
+    assert.strictEqual(R.mostCommented([r], 'instagram', nowMs).post.id, 'commented');
+    assert.strictEqual(R.mostViewed([r], 'instagram', nowMs).post.id, 'viewed');
+  });
+  await test('per-profile analytics recompute totals, medians, mix, and coverage', () => {
+    const r = rec({ followers: 1000, recentPosts: [
+      post(1, { id: 'a', type: 'image', likes: 100, comments: 10 }),
+      post(2, { id: 'b', type: 'carousel', likes: 300, comments: 5 }),
+      post(3, { id: 'c', type: 'reel', likes: 50, comments: 50, views: 1000 }),
+      post(4, { id: 'd', type: 'video', likes: 20, comments: 100, views: 500 }),
+    ] });
+    const analytics = R.profileAnalytics([r], 'instagram', nowMs)[0];
+    assert.strictEqual(analytics.postsInWindow, 4);
+    assert.strictEqual(analytics.totalLikes, 470);
+    assert.strictEqual(analytics.totalComments, 165);
+    assert.strictEqual(analytics.medianLikes, 75);
+    assert.strictEqual(analytics.medianComments, 30);
+    assert.strictEqual(analytics.medianInteractions, 115);
+    assert.strictEqual(analytics.interactionRate, 0.115);
+    assert.strictEqual(analytics.videoCount, 2);
+    assert.strictEqual(analytics.carouselCount, 1);
+    assert.strictEqual(analytics.imageCount, 1);
+    assert.strictEqual(analytics.totalShares, null);
+    assert.deepStrictEqual(analytics.metricCoverage, {
+      posts: 4, likes: 4, comments: 4, shares: 0, videos: 2, videoViews: 2,
+    });
+  });
+  await test('team format analytics never mixes unsupported values into zero', () => {
+    const r = rec({ recentPosts: [
+      post(1, { id: 'a', type: 'image', likes: 100, comments: 10, views: null }),
+      post(2, { id: 'b', type: 'image', likes: 200, comments: null, views: null }),
+      post(3, { id: 'c', type: 'reel', likes: 50, comments: 5, views: 1000 }),
+    ] });
+    const formats = new Map(R.formatAnalytics([r], 'instagram', nowMs).map(row => [row.type, row]));
+    assert.strictEqual(formats.get('image').posts, 2);
+    assert.strictEqual(formats.get('image').comparablePosts, 1);
+    assert.strictEqual(formats.get('image').medianInteractions, 110);
+    assert.strictEqual(formats.get('image').medianViews, null);
+    assert.strictEqual(formats.get('reel').medianViews, 1000);
+  });
+  await test('fresh normalized records can rebuild every derived analytics field', () => {
+    const snapshot = {
+      meta: {
+        source: 'live',
+        measurementVersion: 3,
+        capturedAt: now,
+        growthBaselineAt: null,
+      },
+      records: [rec()],
+      leaderboards: {},
+      trend: [],
+    };
+    rebuildDerived(snapshot, null, () => ({
+      followersCount: 1000,
+      postsCount: 1,
+      _postsQuerySucceeded: true,
+      _postsOwnershipComplete: true,
+      _postsLookbackDays: 31,
+      _postsResultLimit: 200,
+      recentPosts: [rawPost(1, { likesCount: -1, commentsCount: 5 })],
+    }));
+    assert.strictEqual(snapshot.meta.validation.status, 'pending');
+    assert.strictEqual(snapshot.leaderboards.instagram.analytics.length, 1);
+    assert.strictEqual(snapshot.records[0].recentPosts[0].likes, null);
+    assert.ok(snapshot.leaderboards.instagram.mostCommented);
+    assert.ok(snapshot.leaderboards.instagram.formatAnalytics.length > 0);
   });
   await test('snapshot validator independently recomputes every cadence row', () => {
     const records = [rec()];

@@ -1,6 +1,6 @@
 # Kirpa Social Leaderboard
 
-A weekly leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, posting participation, follower growth, fair engagement and cadence rankings, top posts, team benchmarks, and a next action for every person.
+A weekly leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, posting participation, follower growth, fair engagement and cadence rankings, content records, format performance, and a detailed analytics view for every person.
 
 It runs on a schedule with **no logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; the weekly pull is a GitHub Action.
 
@@ -16,6 +16,9 @@ It runs on a schedule with **no logins and no passwords**. It reads only the pub
 - **The headline post board ranks interactions, not views.** Instagram reports view counts on only ~19% of videos here, and mostly older ones (median 63 days old, versus 3 days for posts without). A view-ranked board therefore crowned year-old content and made anyone posting only recently ineligible to win. Views still appear, on their own card, labelled with how little of the data they cover.
 - **Unknown is never scored as zero.** A person with a real profile but no posts yet in the window has no engagement rate — that is missing data, not bad performance. The overall score requires all three inputs; otherwise the person is shown *unranked* with the reason.
 - **Engagement uses comparable public inputs.** Instagram share counts are not consistently public, so supported interactions means likes plus comments. A post missing either value is excluded from engagement, never treated as zero.
+- **Every profile has its own analytics view.** When the 30-day window is complete, the dashboard exposes posts/week, active days, median post gap, median and total likes/comments, public video views, interaction and comment rates, format mix, best posts, and metric-coverage counts. Legacy snapshots can expose the same fields only as a clearly labelled directional sample.
+- **Content records answer separate questions.** Highest likes, highest comments, most public video views, top supported interactions, and top video interactions are not collapsed into one opaque “best post” claim.
+- **CSV export is reproducible.** The roster explorer can export all people and all supported analytics, including confidence and metric-coverage columns, for independent checking.
 - **TikTok and Facebook are not active yet.** Verified registry entries remain recorded for future adapters, but the production pull and dashboard rankings are Instagram-only.
 
 The product brief and complete scorecard are in [`PRODUCT_PLAN.md`](PRODUCT_PLAN.md).
@@ -69,7 +72,7 @@ handles.json ──► src/ingest.js ──► src/provider.js  (Apify | Mock)  
 ```
 
 - **`handles.json`** — the roster (seeded from kirpaproperties.com). Names + roles + per-platform handles + a `confirmed` flag. Back-office roles are `dashboardRelevant: false`.
-- **`src/rank.js`** — pure ranking engine. Single source of truth, used by both ingest and the tests. No I/O.
+- **`src/rank.js`** — pure ranking and analytics engine. Single source of truth for leaderboards, per-person metrics, format analysis, content records, and coverage. Used by both ingest and the tests. No I/O.
 - **`src/normalize.js`** — maps any provider's payload into one record shape. Missing fields become `null`, never invented.
 - **`src/provider.js`** — the adapter. `MockProvider` (offline/tests/sample) and `ApifyProvider` (live). The live provider batches confirmed Instagram profiles and performs one date-bounded post query per handle.
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
