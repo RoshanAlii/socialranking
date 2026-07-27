@@ -6,7 +6,10 @@ const PROFILE_ACTOR = process.env.APIFY_IG_PROFILE_ACTOR || 'apify~instagram-pro
 const POSTS_ACTOR = process.env.APIFY_IG_POSTS_ACTOR || 'apify~instagram-scraper';
 const INSTAGRAM_POST_RESULTS_LIMIT = Number(process.env.APIFY_IG_POST_RESULTS_LIMIT || 200);
 const INSTAGRAM_POST_LOOKBACK_DAYS = Number(process.env.APIFY_IG_POST_LOOKBACK_DAYS || 31);
-const POST_FETCH_CONCURRENCY = Number(process.env.APIFY_IG_POST_CONCURRENCY || 5);
+// The default Apify account limit is 16 GB and this Actor requests 4 GB per
+// run. Keep one slot of headroom so profile-run cleanup cannot starve a post
+// pull with actor-memory-limit-exceeded errors.
+const POST_FETCH_CONCURRENCY = Number(process.env.APIFY_IG_POST_CONCURRENCY || 3);
 
 function seed(str) {
   let h = 2166136261;
