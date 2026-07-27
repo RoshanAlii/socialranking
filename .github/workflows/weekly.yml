@@ -33,6 +33,15 @@ jobs:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
         run: node src/ingest.js
 
+      - name: Quarantine candidate snapshot and raw captures
+        uses: actions/upload-artifact@v4
+        with:
+          name: instagram-candidate-${{ github.run_id }}
+          path: |
+            data/latest.json
+            data/raw
+          retention-days: 7
+
       - name: Validate and stamp every published answer
         run: node src/validate-snapshot.js --stamp
 
