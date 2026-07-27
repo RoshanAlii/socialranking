@@ -2,7 +2,7 @@
 
 function n(x) {
   const value = typeof x === 'string' ? Number(x.replace(/[, ]/g, '')) : x;
-  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
 }
 function s(x) { return x === 0 || x ? String(x) : null; }
 function canonicalHandle(value) {
