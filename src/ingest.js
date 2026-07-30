@@ -132,6 +132,8 @@ async function main() {
     meta: {
       company: registry.company,
       orn: registry.orn,
+      rosterVersion: registry.rosterVersion,
+      rosterSourceSha256: registry.sourceSha256,
       measurementVersion: 3,
       capturedAt,
       source,
@@ -147,8 +149,9 @@ async function main() {
       postsActor: POSTS_ACTOR,
       validation: {
         status: 'pending',
-        validatorVersion: 1,
+        validatorVersion: 2,
         snapshotCapturedAt: capturedAt,
+        rosterVersion: registry.rosterVersion,
       },
       note: source === 'sample'
         ? 'SAMPLE data for layout testing only.'

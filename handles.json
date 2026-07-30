@@ -1,13 +1,18 @@
 {
   "company": "Kirpa Properties L.L.C",
   "orn": "49046",
-  "source": "kirpaproperties.com — 'Our Team' section, captured 2026-07-21",
+  "source": "kirpa_team_instagram_handles.xlsx — roster and Instagram Match Status supplied by Kirpa, imported 2026-07-30",
+  "rosterVersion": "2026-07-30-kirpa-workbook-v1",
+  "rosterRowCount": 44,
+  "sourceSha256": "df845aa20f4edd4e3e792c95c4da20d4e049b77dc1b3afb7da3124b768e25c8f",
   "platforms": [
     "instagram",
     "tiktok",
     "facebook"
   ],
   "notes": [
+    "The 2026-07-30 Kirpa workbook is authoritative for employee names, roles, Instagram handles, and Match Status. It supersedes earlier discovery notes wherever they conflict.",
+    "confirmed=true now means the workbook says Confirmed. A Not Found row keeps the Instagram handle null and cannot enter measurements.",
     "Handles are NOT published on the official site — only company social links exist. Each handle below must be resolved and confirmed before any live pull.",
     "dashboardRelevant is a role-based heuristic (client-facing sales + content + founders = true; back-office = false). Override freely.",
     "Nothing enters live metrics until confirmed=true. private=true or unresolved handles are shown in the dashboard as a labeled state, never estimated.",
@@ -221,14 +226,14 @@
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": "riya.kirpa",
+        "instagram": null,
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": true,
-      "sourcedFrom": "Verified Apify run iBxYQI8abN2d2fCjM / bVp4IROoKZ9EONJwt, 2026-07-23 against the live public profile. Evidence — bio: Real estate agent @kirpa.properties, riya@kirpaproperties.com.",
-      "evidenceClass": "bio"
+      "confirmed": false,
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Not Found. This supersedes the earlier candidate.",
+      "evidenceClass": "kirpa-workbook-not-found"
     },
     {
       "name": "Geethika Sri Vyshnavi",
@@ -338,10 +343,9 @@
         "facebook": null
       },
       "private": null,
-      "confirmed": false,
-      "sourcedFrom": "Verified 2026-07-23 through the public profile and its linked Threads identity. Evidence: sarafaisal.kirpa publicly describes the Kirpa leadership and tags @kirpa.properties; 26K-follower Instagram profile is live. Roster-to-profile surname is not displayed, so this match should be rechecked during the next HR roster audit.",
-      "evidenceClass": "posting-context",
-      "needsHumanConfirmation": true
+      "confirmed": true,
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Confirmed.",
+      "evidenceClass": "kirpa-workbook"
     },
     {
       "name": "Ritika Kodwani",
@@ -407,25 +411,23 @@
         "facebook": null
       },
       "private": null,
-      "confirmed": false,
-      "sourcedFrom": "Verified 2026-07-23 from live public Instagram metadata and Kirpa-related posts. Evidence: exact public profile name \"Nikita Lal Tekwani | Dubai Real Estate\"; posts explicitly reference Kirpa Properties and @kirpa.properties. This supersedes the rejected empty shell nikita.kirpa.",
-      "evidenceClass": "posting-context",
-      "needsHumanConfirmation": true
+      "confirmed": true,
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Confirmed.",
+      "evidenceClass": "kirpa-workbook"
     },
     {
       "name": "Sleeja Misra",
       "role": "Consultant – Offplan Sales",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": "sleeja.kirpa",
+        "instagram": null,
         "tiktok": null,
         "facebook": null
       },
       "private": null,
       "confirmed": false,
-      "sourcedFrom": "Verified 2026-07-23 from indexed public Instagram posts. Evidence: exact name Sleeja Misra, handle sleeja.kirpa, Dubai property content, and consistent public contact details across the profile's posts.",
-      "evidenceClass": "posting-context",
-      "needsHumanConfirmation": true
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Not Found. The earlier candidate is not treated as confirmed.",
+      "evidenceClass": "kirpa-workbook-not-found"
     },
     {
       "name": "Lovepreet Singh",
@@ -505,10 +507,9 @@
         "facebook": null
       },
       "private": null,
-      "confirmed": false,
-      "sourcedFrom": "Handle supplied by Kirpa 2026-07-22, then verified against the live public profile on 2026-07-23. Evidence — bio names no employer (\"Real Estate Agent | Dubai\"), so the bio gate does NOT pass. Accepted instead on posting evidence: posts geotagged to the Kirpa Properties office and captions thanking @sahilbedi.kirpa and @saloni.kirpa for bringing him to Dubai. Weaker than a self-declared bio — worth a human confirmation.",
-      "evidenceClass": "posting-context",
-      "needsHumanConfirmation": true
+      "confirmed": true,
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Confirmed.",
+      "evidenceClass": "kirpa-workbook"
     },
     {
       "name": "Param Singh",
@@ -527,14 +528,14 @@
       "role": "Content Executive",
       "dashboardRelevant": true,
       "handles": {
-        "instagram": "anmoll.dxb",
+        "instagram": null,
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": true,
-      "sourcedFrom": "Verified 2026-07-23 from the live public profile. Evidence: public name \"Anmol Singh | Dubai Creator\" and bio \"Content Executive @kirpa.properties\". A second personal account exists; anmoll.dxb is selected because it is the Kirpa-facing creator profile.",
-      "evidenceClass": "bio"
+      "confirmed": false,
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Not Found. This supersedes the earlier candidate.",
+      "evidenceClass": "kirpa-workbook-not-found"
     },
     {
       "name": "Amandeep Singh",
@@ -553,12 +554,14 @@
       "role": "HR Executive",
       "dashboardRelevant": false,
       "handles": {
-        "instagram": null,
+        "instagram": "janisha.kirpa",
         "tiktok": null,
         "facebook": null
       },
       "private": null,
-      "confirmed": false
+      "confirmed": true,
+      "sourcedFrom": "Kirpa workbook imported 2026-07-30 — Match Status: Confirmed.",
+      "evidenceClass": "kirpa-workbook"
     },
     {
       "name": "Inderjeet Kaur",

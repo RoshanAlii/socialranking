@@ -5,7 +5,7 @@ const path = require('path');
 const R = require('./rank');
 const N = require('./normalize');
 
-const VALIDATOR_VERSION = 1;
+const VALIDATOR_VERSION = 2;
 
 function safeRawName(record) {
   return `${record.platform}_${record.handle}`.replace(/[^a-zA-Z0-9._-]/g, '_') + '.json';
@@ -29,6 +29,7 @@ function validateSnapshot(snapshot, registry, opts = {}) {
   const minCompleteCoverage = opts.minCompleteCoverage === undefined ? 0.8 : opts.minCompleteCoverage;
   const rawExists = opts.rawExists || (() => true);
   const rawLoader = opts.rawLoader || null;
+  const rosterVersion = registry?.rosterVersion || null;
 
   if (meta.source !== 'live') errors.push(`source must be live, got ${meta.source || 'missing'}`);
   if (!/apify/i.test(meta.provider || '')) errors.push('provider must identify Apify');
@@ -39,6 +40,12 @@ function validateSnapshot(snapshot, registry, opts = {}) {
   }
   if (meta.validation && meta.validation.snapshotCapturedAt !== meta.capturedAt) {
     errors.push('validation marker does not belong to this snapshot');
+  }
+  if (rosterVersion && meta.rosterVersion !== rosterVersion) {
+    errors.push(`snapshot roster version ${meta.rosterVersion || 'missing'} does not match registry ${rosterVersion}`);
+  }
+  if (rosterVersion && meta.validation && meta.validation.rosterVersion !== rosterVersion) {
+    errors.push('validation marker does not belong to the current roster');
   }
 
   const captured = new Date(meta.capturedAt).getTime();
@@ -216,6 +223,7 @@ function main() {
       status: 'passed',
       validatorVersion: VALIDATOR_VERSION,
       snapshotCapturedAt: snapshot.meta.capturedAt,
+      rosterVersion: registry.rosterVersion,
       validatedAt: new Date().toISOString(),
     };
     const pendingPath = path.join(root, 'data', '.latest.validated.json');

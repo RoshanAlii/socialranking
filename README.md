@@ -1,8 +1,8 @@
 # Kirpa Social Leaderboard
 
-A weekly leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, posting participation, follower growth, fair engagement and cadence rankings, content records, format performance, and a detailed analytics view for every person.
+A daily leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, posting participation, follower growth, fair engagement and cadence rankings, content records, format performance, and a detailed analytics view for every person.
 
-It runs on a schedule with **no logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; the weekly pull is a GitHub Action.
+It runs on a schedule with **no logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; the daily pull is a GitHub Action.
 
 ---
 
@@ -11,6 +11,7 @@ It runs on a schedule with **no logins and no passwords**. It reads only the pub
 - **Public-surface data, not an official API.** Meta's official Instagram API only reads accounts that authorise your app; it cannot read arbitrary public profiles. So this reads the same public profile/post numbers a logged-out visitor sees, through a public-data provider (Apify by default). It is a **snapshot**, not real-time, and it can break if a platform changes its markup.
 - **Public accounts only.** A private account shows as `Private` (counts only, no post data) and is **never estimated** into a ranking.
 - **No fabricated handles.** Name-to-handle matching is where a tool like this quietly pulls a stranger's stats. So handles are **confirm-gated**: every handle sits `confirmed: false` until a human verifies it. Nothing is pulled until then.
+- **Roster-locked and freshness-gated.** A validator stamp is valid only for the exact roster version it measured. The public board stops rankings and individual metrics after 36 hours or immediately after the roster changes.
 - **One shared measurement window.** Every rate metric is computed over the same trailing **30 days** for everyone. The pipeline fetches a fixed number of posts per person, which silently gave one person a 4-day window and another a 485-day window; those were never comparable and are no longer compared.
 - **Engagement rate uses the median post, not the mean.** A reel that escapes the follower base can land more likes than the account has followers — one such post produced a reported engagement rate of *86.87%* before this changed. The median describes the typical post, which is the thing a person can actually act on. Posts that out-reach the whole following are counted and surfaced separately, as the signal they are.
 - **The headline post board ranks interactions, not views.** Instagram reports view counts on only ~19% of videos here, and mostly older ones (median 63 days old, versus 3 days for posts without). A view-ranked board therefore crowned year-old content and made anyone posting only recently ineligible to win. Views still appear, on their own card, labelled with how little of the data they cover.
@@ -25,8 +26,9 @@ The product brief and complete scorecard are in [`PRODUCT_PLAN.md`](PRODUCT_PLAN
 
 ### Current profile coverage
 
-- **Instagram:** 30 of 38 dashboard-relevant staff have verified Kirpa-facing profiles.
-- **Candidate handles:** 4 contextual matches are recorded but excluded from pulls and rankings until a human confirms them — Sara Banu, Nikita Lal Tekwani, Sleeja Misra, and Samaksh Malhotra.
+- **Full roster:** 44 employees from the Kirpa workbook are visible in the roster explorer; six back-office roles are clearly labelled as excluded from rankings.
+- **Instagram:** 31 of 38 dashboard-relevant staff have workbook-confirmed Kirpa-facing profiles.
+- **Not found:** 7 dashboard-relevant staff have no confirmed Instagram handle — Riya Bhardwaj, Arbaaz Ali Khan, Sleeja Misra, Ameer Agha Shirazi, Param Singh, Anmol Singh, and Amandeep Singh.
 - **TikTok:** 1 of 38 is verified — Manpreet Kaur (`@manpreet.kirpa`). The other 37 remain unconnected until public Kirpa evidence is found or the team confirms their handles.
 - **Facebook:** 1 Page is verified — Manpreet Kirpa. Personal Facebook profiles remain out of scope.
 
@@ -71,14 +73,14 @@ handles.json ──► src/ingest.js ──► src/provider.js  (Apify | Mock)  
                                        (leaderboards)     data/history/*      (GitHub Pages)
 ```
 
-- **`handles.json`** — the roster (seeded from kirpaproperties.com). Names + roles + per-platform handles + a `confirmed` flag. Back-office roles are `dashboardRelevant: false`.
+- **`handles.json`** — the authoritative 44-person roster imported from `kirpa_team_instagram_handles.xlsx`, with a source hash and roster version. Names + roles + per-platform handles + a `confirmed` flag. Back-office roles remain visible in the full roster but are `dashboardRelevant: false`.
 - **`src/rank.js`** — pure ranking and analytics engine. Single source of truth for leaderboards, per-person metrics, format analysis, content records, and coverage. Used by both ingest and the tests. No I/O.
 - **`src/normalize.js`** — maps any provider's payload into one record shape. Missing fields become `null`, never invented.
 - **`src/provider.js`** — the adapter. `MockProvider` (offline/tests/sample) and `ApifyProvider` (live). The live provider batches confirmed Instagram profiles and performs one date-bounded post query per handle.
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards → write `data/latest.json` + a dated history snapshot.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
-- **`.github/workflows/weekly.yml`** — weekly cron (Mondays 06:00 UTC) plus a manual trigger. Unit-test gate → Instagram pull → full answer recomputation and validation stamp → tests → commit. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers.
+- **`.github/workflows/weekly.yml`** — daily cron (04:00 UTC) plus a manual trigger. Unit-test gate → Instagram pull → full answer recomputation and roster-bound validation stamp → tests → commit. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers.
 
 ---
 
@@ -87,7 +89,7 @@ handles.json ──► src/ingest.js ──► src/provider.js  (Apify | Mock)  
 1. **Add handles.** Fill `handles.json`: add the Instagram handle and set `confirmed: true` only after Kirpa-owned evidence or direct human confirmation. Leave back-office `dashboardRelevant: false`.
 2. **Add the provider key.** Create an [Apify](https://apify.com) account, copy your API token, and add it as a repo secret named `APIFY_TOKEN` (Settings → Secrets → Actions).
 3. **Enable Pages.** Settings → Pages → deploy from `main`. The dashboard is `index.html`.
-4. **Run it.** Actions → *Weekly social snapshot* → *Run workflow*. It writes `data/latest.json` and the page goes live. After that it runs every Monday.
+4. **Run it.** Actions → *Daily social snapshot* → *Run workflow*. It writes `data/latest.json` and the page goes live. After that it runs every day.
 
 ### Live-only policy
 
@@ -116,7 +118,7 @@ python3 -m http.server                         # then open http://localhost:8000
 The profile-details pull is batched. Complete cadence requires one date-bounded Instagram post
 query per verified profile, run with bounded concurrency. The provider charges according to actor
 result volume, so check the selected Apify actors' current pricing before increasing coverage or
-the weekly cadence.
+the daily cadence.
 
 ## Swapping the provider
 

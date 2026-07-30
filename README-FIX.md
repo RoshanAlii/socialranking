@@ -48,4 +48,4 @@ Copy these paths into the repository root and commit to `main`:
 - `.github/workflows/weekly.yml`
 - `index.html`
 
-The workflow runs automatically when the source files reach `main`, using the existing `APIFY_TOKEN`. It writes a new version-3 `data/latest.json` after validation.
+The workflow runs daily when the source files reach `main`, using the existing `APIFY_TOKEN`. It writes a new version-3 `data/latest.json` only after the capture matches the current roster version and passes validation.

@@ -1,19 +1,24 @@
 Validation completed
 ====================
 
-JavaScript test suite: 29 passed, 0 failed
-Independent Python cross-check: matched the JavaScript audit for 233 observed posts,
-29 confirmed public profiles, highest supported interactions, highest likes,
-highest comments, highest public video views, and zero publicly reported shares
+JavaScript test suite: 34 passed, 0 failed
+Workbook reconciliation: 44 of 44 employees matched by name, role, Instagram
+handle, and Match Status; 0 differences remained
 JavaScript syntax checks: provider, normalize, rank, ingest, validator and dashboard script passed
+Browser check: all 44 roster rows rendered; the superseded snapshot exposed
+no follower, activity, cadence, or engagement values
 
 Formula checked:
 postsPerWeek = postsInWindow * 7 / 30
 
 Live limitation:
-The existing repository snapshot is based on the profile scraper's 12-post payload and cannot be accurately recalculated. The new workflow must run once with APIFY_TOKEN to create the correct values for all profiles. Until that succeeds, the updated dashboard hides old cadence values rather than showing estimates.
+The saved 2026-07-27 snapshot predates roster version
+2026-07-30-kirpa-workbook-v1. The dashboard now pauses all rankings and
+individual metrics until the daily workflow completes a fresh Apify pull and
+validator-v2 stamp against the current roster. Public Instagram data is a
+point-in-time snapshot and cannot be guaranteed real-time.
 
-New answer coverage:
-Per-profile analytics, content records, format medians, metric coverage, and
-leaderboards are stored in the snapshot and rejected by the validator if they
-do not exactly match a full recomputation from normalized raw captures.
+Release gates:
+Snapshots must match the exact roster version, pass a full recomputation from
+normalized raw captures, and be no more than 36 hours old on the public board.
+The GitHub workflow now runs daily at 04:00 UTC.

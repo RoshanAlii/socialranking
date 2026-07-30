@@ -232,6 +232,33 @@
     }
 
     .main { position: relative; z-index: 2; margin-top: -23px; padding-bottom: 72px; }
+    .data-alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-top: 12px;
+      padding: 12px 15px;
+      border: 1px solid #e8c48e;
+      border-radius: var(--radius-sm);
+      background: #fff4e3;
+      color: #6f4610;
+      box-shadow: var(--shadow-soft);
+      font-size: 10px;
+    }
+    .data-alert::before {
+      content: "!";
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--amber);
+      color: #fff;
+      font-weight: 800;
+    }
+    .data-alert b { display: block; color: var(--ink); font-size: 11px; }
+    .data-alert span { display: block; margin-top: 2px; }
     .truth-strip {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1270,6 +1297,8 @@
     .status.incomplete { background: #fbf0df; color: var(--amber); }
     .status.context { background: #fff0e9; color: var(--orange-deep); }
     .status.unconfirmed { background: #fce9e2; color: var(--orange-deep); }
+    .status.refresh { background: #fbf0df; color: var(--amber); }
+    .status.excluded { background: #f0ece8; color: var(--dust); }
     .next-move { max-width: 190px; color: var(--dust); font-size: 9px; }
     .no-results { padding: 30px !important; color: var(--dust); text-align: center !important; }
     .roster-more {
@@ -1532,10 +1561,11 @@
       <article class="kpi"><span class="micro">Activity</span><b>—</b><span>Loading 30-day window</span></article>
       <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
     </section>
+    <aside class="data-alert reveal" id="data-alert" role="status" hidden style="--delay:55ms"></aside>
     <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
-      <div class="truth-item"><span class="truth-index">01</span><b>Context is labeled</b><span>Legacy observations never masquerade as a fair ranking.</span></div>
+      <div class="truth-item"><span class="truth-index">01</span><b>Roster-locked</b><span>A snapshot cannot rank after the employee registry changes.</span></div>
       <div class="truth-item"><span class="truth-index">02</span><b>Unknown stays unknown</b><span>Missing values are shown as —, never invented as zero.</span></div>
-      <div class="truth-item"><span class="truth-index">03</span><b>Fair ranking gate</b><span>Official scores still require one audited 30-day window.</span></div>
+      <div class="truth-item"><span class="truth-index">03</span><b>Freshness gate</b><span>Rankings stop after 36 hours until a new audited pull succeeds.</span></div>
     </aside>
 
     <section class="section reveal" aria-labelledby="arena-title" style="--delay:100ms">
@@ -1633,6 +1663,7 @@
               <option value="measured">Measured</option>
               <option value="unranked">Unranked</option>
               <option value="attention">Needs attention</option>
+              <option value="excluded">Not ranked by role</option>
             </select>
           </label>
           <label class="field">
@@ -1676,8 +1707,8 @@
       <summary>How this snapshot stays fair and honest</summary>
       <div class="method-grid">
         <div class="method-item">
-          <b>Public snapshot, not Insights</b>
-          <p>Numbers come from public profile and post surfaces through the named provider. They are point-in-time observations, not official Instagram Insights or real-time telemetry.</p>
+          <b>Roster and freshness lock</b>
+          <p>Every published snapshot must match the current Kirpa roster version. Rankings are withheld when that lock fails or the capture is more than 36 hours old.</p>
         </div>
         <div class="method-item">
           <b>One comparable window</b>
@@ -1717,6 +1748,7 @@
     let DATA = null;
     let REGISTRY = null;
     let ROSTER_EXPANDED = false;
+    const MAX_PUBLIC_AGE_HOURS = 36;
 
     const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
       '&': '&amp;',
@@ -1754,10 +1786,46 @@
     const profileUrl = handle => handle
       ? `https://www.instagram.com/${encodeURIComponent(String(handle).replace(/^@/, ''))}/`
       : '';
+    const canonicalHandle = handle => String(handle || '').replace(/^@/, '').trim().toLowerCase();
     const igRecords = () => DATA?.records?.filter(record => record.platform === 'instagram') || [];
     const board = () => DATA?.leaderboards?.instagram || {};
-    const isLegacy = () => DATA?.meta?.validation?.status === 'legacy';
-    const isAudited = () => (
+    const isLegacy = () => DATA?.meta?.validation?.status === 'legacy' && snapshotMatchesRoster();
+    const snapshotAgeHours = () => {
+      const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
+      return Number.isFinite(timestamp) ? (Date.now() - timestamp) / 3600000 : Infinity;
+    };
+    const registryIsValid = () => {
+      const employees = REGISTRY?.employees || [];
+      const names = employees.map(employee => employee.name);
+      const confirmedHandles = employees
+        .filter(employee => employee.confirmed === true)
+        .map(employee => canonicalHandle(employee.handles?.instagram))
+        .filter(Boolean);
+      return Boolean(
+        REGISTRY?.rosterVersion &&
+        Number.isInteger(REGISTRY?.rosterRowCount) &&
+        employees.length === REGISTRY.rosterRowCount &&
+        new Set(names).size === names.length &&
+        new Set(confirmedHandles).size === confirmedHandles.length &&
+        employees.every(employee => employee.confirmed !== true || canonicalHandle(employee.handles?.instagram))
+      );
+    };
+    const snapshotMatchesRoster = () => {
+      if (!registryIsValid() || DATA?.meta?.rosterVersion !== REGISTRY.rosterVersion) return false;
+      const relevant = relevantEmployees();
+      const records = igRecords();
+      if (records.length !== relevant.length) return false;
+      const recordsByName = new Map(records.map(record => [record.name, record]));
+      if (recordsByName.size !== records.length) return false;
+      return relevant.every(employee => {
+        const record = recordsByName.get(employee.name);
+        if (!record) return false;
+        const expectedHandle = canonicalHandle(employee.handles?.instagram);
+        if (canonicalHandle(record.handle) !== expectedHandle) return false;
+        return record.resolved !== true || (employee.confirmed === true && Boolean(expectedHandle));
+      });
+    };
+    const hasPassedValidator = () => (
       DATA?.meta?.source === 'live' &&
       /apify/i.test(DATA?.meta?.provider || '') &&
       DATA?.meta?.measurementVersion === 3 &&
@@ -1765,12 +1833,16 @@
       DATA.meta.platforms.length === 1 &&
       DATA.meta.platforms[0] === 'instagram' &&
       DATA?.meta?.validation?.status === 'passed' &&
-      DATA.meta.validation.validatorVersion === 1 &&
+      DATA.meta.validation.validatorVersion === 2 &&
       DATA.meta.validation.snapshotCapturedAt === DATA.meta.capturedAt &&
+      DATA.meta.validation.rosterVersion === REGISTRY?.rosterVersion &&
+      snapshotMatchesRoster() &&
       typeof board()?.coverage?.formula === 'string' &&
       board().coverage.formula.includes('7 ÷ 30') &&
       Array.isArray(board().coverage?.cadenceAudit)
     );
+    const isAudited = () => hasPassedValidator() && snapshotAgeHours() >= -0.1 && snapshotAgeHours() <= MAX_PUBLIC_AGE_HOURS;
+    const isExpired = () => hasPassedValidator() && snapshotAgeHours() > MAX_PUBLIC_AGE_HOURS;
     const auditMap = () => new Map(
       (isAudited() ? board().coverage?.cadenceAudit || [] : []).map(row => [row.handle, row])
     );
@@ -1913,12 +1985,14 @@
       if (isAudited()) {
         return (board().analytics || []).find(row => row.handle === person.handle) || null;
       }
-      return detailedAnalytics(
-        person.record,
-        observedPosts(person.record),
-        false,
-        'Fixed-size legacy response; this is directional account context, not a complete 30-day window.'
-      );
+      return isLegacy()
+        ? detailedAnalytics(
+            person.record,
+            observedPosts(person.record),
+            false,
+            'Fixed-size legacy response; this is directional account context, not a complete 30-day window.'
+          )
+        : null;
     };
     const relativeAge = raw => {
       const timestamp = Date.parse(raw || '');
@@ -1940,45 +2014,47 @@
       if (hours < -0.1) return { short: 'Future', detail: 'Snapshot time is ahead of this device', tone: 'stale' };
       if (hours < 1) return { short: 'Now', detail: 'Captured less than one hour ago', tone: 'healthy' };
       if (hours < 24) return { short: `${Math.floor(hours)}h`, detail: `Snapshot ${Math.floor(hours)} hours old`, tone: 'healthy' };
+      if (hours <= MAX_PUBLIC_AGE_HOURS) {
+        return { short: `${Math.floor(hours)}h`, detail: `Snapshot ${Math.floor(hours)} hours old`, tone: 'attention' };
+      }
       const days = Math.floor(hours / 24);
       return {
         short: `${days}d`,
         detail: `Snapshot ${days} day${days === 1 ? '' : 's'} old`,
-        tone: days <= 3 ? 'attention' : 'stale'
+        tone: 'stale'
       };
     }
 
+    function allEmployees() {
+      return REGISTRY?.employees || [];
+    }
+
     function relevantEmployees() {
-      return (REGISTRY?.employees || []).filter(employee => employee.dashboardRelevant !== false);
+      return allEmployees().filter(employee => employee.dashboardRelevant !== false);
     }
 
     function rosterPeople() {
       const people = new Map();
-      for (const employee of relevantEmployees()) {
+      for (const employee of allEmployees()) {
         people.set(employee.name, {
           name: employee.name,
           role: employee.role || '',
           handle: employee.handles?.instagram || null,
+          dashboardRelevant: employee.dashboardRelevant !== false,
           confirmed: employee.confirmed === true,
           needsHumanConfirmation: employee.needsHumanConfirmation === true,
           registryPrivate: employee.private === true,
+          recordMismatch: false,
           record: null
         });
       }
       for (const record of igRecords()) {
-        if (!people.has(record.name)) {
-          people.set(record.name, {
-            name: record.name,
-            role: record.role || '',
-            handle: record.handle || null,
-            confirmed: true,
-            needsHumanConfirmation: false,
-            registryPrivate: false,
-            record: null
-          });
-        }
         const person = people.get(record.name);
-        person.handle = record.handle || person.handle;
+        if (!person) continue;
+        if (canonicalHandle(record.handle) !== canonicalHandle(person.handle)) {
+          person.recordMismatch = true;
+          continue;
+        }
         person.record = record;
       }
       return [...people.values()];
@@ -1986,10 +2062,16 @@
 
     function statusFor(person, audit, engagementRow) {
       const record = person.record;
+      if (!person.dashboardRelevant) return { key: 'excluded', className: 'excluded', label: 'Not ranked · role excluded' };
       if (!person.handle) return { key: 'attention', className: 'attention', label: 'Handle needed' };
       if (!person.confirmed || person.needsHumanConfirmation) {
         return { key: 'attention', className: 'unconfirmed', label: 'Handle confirmation needed' };
       }
+      if (!snapshotMatchesRoster() || person.recordMismatch) {
+        return { key: 'attention', className: 'refresh', label: 'Roster changed · refresh required' };
+      }
+      if (isExpired()) return { key: 'attention', className: 'refresh', label: 'Snapshot expired · refresh required' };
+      if (!hasPassedValidator()) return { key: 'attention', className: 'refresh', label: 'Snapshot verification required' };
       if (person.registryPrivate || record?.isPrivate === true) return { key: 'attention', className: 'private', label: 'Private' };
       if (!record) return { key: 'attention', className: 'awaiting', label: 'Awaiting pull' };
       if (record.resolved !== true) return { key: 'attention', className: 'attention', label: 'Unresolved' };
@@ -2008,11 +2090,16 @@
       const age = snapshotAge();
       const audited = isAudited();
       const sample = meta.source === 'sample';
+      const rosterOk = snapshotMatchesRoster();
       let label = 'Awaiting audited pull';
       let mode = 'warning';
       if (sample) {
         label = 'Sample data';
         mode = 'sample';
+      } else if (!registryIsValid()) {
+        label = 'Roster integrity error';
+      } else if (!rosterOk) {
+        label = 'Roster updated · refresh required';
       } else if (meta.validation?.status === 'legacy') {
         label = 'Legacy context only';
         mode = 'warning';
@@ -2020,8 +2107,9 @@
         label = 'Validated snapshot';
         mode = 'live';
       } else if (audited) {
-        label = age.tone === 'stale' ? 'Validated · stale' : 'Validated · aging';
-        mode = 'warning';
+        label = 'Validated · refresh due soon';
+      } else if (isExpired()) {
+        label = 'Validated · expired';
       }
       const captured = meta.capturedAt
         ? new Date(meta.capturedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
@@ -2030,6 +2118,27 @@
         <span class="source-status ${mode}"><span class="status-dot"></span>${esc(label)}</span>
         <div>${esc(captured)} · ${esc(age.detail)}</div>
       `;
+    }
+
+    function renderDataAlert() {
+      const alert = byId('data-alert');
+      let title = '';
+      let detail = '';
+      if (!registryIsValid()) {
+        title = 'Roster integrity check failed';
+        detail = 'Rankings and individual metrics are withheld because the published employee registry is incomplete or internally inconsistent.';
+      } else if (!snapshotMatchesRoster()) {
+        title = 'Employee roster updated — performance data paused';
+        detail = `Roster ${REGISTRY.rosterVersion} does not match this saved Instagram capture. The next successful daily pull will restore rankings; no old handle data is being reused.`;
+      } else if (isExpired()) {
+        title = 'Snapshot expired — performance data paused';
+        detail = `This capture is older than ${MAX_PUBLIC_AGE_HOURS} hours. Rankings and individual metrics will return after the next validated daily pull.`;
+      } else if (!isAudited() && !isLegacy()) {
+        title = 'Snapshot verification incomplete';
+        detail = 'Performance answers are withheld until the capture, roster lock, 30-day coverage, and recomputed leaderboards all pass validation.';
+      }
+      alert.hidden = !title;
+      alert.innerHTML = title ? `<div><b>${esc(title)}</b><span>${esc(detail)}</span></div>` : '';
     }
 
     function renderKpis() {
@@ -2047,7 +2156,7 @@
         person.confirmed &&
         person.needsHumanConfirmation !== true
       )).map(person => person.name));
-      const publicRows = igRecords().filter(record => (
+      const publicRows = (isAudited() ? igRecords() : []).filter(record => (
         record.resolved === true &&
         record.isPrivate === false &&
         confirmedNames.has(record.name)
@@ -2064,24 +2173,24 @@
         : null;
       byId('kpis').innerHTML = `
         <article class="kpi ${coveragePct >= 85 ? 'healthy' : 'attention'}">
-          <span class="micro">Profile coverage</span>
+          <span class="micro">Rankable profile coverage</span>
           <b>${isNumber(coveragePct) ? `${coveragePct}%` : '—'}</b>
-          <span>${verified} of ${people.length || '—'} verified · ${candidates} awaiting confirmation</span>
+          <span>${verified} of ${people.length || '—'} roster-confirmed · ${candidates} awaiting confirmation</span>
         </article>
         <article class="kpi">
-          <span class="micro">Measured audience</span>
-          <b>${missingAudience ? '≥' : ''}${fmt(audience)}</b>
-          <span>Known non-unique followers · ${knownAudienceRows.length}/${publicRows.length || 0} reporting</span>
+          <span class="micro">Validated audience</span>
+          <b>${isAudited() ? `${missingAudience ? '≥' : ''}${fmt(audience)}` : '—'}</b>
+          <span>${isAudited() ? `Known non-unique followers · ${knownAudienceRows.length}/${publicRows.length || 0} reporting` : 'Withheld until roster and freshness checks pass'}</span>
         </article>
         <article class="kpi ${isAudited() || isNumber(observed) ? 'healthy' : 'attention'}">
           <span class="micro">${isLegacy() ? 'Observed content' : '30-day activity'}</span>
           <b>${isLegacy() ? fmt(observed) : (isAudited() ? fmt(activity) : 'Pending')}</b>
           <span>${isLegacy() ? 'Non-pinned posts returned · incomplete sample' : (isAudited() ? `${coverage.completeWindowProfiles} complete profile windows` : 'Waiting for a version-3 audited pull')}</span>
         </article>
-        <article class="kpi ${age.tone === 'healthy' ? 'healthy' : 'attention'}">
+        <article class="kpi ${isAudited() && age.tone === 'healthy' ? 'healthy' : 'attention'}">
           <span class="micro">Snapshot freshness</span>
-          <b>${esc(age.short)}</b>
-          <span>${esc(age.detail)}</span>
+          <b>${snapshotMatchesRoster() ? esc(age.short) : 'Refresh'}</b>
+          <span>${snapshotMatchesRoster() ? esc(age.detail) : 'Current roster has no matching validated pull'}</span>
         </article>
       `;
     }
@@ -2589,7 +2698,7 @@
     function attentionItems() {
       const audits = auditMap();
       const engagement = new Map((isAudited() ? board().engagement || [] : []).map(row => [row.handle, row]));
-      return rosterPeople().map(person => ({
+      return rosterPeople().filter(person => person.dashboardRelevant).map(person => ({
         person,
         audit: audits.get(person.handle),
         engagement: engagement.get(person.handle)
@@ -2699,8 +2808,10 @@
     }
 
     function nextMove(person, state, audit, engagementRow, benchmarks, legacySignal) {
+      if (state.key === 'excluded') return 'Visible in the full roster; excluded from performance rankings by role.';
       if (state.label === 'Handle needed') return 'Confirm the correct public Instagram handle.';
       if (state.label === 'Handle confirmation needed') return 'Verify this candidate handle with Kirpa-owned evidence.';
+      if (state.className === 'refresh') return 'Run and validate a fresh Instagram snapshot against the current roster.';
       if (state.label === 'Private') return 'A public account is required to participate.';
       if (state.label === 'Awaiting pull') return 'Wait for the next verified snapshot.';
       if (state.label === 'Unresolved') return 'Re-check the confirmed handle and public profile.';
@@ -2940,7 +3051,13 @@
       byId('tbody').innerHTML = visibleRows.length ? visibleRows.map(({ person, audit, engagementRow, legacySignal, analytics, state }) => {
         const handleUrl = profileUrl(person.handle);
         const action = nextMove(person, state, audit, engagementRow, benchmarks, legacySignal);
-        const mayShowMetrics = person.confirmed && !person.needsHumanConfirmation;
+        const mayShowMetrics = (
+          person.dashboardRelevant &&
+          person.confirmed &&
+          !person.needsHumanConfirmation &&
+          !person.recordMismatch &&
+          (isAudited() || isLegacy())
+        );
         return `
           <tr>
             <td data-label="Team member">
@@ -2958,7 +3075,7 @@
             <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(analytics?.interactionRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
             <td data-label="Next move">
               <span class="next-move">${esc(action)}</span>
-              ${person.handle ? `<button class="analytics-button" type="button" data-analytics-handle="${esc(person.handle)}">View analytics</button>` : ''}
+              ${mayShowMetrics && person.record ? `<button class="analytics-button" type="button" data-analytics-handle="${esc(person.handle)}">View analytics</button>` : ''}
             </td>
           </tr>
         `;
@@ -2969,12 +3086,13 @@
       const meta = DATA.meta || {};
       byId('foot').innerHTML = `
         <span><b>${esc(meta.company || 'Kirpa Properties L.L.C')}</b> · ORN ${esc(meta.orn || '49046')}</span>
-        <span>Source: ${esc(meta.provider || 'public provider')} · public surfaces · snapshot, not real-time</span>
+        <span>Roster: ${esc(REGISTRY?.rosterVersion || 'unverified')} · Source: ${esc(meta.provider || 'public provider')} · snapshot, not real-time</span>
       `;
     }
 
     function render() {
       renderStamp();
+      renderDataAlert();
       renderKpis();
       renderChampion();
       renderSpotlight();
@@ -2997,6 +3115,8 @@
           <span>The snapshot could not be loaded. Refresh the page or check that data/latest.json and handles.json are published beside this file.</span>
         </article>
       `;
+      byId('data-alert').hidden = false;
+      byId('data-alert').innerHTML = '<div><b>Source files unavailable</b><span>The board stopped before displaying any performance data.</span></div>';
       byId('champ').innerHTML = `
         <div class="stage-eyebrow"><span>●</span> Loading failure</div>
         <h3 class="stage-name">No snapshot.<br>No invented score.</h3>
@@ -3022,7 +3142,8 @@
         ]);
         if (!snapshotResponse.ok) throw new Error('Snapshot request failed');
         DATA = await snapshotResponse.json();
-        REGISTRY = rosterResponse.ok ? await rosterResponse.json() : { employees: [] };
+        if (!rosterResponse.ok) throw new Error('Roster request failed');
+        REGISTRY = await rosterResponse.json();
         render();
       } catch (_) {
         renderFailure();

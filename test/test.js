@@ -351,11 +351,52 @@ function rec(over = {}) {
   await test('published workflow runs and stamps the full validator', () => {
     const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'weekly.yml'), 'utf8');
     assert.match(workflow, /node src\/validate-snapshot\.js --stamp/);
+    assert.match(workflow, /cron: "0 4 \* \* \*"/);
   });
-  await test('dashboard requires a passed validator marker', () => {
+  await test('dashboard requires roster lock, validator v2, and a 36-hour freshness gate', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
     assert.match(html, /validation\?\.status === 'passed'/);
-    assert.match(html, /needsHumanConfirmation/);
+    assert.match(html, /validatorVersion === 2/);
+    assert.match(html, /MAX_PUBLIC_AGE_HOURS = 36/);
+    assert.match(html, /snapshotMatchesRoster/);
+  });
+  await test('published roster exactly reflects the 2026-07-30 Kirpa workbook corrections', () => {
+    const registry = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'handles.json'), 'utf8'));
+    const byName = new Map(registry.employees.map(employee => [employee.name, employee]));
+    assert.strictEqual(registry.rosterVersion, '2026-07-30-kirpa-workbook-v1');
+    assert.strictEqual(registry.rosterRowCount, 44);
+    assert.strictEqual(registry.employees.length, 44);
+    for (const name of ['Riya Bhardwaj', 'Sleeja Misra', 'Anmol Singh']) {
+      assert.strictEqual(byName.get(name).handles.instagram, null);
+      assert.strictEqual(byName.get(name).confirmed, false);
+    }
+    for (const [name, handle] of [
+      ['Sara Banu', 'sarafaisal.kirpa'],
+      ['Nikita Lal Tekwani', 'nikitaa.kirpa'],
+      ['Samaksh Malhotra', 'samaksh.kirpa'],
+      ['Janisha Puri', 'janisha.kirpa'],
+    ]) {
+      assert.strictEqual(byName.get(name).handles.instagram, handle);
+      assert.strictEqual(byName.get(name).confirmed, true);
+    }
+  });
+  await test('validator rejects a snapshot stamped for a different roster version', () => {
+    const records = [rec()];
+    const snapshot = {
+      meta: {
+        source: 'live', provider: 'Apify', measurementVersion: 3, platforms: ['instagram'],
+        capturedAt: now, relevantCount: 1, resolvedProfiles: 1, trendAvailable: false,
+        cadenceFormula: 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30',
+      },
+      records,
+      leaderboards: R.buildLeaderboards(records, ['instagram'], { now: nowMs }),
+      trend: [],
+    };
+    const registry = {
+      rosterVersion: 'current-roster',
+      employees: [{ name: 'A', dashboardRelevant: true, confirmed: true, handles: { instagram: 'a' } }],
+    };
+    assert.throws(() => validateSnapshot(snapshot, registry, { now, maxAgeHours: null }), /snapshot roster version missing/);
   });
   await test('legacy snapshots are rejected instead of ranked', () => {
     const records = [rec()];
