@@ -1,431 +1,3168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kirpa Social Leaderboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<style>
-  :root{
-    --cream:#FBF6F1; --surface:#FFFFFF; --surface-2:#FFFDFB;
-    --ink:#2A2622; --muted:#8A817A; --line:#ECE3DA;
-    --coral:#F0653A;                 /* brand + interactive ONLY */
-    --green:#2E7D5B; --ochre:#C98A1B; --crimson:#B03A3A;  /* signal states */
-    --shadow:0 1px 2px rgba(42,38,34,.04), 0 8px 24px rgba(42,38,34,.06);
-    --r:14px;
-  }
-  *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{margin:0;background:var(--cream);color:var(--ink);
-    font-family:Poppins,system-ui,sans-serif;font-size:15px;line-height:1.5;
-    font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
-  a{color:var(--coral);text-decoration:none}
-  .wrap{max-width:1120px;margin:0 auto;padding:24px 20px 64px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f15a29">
+  <meta name="description" content="Kirpa Properties public Instagram performance dashboard.">
+  <title>Kirpa Properties · Social Performance</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #171717;
+      --ink-soft: #292929;
+      --canvas: #f6f3ee;
+      --paper: #ffffff;
+      --paper-warm: #fbf7f2;
+      --orange: #f15a29;
+      --orange-deep: #b93614;
+      --orange-soft: #ffb195;
+      --champagne: #d9b06f;
+      --emerald: #2d8062;
+      --amber: #a86b14;
+      --crimson: #a94545;
+      --blue: #496698;
+      --dust: #796f68;
+      --line: #e8ddd2;
+      --line-dark: rgba(255, 255, 255, .12);
+      --shadow: 0 18px 50px rgba(52, 35, 25, .09);
+      --shadow-soft: 0 8px 24px rgba(52, 35, 25, .06);
+      --radius: 20px;
+      --radius-sm: 13px;
+      --ease: cubic-bezier(.2, .72, .2, 1);
+    }
 
-  /* header */
-  .top{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;
-    padding-bottom:20px;border-bottom:1px solid var(--line)}
-  .brand{display:flex;align-items:center;gap:11px}
-  .spark{width:26px;height:26px;flex:0 0 auto}
-  .brand h1{font-size:20px;font-weight:700;margin:0;letter-spacing:-.02em}
-  .brand .sub{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:1px}
-  .stamp{text-align:right;font-size:12px;color:var(--muted);line-height:1.45}
-  .src{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:11px;
-    padding:4px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
-  .src.sample{background:#FBF0D9;color:var(--ochre)}
-  .src.pending{background:#FBF0D9;color:var(--ochre)}
-  .src.live{background:#E4F1EA;color:var(--green)}
-  .setup{padding:22px;margin:16px 0}
-  .setup h2{margin:8px 0 6px;font-size:18px;font-weight:700;letter-spacing:-.01em}
-  .setup p{margin:0 0 14px;font-size:13.5px;color:var(--muted);max-width:60ch}
-  .setup ol{margin:0;padding-left:20px;font-size:13.5px}
-  .setup li{margin-bottom:7px}
-  .setup code{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;
-    padding:1px 6px;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-  .ready{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13px}
-  .ready b{font-weight:600}
-  .src .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 88% 8%, rgba(240, 101, 58, .08), transparent 27rem),
+        var(--canvas);
+      color: var(--ink);
+      font: 14px/1.55 Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    [hidden] { display: none !important; }
 
-  /* controls */
-  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 8px}
-  .pill{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);
-    font:inherit;font-weight:500;font-size:13.5px;padding:7px 15px;border-radius:999px;cursor:pointer;
-    transition:border-color .15s,color .15s}
-  .pill:hover{border-color:var(--coral)}
-  .pill[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:#fff}
-  .pill:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
-  .hint{font-size:12px;color:var(--muted);margin-left:auto}
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink);
+      transform: translateY(-160%);
+      transition: transform 180ms var(--ease);
+    }
+    .skip-link:focus { transform: none; }
+    :focus-visible {
+      outline: 3px solid var(--orange);
+      outline-offset: 3px;
+    }
 
-  /* hero */
-  .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin:16px 0 8px}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .champ{padding:20px}
-  .leads{display:flex;gap:14px;margin-top:14px}
-  .lead{flex:1;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:14px}
-  .lead-k{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-  .lead-n{display:block;font-size:20px;font-weight:700;letter-spacing:-.01em;margin:6px 0 1px}
-  .lead-v{font-size:14px;font-weight:600;color:var(--coral)}
-  .lead-note{margin-top:14px;font-size:12px;color:var(--muted)}
-  .ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-    background:repeating-linear-gradient(135deg,var(--surface-2),var(--surface-2) 10px,#FBF4EE 10px,#FBF4EE 20px)}
-  .ph svg{width:38px;height:38px}
-  .ph span{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--coral)}
-  .dstat{display:flex;gap:18px;margin-top:6px}
-  .dstat b{display:block;font-size:19px;font-weight:700}
-  .dstat span{font-size:11px;color:var(--muted)}
-  .pthumb{width:56px;height:70px;flex:0 0 auto;border-radius:8px;overflow:hidden;background:var(--surface-2)}
-  .pthumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .champ .name{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:8px 0 2px}
-  .champ .role{font-size:13px;color:var(--muted)}
-  .champ .metrics{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap}
-  .champ .metrics b{display:block;font-size:19px;font-weight:600}
-  .champ .metrics span{font-size:11.5px;color:var(--muted)}
-  .spot{padding:20px;display:flex;flex-direction:column}
-  .spot .thumb{margin-top:12px;border-radius:10px;overflow:hidden;background:var(--surface-2);
-    aspect-ratio:16/10;border:1px solid var(--line);position:relative}
-  .spot .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .spot .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-  .spot .play svg{width:44px;height:44px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-  .spot .cap{margin-top:12px;font-size:13px;color:var(--ink)}
-  .spot .stats{margin-top:8px;font-size:12px;color:var(--muted);display:flex;gap:14px}
+    .command {
+      position: relative;
+      overflow: hidden;
+      min-height: 192px;
+      color: #fff;
+      background: var(--orange);
+      color: var(--ink);
+      border-bottom: 5px solid var(--ink);
+    }
+    .command::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -120px;
+      top: -245px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .14);
+      box-shadow: 0 0 80px rgba(255, 255, 255, .1);
+      pointer-events: none;
+    }
+    .command-inner,
+    .main,
+    .footer-inner {
+      width: min(1240px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+    .command-inner { position: relative; z-index: 1; padding: 22px 0 42px; }
+    .command-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(23, 23, 23, .18);
+    }
+    .brand-mark::before {
+      content: "✦";
+      font-size: 24px;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+    .brand-name {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -.025em;
+    }
+    .brand-sub {
+      margin-top: 3px;
+      color: rgba(23, 23, 23, .68);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .stamp {
+      min-width: 250px;
+      text-align: right;
+      color: rgba(23, 23, 23, .72);
+      font-size: 11px;
+    }
+    .source-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 4px;
+      padding: 5px 10px;
+      border: 1px solid rgba(23, 23, 23, .18);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, .22);
+      font-weight: 800;
+      font-size: 9px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 0 4px rgba(45, 128, 98, .16);
+    }
+    .source-status.warning .status-dot {
+      background: var(--amber);
+      box-shadow: 0 0 0 4px rgba(185, 120, 24, .16);
+    }
+    .source-status.sample .status-dot {
+      background: var(--orange-soft);
+      box-shadow: 0 0 0 4px rgba(255, 176, 143, .16);
+    }
+    .source-status.live .status-dot { animation: livePulse 2.2s ease-out infinite; }
 
-  /* leaderboard grid */
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px}
-  .board{padding:18px}
-  .board h3{margin:0 0 2px;font-size:14.5px;font-weight:600}
-  .board .desc{font-size:11.5px;color:var(--muted);margin-bottom:12px}
-  ol.rows{list-style:none;margin:0;padding:0}
-  ol.rows li{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
-  ol.rows li:first-child{border-top:0}
-  .rk{flex:0 0 22px;font-weight:700;font-size:13px;color:var(--muted);text-align:center}
-  .rk.one{color:var(--coral)}
-  .who{flex:1;min-width:0}
-  .who .n{font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .who .h{font-size:11px;color:var(--muted)}
-  .val{font-weight:600;font-size:13.5px;white-space:nowrap}
-  .empty{font-size:12.5px;color:var(--muted);padding:10px 0}
+    .command-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-top: 27px;
+    }
+    .command-copy { max-width: 690px; }
+    .command-kicker {
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .command-title {
+      margin: 5px 0 0;
+      max-width: 760px;
+      font: 400 clamp(29px, 4vw, 47px)/.98 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.025em;
+    }
+    .platforms {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .platform {
+      min-height: 36px;
+      padding: 7px 13px;
+      border: 1px solid rgba(23, 23, 23, .2);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .platform[aria-pressed="true"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+    .platform:disabled { cursor: not-allowed; opacity: .58; }
+    .platform small {
+      margin-left: 4px;
+      font-size: 7px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
 
-  /* trend */
-  .trend{margin-top:16px;padding:18px}
-  .trend .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .gain{display:inline-flex;gap:6px;align-items:center;background:#E4F1EA;color:var(--green);
-    font-size:12.5px;font-weight:500;padding:5px 11px;border-radius:999px}
-  .gain small{color:var(--muted);font-weight:400}
+    .main { position: relative; z-index: 2; margin-top: -23px; padding-bottom: 72px; }
+    .data-alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-top: 12px;
+      padding: 12px 15px;
+      border: 1px solid #e8c48e;
+      border-radius: var(--radius-sm);
+      background: #fff4e3;
+      color: #6f4610;
+      box-shadow: var(--shadow-soft);
+      font-size: 10px;
+    }
+    .data-alert::before {
+      content: "!";
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--amber);
+      color: #fff;
+      font-weight: 800;
+    }
+    .data-alert b { display: block; color: var(--ink); font-size: 11px; }
+    .data-alert span { display: block; margin-top: 2px; }
+    .truth-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, .62);
+    }
+    .truth-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      min-height: 52px;
+      padding: 10px 14px;
+      border-right: 1px solid var(--line);
+      color: var(--dust);
+      font-size: 9px;
+    }
+    .truth-item:last-child { border-right: 0; }
+    .truth-item b {
+      color: var(--ink);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .truth-index {
+      width: 23px;
+      height: 23px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: 8px;
+      font-weight: 800;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow-soft);
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .data-ready .reveal {
+      animation: reveal 560ms var(--ease) forwards;
+      animation-delay: var(--delay, 0ms);
+    }
 
-  /* roster */
-  .roster{margin-top:28px}
-  .roster h2{font-size:16px;font-weight:600;margin:0 0 12px}
-  .tbl{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);
-    border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-  .tbl th,.tbl td{padding:11px 14px;text-align:left;font-size:13px;border-top:1px solid var(--line)}
-  .tbl th{background:var(--surface-2);font-weight:600;color:var(--muted);font-size:11.5px;
-    letter-spacing:.03em;text-transform:uppercase;border-top:0;cursor:pointer;user-select:none}
-  .tbl th.num,.tbl td.num{text-align:right}
-  .tbl tbody tr{cursor:pointer;transition:background .12s}
-  .tbl tbody tr:hover{background:var(--surface-2)}
-  .tbl tbody tr:focus-visible{outline:2px solid var(--coral);outline-offset:-2px}
-  .chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
-  .chip.public{background:#E4F1EA;color:var(--green)}
-  .chip.private{background:#F6E3E3;color:var(--crimson)}
-  .chip.need{background:#FBF0D9;color:var(--ochre)}
-  .muted{color:var(--muted)}
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .kpi {
+      position: relative;
+      min-width: 0;
+      padding: 18px 20px;
+      border-right: 1px solid var(--line);
+    }
+    .kpi:last-child { border-right: 0; }
+    .kpi::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20px;
+      width: 34px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--orange);
+    }
+    .kpi b {
+      display: block;
+      margin-top: 2px;
+      font-size: clamp(21px, 2.2vw, 29px);
+      line-height: 1.1;
+      letter-spacing: -.045em;
+    }
+    .kpi span {
+      display: block;
+      margin-top: 6px;
+      color: var(--dust);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+    .kpi .micro {
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .kpi.attention b { color: var(--amber); }
+    .kpi.healthy b { color: var(--emerald); }
 
-  /* drawer */
-  .scrim{position:fixed;inset:0;background:rgba(42,38,34,.32);opacity:0;pointer-events:none;
-    transition:opacity .2s;z-index:40}
-  .scrim.open{opacity:1;pointer-events:auto}
-  .drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);background:var(--cream);
-    box-shadow:-8px 0 32px rgba(42,38,34,.14);transform:translateX(100%);transition:transform .24s ease;
-    z-index:41;overflow:auto;padding:24px}
-  .drawer.open{transform:none}
-  .drawer .x{float:right;border:0;background:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
-  .drawer h3{margin:2px 0 0;font-size:20px;font-weight:700}
-  .drawer .role{color:var(--muted);font-size:13px;margin-bottom:16px}
-  .post{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);color:inherit;text-decoration:none}
-  .post:hover .pc{color:var(--coral)}
-  .post img{width:56px;height:70px;object-fit:cover;border-radius:8px;flex:0 0 auto;background:var(--surface-2)}
-  .post .pc{font-size:12.5px}
-  .post .ps{font-size:11.5px;color:var(--muted);margin-top:4px}
+    .section { margin-top: 27px; }
+    .section-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 11px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      font: 400 25px/1.1 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.015em;
+    }
+    .section-heading p {
+      max-width: 600px;
+      margin: 3px 0 0;
+      color: var(--dust);
+      font-size: 11px;
+    }
+    .section-label {
+      color: var(--orange-deep);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .section-note {
+      color: var(--dust);
+      font-size: 9px;
+      text-align: right;
+    }
 
-  footer{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);
-    font-size:12px;color:var(--muted);line-height:1.6}
-  footer b{color:var(--ink);font-weight:600}
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(340px, .84fr);
+      gap: 16px;
+    }
+    .champ {
+      position: relative;
+      isolation: isolate;
+      min-height: 344px;
+      overflow: hidden;
+      padding: 27px;
+      border-color: rgba(255, 255, 255, .08);
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 22px 60px rgba(34, 23, 17, .2);
+    }
+    .champ::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 390px;
+      height: 390px;
+      right: -135px;
+      bottom: -230px;
+      border-radius: 50%;
+      background: rgba(240, 101, 58, .55);
+      filter: blur(2px);
+    }
+    .champ::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 56%, rgba(255, 255, 255, .05));
+      pointer-events: none;
+    }
+    .champ-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .stage-number {
+      color: rgba(255, 255, 255, .1);
+      font: 400 72px/.75 "DM Serif Display", Georgia, serif;
+    }
+    .stage-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--orange-soft);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .stage-name {
+      max-width: 600px;
+      margin: 17px 0 4px;
+      font: 400 clamp(34px, 5vw, 55px)/.94 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.03em;
+    }
+    .stage-role { color: rgba(255, 255, 255, .58); font-size: 12px; }
+    .stage-reason {
+      max-width: 600px;
+      margin: 17px 0 0;
+      color: rgba(255, 255, 255, .72);
+      font-size: 12px;
+    }
+    .stage-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .stage-metric {
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .045);
+    }
+    .stage-metric b { display: block; font-size: 17px; line-height: 1.1; }
+    .stage-metric span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, .52);
+      font-size: 8px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .readiness {
+      margin-top: 29px;
+      max-width: 560px;
+    }
+    .readiness-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, .64);
+      font-size: 10px;
+    }
+    .readiness-track {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .09);
+    }
+    .readiness-fill {
+      width: var(--progress, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--orange);
+      transition: width 480ms var(--ease);
+    }
 
-  @media (max-width:720px){
-    .hero{grid-template-columns:1fr}
-    .grid{grid-template-columns:1fr}
-    .tbl .hide-sm{display:none}
-    .stamp{text-align:left}
-  }
-  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
+    .spot {
+      min-height: 344px;
+      overflow: hidden;
+    }
+    .spot-media {
+      position: relative;
+      min-height: 176px;
+      overflow: hidden;
+      background: var(--paper-warm);
+      border-bottom: 1px solid var(--line);
+    }
+    .spot-media img {
+      width: 100%;
+      height: 210px;
+      display: block;
+      object-fit: cover;
+    }
+    .media-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 25% 20%, rgba(240, 101, 58, .22), transparent 42%),
+        var(--paper-warm);
+      text-align: center;
+    }
+    .fallback-mark {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 9px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    .media-fallback b { display: block; font-size: 12px; }
+    .media-fallback span { color: var(--dust); font-size: 9px; }
+    .spot-body { padding: 21px; }
+    .spot-kicker {
+      color: var(--orange-deep);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .spot-title {
+      margin: 7px 0 4px;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    .spot-copy {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--dust);
+      font-size: 10px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .spot-stats {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 14px;
+      color: var(--dust);
+      font-size: 10px;
+    }
+    .spot-stats b { color: var(--ink); font-size: 13px; }
+    .spot-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 13px;
+      color: var(--orange-deep);
+      font-size: 10px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .readiness-spot {
+      min-height: 342px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      background: var(--paper);
+    }
+    .readiness-orbit {
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--paper-warm);
+      box-shadow: inset 0 0 0 18px rgba(240, 101, 58, .06);
+    }
+    .readiness-orbit span {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+    }
+    .readiness-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .readiness-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      color: var(--dust);
+      font-size: 10px;
+    }
+    .readiness-item b { color: var(--ink); font-size: 11px; }
+
+    .boards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .board { min-width: 0; overflow: hidden; }
+    .board-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 19px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .board h3 {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.3;
+      letter-spacing: -.015em;
+    }
+    .board-desc { margin-top: 3px; color: var(--dust); font-size: 9px; }
+    .board-count {
+      flex: 0 0 auto;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .rows {
+      max-height: 405px;
+      overflow: auto;
+      margin: 0;
+      padding: 5px 18px 9px;
+      list-style: none;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange-soft) transparent;
+    }
+    .rows li {
+      position: relative;
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 58px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+      isolation: isolate;
+    }
+    .rows li:first-child { border-top: 0; }
+    .rows li::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: -18px;
+      bottom: 0;
+      width: var(--bar, 0%);
+      height: 2px;
+      background: var(--orange-soft);
+      opacity: .55;
+    }
+    .rank {
+      width: 25px;
+      height: 25px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--dust);
+      background: var(--paper-warm);
+      font-size: 9px;
+      font-weight: 800;
+    }
+    .rows li:first-child .rank {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(240, 101, 58, .2);
+    }
+    .who { min-width: 0; }
+    .person-link {
+      display: block;
+      min-width: 0;
+      color: inherit;
+      text-decoration: none;
+    }
+    .person-link:hover .person-name { color: var(--orange-deep); }
+    .person-name {
+      display: block;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color 180ms var(--ease);
+    }
+    .person-sub {
+      display: block;
+      overflow: hidden;
+      margin-top: 2px;
+      color: var(--dust);
+      font-size: 8.5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .metric-value { text-align: right; font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .metric-value small { display: block; color: var(--dust); font-size: 8px; font-weight: 500; }
+    .empty-state {
+      min-height: 236px;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+      color: var(--dust);
+      text-align: center;
+    }
+    .empty-state b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 13px; }
+    .empty-state p { max-width: 35ch; margin: 0; font-size: 10px; }
+
+    .trend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 56px;
+      margin-top: 16px;
+      padding: 11px 14px;
+      overflow-x: auto;
+    }
+    .trend-label {
+      flex: 0 0 auto;
+      padding: 0 8px 0 3px;
+      color: var(--dust);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .movement {
+      flex: 0 0 auto;
+      padding: 7px 11px;
+      border: 1px solid #dce9e3;
+      border-radius: 999px;
+      background: #f0f7f3;
+      color: var(--emerald);
+      font-size: 9px;
+      font-weight: 800;
+    }
+    .movement small { margin-left: 4px; color: var(--dust); font-weight: 500; }
+    .trend-empty { color: var(--dust); font-size: 10px; }
+
+    .records-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .record-card {
+      min-width: 0;
+      min-height: 190px;
+      padding: 17px;
+      overflow: hidden;
+    }
+    .record-card.featured {
+      background: var(--ink);
+      color: #fff;
+    }
+    .record-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .record-icon {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: rgba(240, 101, 58, .12);
+      color: var(--orange-deep);
+      font-size: 9px;
+      font-weight: 900;
+    }
+    .record-card.featured .record-icon {
+      background: rgba(255, 255, 255, .1);
+      color: var(--orange-soft);
+    }
+    .record-basis {
+      max-width: 120px;
+      color: var(--dust);
+      font-size: 7.5px;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+    .record-card.featured .record-basis { color: rgba(255,255,255,.55); }
+    .record-card h3 {
+      margin: 16px 0 2px;
+      font-size: 11px;
+    }
+    .record-value {
+      margin-top: 2px;
+      font: 400 29px/1 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.03em;
+    }
+    .record-person {
+      margin-top: 10px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .record-caption {
+      display: -webkit-box;
+      margin-top: 4px;
+      overflow: hidden;
+      color: var(--dust);
+      font-size: 8.5px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .record-card.featured .record-caption { color: rgba(255,255,255,.62); }
+    .record-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--orange-deep);
+      font-size: 8.5px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .record-card.featured .record-link { color: var(--orange-soft); }
+    .record-empty {
+      color: var(--dust);
+      font-size: 9px;
+    }
+    .format-panel {
+      margin-top: 14px;
+      overflow: hidden;
+    }
+    .format-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 17px 19px;
+      border-bottom: 1px solid var(--line);
+    }
+    .format-head h3 { margin: 0; font-size: 13px; }
+    .format-head p { margin: 3px 0 0; color: var(--dust); font-size: 8.5px; }
+    .format-head > span {
+      align-self: flex-start;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 7.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .format-card {
+      min-width: 0;
+      padding: 16px 18px;
+      border-right: 1px solid var(--line);
+    }
+    .format-card:last-child { border-right: 0; }
+    .format-type {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+    .format-type span:last-child { color: var(--dust); font-size: 8px; }
+    .format-metric {
+      margin-top: 13px;
+      font: 400 23px/1 "DM Serif Display", Georgia, serif;
+    }
+    .format-card > p { margin: 4px 0 0; color: var(--dust); font-size: 8px; }
+    .format-bars {
+      display: grid;
+      gap: 5px;
+      margin-top: 12px;
+    }
+    .format-bar {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 6px;
+      align-items: center;
+      color: var(--dust);
+      font-size: 7.5px;
+    }
+    .format-track {
+      height: 4px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--paper-warm);
+    }
+    .format-fill { display: block; width: var(--fill); height: 100%; border-radius: inherit; background: var(--orange); }
+
+    .analytics-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 7px;
+      padding: 5px 9px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .analytics-button:hover { background: var(--ink); color: #fff; }
+    .analytics-button:focus-visible { outline: 3px solid rgba(240, 101, 58, .25); outline-offset: 2px; }
+    .analytics-dialog {
+      width: min(900px, calc(100% - 28px));
+      max-height: min(88vh, 940px);
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-radius: 22px;
+      background: var(--canvas);
+      color: var(--ink);
+      box-shadow: 0 30px 90px rgba(20, 14, 10, .32);
+    }
+    .analytics-dialog::backdrop {
+      background: rgba(15, 12, 10, .7);
+      backdrop-filter: blur(7px);
+    }
+    .dialog-shell { max-height: inherit; overflow: auto; }
+    .analytics-hero {
+      position: relative;
+      padding: 28px 30px 25px;
+      overflow: hidden;
+      background: var(--ink);
+      color: #fff;
+    }
+    .analytics-hero::after {
+      content: "";
+      position: absolute;
+      right: -55px;
+      bottom: -85px;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: rgba(240, 101, 58, .42);
+    }
+    .analytics-status {
+      display: inline-flex;
+      position: relative;
+      z-index: 1;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      color: var(--orange-soft);
+      font-size: 7.5px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .analytics-hero h2 {
+      position: relative;
+      z-index: 1;
+      max-width: 650px;
+      margin: 13px 0 3px;
+      font: 400 36px/1 "DM Serif Display", Georgia, serif;
+    }
+    .analytics-hero p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+    }
+    .analytics-body { padding: 20px 22px 24px; }
+    .analytics-note {
+      margin-bottom: 14px;
+      padding: 11px 13px;
+      border: 1px solid #efc8b8;
+      border-radius: 12px;
+      background: #fff2ec;
+      color: #83452f;
+      font-size: 9px;
+    }
+    .person-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .person-kpi {
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    .person-kpi span { display: block; color: var(--dust); font-size: 7.5px; text-transform: uppercase; letter-spacing: .06em; }
+    .person-kpi b { display: block; margin-top: 5px; font-size: 17px; }
+    .person-kpi small { display: block; margin-top: 3px; color: var(--dust); font-size: 7.5px; }
+    .analytics-subhead {
+      margin: 22px 0 10px;
+      font: 400 21px/1.1 "DM Serif Display", Georgia, serif;
+    }
+    .person-formats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .person-format {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+    }
+    .person-format b { display: block; font-size: 10px; text-transform: capitalize; }
+    .person-format span { display: block; margin-top: 4px; color: var(--dust); font-size: 8px; }
+    .person-posts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+    .person-post {
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--paper);
+    }
+    .person-post time { color: var(--dust); font-size: 7.5px; }
+    .person-post p {
+      display: -webkit-box;
+      min-height: 32px;
+      margin: 8px 0;
+      overflow: hidden;
+      font-size: 8.5px;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+    .post-metrics { display: flex; flex-wrap: wrap; gap: 7px; color: var(--dust); font-size: 7.5px; }
+    .person-post a { display: inline-block; margin-top: 9px; color: var(--orange-deep); font-size: 8px; font-weight: 800; text-decoration: none; }
+    .dialog-close-row {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px 22px;
+      border-top: 1px solid var(--line);
+      background: rgba(246, 243, 238, .94);
+      backdrop-filter: blur(10px);
+    }
+    .dialog-close {
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .insight {
+      min-height: 160px;
+      padding: 19px;
+    }
+    .insight-icon {
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(240, 101, 58, .11);
+      color: var(--orange-deep);
+      font-weight: 800;
+    }
+    .insight h3 { margin: 12px 0 2px; font-size: 12px; }
+    .insight-value {
+      font: 400 27px/1.08 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.02em;
+    }
+    .insight p { margin: 7px 0 0; color: var(--dust); font-size: 9px; }
+    .attention-list {
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .attention-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 9px;
+      padding: 5px 0;
+      border-top: 1px solid var(--line);
+      color: var(--dust);
+      font-size: 8.5px;
+    }
+    .attention-list b { color: var(--ink); }
+    .coverage-detail {
+      margin-top: 14px;
+      overflow: hidden;
+    }
+    .coverage-detail summary {
+      cursor: pointer;
+      padding: 14px 17px;
+      font-size: 10px;
+      font-weight: 800;
+      list-style-position: inside;
+    }
+    .audit { padding: 0 17px 15px; }
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .audit-item {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper-warm);
+    }
+    .audit-item b { display: block; font-size: 9px; }
+    .audit-item span { display: block; margin-top: 3px; color: var(--dust); font-size: 8px; }
+    .audit-item.ok b { color: var(--emerald); }
+    .audit-item.held b { color: var(--amber); }
+
+    .roster-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-end;
+      margin-bottom: 12px;
+    }
+    .roster-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .field { position: relative; }
+    .field-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .search,
+    .filter,
+    .export-button {
+      min-height: 39px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      color: var(--ink);
+      outline: 0;
+    }
+    .search {
+      width: min(280px, 34vw);
+      padding: 8px 12px 8px 35px;
+    }
+    .field.search-field::before {
+      content: "⌕";
+      position: absolute;
+      left: 13px;
+      top: 6px;
+      z-index: 1;
+      color: var(--dust);
+      font-size: 17px;
+      pointer-events: none;
+    }
+    .filter { padding: 8px 32px 8px 11px; }
+    .export-button {
+      padding: 8px 12px;
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .export-button:hover { border-color: var(--orange-deep); background: var(--orange-deep); }
+    .search:focus,
+    .filter:focus,
+    .export-button:focus-visible { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(240, 101, 58, .12); }
+    .roster-result { margin-top: 4px; color: var(--dust); font-size: 9px; }
+    .table-wrap { overflow-x: auto; }
+    .tbl {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+    }
+    .tbl th,
+    .tbl td {
+      padding: 12px 13px;
+      border-top: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 10px;
+    }
+    .tbl thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      border-top: 0;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 8px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .tbl tbody tr { transition: background 180ms var(--ease); }
+    .tbl tbody tr:hover { background: #fff8f4; }
+    .tbl .num { text-align: right; white-space: nowrap; }
+    .agent-name { font-weight: 800; }
+    .agent-role,
+    .agent-handle { display: block; margin-top: 2px; color: var(--dust); font-size: 8px; }
+    .agent-handle { color: var(--orange-deep); text-decoration: none; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      max-width: 190px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 8px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .status::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .status.measured { background: #e8f3ed; color: var(--emerald); }
+    .status.private { background: #f7e8e8; color: var(--crimson); }
+    .status.awaiting { background: #e9eef7; color: var(--blue); }
+    .status.attention,
+    .status.unranked,
+    .status.incomplete { background: #fbf0df; color: var(--amber); }
+    .status.context { background: #fff0e9; color: var(--orange-deep); }
+    .status.unconfirmed { background: #fce9e2; color: var(--orange-deep); }
+    .status.refresh { background: #fbf0df; color: var(--amber); }
+    .status.excluded { background: #f0ece8; color: var(--dust); }
+    .next-move { max-width: 190px; color: var(--dust); font-size: 9px; }
+    .no-results { padding: 30px !important; color: var(--dust); text-align: center !important; }
+    .roster-more {
+      display: flex;
+      justify-content: center;
+      padding-top: 12px;
+    }
+    .roster-more[hidden] { display: none; }
+    .roster-more button {
+      min-height: 38px;
+      padding: 8px 16px;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .roster-more button:hover { background: var(--orange-deep); border-color: var(--orange-deep); }
+    .roster-more button:focus-visible { outline: 3px solid rgba(240, 101, 58, .28); outline-offset: 2px; }
+
+    .method {
+      margin-top: 18px;
+      overflow: hidden;
+    }
+    .method summary {
+      cursor: pointer;
+      padding: 17px 20px;
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+    .method-item {
+      min-height: 142px;
+      padding: 17px;
+      border-right: 1px solid var(--line);
+    }
+    .method-item:last-child { border-right: 0; }
+    .method-item b { display: block; margin-bottom: 6px; font-size: 10px; }
+    .method-item p { margin: 0; color: var(--dust); font-size: 9px; }
+
+    .site-footer {
+      border-top: 1px solid #ddd0c4;
+      background: #eee5dc;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-block: 22px;
+      color: var(--dust);
+      font-size: 9px;
+    }
+    .footer-inner b { color: var(--ink); }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes livePulse {
+      0%, 60%, 100% { box-shadow: 0 0 0 4px rgba(45, 128, 98, .16); }
+      30% { box-shadow: 0 0 0 7px rgba(45, 128, 98, .04); }
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(310px, .78fr); }
+      .records-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .format-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .format-card:nth-child(2) { border-right: 0; }
+      .format-card:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .method-grid { grid-template-columns: repeat(2, 1fr); }
+      .method-item:nth-child(2) { border-right: 0; }
+      .method-item:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .next-move { max-width: 145px; }
+    }
+    @media (max-width: 820px) {
+      .command-inner,
+      .main,
+      .footer-inner { width: min(100% - 28px, 1240px); }
+      .command-top { align-items: flex-start; }
+      .command-row { align-items: flex-start; flex-direction: column; margin-top: 23px; }
+      .platforms { justify-content: flex-start; }
+      .kpis { grid-template-columns: repeat(2, 1fr); }
+      .truth-strip { grid-template-columns: 1fr; }
+      .truth-item { border-right: 0; border-bottom: 1px solid var(--line); }
+      .truth-item:last-child { border-bottom: 0; }
+      .kpi:nth-child(2) { border-right: 0; }
+      .kpi:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .hero-grid,
+      .boards { grid-template-columns: 1fr; }
+      .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .person-posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-grid { gap: 14px; }
+      .insight-grid { grid-template-columns: 1fr; }
+      .insight { min-height: 0; }
+      .audit-grid { grid-template-columns: repeat(2, 1fr); }
+      .roster-head { align-items: stretch; flex-direction: column; }
+      .roster-tools { width: 100%; }
+      .search { width: 100%; }
+      .search-field { flex: 1; }
+      .method-grid { grid-template-columns: 1fr; }
+      .method-item,
+      .method-item:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .method-item:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 620px) {
+      .command { min-height: 238px; }
+      .command-inner { padding-top: 17px; }
+      .command-top { gap: 12px; }
+      .brand-mark { width: 37px; height: 37px; border-radius: 11px; }
+      .brand-name { font-size: 14px; }
+      .brand-sub { font-size: 8px; }
+      .stamp { min-width: 0; max-width: 145px; font-size: 9px; }
+      .source-status { font-size: 7px; }
+      .command-title { font-size: 31px; }
+      .platform { padding-inline: 10px; }
+      .main { margin-top: -18px; padding-bottom: 48px; }
+      .kpi { padding: 15px 14px; }
+      .kpi b { font-size: 22px; }
+      .section { margin-top: 23px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .section-heading h2 { font-size: 22px; }
+      .section-note { text-align: left; }
+      .champ { min-height: 375px; padding: 22px; }
+      .stage-name { font-size: 39px; }
+      .stage-metrics { grid-template-columns: 1fr; margin-top: 22px; }
+      .stage-metric { display: flex; align-items: center; justify-content: space-between; }
+      .stage-metric span { margin-top: 0; text-align: right; }
+      .spot-media img { height: 190px; }
+      .records-grid,
+      .format-grid,
+      .person-formats,
+      .person-posts { grid-template-columns: 1fr; }
+      .format-card,
+      .format-card:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .format-card:last-child { border-bottom: 0; }
+      .format-head { align-items: flex-start; flex-direction: column; }
+      .analytics-dialog { width: calc(100% - 16px); max-height: 92vh; border-radius: 17px; }
+      .analytics-hero { padding: 23px 20px 21px; }
+      .analytics-hero h2 { font-size: 30px; }
+      .analytics-body { padding: 15px 13px 20px; }
+      .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .audit-grid { grid-template-columns: 1fr; }
+      .roster-tools { align-items: stretch; flex-direction: column; }
+      .filter { width: 100%; }
+      .export-button { width: 100%; }
+      .table-wrap { overflow: visible; background: transparent; border: 0; box-shadow: none; }
+      .tbl,
+      .tbl tbody,
+      .tbl tr,
+      .tbl td { display: block; width: 100%; }
+      .tbl { background: transparent; }
+      .tbl thead { display: none; }
+      .tbl tbody { display: grid; gap: 10px; }
+      .tbl tbody tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: var(--paper);
+        box-shadow: var(--shadow-soft);
+      }
+      .tbl td {
+        min-width: 0;
+        padding: 10px 12px;
+        border-top: 1px solid var(--line);
+        text-align: left !important;
+      }
+      .tbl td:first-child {
+        grid-column: 1 / -1;
+        border-top: 0;
+        background: var(--paper-warm);
+      }
+      .tbl td:last-child { grid-column: 1 / -1; }
+      .tbl td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 3px;
+        color: var(--dust);
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .tbl td:first-child::before { display: none; }
+      .status { max-width: 100%; white-space: normal; }
+      .next-move { max-width: none; }
+      .footer-inner { flex-direction: column; }
+    }
+    @media (max-width: 390px) {
+      .command-inner,
+      .main,
+      .footer-inner { width: calc(100% - 22px); }
+      .brand-sub { display: none; }
+      .stamp > div { display: none; }
+      .command-title { max-width: 300px; }
+      .platform small { display: none; }
+      .kpi span { font-size: 8px; }
+      .champ { min-height: 395px; }
+      .stage-number { font-size: 58px; }
+      .rows { padding-inline: 13px; }
+      .rows li::after { left: -13px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .source-status.live .status-dot { animation: none; }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <div class="brand">
-      <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.6 6.4 6.9.5-5.3 4.5 1.7 6.7L12 16.9 6.1 20.1l1.7-6.7L2.5 8.9l6.9-.5z" fill="#F0653A"/></svg>
-      <div>
-        <h1>Kirpa Instagram Leaderboard</h1>
-        <div class="sub">Live public performance across the Kirpa Army</div>
+  <a class="skip-link" href="#main-content">Skip to dashboard</a>
+
+  <header class="command">
+    <div class="command-inner">
+      <div class="command-top">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <h1 class="brand-name">KIRPA</h1>
+            <div class="brand-sub">Properties · Social performance</div>
+          </div>
+        </div>
+        <div class="stamp" id="stamp" aria-live="polite">
+          <span class="source-status warning"><span class="status-dot"></span>Loading snapshot</span>
+        </div>
+      </div>
+
+      <div class="command-row">
+        <div class="command-copy">
+          <div class="command-kicker">Kirpa Army · public performance</div>
+          <p class="command-title">Fair competition.<br>Clear next moves.</p>
+        </div>
+        <nav class="platforms" aria-label="Platform availability">
+          <button class="platform" type="button" aria-pressed="true">Instagram</button>
+          <button class="platform" type="button" disabled aria-label="TikTok, available soon">TikTok <small>Soon</small></button>
+          <button class="platform" type="button" disabled aria-label="Facebook, available soon">Facebook <small>Soon</small></button>
+        </nav>
       </div>
     </div>
-    <div class="stamp" id="stamp"></div>
-  </div>
+  </header>
 
-  <div class="controls" id="filters" role="group" aria-label="Platform filter"></div>
+  <main class="main" id="main-content">
+    <section class="kpis reveal" id="kpis" aria-label="Executive pulse" style="--delay:40ms">
+      <article class="kpi"><span class="micro">Coverage</span><b>—</b><span>Loading confirmed roster</span></article>
+      <article class="kpi"><span class="micro">Audience</span><b>—</b><span>Loading measured profiles</span></article>
+      <article class="kpi"><span class="micro">Activity</span><b>—</b><span>Loading 30-day window</span></article>
+      <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
+    </section>
+    <aside class="data-alert reveal" id="data-alert" role="status" hidden style="--delay:55ms"></aside>
+    <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
+      <div class="truth-item"><span class="truth-index">01</span><b>Roster-locked</b><span>A snapshot cannot rank after the employee registry changes.</span></div>
+      <div class="truth-item"><span class="truth-index">02</span><b>Unknown stays unknown</b><span>Missing values are shown as —, never invented as zero.</span></div>
+      <div class="truth-item"><span class="truth-index">03</span><b>Freshness gate</b><span>Rankings stop after 36 hours until a new audited pull succeeds.</span></div>
+    </aside>
 
-  <section class="hero">
-    <div class="card champ" id="champ"></div>
-    <div class="card spot" id="spotlight"></div>
-  </section>
+    <section class="section reveal" aria-labelledby="arena-title" style="--delay:100ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Performance stage</div>
+          <h2 id="arena-title">What do we know right now?</h2>
+          <p>Usable signals stay visible while incomplete comparisons remain clearly withheld.</p>
+        </div>
+        <div class="section-note">Latest captured public data</div>
+      </div>
+      <div class="hero-grid">
+        <article class="panel champ" id="champ" aria-live="polite">
+          <div class="stage-eyebrow"><span>●</span> Preparing fair momentum leader</div>
+        </article>
+        <article class="panel spot" id="spot" aria-live="polite">
+          <div class="readiness-spot">
+            <div class="readiness-orbit"><span>K</span></div>
+            <div>
+              <div class="spot-kicker">Content spotlight</div>
+              <h3 class="spot-title">Loading verified post data</h3>
+              <p class="spot-copy">Top content appears only when its comparison window passes the data audit.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-  <section class="grid" id="boards"></section>
+    <section class="section reveal" aria-labelledby="leaderboards-title" style="--delay:160ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Fair lanes</div>
+          <h2 id="leaderboards-title">Available signals, separated</h2>
+          <p>Audience and recent-post observations are shown independently, with confidence limits attached.</p>
+        </div>
+        <div class="section-note">Bars are relative within each lane, not percentages</div>
+      </div>
+      <div class="boards" id="boards"></div>
+      <div class="panel trend" id="trend" aria-label="Weekly movement"></div>
+    </section>
 
-  <div class="card trend" id="trend"></div>
+    <section class="section reveal" aria-labelledby="records-title" style="--delay:190ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Content intelligence</div>
+          <h2 id="records-title">Records and format performance</h2>
+          <p>Likes, comments, views, and interaction totals stay separate so each record answers one clear question.</p>
+        </div>
+        <div class="section-note" id="records-note">Metric availability follows public reporting</div>
+      </div>
+      <div class="records-grid" id="records" aria-live="polite"></div>
+      <div class="format-panel panel">
+        <div class="format-head">
+          <div>
+            <h3>What formats are working?</h3>
+            <p>Median performance protects the comparison from one viral outlier.</p>
+          </div>
+          <span id="format-confidence">Checking coverage</span>
+        </div>
+        <div class="format-grid" id="formats"></div>
+      </div>
+    </section>
 
-  <section class="roster">
-    <h2>Full roster</h2>
-    <table class="tbl" id="tbl">
-      <thead><tr>
-        <th data-sort="name">Agent</th>
-        <th class="num" data-sort="ig">Followers</th>
-        <th class="num" data-sort="er">Engagement</th>
-        <th class="num hide-sm" data-sort="ppw">Posts/wk</th>
-        <th>Status</th>
-      </tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </section>
+    <section class="section reveal" aria-labelledby="insights-title" style="--delay:220ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Team pulse</div>
+          <h2 id="insights-title">What needs action next?</h2>
+          <p>Start with the strongest available evidence, then repair the gaps blocking a fair comparison.</p>
+        </div>
+      </div>
+      <div id="insights"></div>
+      <details class="panel coverage-detail">
+        <summary>Open the 30-day input audit</summary>
+        <div class="audit" id="audit"></div>
+      </details>
+    </section>
 
-  <footer id="foot"></footer>
-</div>
+    <section class="section reveal" aria-labelledby="roster-title" style="--delay:280ms">
+      <div class="roster-head">
+        <div>
+          <div class="section-label">Roster explorer</div>
+          <h2 id="roster-title" style="margin:2px 0 0;font:400 25px/1.1 'DM Serif Display',Georgia,serif">The full Kirpa team</h2>
+          <div class="roster-result" id="roster-result" aria-live="polite">Loading roster</div>
+        </div>
+        <div class="roster-tools">
+          <label class="field search-field">
+            <span class="field-label">Search the Kirpa roster</span>
+            <input class="search" id="search" type="search" autocomplete="off" placeholder="Search team member">
+          </label>
+          <label class="field">
+            <span class="field-label">Filter by measurement status</span>
+            <select class="filter" id="status-filter">
+              <option value="all">All statuses</option>
+              <option value="measured">Measured</option>
+              <option value="unranked">Unranked</option>
+              <option value="attention">Needs attention</option>
+              <option value="excluded">Not ranked by role</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Sort analytics</span>
+            <select class="filter" id="sort-by">
+              <option value="followers">Sort: followers</option>
+              <option value="interaction">Sort: interaction rate</option>
+              <option value="comments">Sort: median comments</option>
+              <option value="posts">Sort: post count</option>
+              <option value="latest">Sort: latest post</option>
+              <option value="name">Sort: name</option>
+            </select>
+          </label>
+          <button class="export-button" id="export-analytics" type="button">Export all analytics</button>
+        </div>
+      </div>
+      <div class="panel table-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th scope="col">Team member</th>
+              <th scope="col">Input status</th>
+              <th scope="col" class="num">Followers</th>
+              <th scope="col" class="num" id="posts-heading">Observed posts</th>
+              <th scope="col" class="num" id="cadence-heading">Latest post</th>
+              <th scope="col" class="num" id="engagement-heading">Sample ER</th>
+              <th scope="col">Next move</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="7" class="no-results">Loading verified roster…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="roster-more" id="roster-more" hidden>
+        <button id="roster-toggle" type="button" aria-controls="tbody" aria-expanded="false">Show full roster</button>
+      </div>
+    </section>
 
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" aria-hidden="true" tabindex="-1"></aside>
+    <details class="panel method reveal" style="--delay:320ms">
+      <summary>How this snapshot stays fair and honest</summary>
+      <div class="method-grid">
+        <div class="method-item">
+          <b>Roster and freshness lock</b>
+          <p>Every published snapshot must match the current Kirpa roster version. Rankings are withheld when that lock fails or the capture is more than 36 hours old.</p>
+        </div>
+        <div class="method-item">
+          <b>One comparable window</b>
+          <p>Cadence and engagement require the same trailing 30 days. A profile is withheld when the post query cannot prove complete coverage of that window.</p>
+        </div>
+        <div class="method-item">
+          <b>Typical engagement</b>
+          <p>The median public likes plus comments per eligible post is divided by followers. At least three comparable posts are required. The ratio can exceed 100% when content reaches people beyond the follower base.</p>
+        </div>
+        <div class="method-item">
+          <b>Current pinned-post rule</b>
+          <p>The version-3 cadence engine counts a pinned post only when its actual publication date is inside the window; old pins fall outside by date. Missing values remain unknown, never zero.</p>
+        </div>
+      </div>
+    </details>
+  </main>
 
-<script>
-const SAMPLE_DATA = null; // live-only: no bundled placeholder data
-
-const fmt = n => n==null ? '\u2014'
-  : n>=1e6 ? (n/1e6).toFixed(n>=1e7?0:1).replace(/\.0$/,'')+'M'
-  : n>=1000 ? (n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,'')+'k'
-  : String(n);
-const pct = n => n==null ? '\u2014' : (n*100).toFixed(1)+'%';
-const esc = s => (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let DATA=null;
-const IG = () => (DATA.leaderboards && DATA.leaderboards.instagram) || {};
-// look up a person's engine-computed metric by name, so the roster never
-// re-derives a number the ranking engine already decided (single source of truth)
-const lookup = (board, name, key) => { const r=(IG()[board]||[]).find(x=>x.name===name); return r? r[key] : null; };
-const firstName = n => (n||'').split(' ')[0];
-
-async function load(){
-  try{
-    const res = await fetch('data/latest.json',{cache:'no-store'});
-    if(!res.ok) throw 0;
-    DATA = await res.json();
-  }catch(e){ DATA = SAMPLE_DATA; }
-  if(!DATA){ renderNoData(); return; }
-  if(DATA.meta.source==='pending' || DATA.meta.resolvedProfiles===0){ renderStamp(); renderPending(); return; }
-  renderStamp(); renderLegend(); renderAll();
-}
-
-function renderNoData(){
-  document.querySelector('.hero').outerHTML=
-    `<section class="card setup"><div class="eyebrow">No data file</div>
-     <h2>Can\u2019t read data/latest.json</h2>
-     <p>Open this page over http (<code>python3 -m http.server</code>) or via GitHub Pages, then run the snapshot job.</p></section>`;
-  document.getElementById('boards').innerHTML='';
-  document.getElementById('trend').style.display='none';
-  document.querySelector('.roster').style.display='none';
-}
-function renderPending(){
-  const s=DATA.states||{}, ready=[...new Set((s.awaitingPull||[]).map(r=>r.name))];
-  document.querySelector('.hero').outerHTML=
-    `<section class="card setup"><div class="eyebrow">No snapshot yet</div>
-      <h2>Waiting on the first live pull</h2>
-      <p>This board shows live public Instagram data only \u2014 no placeholder numbers until a pull runs.</p>
-      <div class="ready"><b>${ready.length} confirmed</b>, ready on the next run${ready.length?': '+ready.map(esc).join(', '):''}.</div></section>`;
-  document.getElementById('boards').innerHTML='';
-  document.getElementById('trend').style.display='none';
-  document.querySelector('.roster').style.display='none';
-  renderFoot();
-}
-
-function renderStamp(){
-  const m=DATA.meta, when=new Date(m.capturedAt);
-  const badge = m.source==='live'
-    ? '<span class="src live"><span class="dot"></span>Live \u00b7 public data</span>'
-    : '<span class="src pending"><span class="dot"></span>Awaiting first pull</span>';
-  document.getElementById('stamp').innerHTML =
-    badge+'<div style="margin-top:6px">Instagram snapshot '+when.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})+
-    '<br>'+m.resolvedProfiles+' public profile'+(m.resolvedProfiles===1?'':'s')+' \u00b7 via '+esc(m.provider)+'</div>';
-}
-
-// how many people can actually be ranked; a "leaderboard" of one is not a race
-function rankableCount(){ return (IG().mostFollowers||[]).length; }
-function renderLegend(){
-  const el=document.getElementById('filters');
-  const n=rankableCount();
-  el.innerHTML = `<span class="hint">${n<2
-    ? '\u26a0 Ranking activates once a second agent\u2019s handle is confirmed \u2014 showing '+n+' live profile so far.'
-    : 'Ranked two ways: <b>followers</b> (reach) and <b>engagement</b> (quality), side by side.'}</span>`;
-}
-
-function renderAll(){ renderLeaders(); renderSpotlight(); renderBoards(); renderTrend(); renderRoster(); renderFoot(); }
-
-// HERO LEFT: both ranking bases side by side \u2014 followers leader + engagement leader
-function renderLeaders(){
-  const c=document.getElementById('champ');
-  const fol=(IG().mostFollowers||[])[0];
-  const eng=(IG().engagement||[])[0];
-  if(!fol && !eng){ c.innerHTML='<div class="eyebrow">Leaders</div><div class="empty">No public profiles yet.</div>'; return; }
-  const cell=(label,who,val)=>`<div class="lead"><span class="lead-k">${label}</span>
-    <b class="lead-n">${who?esc(firstName(who.name)):'\u2014'}</b>
-    <span class="lead-v">${val}</span></div>`;
-  c.innerHTML=`<div class="eyebrow">This week\u2019s leaders</div>
-    <div class="leads">
-      ${cell('Most followers',fol,fol?fmt(fol.followers):'\u2014')}
-      ${cell('Highest engagement',eng,eng?pct(eng.engagementRate):'\u2014')}
+  <footer class="site-footer">
+    <div class="footer-inner" id="foot">
+      <span><b>Kirpa Properties L.L.C</b> · ORN 49046</span>
+      <span>Public-surface data · snapshot, not real-time</span>
     </div>
-    <div class="lead-note">Two lenses on the same team: audience size vs. how hard that audience reacts.</div>`;
-}
+  </footer>
 
-// branded placeholder tile when a thumbnail is absent or expired (IG CDN urls rot)
-function thumbTile(p, big){
-  if(p.thumb) return `<img src="${esc(p.thumb)}" alt="${esc((p.caption||'post').slice(0,60))}" loading="lazy"/>`;
-  return `<div class="ph"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="rgba(240,101,58,.10)"/>
-    <path d="M10 8.5l6 3.5-6 3.5z" fill="rgba(240,101,58,.85)"/></svg>${big?'<span>reel</span>':''}</div>`;
-}
+  <dialog class="analytics-dialog" id="analytics-dialog" aria-labelledby="analytics-title">
+    <div class="dialog-shell">
+      <div id="analytics-content"></div>
+      <form method="dialog" class="dialog-close-row">
+        <button class="dialog-close" type="submit">Close analytics</button>
+      </form>
+    </div>
+  </dialog>
 
-function renderSpotlight(){
-  const s=document.getElementById('spotlight');
-  const tv=IG().topVideo;
-  if(!tv){s.innerHTML='<div class="eyebrow">Top reel</div><div class="empty">No public video data yet.</div>';return;}
-  const p=tv.post;
-  s.innerHTML=`<div class="eyebrow">Top reel this week</div>
-    <a class="thumb" href="${esc(p.url||'#')}" target="_blank" rel="noopener">${thumbTile(p,true)}
-      <div class="play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="rgba(240,101,58,.92)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></a>
-    <div class="cap"><b>${esc(firstName(tv.name))}</b> \u2014 ${esc((p.caption||'').slice(0,80))}</div>
-    <div class="stats"><span>\u25b6 ${fmt(p.views)} views</span><span>\u2661 ${fmt(p.likes)}</span><span>\ud83d\udcac ${fmt(p.comments)}</span></div>`;
-}
+  <script>
+    'use strict';
 
-function boardList(title,desc,rows,valFn){
-  if(!rows||!rows.length) return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div><div class="empty">Nothing to rank yet.</div></div>`;
-  const li=rows.slice(0,5).map(r=>`<li><span class="rk${r.rank===1?' one':''}">${r.rank}</span>
-    <span class="who"><div class="n">${esc(r.name)}</div>${r.handle?`<div class="h">@${esc(r.handle)}</div>`:''}</span>
-    <span class="val">${valFn(r)}</span></li>`).join('');
-  return `<div class="card board"><h3>${title}</h3><div class="desc">${desc}</div><ol class="rows">${li}</ol></div>`;
-}
+    let DATA = null;
+    let REGISTRY = null;
+    let ROSTER_EXPANDED = false;
+    const MAX_PUBLIC_AGE_HOURS = 36;
 
-function renderBoards(){
-  const b=document.getElementById('boards'), B=IG();
-  b.innerHTML =
-    boardList('Most followers','Reach \u2014 public follower count',B.mostFollowers,r=>fmt(r.followers))+
-    boardList('Highest engagement','Quality \u2014 avg likes+comments per post \u00f7 followers',B.engagement,r=>pct(r.engagementRate))+
-    boardList('Most active','Consistency \u2014 posts per week',B.postingFrequency,r=>r.postsPerWeek.toFixed(1)+'/wk')+
-    mostCommentedCard(B.mostCommented);
-}
-function mostCommentedCard(mc){
-  if(!mc) return `<div class="card board"><h3>Most commented</h3><div class="desc">Conversation \u2014 single most-discussed post</div><div class="empty">Nothing to rank yet.</div></div>`;
-  return `<div class="card board"><h3>Most commented post</h3><div class="desc">Conversation \u2014 single most-discussed post</div>
-    <ol class="rows"><li><span class="rk one">\ud83d\udcac</span><span class="who"><div class="n">${esc(mc.name)}</div>
-    <div class="h">${esc((mc.post.caption||'').slice(0,42))}</div></span><span class="val">${fmt(mc.post.comments)}</span></li></ol></div>`;
-}
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[char]);
 
-function renderTrend(){
-  const el=document.getElementById('trend'); el.style.display='';
-  if(!DATA.meta.trendAvailable||!DATA.trend.length){
-    el.innerHTML=`<div class="eyebrow">Follower growth \u00b7 vs last week</div>
-      <div class="empty" style="margin-top:8px">Collecting \u2014 the race appears once next week\u2019s snapshot lands and there are two points to compare.</div>`;
-    return;
-  }
-  const rows=DATA.trend.filter(t=>t.platform==='instagram'&&t.followerDelta>0).slice(0,8);
-  el.innerHTML=`<div class="eyebrow">Fastest follower growth \u00b7 vs last week</div>
-    <div class="chips">${rows.map(t=>`<span class="gain">\u2197 ${esc(firstName(t.name))} +${fmt(t.followerDelta)}${t.followerPct!=null?` <small>${(t.followerPct*100).toFixed(1)}%</small>`:''}</span>`).join('')||'<span class="empty">No gains this week.</span>'}</div>`;
-}
+    const byId = id => document.getElementById(id);
+    const isNumber = value => typeof value === 'number' && Number.isFinite(value);
+    const fmt = value => isNumber(value)
+      ? Intl.NumberFormat('en', {
+          notation: Math.abs(value) >= 10000 ? 'compact' : 'standard',
+          maximumFractionDigits: 1
+        }).format(value)
+      : '—';
+    const pct = value => isNumber(value)
+      ? `${(value * 100).toFixed(Math.abs(value * 100) >= 10 ? 1 : 2)}%`
+      : '—';
+    const median = values => {
+      const sorted = values.filter(isNumber).sort((a, b) => a - b);
+      if (!sorted.length) return null;
+      const middle = Math.floor(sorted.length / 2);
+      return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+    };
+    const safeUrl = raw => {
+      try {
+        const url = new URL(raw);
+        return url.protocol === 'https:' ? url.href : '';
+      } catch (_) {
+        return '';
+      }
+    };
+    const profileUrl = handle => handle
+      ? `https://www.instagram.com/${encodeURIComponent(String(handle).replace(/^@/, ''))}/`
+      : '';
+    const canonicalHandle = handle => String(handle || '').replace(/^@/, '').trim().toLowerCase();
+    const igRecords = () => DATA?.records?.filter(record => record.platform === 'instagram') || [];
+    const board = () => DATA?.leaderboards?.instagram || {};
+    const isLegacy = () => DATA?.meta?.validation?.status === 'legacy' && snapshotMatchesRoster();
+    const snapshotAgeHours = () => {
+      const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
+      return Number.isFinite(timestamp) ? (Date.now() - timestamp) / 3600000 : Infinity;
+    };
+    const registryIsValid = () => {
+      const employees = REGISTRY?.employees || [];
+      const names = employees.map(employee => employee.name);
+      const confirmedHandles = employees
+        .filter(employee => employee.confirmed === true)
+        .map(employee => canonicalHandle(employee.handles?.instagram))
+        .filter(Boolean);
+      return Boolean(
+        REGISTRY?.rosterVersion &&
+        Number.isInteger(REGISTRY?.rosterRowCount) &&
+        employees.length === REGISTRY.rosterRowCount &&
+        new Set(names).size === names.length &&
+        new Set(confirmedHandles).size === confirmedHandles.length &&
+        employees.every(employee => employee.confirmed !== true || canonicalHandle(employee.handles?.instagram))
+      );
+    };
+    const snapshotMatchesRoster = () => {
+      if (!registryIsValid() || DATA?.meta?.rosterVersion !== REGISTRY.rosterVersion) return false;
+      const relevant = relevantEmployees();
+      const records = igRecords();
+      if (records.length !== relevant.length) return false;
+      const recordsByName = new Map(records.map(record => [record.name, record]));
+      if (recordsByName.size !== records.length) return false;
+      return relevant.every(employee => {
+        const record = recordsByName.get(employee.name);
+        if (!record) return false;
+        const expectedHandle = canonicalHandle(employee.handles?.instagram);
+        if (canonicalHandle(record.handle) !== expectedHandle) return false;
+        return record.resolved !== true || (employee.confirmed === true && Boolean(expectedHandle));
+      });
+    };
+    const hasPassedValidator = () => (
+      DATA?.meta?.source === 'live' &&
+      /apify/i.test(DATA?.meta?.provider || '') &&
+      DATA?.meta?.measurementVersion === 3 &&
+      Array.isArray(DATA?.meta?.platforms) &&
+      DATA.meta.platforms.length === 1 &&
+      DATA.meta.platforms[0] === 'instagram' &&
+      DATA?.meta?.validation?.status === 'passed' &&
+      DATA.meta.validation.validatorVersion === 2 &&
+      DATA.meta.validation.snapshotCapturedAt === DATA.meta.capturedAt &&
+      DATA.meta.validation.rosterVersion === REGISTRY?.rosterVersion &&
+      snapshotMatchesRoster() &&
+      typeof board()?.coverage?.formula === 'string' &&
+      board().coverage.formula.includes('7 ÷ 30') &&
+      Array.isArray(board().coverage?.cadenceAudit)
+    );
+    const isAudited = () => hasPassedValidator() && snapshotAgeHours() >= -0.1 && snapshotAgeHours() <= MAX_PUBLIC_AGE_HOURS;
+    const isExpired = () => hasPassedValidator() && snapshotAgeHours() > MAX_PUBLIC_AGE_HOURS;
+    const auditMap = () => new Map(
+      (isAudited() ? board().coverage?.cadenceAudit || [] : []).map(row => [row.handle, row])
+    );
+    const observedPosts = record => {
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const seen = new Set();
+      return (record?.recentPosts || [])
+        .filter(post => post && post.isPinned !== true)
+        .filter(post => {
+          const identity = post.id || post.url;
+          if (!identity || seen.has(identity)) return false;
+          seen.add(identity);
+          const postedAt = Date.parse(post.postedAt || '');
+          return Number.isFinite(postedAt) && (!Number.isFinite(capturedAt) || postedAt <= capturedAt);
+        })
+        .sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
+    };
+    const interactionRateForPost = (post, followers) => {
+      if (!isNumber(followers) || followers <= 0 || !isNumber(post?.likes) || !isNumber(post?.comments)) return null;
+      return (post.likes + post.comments) / followers;
+    };
+    const legacySignalRows = () => {
+      const confirmedNames = new Set(relevantEmployees().filter(person => (
+        person.confirmed &&
+        person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      return igRecords().filter(record => (
+        confirmedNames.has(record.name) &&
+        record.resolved === true &&
+        record.isPrivate === false
+      )).map(record => {
+        const posts = observedPosts(record);
+        const sample = posts.slice(0, 3);
+        const rates = sample.map(post => interactionRateForPost(post, record.followers)).filter(isNumber);
+        return {
+          name: record.name,
+          role: record.role || '',
+          handle: record.handle,
+          followers: isNumber(record.followers) ? record.followers : null,
+          observedPosts: posts.length,
+          sampleSize: rates.length,
+          sampleEngagementRate: median(rates),
+          latestPostAt: posts[0]?.postedAt || null,
+          latestPostTime: posts[0]?.postedAt ? Date.parse(posts[0].postedAt) : null,
+          record,
+          posts
+        };
+      });
+    };
+    const legacySignalMap = () => new Map(legacySignalRows().map(row => [row.handle, row]));
+    const average = values => {
+      const numbers = values.filter(isNumber);
+      return numbers.length ? numbers.reduce((sum, value) => sum + value, 0) / numbers.length : null;
+    };
+    const bestPostBy = (posts, metric) => {
+      return (posts || []).map(post => ({ post, value: metric(post) }))
+        .filter(item => isNumber(item.value))
+        .sort((a, b) => b.value - a.value)[0] || null;
+    };
+    const postInteractions = post => (
+      isNumber(post?.likes) && isNumber(post?.comments) ? post.likes + post.comments : null
+    );
+    const detailedAnalytics = (record, posts, complete, reason) => {
+      const comparable = posts.filter(post => isNumber(post.likes) && isNumber(post.comments));
+      const likes = posts.map(post => post.likes).filter(isNumber);
+      const comments = posts.map(post => post.comments).filter(isNumber);
+      const shares = posts.map(post => post.shares).filter(isNumber);
+      const videos = posts.filter(post => post.type === 'video' || post.type === 'reel');
+      const views = videos.map(post => post.views).filter(isNumber);
+      const interactions = comparable.map(postInteractions);
+      const times = posts.map(post => Date.parse(post.postedAt || '')).filter(Number.isFinite).sort((a, b) => a - b);
+      const gaps = times.slice(1).map((time, index) => (time - times[index]) / 3600000);
+      const byType = ['image', 'carousel', 'video', 'reel'].map(type => {
+        const typePosts = posts.filter(post => post.type === type);
+        const typeInteractions = typePosts.map(postInteractions).filter(isNumber);
+        return {
+          type,
+          posts: typePosts.length,
+          comparablePosts: typeInteractions.length,
+          medianInteractions: median(typeInteractions),
+          averageInteractions: average(typeInteractions)
+        };
+      }).filter(row => row.posts > 0);
+      const latest = posts.slice().sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt))[0] || null;
+      return {
+        name: record?.name,
+        role: record?.role,
+        handle: record?.handle,
+        resolved: record?.resolved === true,
+        isPrivate: record?.isPrivate === true,
+        followers: record?.followers,
+        following: record?.following,
+        lifetimePosts: record?.postCount,
+        windowComplete: complete,
+        coverageReason: reason,
+        postsInWindow: posts.length,
+        comparablePosts: comparable.length,
+        postsPerWeek: complete ? posts.length * 7 / 30 : null,
+        activeDays: new Set(posts.map(post => post.postedAt?.slice(0, 10)).filter(Boolean)).size,
+        medianGapHours: median(gaps),
+        latestPostAt: latest?.postedAt || null,
+        likesReporting: likes.length,
+        commentsReporting: comments.length,
+        sharesReporting: shares.length,
+        viewsReporting: views.length,
+        totalLikes: likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
+        totalComments: comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
+        totalShares: shares.length ? shares.reduce((sum, value) => sum + value, 0) : null,
+        totalViews: views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+        medianLikes: median(likes),
+        medianComments: median(comments),
+        medianViews: median(views),
+        averageLikes: average(likes),
+        averageComments: average(comments),
+        averageViews: average(views),
+        medianInteractions: median(interactions),
+        averageInteractions: average(interactions),
+        interactionRate: record?.followers > 0 && comparable.length >= 3 ? median(interactions) / record.followers : null,
+        commentRate: record?.followers > 0 && comments.length >= 3 ? median(comments) / record.followers : null,
+        videoCount: videos.length,
+        carouselCount: posts.filter(post => post.type === 'carousel').length,
+        imageCount: posts.filter(post => post.type === 'image').length,
+        formatPerformance: byType,
+        bestPost: bestPostBy(posts, postInteractions)?.post || null,
+        mostLikedPost: bestPostBy(posts, post => post.likes)?.post || null,
+        mostCommentedPost: bestPostBy(posts, post => post.comments)?.post || null,
+        mostViewedPost: bestPostBy(videos, post => post.views)?.post || null,
+        metricCoverage: {
+          posts: posts.length,
+          likes: likes.length,
+          comments: comments.length,
+          shares: shares.length,
+          videos: videos.length,
+          videoViews: views.length
+        }
+      };
+    };
+    const analyticsForPerson = person => {
+      if (!person?.record) return null;
+      if (isAudited()) {
+        return (board().analytics || []).find(row => row.handle === person.handle) || null;
+      }
+      return isLegacy()
+        ? detailedAnalytics(
+            person.record,
+            observedPosts(person.record),
+            false,
+            'Fixed-size legacy response; this is directional account context, not a complete 30-day window.'
+          )
+        : null;
+    };
+    const relativeAge = raw => {
+      const timestamp = Date.parse(raw || '');
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      if (!Number.isFinite(timestamp) || !Number.isFinite(capturedAt)) return '—';
+      const hours = Math.max(0, (capturedAt - timestamp) / 3600000);
+      if (hours < 1) return '<1h';
+      if (hours < 24) return `${Math.floor(hours)}h`;
+      const days = Math.floor(hours / 24);
+      return `${days}d`;
+    };
 
-// roster identity + state from records; every METRIC pulled from the engine's
-// leaderboards, so the table can never disagree with the cards above it
-function rosterRows(){
-  const people=new Map();
-  for(const r of DATA.records){
-    if(r.platform!=='instagram') continue;
-    if(!people.has(r.name))people.set(r.name,{name:r.name,role:r.role,ig:null,er:null,ppw:null,state:'need',warn:null});
-    const p=people.get(r.name);
-    if(r.resolved&&!r.isPrivate){
-      p.ig=lookup('mostFollowers',r.name,'followers');
-      p.er=lookup('engagement',r.name,'engagementRate');
-      p.ppw=lookup('postingFrequency',r.name,'postsPerWeek');
-      p.state='public';
-      if((r.warnings||[]).length) p.warn=r.warnings[0];
-    } else if(r.isPrivate){ if(p.state!=='public')p.state='private'; }
-  }
-  return [...people.values()];
-}
-let sortKey='ig',sortDir=-1;
-function renderRoster(){
-  const rows=rosterRows().sort((a,b)=>{
-    if(sortKey==='name')return sortDir*a.name.localeCompare(b.name)*-1;
-    const va=a[sortKey],vb=b[sortKey];
-    return sortDir*(((vb==null)-(va==null))||((va||0)-(vb||0)));
-  });
-  document.getElementById('tbody').innerHTML=rows.map(p=>`
-    <tr tabindex="0" data-name="${esc(p.name)}">
-      <td><b>${esc(p.name)}</b><div class="muted" style="font-size:11.5px">${esc(p.role||'')}</div></td>
-      <td class="num">${p.ig==null?'<span class="muted">\u2014</span>':fmt(p.ig)}</td>
-      <td class="num">${p.er==null?'<span class="muted">\u2014</span>':pct(p.er)}</td>
-      <td class="num hide-sm">${p.ppw==null?'<span class="muted">\u2014</span>':p.ppw.toFixed(1)+'/wk'}</td>
-      <td>${p.state==='public'?'<span class="chip public">Public</span>':p.state==='private'?'<span class="chip private">Private</span>':'<span class="chip need">Handle needed</span>'}</td>
-    </tr>`).join('');
-  document.querySelectorAll('#tbody tr').forEach(tr=>{
-    const open=()=>openDrawer(tr.dataset.name);
-    tr.onclick=open; tr.onkeydown=e=>{if(e.key==='Enter')open();};
-  });
-  document.querySelectorAll('#tbl th').forEach(th=>th.onclick=()=>{const k=th.dataset.sort;if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=-1;}renderRoster();});
-}
+    function snapshotAge() {
+      const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
+      if (!Number.isFinite(timestamp)) {
+        return { short: 'Unknown', detail: 'Snapshot time unavailable', tone: 'attention' };
+      }
+      const hours = (Date.now() - timestamp) / 3600000;
+      if (hours < -0.1) return { short: 'Future', detail: 'Snapshot time is ahead of this device', tone: 'stale' };
+      if (hours < 1) return { short: 'Now', detail: 'Captured less than one hour ago', tone: 'healthy' };
+      if (hours < 24) return { short: `${Math.floor(hours)}h`, detail: `Snapshot ${Math.floor(hours)} hours old`, tone: 'healthy' };
+      if (hours <= MAX_PUBLIC_AGE_HOURS) {
+        return { short: `${Math.floor(hours)}h`, detail: `Snapshot ${Math.floor(hours)} hours old`, tone: 'attention' };
+      }
+      const days = Math.floor(hours / 24);
+      return {
+        short: `${days}d`,
+        detail: `Snapshot ${days} day${days === 1 ? '' : 's'} old`,
+        tone: 'stale'
+      };
+    }
 
-function openDrawer(name){
-  const r=DATA.records.find(x=>x.name===name && x.platform==='instagram');
-  const d=document.getElementById('drawer');
-  let body='';
-  if(!r || !r.resolved) body='<div class="empty">No confirmed public Instagram handle yet. Add one in the registry and it appears here after the next snapshot.</div>';
-  else if(r.isPrivate) body='<div class="empty">Private account \u2014 counts only, no post data.</div>';
-  else{
-    const er=lookup('engagement',name,'engagementRate'), ppw=lookup('postingFrequency',name,'postsPerWeek');
-    body+=`<div class="dstat"><div><b>${fmt(r.followers)}</b><span>followers</span></div>
-      <div><b>${pct(er)}</b><span>engagement</span></div>
-      <div><b>${ppw!=null?ppw.toFixed(1):'\u2014'}</b><span>posts/wk</span></div></div>`;
-    if((r.warnings||[]).length) body+=`<div style="font-size:12px;color:var(--ochre);margin-top:8px">${r.warnings.map(esc).join('<br>')}</div>`;
-    const top=(r.recentPosts||[]).slice().sort((a,b)=>(b.views||b.likes||0)-(a.views||a.likes||0)).slice(0,3);
-    body+='<div class="eyebrow" style="margin-top:18px">Top posts</div>';
-    body+=top.map(p=>`<a class="post" href="${esc(p.url||'#')}" target="_blank" rel="noopener"><div class="pthumb">${thumbTile(p)}</div>
-      <div><div class="pc">${esc((p.caption||'').slice(0,70))}</div>
-      <div class="ps">${p.views!=null?'\u25b6 '+fmt(p.views)+' \u00b7 ':''}\u2661 ${fmt(p.likes)} \u00b7 \ud83d\udcac ${fmt(p.comments)}</div></div></a>`).join('');
-  }
-  d.innerHTML=`<button class="x" aria-label="Close">\u00d7</button>
-    <h3>${esc(name)}</h3><div class="role">${esc((r&&r.role)||'')}</div>${body}`;
-  d.querySelector('.x').onclick=closeDrawer;
-  d.classList.add('open');d.setAttribute('aria-hidden','false');
-  document.getElementById('scrim').classList.add('open');d.focus();
-}
-function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer').setAttribute('aria-hidden','true');document.getElementById('scrim').classList.remove('open');}
-document.getElementById('scrim').onclick=closeDrawer;
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+    function allEmployees() {
+      return REGISTRY?.employees || [];
+    }
 
-function renderFoot(){
-  const m=DATA.meta;
-  document.getElementById('foot').innerHTML=
-    `<b>What this is.</b> Live public Instagram data \u2014 the same profile and post numbers a logged-out visitor sees, read via ${esc(m.provider)} on a weekly snapshot. Not an official Instagram API; a snapshot, not real-time.
-    <br><b>How to read it.</b> Follower count rewards reach; engagement rate rewards how hard that audience reacts, so a smaller account can top it. Posts-per-week rewards consistency. Private accounts show as <i>Private</i> and never enter a ranking.
-    <br><b>${esc(m.company)}</b> \u00b7 ORN ${esc(m.orn)} \u00b7 ${m.relevantCount} client-facing team members tracked.`;
-}
+    function relevantEmployees() {
+      return allEmployees().filter(employee => employee.dashboardRelevant !== false);
+    }
 
-load();
-</script>
+    function rosterPeople() {
+      const people = new Map();
+      for (const employee of allEmployees()) {
+        people.set(employee.name, {
+          name: employee.name,
+          role: employee.role || '',
+          handle: employee.handles?.instagram || null,
+          dashboardRelevant: employee.dashboardRelevant !== false,
+          confirmed: employee.confirmed === true,
+          needsHumanConfirmation: employee.needsHumanConfirmation === true,
+          registryPrivate: employee.private === true,
+          recordMismatch: false,
+          record: null
+        });
+      }
+      for (const record of igRecords()) {
+        const person = people.get(record.name);
+        if (!person) continue;
+        if (canonicalHandle(record.handle) !== canonicalHandle(person.handle)) {
+          person.recordMismatch = true;
+          continue;
+        }
+        person.record = record;
+      }
+      return [...people.values()];
+    }
+
+    function statusFor(person, audit, engagementRow) {
+      const record = person.record;
+      if (!person.dashboardRelevant) return { key: 'excluded', className: 'excluded', label: 'Not ranked · role excluded' };
+      if (!person.handle) return { key: 'attention', className: 'attention', label: 'Handle needed' };
+      if (!person.confirmed || person.needsHumanConfirmation) {
+        return { key: 'attention', className: 'unconfirmed', label: 'Handle confirmation needed' };
+      }
+      if (!snapshotMatchesRoster() || person.recordMismatch) {
+        return { key: 'attention', className: 'refresh', label: 'Roster changed · refresh required' };
+      }
+      if (isExpired()) return { key: 'attention', className: 'refresh', label: 'Snapshot expired · refresh required' };
+      if (!hasPassedValidator()) return { key: 'attention', className: 'refresh', label: 'Snapshot verification required' };
+      if (person.registryPrivate || record?.isPrivate === true) return { key: 'attention', className: 'private', label: 'Private' };
+      if (!record) return { key: 'attention', className: 'awaiting', label: 'Awaiting pull' };
+      if (record.resolved !== true) return { key: 'attention', className: 'attention', label: 'Unresolved' };
+      if (isLegacy()) return { key: 'measured', className: 'context', label: 'Directional sample' };
+      if (!isAudited() || !audit?.complete) {
+        return { key: 'attention', className: 'incomplete', label: 'Incomplete 30-day coverage' };
+      }
+      if (!engagementRow) {
+        return { key: 'unranked', className: 'unranked', label: 'Unranked — insufficient comparable data' };
+      }
+      return { key: 'measured', className: 'measured', label: 'Measured' };
+    }
+
+    function renderStamp() {
+      const meta = DATA.meta || {};
+      const age = snapshotAge();
+      const audited = isAudited();
+      const sample = meta.source === 'sample';
+      const rosterOk = snapshotMatchesRoster();
+      let label = 'Awaiting audited pull';
+      let mode = 'warning';
+      if (sample) {
+        label = 'Sample data';
+        mode = 'sample';
+      } else if (!registryIsValid()) {
+        label = 'Roster integrity error';
+      } else if (!rosterOk) {
+        label = 'Roster updated · refresh required';
+      } else if (meta.validation?.status === 'legacy') {
+        label = 'Legacy context only';
+        mode = 'warning';
+      } else if (audited && age.tone === 'healthy') {
+        label = 'Validated snapshot';
+        mode = 'live';
+      } else if (audited) {
+        label = 'Validated · refresh due soon';
+      } else if (isExpired()) {
+        label = 'Validated · expired';
+      }
+      const captured = meta.capturedAt
+        ? new Date(meta.capturedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+        : 'Time unavailable';
+      byId('stamp').innerHTML = `
+        <span class="source-status ${mode}"><span class="status-dot"></span>${esc(label)}</span>
+        <div>${esc(captured)} · ${esc(age.detail)}</div>
+      `;
+    }
+
+    function renderDataAlert() {
+      const alert = byId('data-alert');
+      let title = '';
+      let detail = '';
+      if (!registryIsValid()) {
+        title = 'Roster integrity check failed';
+        detail = 'Rankings and individual metrics are withheld because the published employee registry is incomplete or internally inconsistent.';
+      } else if (!snapshotMatchesRoster()) {
+        title = 'Employee roster updated — performance data paused';
+        detail = `Roster ${REGISTRY.rosterVersion} does not match this saved Instagram capture. The next successful daily pull will restore rankings; no old handle data is being reused.`;
+      } else if (isExpired()) {
+        title = 'Snapshot expired — performance data paused';
+        detail = `This capture is older than ${MAX_PUBLIC_AGE_HOURS} hours. Rankings and individual metrics will return after the next validated daily pull.`;
+      } else if (!isAudited() && !isLegacy()) {
+        title = 'Snapshot verification incomplete';
+        detail = 'Performance answers are withheld until the capture, roster lock, 30-day coverage, and recomputed leaderboards all pass validation.';
+      }
+      alert.hidden = !title;
+      alert.innerHTML = title ? `<div><b>${esc(title)}</b><span>${esc(detail)}</span></div>` : '';
+    }
+
+    function renderKpis() {
+      const people = relevantEmployees();
+      const verified = people.filter(person => (
+        person.confirmed &&
+        person.handles?.instagram &&
+        person.needsHumanConfirmation !== true
+      )).length;
+      const candidates = people.filter(person => (
+        person.handles?.instagram &&
+        person.needsHumanConfirmation === true
+      )).length;
+      const confirmedNames = new Set(people.filter(person => (
+        person.confirmed &&
+        person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      const publicRows = (isAudited() ? igRecords() : []).filter(record => (
+        record.resolved === true &&
+        record.isPrivate === false &&
+        confirmedNames.has(record.name)
+      ));
+      const knownAudienceRows = publicRows.filter(record => isNumber(record.followers));
+      const audience = knownAudienceRows.reduce((sum, record) => sum + record.followers, 0);
+      const missingAudience = publicRows.length - knownAudienceRows.length;
+      const coverage = board().coverage || {};
+      const age = snapshotAge();
+      const coveragePct = people.length ? Math.round(verified * 100 / people.length) : null;
+      const activity = isAudited() ? coverage.postsInWindow : null;
+      const observed = isLegacy()
+        ? legacySignalRows().reduce((sum, row) => sum + row.observedPosts, 0)
+        : null;
+      byId('kpis').innerHTML = `
+        <article class="kpi ${coveragePct >= 85 ? 'healthy' : 'attention'}">
+          <span class="micro">Rankable profile coverage</span>
+          <b>${isNumber(coveragePct) ? `${coveragePct}%` : '—'}</b>
+          <span>${verified} of ${people.length || '—'} roster-confirmed · ${candidates} awaiting confirmation</span>
+        </article>
+        <article class="kpi">
+          <span class="micro">Validated audience</span>
+          <b>${isAudited() ? `${missingAudience ? '≥' : ''}${fmt(audience)}` : '—'}</b>
+          <span>${isAudited() ? `Known non-unique followers · ${knownAudienceRows.length}/${publicRows.length || 0} reporting` : 'Withheld until roster and freshness checks pass'}</span>
+        </article>
+        <article class="kpi ${isAudited() || isNumber(observed) ? 'healthy' : 'attention'}">
+          <span class="micro">${isLegacy() ? 'Observed content' : '30-day activity'}</span>
+          <b>${isLegacy() ? fmt(observed) : (isAudited() ? fmt(activity) : 'Pending')}</b>
+          <span>${isLegacy() ? 'Non-pinned posts returned · incomplete sample' : (isAudited() ? `${coverage.completeWindowProfiles} complete profile windows` : 'Waiting for a version-3 audited pull')}</span>
+        </article>
+        <article class="kpi ${isAudited() && age.tone === 'healthy' ? 'healthy' : 'attention'}">
+          <span class="micro">Snapshot freshness</span>
+          <b>${snapshotMatchesRoster() ? esc(age.short) : 'Refresh'}</b>
+          <span>${snapshotMatchesRoster() ? esc(age.detail) : 'Current roster has no matching validated pull'}</span>
+        </article>
+      `;
+    }
+
+    function metricFor(handle, rows, key) {
+      const row = (rows || []).find(item => item.handle === handle);
+      return row && isNumber(row[key]) ? row[key] : null;
+    }
+
+    function renderChampion() {
+      const combined = DATA?.leaderboards?.combined?.composite || [];
+      const leader = isAudited()
+        ? combined.find(row => row.provisional !== true && isNumber(row.score))
+        : null;
+      const coverage = board().coverage || {};
+      if (!leader && isLegacy()) {
+        const audienceLeader = legacySignalRows()
+          .filter(row => isNumber(row.followers))
+          .sort((a, b) => b.followers - a.followers)[0];
+        if (audienceLeader) {
+          byId('champ').innerHTML = `
+            <div class="champ-top">
+              <div class="stage-eyebrow"><span>●</span> Audience context</div>
+              <div class="stage-number" aria-hidden="true">01</div>
+            </div>
+            <h3 class="stage-name">${esc(audienceLeader.name)}</h3>
+            <p class="stage-role">${esc(audienceLeader.role || 'Kirpa team member')}</p>
+            <p class="stage-reason">Largest known public audience in this snapshot. This is reach context—not a performance winner or momentum score.</p>
+            <div class="stage-metrics">
+              <div class="stage-metric"><b>${fmt(audienceLeader.followers)}</b><span>Public followers</span></div>
+              <div class="stage-metric"><b>${audienceLeader.observedPosts}</b><span>Non-pinned posts observed</span></div>
+              <div class="stage-metric"><b>${pct(audienceLeader.sampleEngagementRate)}</b><span>Latest ${audienceLeader.sampleSize || 0}-post reaction sample</span></div>
+            </div>
+          `;
+          return;
+        }
+      }
+      if (!leader) {
+        const complete = isAudited() && isNumber(coverage.completeWindowProfiles)
+          ? coverage.completeWindowProfiles
+          : 0;
+        const total = isNumber(coverage.profiles)
+          ? coverage.profiles
+          : igRecords().filter(record => record.resolved && !record.isPrivate).length;
+        const progress = total ? Math.min(100, complete * 100 / total) : 0;
+        byId('champ').innerHTML = `
+          <div class="champ-top">
+            <div class="stage-eyebrow"><span>●</span> Data readiness</div>
+            <div class="stage-number" aria-hidden="true">01</div>
+          </div>
+          <h3 class="stage-name">Fair ranking<br>is paused.</h3>
+          <p class="stage-role">No one is being scored from incomplete inputs.</p>
+          <p class="stage-reason">The next verified version-3 pull must prove a complete 30-day post window before momentum, engagement, or cadence can be ranked.</p>
+          <div class="readiness">
+            <div class="readiness-line"><span>Audited profile windows</span><b>${complete} / ${total || '—'}</b></div>
+            <div class="readiness-track"><div class="readiness-fill" style="--progress:${progress.toFixed(1)}%"></div></div>
+          </div>
+        `;
+        return;
+      }
+      const engagement = metricFor(leader.handle, board().engagement, 'engagementRate');
+      const cadence = metricFor(leader.handle, board().postingFrequency, 'postsPerWeek');
+      const followers = metricFor(leader.handle, board().mostFollowers, 'followers');
+      byId('champ').innerHTML = `
+        <div class="champ-top">
+          <div class="stage-eyebrow"><span>●</span> Momentum leader</div>
+          <div class="stage-number" aria-hidden="true">01</div>
+        </div>
+        <h3 class="stage-name">${esc(leader.name)}</h3>
+        <p class="stage-role">${esc(leader.role || 'Kirpa team member')}</p>
+        <p class="stage-reason">Leads the normalized Instagram momentum score using only complete, comparable inputs.</p>
+        <div class="stage-metrics">
+          <div class="stage-metric"><b>${Math.round(leader.score * 100)}</b><span>Momentum points</span></div>
+          <div class="stage-metric"><b>${pct(engagement)}</b><span>Typical engagement</span></div>
+          <div class="stage-metric"><b>${isNumber(cadence) ? cadence.toFixed(1) : '—'}</b><span>Posts per week · ${fmt(followers)} followers</span></div>
+        </div>
+      `;
+    }
+
+    function initials(name) {
+      return String(name || 'K').split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+    }
+
+    function renderSpotlight() {
+      const top = isAudited() ? board().topPost : null;
+      if (!top?.post && isLegacy()) {
+        const candidates = legacySignalRows().flatMap(row => row.posts.slice(0, 3).map(post => ({
+          name: row.name,
+          handle: row.handle,
+          post,
+          interactions: isNumber(post.likes) && isNumber(post.comments) ? post.likes + post.comments : null
+        }))).filter(item => isNumber(item.interactions));
+        const sampleTop = candidates.sort((a, b) => b.interactions - a.interactions)[0];
+        if (sampleTop) {
+          const postUrl = safeUrl(sampleTop.post.url);
+          const thumb = safeUrl(sampleTop.post.thumb);
+          byId('spot').innerHTML = `
+            <div class="spot-media">
+              ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${sampleTop.name} observed post preview`)}">` : ''}
+              <div class="media-fallback" ${thumb ? 'hidden' : ''}>
+                <div><span class="fallback-mark">${esc(initials(sampleTop.name))}</span><b>Preview unavailable</b><span>The public post link may still be available.</span></div>
+              </div>
+            </div>
+            <div class="spot-body">
+              <div class="spot-kicker">Equal-sample highlight · latest 3 per profile</div>
+              <h3 class="spot-title">${esc(sampleTop.name)}</h3>
+              <p class="spot-copy">${esc(sampleTop.post.caption || 'Public Instagram post')}</p>
+              <div class="spot-stats">
+                <span><b>${fmt(sampleTop.interactions)}</b> likes + comments</span>
+                <span><b>${fmt(sampleTop.post.likes)}</b> likes</span>
+                <span><b>${fmt(sampleTop.post.comments)}</b> comments</span>
+              </div>
+              ${postUrl ? `<a class="spot-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open public post ↗</a>` : ''}
+            </div>
+          `;
+          document.querySelectorAll('.post-image').forEach(image => {
+            image.addEventListener('error', () => {
+              image.hidden = true;
+              const fallback = image.nextElementSibling;
+              if (fallback) fallback.hidden = false;
+            }, { once: true });
+          });
+          return;
+        }
+      }
+      if (!top?.post) {
+        const coverage = board().coverage || {};
+        byId('spot').innerHTML = `
+          <div class="readiness-spot">
+            <div class="readiness-orbit"><span>K</span></div>
+            <div>
+              <div class="spot-kicker">Content spotlight</div>
+              <h3 class="spot-title">Unlocks after the input audit</h3>
+              <p class="spot-copy">No post is crowned while its comparison window is incomplete. This keeps old, pinned, or partially fetched content from becoming a decorative winner.</p>
+              <div class="readiness-list">
+                <div class="readiness-item"><span>Complete 30-day windows</span><b>${isAudited() ? fmt(coverage.completeWindowProfiles) : 'Pending'}</b></div>
+                <div class="readiness-item"><span>Minimum engagement sample</span><b>3 posts</b></div>
+                <div class="readiness-item"><span>Unsupported values</span><b>Shown as —</b></div>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      const postUrl = safeUrl(top.post.url);
+      const thumb = safeUrl(top.post.thumb);
+      const interactions = isNumber(top.engagement)
+        ? top.engagement
+        : [top.post.likes, top.post.comments, top.post.shares].filter(isNumber).reduce((sum, value) => sum + value, 0);
+      byId('spot').innerHTML = `
+        <div class="spot-media">
+          ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${top.name} top post preview`)}">` : ''}
+          <div class="media-fallback" ${thumb ? 'hidden' : ''}>
+            <div>
+              <span class="fallback-mark">${esc(initials(top.name))}</span>
+              <b>Preview unavailable</b>
+              <span>The post link still opens the public source.</span>
+            </div>
+          </div>
+        </div>
+        <div class="spot-body">
+          <div class="spot-kicker">Top supported interactions · 30 days</div>
+          <h3 class="spot-title">${esc(top.name)}</h3>
+          <p class="spot-copy">${esc(top.post.caption || 'Public Instagram post')}</p>
+          <div class="spot-stats">
+            <span><b>${fmt(interactions)}</b> interactions</span>
+            <span><b>${fmt(top.post.comments)}</b> comments</span>
+            <span><b>${fmt(top.post.shares)}</b> shares</span>
+          </div>
+          ${postUrl ? `<a class="spot-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open public post ↗</a>` : ''}
+        </div>
+      `;
+      document.querySelectorAll('.post-image').forEach(image => {
+        image.addEventListener('error', () => {
+          image.hidden = true;
+          const fallback = image.nextElementSibling;
+          if (fallback) fallback.hidden = false;
+        }, { once: true });
+      });
+    }
+
+    function contentRows() {
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const cutoff = capturedAt - 30 * 86400000;
+      const completeHandles = new Set((board().analytics || []).filter(row => row.windowComplete).map(row => row.handle));
+      const confirmedNames = new Set(relevantEmployees().filter(person => (
+        person.confirmed && person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      return igRecords().filter(record => confirmedNames.has(record.name)).flatMap(record => {
+        const posts = isAudited()
+          ? (completeHandles.has(record.handle) ? (record.recentPosts || []).filter(post => {
+              const timestamp = Date.parse(post.postedAt || '');
+              return Number.isFinite(timestamp) && timestamp >= cutoff && timestamp <= capturedAt;
+            }) : [])
+          : observedPosts(record);
+        return posts.map(post => ({
+          name: record.name,
+          role: record.role,
+          handle: record.handle,
+          followers: record.followers,
+          post,
+          interactions: postInteractions(post)
+        }));
+      });
+    }
+
+    function contentRecordCard({ title, value, item, basis, icon, featured = false }) {
+      const postUrl = safeUrl(item?.post?.url);
+      return `
+        <article class="panel record-card ${featured ? 'featured' : ''}">
+          <div class="record-top">
+            <span class="record-icon" aria-hidden="true">${esc(icon)}</span>
+            <span class="record-basis">${esc(basis)}</span>
+          </div>
+          <h3>${esc(title)}</h3>
+          ${item ? `
+            <div class="record-value">${esc(value)}</div>
+            <div class="record-person">${esc(item.name)}</div>
+            <div class="record-caption">${esc(item.post?.caption || `${item.post?.type || 'Instagram'} post`)}</div>
+            ${postUrl ? `<a class="record-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open post ↗</a>` : ''}
+          ` : `<div class="record-empty">This metric is not publicly reported in the current snapshot.</div>`}
+        </article>
+      `;
+    }
+
+    function renderRecords() {
+      const rows = contentRows();
+      const basis = isAudited() ? 'Validated 30-day window' : 'Observed legacy sample';
+      const mostInteractions = rows.filter(row => isNumber(row.interactions)).sort((a, b) => b.interactions - a.interactions)[0];
+      const mostLikes = rows.filter(row => isNumber(row.post.likes)).sort((a, b) => b.post.likes - a.post.likes)[0];
+      const mostComments = rows.filter(row => isNumber(row.post.comments)).sort((a, b) => b.post.comments - a.post.comments)[0];
+      const mostViews = rows.filter(row => (
+        (row.post.type === 'video' || row.post.type === 'reel') && isNumber(row.post.views)
+      )).sort((a, b) => b.post.views - a.post.views)[0];
+      const topVideo = rows.filter(row => (
+        (row.post.type === 'video' || row.post.type === 'reel') && isNumber(row.interactions)
+      )).sort((a, b) => b.interactions - a.interactions)[0];
+      const latest = rows.filter(row => Number.isFinite(Date.parse(row.post.postedAt || '')))
+        .sort((a, b) => Date.parse(b.post.postedAt) - Date.parse(a.post.postedAt))[0];
+      byId('records-note').textContent = isAudited()
+        ? 'Verified against complete profile windows'
+        : 'Directional records inside the returned sample';
+      byId('records').innerHTML = [
+        contentRecordCard({
+          title: 'Highest supported interactions',
+          value: fmt(mostInteractions?.interactions),
+          item: mostInteractions,
+          basis,
+          icon: 'Σ',
+          featured: true
+        }),
+        contentRecordCard({
+          title: 'Most liked post',
+          value: fmt(mostLikes?.post?.likes),
+          item: mostLikes,
+          basis,
+          icon: '♥'
+        }),
+        contentRecordCard({
+          title: 'Highest comments',
+          value: fmt(mostComments?.post?.comments),
+          item: mostComments,
+          basis,
+          icon: '↳'
+        }),
+        contentRecordCard({
+          title: 'Most viewed video',
+          value: fmt(mostViews?.post?.views),
+          item: mostViews,
+          basis: mostViews ? `${basis} · public views` : basis,
+          icon: '▶'
+        }),
+        contentRecordCard({
+          title: 'Top video interactions',
+          value: fmt(topVideo?.interactions),
+          item: topVideo,
+          basis,
+          icon: 'V'
+        }),
+        contentRecordCard({
+          title: 'Latest observed post',
+          value: latest ? `${relativeAge(latest.post.postedAt)} before capture` : '—',
+          item: latest,
+          basis,
+          icon: '●'
+        })
+      ].join('');
+      renderFormats(rows);
+    }
+
+    function renderFormats(content) {
+      const rows = isAudited() ? (board().formatAnalytics || []) : ['image', 'carousel', 'video', 'reel'].map(type => {
+        const posts = content.filter(row => row.post.type === type);
+        const interactions = posts.map(row => row.interactions).filter(isNumber);
+        const comments = posts.map(row => row.post.comments).filter(isNumber);
+        const views = posts.map(row => row.post.views).filter(isNumber);
+        return {
+          type,
+          posts: posts.length,
+          profiles: new Set(posts.map(row => row.handle)).size,
+          comparablePosts: interactions.length,
+          medianInteractions: median(interactions),
+          medianComments: median(comments),
+          viewsReporting: views.length,
+          medianViews: median(views)
+        };
+      }).filter(row => row.posts > 0);
+      const maxInteractions = Math.max(0, ...rows.map(row => row.medianInteractions || 0));
+      const maxComments = Math.max(0, ...rows.map(row => row.medianComments || 0));
+      const maxViews = Math.max(0, ...rows.map(row => row.medianViews || 0));
+      byId('format-confidence').textContent = isAudited() ? 'Validated 30-day formats' : 'Directional sample';
+      byId('formats').innerHTML = rows.length ? rows.map(row => {
+        const interactionFill = maxInteractions ? 100 * (row.medianInteractions || 0) / maxInteractions : 0;
+        const commentFill = maxComments ? 100 * (row.medianComments || 0) / maxComments : 0;
+        const viewFill = maxViews ? 100 * (row.medianViews || 0) / maxViews : 0;
+        return `
+          <article class="format-card">
+            <div class="format-type"><span>${esc(row.type)}</span><span>${fmt(row.posts)} posts · ${fmt(row.profiles)} profiles</span></div>
+            <div class="format-metric">${fmt(row.medianInteractions)}</div>
+            <p>Median supported interactions · ${fmt(row.comparablePosts)}/${fmt(row.posts)} reporting</p>
+            <div class="format-bars">
+              <div class="format-bar"><span>Interactions</span><span class="format-track"><span class="format-fill" style="--fill:${interactionFill.toFixed(1)}%"></span></span><b>${fmt(row.medianInteractions)}</b></div>
+              <div class="format-bar"><span>Comments</span><span class="format-track"><span class="format-fill" style="--fill:${commentFill.toFixed(1)}%"></span></span><b>${fmt(row.medianComments)}</b></div>
+              <div class="format-bar"><span>Views</span><span class="format-track"><span class="format-fill" style="--fill:${viewFill.toFixed(1)}%"></span></span><b>${fmt(row.medianViews)}</b></div>
+            </div>
+          </article>
+        `;
+      }).join('') : '<div class="empty-state"><div><b>Format analysis unavailable</b><p>No supported post types are present in this snapshot.</p></div></div>';
+    }
+
+    function rankBy(rows, key) {
+      const sorted = rows.slice().sort((a, b) => (b[key] || 0) - (a[key] || 0));
+      let prior = null;
+      let priorRank = 0;
+      return sorted.map((row, index) => {
+        const value = row[key];
+        const rank = value === prior ? priorRank : index + 1;
+        prior = value;
+        priorRank = rank;
+        return { ...row, rank };
+      });
+    }
+
+    function boardMarkup({ title, description, rows, key, value, sub, unavailable }) {
+      if (!rows?.length) {
+        return `
+          <article class="panel board">
+            <div class="board-head">
+              <div><h3>${esc(title)}</h3><div class="board-desc">${esc(description)}</div></div>
+              <span class="board-count">Unavailable</span>
+            </div>
+            <div class="empty-state"><div><b>Not ranked yet</b><p>${esc(unavailable)}</p></div></div>
+          </article>
+        `;
+      }
+      const values = rows.map(row => row[key]).filter(isNumber);
+      const maximum = values.length ? Math.max(...values.map(Math.abs)) : 0;
+      return `
+        <article class="panel board">
+          <div class="board-head">
+            <div><h3>${esc(title)}</h3><div class="board-desc">${esc(description)}</div></div>
+            <span class="board-count">${rows.length} eligible</span>
+          </div>
+          <ol class="rows">
+            ${rows.slice(0, 15).map((row, index) => {
+              const raw = row[key];
+              const bar = maximum && isNumber(raw) ? Math.max(2, Math.abs(raw) * 100 / maximum) : 0;
+              const url = profileUrl(row.handle);
+              return `
+                <li style="--bar:${bar.toFixed(1)}%">
+                  <span class="rank">${esc(row.rank ?? index + 1)}</span>
+                  <span class="who">
+                    ${url
+                      ? `<a class="person-link" href="${esc(url)}" target="_blank" rel="noopener"><span class="person-name">${esc(row.name)}</span><span class="person-sub">${esc(sub(row))}</span></a>`
+                      : `<span class="person-name">${esc(row.name)}</span><span class="person-sub">${esc(sub(row))}</span>`
+                    }
+                  </span>
+                  <span class="metric-value">${esc(value(row))}</span>
+                </li>
+              `;
+            }).join('')}
+          </ol>
+        </article>
+      `;
+    }
+
+    function renderBoards() {
+      const audited = isAudited();
+      const unavailable = 'A complete, audited 30-day window is required before this lane can be compared.';
+      if (isLegacy()) {
+        const signals = legacySignalRows();
+        const audienceRows = rankBy(signals.filter(row => isNumber(row.followers)), 'followers');
+        const reactionRows = rankBy(signals.filter(row => (
+          row.sampleSize >= 3 && isNumber(row.sampleEngagementRate)
+        )), 'sampleEngagementRate');
+        const observedRows = rankBy(signals.filter(row => row.observedPosts > 0), 'observedPosts');
+        const recentRows = rankBy(signals.filter(row => isNumber(row.latestPostTime)), 'latestPostTime');
+        byId('boards').innerHTML = [
+          boardMarkup({
+            title: 'Audience reach',
+            description: 'Known public followers at capture time · reach context only',
+            rows: audienceRows,
+            key: 'followers',
+            value: row => fmt(row.followers),
+            sub: row => `Public followers · @${row.handle}`,
+            unavailable: 'No public follower counts are available.'
+          }),
+          boardMarkup({
+            title: 'Recent reaction sample',
+            description: 'Median likes + comments ÷ followers · latest 3 returned non-pinned posts',
+            rows: reactionRows,
+            key: 'sampleEngagementRate',
+            value: row => pct(row.sampleEngagementRate),
+            sub: row => `${row.sampleSize}-post directional sample · @${row.handle}`,
+            unavailable: 'No profiles have three supported recent posts.'
+          }),
+          boardMarkup({
+            title: 'Posts returned',
+            description: 'Non-pinned posts present in the fixed-size provider response · not cadence',
+            rows: observedRows,
+            key: 'observedPosts',
+            value: row => `${row.observedPosts} observed`,
+            sub: row => `Incomplete provider sample · @${row.handle}`,
+            unavailable: 'No recent post samples were returned.'
+          }),
+          boardMarkup({
+            title: 'Latest observed activity',
+            description: 'Recency within the captured sample · not a complete activity window',
+            rows: recentRows,
+            key: 'latestPostTime',
+            value: row => `${relativeAge(row.latestPostAt)} before capture`,
+            sub: row => `Latest returned non-pinned post · @${row.handle}`,
+            unavailable: 'No supported post timestamps are available.'
+          })
+        ].join('');
+        return;
+      }
+      const growthRows = audited && DATA.meta?.trendAvailable
+        ? (DATA.trend || []).filter(row => row.platform === 'instagram')
+        : [];
+      const engagementRows = audited ? board().engagement || [] : [];
+      const cadenceRows = audited ? board().postingFrequency || [] : [];
+      const participationRows = audited
+        ? rankBy((board().coverage?.cadenceAudit || []).filter(row => row.complete), 'postsInWindow')
+        : [];
+
+      byId('boards').innerHTML = [
+        boardMarkup({
+          title: 'Weekly audience growth',
+          description: 'Only against a valid baseline approximately 5–9 days old',
+          rows: growthRows,
+          key: 'followerPct',
+          value: row => pct(row.followerPct),
+          sub: row => `${row.followerDelta >= 0 ? '+' : ''}${fmt(Math.round(row.followerDelta))} weekly-equivalent · @${row.handle}`,
+          unavailable: audited ? 'No valid weekly baseline is attached to this snapshot.' : unavailable
+        }),
+        boardMarkup({
+          title: 'Typical engagement',
+          description: 'Median public likes + comments ÷ followers · minimum 3 posts',
+          rows: engagementRows,
+          key: 'engagementRate',
+          value: row => pct(row.engagementRate),
+          sub: row => `${row.postsInWindow} comparable posts · @${row.handle}`,
+          unavailable
+        }),
+        boardMarkup({
+          title: 'Publishing cadence',
+          description: 'Unique authored posts × 7 ÷ 30 · complete windows only',
+          rows: cadenceRows,
+          key: 'postsPerWeek',
+          value: row => `${row.postsPerWeek.toFixed(1)}/wk`,
+          sub: row => `${row.postsInWindow} posts · ${row.formula}`,
+          unavailable
+        }),
+        boardMarkup({
+          title: '30-day participation',
+          description: 'Eligible profiles ordered by posts published in the shared window',
+          rows: participationRows,
+          key: 'postsInWindow',
+          value: row => `${row.postsInWindow} post${row.postsInWindow === 1 ? '' : 's'}`,
+          sub: row => `${row.postsInWindow ? 'Participated' : 'No post in window'} · @${row.handle}`,
+          unavailable
+        })
+      ].join('');
+    }
+
+    function renderTrend() {
+      if (isLegacy()) {
+        byId('trend').innerHTML = `
+          <span class="trend-label">Confidence note</span>
+          <span class="trend-empty">Follower totals are point-in-time context. Recent reaction and post counts are directional samples only. Official growth, cadence, participation, and momentum remain withheld.</span>
+        `;
+        return;
+      }
+      const rows = isAudited() && DATA.meta?.trendAvailable
+        ? (DATA.trend || []).filter(row => row.platform === 'instagram').slice(0, 6)
+        : [];
+      byId('trend').innerHTML = rows.length
+        ? `<span class="trend-label">Movement tape</span>${rows.map(row => `
+            <span class="movement">${row.followerDelta >= 0 ? '↗' : '↘'} ${esc(row.name)} ${esc(pct(row.followerPct))}<small>${row.followerDelta >= 0 ? '+' : ''}${esc(fmt(Math.round(row.followerDelta)))}/wk</small></span>
+          `).join('')}`
+        : `<span class="trend-label">Movement tape</span><span class="trend-empty">A valid 5–9 day baseline will unlock verified weekly movement.</span>`;
+    }
+
+    function attentionItems() {
+      const audits = auditMap();
+      const engagement = new Map((isAudited() ? board().engagement || [] : []).map(row => [row.handle, row]));
+      return rosterPeople().filter(person => person.dashboardRelevant).map(person => ({
+        person,
+        audit: audits.get(person.handle),
+        engagement: engagement.get(person.handle)
+      })).map(item => ({
+        name: item.person.name,
+        state: statusFor(item.person, item.audit, item.engagement)
+      })).filter(item => item.state.key !== 'measured');
+    }
+
+    function renderInsights() {
+      const coverage = board().coverage || {};
+      const engagementRows = isAudited() ? board().engagement || [] : [];
+      const cadenceRows = isAudited() ? board().postingFrequency || [] : [];
+      const engagementMedian = median(engagementRows.map(row => row.engagementRate));
+      const cadenceMedian = median(cadenceRows.map(row => row.postsPerWeek));
+      const complete = isAudited() && isNumber(coverage.completeWindowProfiles) ? coverage.completeWindowProfiles : 0;
+      const active = isAudited() && isNumber(coverage.profilesWithPostsInWindow) ? coverage.profilesWithPostsInWindow : 0;
+      const participation = complete ? active / complete : null;
+      const attention = attentionItems();
+      if (isLegacy()) {
+        const signals = legacySignalRows();
+        const withThreePosts = signals.filter(row => row.sampleSize >= 3).length;
+        const withRecentPost = signals.filter(row => {
+          const timestamp = Date.parse(row.latestPostAt || '');
+          const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+          return Number.isFinite(timestamp) && Number.isFinite(capturedAt) && capturedAt - timestamp <= 7 * 86400000;
+        }).length;
+        byId('insights').innerHTML = `
+          <div class="insight-grid">
+            <article class="panel insight">
+              <span class="insight-icon" aria-hidden="true">◎</span>
+              <h3>Usable public context</h3>
+              <div class="insight-value">${signals.length}</div>
+              <p>Confirmed public profiles with a resolved follower count or recent-post sample.</p>
+            </article>
+            <article class="panel insight">
+              <span class="insight-icon" aria-hidden="true">≈</span>
+              <h3>Recent sample coverage</h3>
+              <div class="insight-value">${withThreePosts}</div>
+              <p>Profiles with three supported returned posts; ${withRecentPost} had an observed post within seven days of capture.</p>
+            </article>
+            <article class="panel insight">
+              <span class="insight-icon" aria-hidden="true">!</span>
+              <h3>Identity and access queue</h3>
+              <div class="insight-value">${attention.length}</div>
+              <p>Profiles still blocked by an unconfirmed handle, missing pull, private account, or unresolved public page.</p>
+              <ul class="attention-list">
+                ${attention.slice(0, 3).map(item => `<li><b>${esc(item.name)}</b><span>${esc(item.state.label)}</span></li>`).join('')}
+              </ul>
+            </article>
+          </div>
+        `;
+        return;
+      }
+      byId('insights').innerHTML = `
+        <div class="insight-grid">
+          <article class="panel insight">
+            <span class="insight-icon" aria-hidden="true">↗</span>
+            <h3>Participation</h3>
+            <div class="insight-value">${isNumber(participation) ? pct(participation) : 'Pending'}</div>
+            <p>${isAudited() ? `${active} of ${complete} profiles with complete inputs posted in the window.` : 'The verified pull must complete before participation is reported.'}</p>
+          </article>
+          <article class="panel insight">
+            <span class="insight-icon" aria-hidden="true">≈</span>
+            <h3>Team benchmark</h3>
+            <div class="insight-value">${isNumber(engagementMedian) ? pct(engagementMedian) : 'Pending'}</div>
+            <p>${isNumber(cadenceMedian) ? `${cadenceMedian.toFixed(1)} posts/week median cadence. Engagement is the team median of individual typical rates.` : 'Typical engagement and cadence remain withheld until inputs pass.'}</p>
+          </article>
+          <article class="panel insight">
+            <span class="insight-icon" aria-hidden="true">!</span>
+            <h3>Coverage attention</h3>
+            <div class="insight-value">${attention.length}</div>
+            <p>People who are private, unconnected, unresolved, incomplete, awaiting a pull, or not yet rankable.</p>
+            <ul class="attention-list">
+              ${attention.slice(0, 3).map(item => `<li><b>${esc(item.name)}</b><span>${esc(item.state.label)}</span></li>`).join('')}
+            </ul>
+          </article>
+        </div>
+      `;
+    }
+
+    function renderAudit() {
+      if (!isAudited()) {
+        const signals = isLegacy() ? legacySignalRows() : [];
+        const supportedSamples = signals.filter(row => row.sampleSize >= 3).length;
+        byId('audit').innerHTML = `
+          <div class="audit-grid">
+            <div class="audit-item held"><b>Validated version-3 pull required</b><span>The current snapshot cannot prove complete 30-day post coverage.</span></div>
+            <div class="audit-item held"><b>Official scores withheld</b><span>Growth, cadence, momentum, and participation are not claimed from this fixed-size response.</span></div>
+            <div class="audit-item ok"><b>Follower context retained</b><span>${signals.length || 'Known'} confirmed public profiles remain visible as point-in-time context.</span></div>
+            <div class="audit-item ok"><b>Recent samples labeled</b><span>${supportedSamples} profiles have a three-post directional reaction sample; none is presented as a verified 30-day benchmark.</span></div>
+          </div>
+        `;
+        return;
+      }
+      const rows = board().coverage?.cadenceAudit || [];
+      byId('audit').innerHTML = `
+        <div class="audit-grid">
+          ${rows.map(row => `
+            <div class="audit-item ${row.complete ? 'ok' : 'held'}">
+              <b>${esc(row.name)} · ${row.complete ? 'Complete' : 'Withheld'}</b>
+              <span>${esc(row.complete ? `${row.postsInWindow} × 7 ÷ 30 = ${row.postsPerWeek.toFixed(2)}/week` : row.reason)}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function nextMove(person, state, audit, engagementRow, benchmarks, legacySignal) {
+      if (state.key === 'excluded') return 'Visible in the full roster; excluded from performance rankings by role.';
+      if (state.label === 'Handle needed') return 'Confirm the correct public Instagram handle.';
+      if (state.label === 'Handle confirmation needed') return 'Verify this candidate handle with Kirpa-owned evidence.';
+      if (state.className === 'refresh') return 'Run and validate a fresh Instagram snapshot against the current roster.';
+      if (state.label === 'Private') return 'A public account is required to participate.';
+      if (state.label === 'Awaiting pull') return 'Wait for the next verified snapshot.';
+      if (state.label === 'Unresolved') return 'Re-check the confirmed handle and public profile.';
+      if (isLegacy()) {
+        if (!legacySignal?.observedPosts) return 'Refresh this profile in the complete 30-day pull.';
+        if (legacySignal.sampleSize < 3) return 'Collect at least three supported posts in the next pull.';
+        const teamSampleMedian = median(legacySignalRows().map(row => row.sampleEngagementRate));
+        if (isNumber(teamSampleMedian) && legacySignal.sampleEngagementRate < teamSampleMedian) {
+          return 'Review recent hooks; confirm the signal after the full pull.';
+        }
+        return 'Keep as directional context; confirm with the full pull.';
+      }
+      if (state.className === 'incomplete') return 'Retry the complete 30-day posts query.';
+      if (state.key === 'unranked') {
+        return audit?.postsInWindow === 0
+          ? 'Publish once this week to restart momentum.'
+          : `Reach ${board().coverage?.minimumEngagementPosts || 3} comparable posts in 30 days.`;
+      }
+      if (isNumber(audit?.postsPerWeek) && isNumber(benchmarks.cadence) && audit.postsPerWeek < benchmarks.cadence) {
+        return 'Build a more consistent publishing rhythm.';
+      }
+      if (isNumber(engagementRow?.engagementRate) && isNumber(benchmarks.engagement) && engagementRow.engagementRate < benchmarks.engagement) {
+        return 'Strengthen hooks and conversation prompts.';
+      }
+      return 'Protect the rhythm and repeat what works.';
+    }
+
+    function formatDuration(hours) {
+      if (!isNumber(hours)) return '—';
+      return hours < 48 ? `${hours.toFixed(hours < 10 ? 1 : 0)}h` : `${(hours / 24).toFixed(1)}d`;
+    }
+
+    function analyticsKpi(label, value, note = '') {
+      return `<div class="person-kpi"><span>${esc(label)}</span><b>${esc(value)}</b>${note ? `<small>${esc(note)}</small>` : ''}</div>`;
+    }
+
+    function renderPersonAnalytics(handle) {
+      const person = rosterPeople().find(item => item.handle === handle);
+      const dialog = byId('analytics-dialog');
+      const container = byId('analytics-content');
+      if (!person) return;
+      const analytics = analyticsForPerson(person);
+      const record = person.record;
+      const state = statusFor(person, auditMap().get(handle), (board().engagement || []).find(row => row.handle === handle));
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const cutoff = capturedAt - 30 * 86400000;
+      const posts = record ? (isAudited()
+        ? (record.recentPosts || []).filter(post => {
+            const timestamp = Date.parse(post.postedAt || '');
+            return Number.isFinite(timestamp) && timestamp >= cutoff && timestamp <= capturedAt;
+          }).sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt))
+        : observedPosts(record)) : [];
+      const sourceLabel = isAudited() && analytics?.windowComplete
+        ? 'Validated 30-day analytics'
+        : isLegacy() && record?.resolved
+          ? 'Directional legacy analytics'
+          : state.label;
+      const complete = isAudited() && analytics?.windowComplete;
+      const note = complete
+        ? 'All performance metrics below were recomputed from a complete, owner-verified 30-day public-post window.'
+        : analytics?.coverageReason || 'Performance analytics are unavailable until this profile has a complete verified pull.';
+      const formats = analytics?.formatPerformance || [];
+      container.innerHTML = `
+        <div class="analytics-hero">
+          <span class="analytics-status">${esc(sourceLabel)}</span>
+          <h2 id="analytics-title">${esc(person.name)}</h2>
+          <p>${esc(person.role || 'Kirpa team member')} · ${person.handle ? `@${esc(person.handle)}` : 'Instagram handle required'}</p>
+        </div>
+        <div class="analytics-body">
+          <div class="analytics-note">${esc(note)} ${isLegacy() ? 'Use it to inspect this account, not to declare a team winner.' : ''}</div>
+          <div class="person-kpis">
+            ${analyticsKpi('Followers', fmt(analytics?.followers), 'Point-in-time public count')}
+            ${analyticsKpi('Following', fmt(analytics?.following), 'Public profile count')}
+            ${analyticsKpi('Lifetime posts', fmt(analytics?.lifetimePosts), 'Public profile count')}
+            ${analyticsKpi(complete ? '30-day posts' : 'Posts observed', fmt(analytics?.postsInWindow), complete ? 'Complete window' : 'Incomplete provider sample')}
+            ${analyticsKpi('Publishing cadence', isNumber(analytics?.postsPerWeek) ? `${analytics.postsPerWeek.toFixed(1)}/wk` : '—', complete ? 'Posts × 7 ÷ 30' : 'Withheld')}
+            ${analyticsKpi('Active days', fmt(analytics?.activeDays), complete ? 'Distinct UTC publishing dates' : 'Inside observed sample')}
+            ${analyticsKpi('Median interaction rate', pct(analytics?.interactionRate), 'Median likes + comments ÷ followers')}
+            ${analyticsKpi('Median comment rate', pct(analytics?.commentRate), 'Median comments ÷ followers')}
+            ${analyticsKpi('Median likes', fmt(analytics?.medianLikes), `${fmt(analytics?.likesReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
+            ${analyticsKpi('Median comments', fmt(analytics?.medianComments), `${fmt(analytics?.commentsReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
+            ${analyticsKpi('Median video views', fmt(analytics?.medianViews), `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
+            ${analyticsKpi('Median post gap', formatDuration(analytics?.medianGapHours), 'Time between observed posts')}
+            ${analyticsKpi('Total likes', fmt(analytics?.totalLikes), 'Supported values only')}
+            ${analyticsKpi('Total comments', fmt(analytics?.totalComments), 'Supported values only')}
+            ${analyticsKpi('Total video views', fmt(analytics?.totalViews), 'Reporting videos only')}
+            ${analyticsKpi('Latest post', analytics?.latestPostAt ? `${relativeAge(analytics.latestPostAt)} before capture` : '—', 'Relative to snapshot time')}
+          </div>
+          <h3 class="analytics-subhead">Content mix</h3>
+          <div class="person-formats">
+            ${formats.length ? formats.map(row => `
+              <div class="person-format">
+                <b>${esc(row.type)}</b>
+                <span>${fmt(row.posts)} posts · ${fmt(row.comparablePosts)} with supported interactions</span>
+                <span>Median interactions: ${fmt(row.medianInteractions)}</span>
+              </div>
+            `).join('') : '<div class="record-empty">No supported content mix is available.</div>'}
+          </div>
+          <h3 class="analytics-subhead">${complete ? 'Posts in the verified window' : 'Recent posts returned'}</h3>
+          <div class="person-posts">
+            ${posts.length ? posts.slice(0, 9).map(post => {
+              const url = safeUrl(post.url);
+              const date = post.postedAt
+                ? new Date(post.postedAt).toLocaleDateString([], { dateStyle: 'medium' })
+                : 'Date unavailable';
+              return `
+                <article class="person-post">
+                  <time>${esc(date)} · ${esc(post.type || 'post')}</time>
+                  <p>${esc(post.caption || 'Instagram post')}</p>
+                  <div class="post-metrics">
+                    <span>${fmt(post.likes)} likes</span>
+                    <span>${fmt(post.comments)} comments</span>
+                    <span>${fmt(post.views)} views</span>
+                  </div>
+                  ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">Open post ↗</a>` : ''}
+                </article>
+              `;
+            }).join('') : '<div class="record-empty">No public posts were returned for this profile.</div>'}
+          </div>
+        </div>
+      `;
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    }
+
+    function exportAnalyticsCsv() {
+      const audits = auditMap();
+      const engagement = new Map((board().engagement || []).map(row => [row.handle, row]));
+      const headings = [
+        'Name', 'Role', 'Instagram handle', 'Status', 'Confidence', 'Followers', 'Following',
+        'Lifetime posts', 'Posts in view', 'Posts per week', 'Active days', 'Median post gap hours',
+        'Median interaction rate', 'Median comment rate', 'Median likes', 'Median comments',
+        'Median video views', 'Total likes', 'Total comments', 'Total video views',
+        'Latest post at', 'Likes coverage', 'Comments coverage', 'View coverage', 'Coverage note'
+      ];
+      const rows = rosterPeople().map(person => {
+        const analytics = analyticsForPerson(person);
+        const state = statusFor(person, audits.get(person.handle), engagement.get(person.handle));
+        return [
+          person.name,
+          person.role,
+          person.handle ? `@${person.handle}` : '',
+          state.label,
+          isAudited() && analytics?.windowComplete ? 'validated 30-day' : (analytics ? 'directional sample' : 'unavailable'),
+          analytics?.followers,
+          analytics?.following,
+          analytics?.lifetimePosts,
+          analytics?.postsInWindow,
+          analytics?.postsPerWeek,
+          analytics?.activeDays,
+          analytics?.medianGapHours,
+          analytics?.interactionRate,
+          analytics?.commentRate,
+          analytics?.medianLikes,
+          analytics?.medianComments,
+          analytics?.medianViews,
+          analytics?.totalLikes,
+          analytics?.totalComments,
+          analytics?.totalViews,
+          analytics?.latestPostAt,
+          analytics?.metricCoverage ? `${analytics.metricCoverage.likes}/${analytics.metricCoverage.posts}` : '',
+          analytics?.metricCoverage ? `${analytics.metricCoverage.comments}/${analytics.metricCoverage.posts}` : '',
+          analytics?.metricCoverage ? `${analytics.metricCoverage.videoViews}/${analytics.metricCoverage.videos}` : '',
+          analytics?.coverageReason || ''
+        ];
+      });
+      const csvCell = value => {
+        const text = value === null || value === undefined ? '' : String(value);
+        return `"${text.replace(/"/g, '""')}"`;
+      };
+      const csv = [headings, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      const date = String(DATA?.meta?.capturedAt || '').slice(0, 10) || 'snapshot';
+      anchor.href = url;
+      anchor.download = `kirpa-instagram-analytics-${date}.csv`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function renderRoster() {
+      const query = byId('search').value.trim().toLowerCase();
+      const filter = byId('status-filter').value;
+      const sortMode = byId('sort-by').value;
+      const audits = auditMap();
+      const legacySignals = legacySignalMap();
+      const engagementRows = isAudited() ? board().engagement || [] : [];
+      const engagement = new Map(engagementRows.map(row => [row.handle, row]));
+      const benchmarks = {
+        engagement: median(engagementRows.map(row => row.engagementRate)),
+        cadence: median((isAudited() ? board().postingFrequency || [] : []).map(row => row.postsPerWeek))
+      };
+      const rows = rosterPeople().map(person => {
+        const audit = audits.get(person.handle);
+        const engagementRow = engagement.get(person.handle);
+        const legacySignal = legacySignals.get(person.handle);
+        const analytics = analyticsForPerson(person);
+        const state = statusFor(person, audit, engagementRow);
+        return { person, audit, engagementRow, legacySignal, analytics, state };
+      }).filter(row => {
+        const haystack = `${row.person.name} ${row.person.role} ${row.person.handle || ''}`.toLowerCase();
+        const matchesQuery = haystack.includes(query);
+        const matchesFilter = filter === 'all'
+          || row.state.key === filter
+          || (filter === 'attention' && row.state.key === 'attention');
+        return matchesQuery && matchesFilter;
+      }).sort((a, b) => {
+        if (sortMode === 'name') return a.person.name.localeCompare(b.person.name);
+        const key = sortMode === 'interaction' ? 'interactionRate'
+          : sortMode === 'comments' ? 'medianComments'
+            : sortMode === 'posts' ? 'postsInWindow'
+              : sortMode === 'latest' ? 'latestPostAt'
+                : 'followers';
+        const rawA = a.analytics?.[key];
+        const rawB = b.analytics?.[key];
+        const valueA = key === 'latestPostAt' ? Date.parse(rawA || '') : rawA;
+        const valueB = key === 'latestPostAt' ? Date.parse(rawB || '') : rawB;
+        const safeA = isNumber(valueA) ? valueA : -1;
+        const safeB = isNumber(valueB) ? valueB : -1;
+        return safeB - safeA || a.person.name.localeCompare(b.person.name);
+      });
+
+      byId('posts-heading').textContent = isAudited() ? '30-day posts' : 'Observed posts';
+      byId('cadence-heading').textContent = isAudited() ? 'Cadence' : 'Latest post';
+      byId('engagement-heading').textContent = isAudited() ? 'Typical ER' : 'Sample ER';
+      const shouldLimit = !ROSTER_EXPANDED && !query && filter === 'all';
+      const visibleRows = shouldLimit ? rows.slice(0, 12) : rows;
+      const more = byId('roster-more');
+      const toggle = byId('roster-toggle');
+      more.hidden = rows.length <= 12 || Boolean(query) || filter !== 'all';
+      toggle.textContent = ROSTER_EXPANDED ? 'Show first 12' : `Show all ${rows.length}`;
+      toggle.setAttribute('aria-expanded', String(ROSTER_EXPANDED));
+      byId('roster-result').textContent = `${visibleRows.length} of ${rosterPeople().length} people shown${rows.length !== rosterPeople().length ? ` · ${rows.length} match filters` : ''}`;
+      byId('tbody').innerHTML = visibleRows.length ? visibleRows.map(({ person, audit, engagementRow, legacySignal, analytics, state }) => {
+        const handleUrl = profileUrl(person.handle);
+        const action = nextMove(person, state, audit, engagementRow, benchmarks, legacySignal);
+        const mayShowMetrics = (
+          person.dashboardRelevant &&
+          person.confirmed &&
+          !person.needsHumanConfirmation &&
+          !person.recordMismatch &&
+          (isAudited() || isLegacy())
+        );
+        return `
+          <tr>
+            <td data-label="Team member">
+              <span class="agent-name">${esc(person.name)}</span>
+              <span class="agent-role">${esc(person.role)}</span>
+              ${handleUrl
+                ? `<a class="agent-handle" href="${esc(handleUrl)}" target="_blank" rel="noopener">@${esc(person.handle)}</a>`
+                : `<span class="agent-handle">Handle needed</span>`
+              }
+            </td>
+            <td data-label="Input status"><span class="status ${esc(state.className)}">${esc(state.label)}</span></td>
+            <td class="num" data-label="Followers">${mayShowMetrics ? fmt(person.record?.followers) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? '30-day posts' : 'Observed posts'}">${mayShowMetrics ? (isLegacy() ? fmt(analytics?.postsInWindow) : (audit?.complete ? fmt(audit.postsInWindow) : '—')) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Cadence' : 'Latest post'}">${mayShowMetrics ? (isLegacy() ? relativeAge(analytics?.latestPostAt) : (audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—')) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(analytics?.interactionRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
+            <td data-label="Next move">
+              <span class="next-move">${esc(action)}</span>
+              ${mayShowMetrics && person.record ? `<button class="analytics-button" type="button" data-analytics-handle="${esc(person.handle)}">View analytics</button>` : ''}
+            </td>
+          </tr>
+        `;
+      }).join('') : `<tr><td colspan="7" class="no-results">No roster entries match this search and status filter.</td></tr>`;
+    }
+
+    function renderFooter() {
+      const meta = DATA.meta || {};
+      byId('foot').innerHTML = `
+        <span><b>${esc(meta.company || 'Kirpa Properties L.L.C')}</b> · ORN ${esc(meta.orn || '49046')}</span>
+        <span>Roster: ${esc(REGISTRY?.rosterVersion || 'unverified')} · Source: ${esc(meta.provider || 'public provider')} · snapshot, not real-time</span>
+      `;
+    }
+
+    function render() {
+      renderStamp();
+      renderDataAlert();
+      renderKpis();
+      renderChampion();
+      renderSpotlight();
+      renderBoards();
+      renderTrend();
+      renderRecords();
+      renderInsights();
+      renderAudit();
+      renderRoster();
+      renderFooter();
+      requestAnimationFrame(() => document.body.classList.add('data-ready'));
+    }
+
+    function renderFailure() {
+      byId('stamp').innerHTML = '<span class="source-status warning"><span class="status-dot"></span>Data unavailable</span><div>The snapshot could not be loaded</div>';
+      byId('kpis').innerHTML = `
+        <article class="kpi attention" style="grid-column:1/-1">
+          <span class="micro">Snapshot error</span>
+          <b>Data unavailable</b>
+          <span>The snapshot could not be loaded. Refresh the page or check that data/latest.json and handles.json are published beside this file.</span>
+        </article>
+      `;
+      byId('data-alert').hidden = false;
+      byId('data-alert').innerHTML = '<div><b>Source files unavailable</b><span>The board stopped before displaying any performance data.</span></div>';
+      byId('champ').innerHTML = `
+        <div class="stage-eyebrow"><span>●</span> Loading failure</div>
+        <h3 class="stage-name">No snapshot.<br>No invented score.</h3>
+        <p class="stage-reason">The dashboard has stopped instead of replacing unknown performance with zeros.</p>
+      `;
+      byId('spot').innerHTML = '<div class="empty-state"><div><b>Content unavailable</b><p>Post data could not be loaded from the published snapshot.</p></div></div>';
+      byId('boards').innerHTML = '';
+      byId('trend').innerHTML = '<span class="trend-label">Movement tape</span><span class="trend-empty">Unavailable until the snapshot loads.</span>';
+      byId('records').innerHTML = '<div class="panel empty-state"><div><b>Content records unavailable</b><p>No post data could be loaded.</p></div></div>';
+      byId('formats').innerHTML = '<div class="empty-state"><div><b>Format analysis unavailable</b><p>No post data could be loaded.</p></div></div>';
+      byId('insights').innerHTML = '<div class="panel empty-state"><div><b>Team pulse unavailable</b><p>No conclusions are shown without the source snapshot.</p></div></div>';
+      byId('audit').innerHTML = '<div class="audit-item held"><b>Audit unavailable</b><span>The source files did not load.</span></div>';
+      byId('tbody').innerHTML = '<tr><td colspan="7" class="no-results">Roster unavailable because the source files did not load.</td></tr>';
+      byId('roster-result').textContent = 'Roster unavailable';
+      requestAnimationFrame(() => document.body.classList.add('data-ready'));
+    }
+
+    async function load() {
+      try {
+        const [snapshotResponse, rosterResponse] = await Promise.all([
+          fetch('data/latest.json', { cache: 'no-store' }),
+          fetch('handles.json', { cache: 'no-store' })
+        ]);
+        if (!snapshotResponse.ok) throw new Error('Snapshot request failed');
+        DATA = await snapshotResponse.json();
+        if (!rosterResponse.ok) throw new Error('Roster request failed');
+        REGISTRY = await rosterResponse.json();
+        render();
+      } catch (_) {
+        renderFailure();
+      }
+    }
+
+    byId('search').addEventListener('input', () => DATA && renderRoster());
+    byId('status-filter').addEventListener('change', () => DATA && renderRoster());
+    byId('sort-by').addEventListener('change', () => DATA && renderRoster());
+    byId('roster-toggle').addEventListener('click', () => {
+      ROSTER_EXPANDED = !ROSTER_EXPANDED;
+      if (DATA) renderRoster();
+    });
+    byId('tbody').addEventListener('click', event => {
+      const button = event.target.closest('[data-analytics-handle]');
+      if (button && DATA) renderPersonAnalytics(button.dataset.analyticsHandle);
+    });
+    byId('export-analytics').addEventListener('click', () => DATA && exportAnalyticsCsv());
+    load();
+  </script>
 </body>
 </html>
