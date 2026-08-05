@@ -61,6 +61,25 @@ audience size—and give every team member a practical next step.
 - Sortable roster
 - Clear metric definitions
 
+### 6. Direction of travel
+
+- Team audience, participation, engagement benchmark and cadence over time
+- Per-person follower trend, in the roster and in their analytics view
+- Company-account context beside the team total
+
+### 7. Content intelligence
+
+- Hashtag performance by interaction rate, with a minimum sample
+- Posting time and day performance in Dubai time
+- Caption-length performance
+- A searchable, sortable table of every measured post
+
+### 8. Personal progress
+
+- Team and per-person targets
+- Weekly posting streak within the measurement window
+- Up to three next actions, each carrying the number that produced it
+
 ## Fairness rules
 
 - Use one trailing 30-day window for all recent-performance metrics.
@@ -73,6 +92,12 @@ audience size—and give every team member a practical next step.
   history more than current effort.
 - Show freshness, coverage, sample size, and provider limitations.
 - Verify handles using Kirpa-owned evidence; never accept a guessed pattern.
+- Compare content by rate, not raw counts, so the largest account cannot win
+  every content question by default.
+- Withhold any pattern below its minimum sample rather than publishing noise.
+- Honour an opt-out at the network boundary: no fetch, no storage, no ranking.
+- Hold a trend line to the same standard as a ranking — points measured against
+  a superseded roster, or never validated, are set aside and reported.
 
 ## Definition of done
 

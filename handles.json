@@ -10,6 +10,23 @@
     "tiktok",
     "facebook"
   ],
+  "activePlatforms": [
+    "instagram"
+  ],
+  "targets": {
+    "postsPerWeek": 3,
+    "engagementRate": 0.02
+  },
+  "brandAccounts": [
+    {
+      "name": "Kirpa Properties",
+      "platform": "instagram",
+      "handle": "kirpa.properties",
+      "confirmed": true,
+      "role": "Company account",
+      "sourcedFrom": "The company account every confirmed employee bio tags. Pulled for context only; it is never ranked against individuals."
+    }
+  ],
   "notes": [
     "The 2026-07-30 Kirpa workbook is authoritative for employee names, roles, Instagram handles, and Match Status. It supersedes earlier discovery notes wherever they conflict.",
     "confirmed=true now means the workbook says Confirmed. A Not Found row keeps the Instagram handle null and cannot enter measurements.",

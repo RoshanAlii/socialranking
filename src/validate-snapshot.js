@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const R = require('./rank');
 const N = require('./normalize');
+const C = require('./content');
+const S = require('./series');
+const { buildPeople, SHORT_WINDOW_DAYS } = require('./ingest');
 
 const VALIDATOR_VERSION = 2;
 
@@ -31,10 +34,30 @@ function validateSnapshot(snapshot, registry, opts = {}) {
   const rawLoader = opts.rawLoader || null;
   const rosterVersion = registry?.rosterVersion || null;
 
-  if (meta.source !== 'live') errors.push(`source must be live, got ${meta.source || 'missing'}`);
+  /*
+   * A replay is a recomputation of stored provider captures. It relaxes exactly
+   * two things — the source label and the age gate — and nothing else: the raw
+   * payloads are still re-normalized, every leaderboard, content figure, coaching
+   * line and trend point is still recomputed, and the roster still has to match.
+   * What it cannot claim is freshness, so it is stamped as a replay and the
+   * dashboard publishes it under its own capture date rather than as "now".
+   */
+  const replay = opts.replay === true;
+  if (replay) {
+    if (meta.source !== 'captured') errors.push(`a replay must declare source "captured", got ${meta.source || 'missing'}`);
+    if (!meta.replay?.of || meta.replay.of !== meta.capturedAt) {
+      errors.push('a replay must record the capture timestamp it replays');
+    }
+  } else if (meta.source !== 'live') {
+    errors.push(`source must be live, got ${meta.source || 'missing'}`);
+  }
   if (!/apify/i.test(meta.provider || '')) errors.push('provider must identify Apify');
   if (meta.measurementVersion !== 3) errors.push(`measurementVersion must be 3, got ${meta.measurementVersion || 'missing'}`);
-  if (platforms.length !== 1 || platforms[0] !== 'instagram') errors.push('only instagram may be active');
+  const activePlatforms = registry?.activePlatforms || ['instagram'];
+  const offPlatforms = platforms.filter(platform => !activePlatforms.includes(platform));
+  if (!platforms.length) errors.push('no platform is recorded on the snapshot');
+  if (offPlatforms.length) errors.push(`${offPlatforms.join(', ')} is published but not in registry.activePlatforms`);
+  if (!platforms.includes('instagram')) errors.push('instagram must be present in every published snapshot');
   if (meta.cadenceFormula !== 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30') {
     errors.push('cadence formula metadata is missing or changed');
   }
@@ -51,7 +74,7 @@ function validateSnapshot(snapshot, registry, opts = {}) {
   const captured = new Date(meta.capturedAt).getTime();
   if (!Number.isFinite(captured)) errors.push('meta.capturedAt is missing or invalid');
   else if (captured > now + 5 * 60 * 1000) errors.push(`snapshot is future-dated (${meta.capturedAt})`);
-  else if (maxAgeHours !== null && now - captured > maxAgeHours * 3600000) {
+  else if (!replay && maxAgeHours !== null && now - captured > maxAgeHours * 3600000) {
     errors.push(`snapshot is not fresh (captured ${meta.capturedAt})`);
   }
 
@@ -147,11 +170,14 @@ function validateSnapshot(snapshot, registry, opts = {}) {
     }
   }
 
+  const trendRows = Array.isArray(snapshot.trend) ? snapshot.trend : [];
   let recomputed = null;
   if (Number.isFinite(captured)) {
     recomputed = R.buildLeaderboards(records, ['instagram'], {
       now: captured,
       windowDays: R.WINDOW_DAYS,
+      growth: trendRows,
+      alternateWindows: [SHORT_WINDOW_DAYS],
     });
     if (!sameJson(snapshot.leaderboards, recomputed)) {
       errors.push('stored leaderboards do not match a full recomputation');
@@ -164,7 +190,70 @@ function validateSnapshot(snapshot, registry, opts = {}) {
     errors.push(`complete 30-day windows ${complete} of ${resolved.length} resolved profiles; minimum is ${requiredComplete}`);
   }
 
-  const trend = Array.isArray(snapshot.trend) ? snapshot.trend : [];
+  /*
+   * Everything derived gets recomputed, not spot-checked. Content
+   * intelligence and per-person coaching are published claims about people;
+   * they earn the same treatment as the leaderboards they sit beside.
+   */
+  if (Number.isFinite(captured) && recomputed) {
+    const expectedContent = C.buildContentIntelligence(records, 'instagram', { now: captured, days: R.WINDOW_DAYS });
+    if (!sameJson(snapshot.content, expectedContent)) {
+      errors.push('stored content intelligence does not match a full recomputation');
+    }
+    const expectedPeople = buildPeople(records, registry, expectedContent, recomputed, captured, R.WINDOW_DAYS);
+    if (!sameJson(snapshot.people, expectedPeople)) {
+      errors.push('stored per-person cadence, goals or next actions do not match a full recomputation');
+    }
+    for (const person of Array.isArray(snapshot.people) ? snapshot.people : []) {
+      const record = records.find(item => item.handle === person.handle && item.platform === 'instagram');
+      if (!record) errors.push(`${person.name}: per-person block has no matching record`);
+      else if (record.optOut === true) errors.push(`${person.name}: opted out but still carries a per-person block`);
+    }
+  }
+
+  const optedOut = records.filter(record => record.optOut === true);
+  for (const record of optedOut) {
+    if (record.resolved === true) errors.push(`${record.name}: opted out but a profile was still fetched`);
+    if ((record.recentPosts || []).length) errors.push(`${record.name}: opted out but posts were stored`);
+    const inBoards = JSON.stringify(snapshot.leaderboards || {}).includes(`"${record.name}"`);
+    if (inBoards) errors.push(`${record.name}: opted out but still appears in a leaderboard`);
+  }
+  if (meta.optedOut !== undefined && meta.optedOut !== optedOut.length) {
+    errors.push(`meta.optedOut is ${meta.optedOut} but ${optedOut.length} records are marked opted out`);
+  }
+
+  /*
+   * Brand accounts are pulled for context and must never be able to leak into a
+   * ranking, so the check is structural rather than statistical.
+   */
+  for (const account of Array.isArray(snapshot.brand) ? snapshot.brand : []) {
+    if (account.isBrand !== true) errors.push(`brand account ${account.handle || 'unknown'} is not flagged as a brand record`);
+    if (records.some(record => record.handle === account.handle)) {
+      errors.push(`brand account ${account.handle} also appears in the ranked record set`);
+    }
+  }
+
+  if (opts.series) {
+    const expected = S.snapshotPoints(records, meta.capturedAt, R.WINDOW_DAYS, ['instagram'], rosterVersion);
+    for (const [key, point] of Object.entries(expected.profiles)) {
+      const stored = (opts.series.profiles?.[key]?.points || []).find(item => item.at === meta.capturedAt);
+      if (!stored) {
+        errors.push(`${point.name}: this capture is missing from the trend series`);
+        continue;
+      }
+      // `validated` is written by this validator after the check passes, so it
+      // is the one field a recomputation cannot be expected to reproduce.
+      const { name, role, platform, ...values } = point;
+      const { validated: _stampedFlag, ...storedValues } = stored;
+      const { validated: _expectedFlag, ...expectedValues } = values;
+      if (!sameJson(storedValues, expectedValues)) errors.push(`${point.name}: trend series point does not match a recomputation`);
+      if (stored.rosterVersion !== rosterVersion) {
+        errors.push(`${point.name}: trend series point is stamped for roster ${stored.rosterVersion || 'unknown'}`);
+      }
+    }
+  }
+
+  const trend = trendRows;
   if (meta.trendAvailable !== (trend.length > 0)) errors.push('meta.trendAvailable does not match stored trend rows');
   if (trend.length) {
     const baselineDays = meta.growthBaselineDays;
@@ -212,8 +301,13 @@ function main() {
   const snapshot = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
   const registry = JSON.parse(fs.readFileSync(path.join(root, 'handles.json'), 'utf8'));
   const baselineRecords = findBaselineRecords(root, snapshot.meta?.growthBaselineAt);
+  const seriesPath = path.join(root, 'data', 'series.json');
+  const series = fs.existsSync(seriesPath) ? JSON.parse(fs.readFileSync(seriesPath, 'utf8')) : null;
+  const replay = process.argv.includes('--replay');
   const summary = validateSnapshot(snapshot, registry, {
     baselineRecords,
+    series,
+    replay,
     rawExists: (_record, filename) => fs.existsSync(path.join(root, 'data', 'raw', filename)),
     rawLoader: (_record, filename) => JSON.parse(fs.readFileSync(path.join(root, 'data', 'raw', filename), 'utf8')),
   });
@@ -225,10 +319,21 @@ function main() {
       snapshotCapturedAt: snapshot.meta.capturedAt,
       rosterVersion: registry.rosterVersion,
       validatedAt: new Date().toISOString(),
+      // A replay passed every check a live pull passes except freshness, and
+      // the dashboard has to know which one it is to label the board correctly.
+      mode: replay ? 'replay' : 'live',
     };
     const pendingPath = path.join(root, 'data', '.latest.validated.json');
     fs.writeFileSync(pendingPath, JSON.stringify(snapshot, null, 2));
     fs.renameSync(pendingPath, latestPath);
+
+    if (series) {
+      const { series: stampedSeries, stamped } = S.stampValidated(series, snapshot.meta.capturedAt);
+      const seriesPending = path.join(root, 'data', '.series.validated.json');
+      fs.writeFileSync(seriesPending, JSON.stringify(stampedSeries));
+      fs.renameSync(seriesPending, seriesPath);
+      console.log(`[validate] stamped ${stamped} trend point(s) for ${snapshot.meta.capturedAt}`);
+    }
   }
 
   console.log(`[validate] accepted: ${summary.resolved}/${summary.expectedPulls} profiles resolved; ${summary.completeWindows} complete windows; all published answers cross-checked`);

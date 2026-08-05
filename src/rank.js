@@ -4,10 +4,27 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const WINDOW_DAYS = 30;
 const MIN_ENGAGEMENT_POSTS = 3;
 const MIN_MEASURED = 3;
-const DEFAULT_WEIGHTS = { followers: 0.15, engagementRate: 0.45, postsPerWeek: 0.40 };
+/*
+ * The product brief asks who improved fastest, so improvement has to be inside
+ * the score rather than parked on a side board. Follower growth is included
+ * whenever a valid 5–9 day baseline exists; when it does not, its weight is
+ * redistributed across the remaining inputs and the score declares which
+ * components produced it. Followers stay deliberately small: audience is
+ * accumulated history, not this month's effort.
+ */
+const DEFAULT_WEIGHTS = { followers: 0.10, engagementRate: 0.40, postsPerWeek: 0.30, followerGrowth: 0.20 };
+const BASE_WEIGHTS = { followers: 0.15, engagementRate: 0.45, postsPerWeek: 0.40 };
 
 function num(value) { return typeof value === 'number' && Number.isFinite(value) ? value : 0; }
-function isUsable(record) { return !!record && record.resolved === true && record.isPrivate === false; }
+/*
+ * `optOut` is the individual's own decision, recorded in the registry. An
+ * opted-out person keeps their roster row and disappears from every ranking,
+ * record, analytic and export produced here — one choke point so no board can
+ * quietly reintroduce them.
+ */
+function isUsable(record) {
+  return !!record && record.resolved === true && record.isPrivate === false && record.optOut !== true;
+}
 function isRankable(record) { return isUsable(record) && typeof record.followers === 'number' && record.followers >= 0; }
 function forPlatform(records, platform) { return (records || []).filter(record => record.platform === platform); }
 function ts(post) {
@@ -301,7 +318,7 @@ function mostViewed(records, platform, now = asOf(records), days = WINDOW_DAYS) 
   return best;
 }
 function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_DAYS) {
-  return forPlatform(records, platform).map(record => {
+  return forPlatform(records, platform).filter(record => record.optOut !== true).map(record => {
     const coverage = windowCoverage(record, now, days);
     const posts = isUsable(record) ? windowPosts(record, now, days) : [];
     const comparable = posts.filter(post => postEngagement(post) !== null);
@@ -421,30 +438,84 @@ function minMax(values) {
   const high = Math.max(...numbers);
   return value => (typeof value !== 'number' || !Number.isFinite(value) || high === low) ? 0 : (value - low) / (high - low);
 }
-function compositeLeaderboard(records, weights = DEFAULT_WEIGHTS, now = asOf(records), days = WINDOW_DAYS) {
+/*
+ * Weights are declared for every possible component, but only the components
+ * actually measurable in this snapshot participate. Dropping one and leaving
+ * the rest at their original weights would silently rescale everyone's score,
+ * so the survivors are renormalised back to a total of 1 and the active set is
+ * published alongside the board.
+ */
+function activeWeights(weights, available) {
+  const active = Object.keys(weights).filter(key => available.includes(key));
+  const total = active.reduce((sum, key) => sum + weights[key], 0);
+  if (!active.length || !total) return {};
+  return Object.fromEntries(active.map(key => [key, Math.round((weights[key] / total) * 1e6) / 1e6]));
+}
+
+/*
+ * The two default sets are reviewed pairs, not one set with a hole in it: the
+ * no-growth board keeps the original 15/45/40 balance rather than inheriting a
+ * silently rescaled version of the growth-aware weights. A caller supplying its
+ * own weights gets them renormalised instead.
+ */
+function resolveWeights(weights, growthAvailable) {
+  const base = (!growthAvailable && weights === DEFAULT_WEIGHTS) ? BASE_WEIGHTS : weights;
+  return activeWeights(base, growthAvailable
+    ? ['followers', 'engagementRate', 'postsPerWeek', 'followerGrowth']
+    : ['followers', 'engagementRate', 'postsPerWeek']);
+}
+
+const WEIGHT_LABELS = {
+  followers: 'follower base',
+  engagementRate: 'typical engagement',
+  postsPerWeek: 'posting cadence',
+  followerGrowth: 'follower growth',
+};
+
+function compositeLeaderboard(records, weights = DEFAULT_WEIGHTS, now = asOf(records), days = WINDOW_DAYS, growthRows = []) {
+  const growthByKey = new Map((growthRows || [])
+    .filter(row => row.platform === 'instagram' && typeof row.followerPct === 'number' && Number.isFinite(row.followerPct))
+    .map(row => [`${row.name}::${row.handle}`, row]));
+  const growthAvailable = growthByKey.size > 0;
   const people = forPlatform(records, 'instagram').filter(isRankable).map(record => ({
     name: record.name,
     role: record.role,
+    // The handle is what every other board is keyed by; without it a consumer
+    // cannot join a composite row back to its engagement or cadence figures.
+    handle: record.handle,
     platforms: ['instagram'],
     followers: record.followers,
     engagementRate: windowCoverage(record, now, days).complete ? engagementRate(record, now, days) : null,
     postsPerWeek: postsPerWeek(record, now, days),
+    followerGrowth: growthAvailable
+      ? (growthByKey.get(`${record.name}::${record.handle}`)?.followerPct ?? null)
+      : null,
   }));
-  const normalizers = {
-    followers: minMax(people.map(person => person.followers)),
-    engagementRate: minMax(people.map(person => person.engagementRate)),
-    postsPerWeek: minMax(people.map(person => person.postsPerWeek)),
-  };
+  const applied = resolveWeights(weights, growthAvailable);
+  const keys = Object.keys(applied);
+  const normalizers = Object.fromEntries(keys.map(key => [key, minMax(people.map(person => person[key]))]));
   const rows = people.map(person => {
-    const measured = Object.keys(weights).filter(key => typeof person[key] === 'number' && Number.isFinite(person[key]));
-    const missing = Object.keys(weights).filter(key => !measured.includes(key));
-    const provisional = measured.length < MIN_MEASURED;
-    const score = provisional ? null : measured.reduce((sum, key) => sum + weights[key] * normalizers[key](person[key]), 0);
-    return { name: person.name, role: person.role, platforms: person.platforms, score, measuredMetrics: measured, missingMetrics: missing, provisional };
+    const measured = keys.filter(key => typeof person[key] === 'number' && Number.isFinite(person[key]));
+    const missing = keys.filter(key => !measured.includes(key));
+    const provisional = measured.length < keys.length;
+    const score = provisional ? null : measured.reduce((sum, key) => sum + applied[key] * normalizers[key](person[key]), 0);
+    return {
+      name: person.name,
+      role: person.role,
+      handle: person.handle,
+      platforms: person.platforms,
+      score,
+      components: Object.fromEntries(keys.map(key => [key, typeof person[key] === 'number' ? person[key] : null])),
+      measuredMetrics: measured,
+      missingMetrics: missing,
+      provisional,
+    };
   });
   const ranked = rankRows(rows.filter(row => !row.provisional && row.score !== null), 'score');
   const held = rows.filter(row => row.provisional || row.score === null).map(row => Object.assign({ rank: null }, row, {
-    note: `Not ranked yet — ${row.missingMetrics.join(', ') || 'required data'} unavailable or sample too small.`,
+    note: row.missingMetrics.includes('followerGrowth') && row.missingMetrics.length === 1
+      ? 'Not ranked yet — no 5–9 day follower baseline exists for this profile.'
+      : `Not ranked yet — ${row.missingMetrics.join(', ') || 'required data'} unavailable or sample too small.`,
   }));
   return ranked.concat(held);
 }
@@ -541,12 +612,60 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
       },
     };
   }
+  const weights = opts.weights || DEFAULT_WEIGHTS;
+  const growthRows = Array.isArray(opts.growth) ? opts.growth : [];
+  const growthUsable = growthRows.some(row => (
+    row.platform === 'instagram' && typeof row.followerPct === 'number' && Number.isFinite(row.followerPct)
+  ));
+  const applied = resolveWeights(weights, growthUsable);
   out.combined = {
-    note: 'Instagram momentum score: 15% followers, 45% typical engagement rate, 40% posting cadence. Profiles need complete 30-day coverage and at least three comparable posts.',
-    composite: compositeLeaderboard(records, opts.weights || DEFAULT_WEIGHTS, now, days),
-    weights: opts.weights || DEFAULT_WEIGHTS,
+    note: `Instagram momentum score: ${Object.entries(applied)
+      .map(([key, value]) => `${Math.round(value * 100)}% ${WEIGHT_LABELS[key] || key}`)
+      .join(', ')}. Profiles need complete ${days}-day coverage, at least ${MIN_ENGAGEMENT_POSTS} comparable posts${growthUsable ? ', and a 5–9 day follower baseline' : ''}.`,
+    composite: compositeLeaderboard(records, weights, now, days, growthRows),
+    weights: applied,
+    declaredWeights: weights,
+    growthIncluded: growthUsable,
     windowDays: days,
   };
+
+  /*
+   * A second, shorter window for the same inputs. Thirty days is the fair unit
+   * for judging anyone, but it is also slow to notice a change in behaviour;
+   * the seven-day view is what makes "did last week work?" answerable. Both are
+   * recomputed from the same posts, so neither can drift from the other.
+   */
+  const alternates = (opts.alternateWindows || []).filter(value => (
+    typeof value === 'number' && value > 0 && value !== days
+  ));
+  if (alternates.length) {
+    out.alternateWindows = {};
+    for (const altDays of alternates) {
+      const perPlatform = {};
+      for (const platform of platforms) {
+        perPlatform[platform] = {
+          engagement: engagementLeaderboard(records, platform, now, altDays),
+          postingFrequency: postingFrequency(records, platform, now, altDays),
+          topPost: topPost(records, platform, now, altDays),
+          coverage: {
+            windowDays: altDays,
+            asOf: new Date(now).toISOString(),
+            formula: `postsPerWeek = unique authored posts in window × 7 ÷ ${altDays}`,
+            completeWindowProfiles: forPlatform(records, platform).filter(record => (
+              isUsable(record) && windowCoverage(record, now, altDays).complete
+            )).length,
+            profilesWithPostsInWindow: forPlatform(records, platform).filter(record => (
+              isUsable(record) && windowCoverage(record, now, altDays).complete &&
+              windowPosts(record, now, altDays).length > 0
+            )).length,
+          },
+        };
+      }
+      out.alternateWindows[String(altDays)] = Object.assign(perPlatform, {
+        composite: compositeLeaderboard(records, weights, now, altDays, growthRows),
+      });
+    }
+  }
   return out;
 }
 
@@ -556,6 +675,6 @@ module.exports = {
   windowCoverage, uniquePosts, median, asOf, mostFollowers,
   engagementLeaderboard, postingFrequency, topPost, topVideo, mostViewed,
   mostLiked, mostCommented, mostShared, profileAnalytics, formatAnalytics,
-  compositeLeaderboard, growth, buildLeaderboards,
-  DEFAULT_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MEASURED,
+  compositeLeaderboard, growth, buildLeaderboards, activeWeights, resolveWeights,
+  DEFAULT_WEIGHTS, BASE_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MEASURED,
 };

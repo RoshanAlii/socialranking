@@ -1,24 +1,58 @@
 Validation completed
 ====================
 
-JavaScript test suite: 34 passed, 0 failed
+JavaScript test suite: 68 passed, 0 failed
 Workbook reconciliation: 44 of 44 employees matched by name, role, Instagram
 handle, and Match Status; 0 differences remained
-JavaScript syntax checks: provider, normalize, rank, ingest, validator and dashboard script passed
-Browser check: all 44 roster rows rendered; the superseded snapshot exposed
-no follower, activity, cadence, or engagement values
+JavaScript syntax checks: provider, normalize, rank, content, series, ingest,
+roster, digest, validator and dashboard script passed
+Roster integrity: node src/roster.js verify reports no problems
 
-Formula checked:
+Published snapshot
+------------------
+data/latest.json is a replay of the 2026-07-27T05:30:07.626Z Apify capture,
+recomputed from the 36 stored raw payloads in data/raw against roster version
+2026-07-30-kirpa-workbook-v1 and stamped by validator v2 in replay mode.
+
+  31 of 31 confirmed handles resolved
+  27 complete 30-day windows
+  822 posts measured in the window
+  23 people ranked on momentum, 4 held for fewer than three comparable posts,
+     4 held because that capture could not prove their window
+  7 people have no confirmed handle in the workbook and are not measured
+
+The validator recomputed every published answer from the raw captures before
+stamping: leaderboards, both measurement windows, content intelligence,
+per-person coaching and every trend point.
+
+Formulas checked:
 postsPerWeek = postsInWindow * 7 / 30
+interaction rate = (likes + comments) / followers, per post, median across posts
+hashtag/slot lift = median of (post rate / that post's author's median rate)
+momentum score = 15/45/40 (followers/engagement/cadence) with no baseline,
+                 10/40/30/20 once follower growth is measurable
+
+Browser check: loaded from a local server with no console errors. The board
+renders as a dated snapshot — "Validated · as of 27 Jul 2026" in the stamp, an
+explanatory alert, "What did we know on 27 Jul 2026?" as the headline, and the
+momentum leader in the past tense. Roster shows 23 Measured, 4 Incomplete
+coverage, 4 Unranked, 7 Handle needed, 6 role-excluded.
 
 Live limitation:
-The saved 2026-07-27 snapshot predates roster version
-2026-07-30-kirpa-workbook-v1. The dashboard now pauses all rankings and
-individual metrics until the daily workflow completes a fresh Apify pull and
-validator-v2 stamp against the current roster. Public Instagram data is a
-point-in-time snapshot and cannot be guaranteed real-time.
+This is real public Instagram data measured on 27 July 2026. It is not live.
+No live pull was run (no APIFY_TOKEN in this environment), so nothing published
+since that capture is counted. Adding the token and running the workflow moves
+the board to current automatically.
+
+Not verified here:
+The TikTok adapter, Slack digest delivery and the workflow failure alert are
+covered by unit tests with injected transports, not by a real API call.
 
 Release gates:
-Snapshots must match the exact roster version, pass a full recomputation from
-normalized raw captures, and be no more than 36 hours old on the public board.
-The GitHub workflow now runs daily at 04:00 UTC.
+Snapshots must match the exact roster version and pass a full recomputation from
+normalized raw captures. A live snapshot older than 36 hours, or any validated
+replay, is published under its own capture date with every headline in the past
+tense; a snapshot that fails the roster lock or the validator is still withheld
+entirely. Opted-out people and brand accounts must be absent from the ranked
+set. The GitHub workflow runs at 04:00 and 16:00 UTC and reports its own
+failures.

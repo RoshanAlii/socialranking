@@ -33,6 +33,13 @@
       --radius: 20px;
       --radius-sm: 13px;
       --ease: cubic-bezier(.2, .72, .2, 1);
+      /*
+       * The board is light in every environment. Declaring it means the browser
+       * renders selects, search inputs and scrollbars in their light form too —
+       * without this, a viewer whose OS is in dark mode gets dark form controls
+       * sitting on a cream page.
+       */
+      color-scheme: light;
     }
 
     * { box-sizing: border-box; }
@@ -1520,6 +1527,98 @@
       .reveal { opacity: 1; transform: none; }
       .source-status.live .status-dot { animation: none; }
     }
+
+    /* ---------- Trend, content intelligence, goals and the post explorer ---------- */
+
+    .window-picker { display: inline-flex; gap: 4px; padding: 3px; border-radius: 999px; background: var(--paper-warm); border: 1px solid var(--line); }
+    .window-picker button {
+      border: 0; border-radius: 999px; padding: 5px 13px; background: transparent; cursor: pointer;
+      color: var(--dust); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .window-picker button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    .window-picker button:disabled { opacity: .4; cursor: not-allowed; }
+
+    .chart-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+    .chart-card { padding: 16px 18px 12px; }
+    .chart-card h3 { margin: 0; font: 600 13px/1.3 Manrope, sans-serif; letter-spacing: .01em; }
+    .chart-value { display: flex; align-items: baseline; gap: 9px; margin: 6px 0 2px; }
+    .chart-value b { font: 400 28px/1 'DM Serif Display', Georgia, serif; }
+    .chart-delta { font-size: 12px; font-weight: 700; }
+    .chart-delta.up { color: var(--emerald); }
+    .chart-delta.down { color: var(--crimson); }
+    .chart-delta.flat { color: var(--dust); }
+    .chart-card p { margin: 4px 0 0; color: var(--dust); font-size: 11.5px; }
+    .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .chart .line { fill: none; stroke: var(--orange); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .chart .area { fill: url(#chartFade); }
+    .chart .dot { fill: var(--orange); }
+    .chart .grid-line { stroke: var(--line); stroke-width: 1; }
+    .chart .axis-label { fill: var(--dust); font-size: 9px; }
+    .spark { display: inline-block; vertical-align: middle; width: 62px; height: 18px; }
+    .spark path { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .spark .spark-dot { fill: currentColor; stroke: none; }
+    .spark-up { color: var(--emerald); }
+    .spark-down { color: var(--crimson); }
+    .spark-flat { color: var(--dust); }
+
+    .intel-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 14px; }
+    .intel-card h3 { margin: 0 0 2px; font: 600 13px/1.3 Manrope, sans-serif; }
+    .intel-card > p { margin: 0 0 11px; color: var(--dust); font-size: 11.5px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 0; padding: 0; list-style: none; }
+    .tag {
+      display: inline-flex; align-items: baseline; gap: 6px; padding: 5px 10px; border-radius: 999px;
+      background: var(--paper-warm); border: 1px solid var(--line); font-size: 11.5px;
+    }
+    .tag b { font-weight: 700; }
+    .tag small { color: var(--dust); font-size: 10px; }
+    .tag.strong { border-color: var(--orange-soft); background: rgba(241, 90, 41, .07); }
+
+    .heatmap { display: grid; grid-template-columns: 42px repeat(6, 1fr); gap: 3px; font-size: 9.5px; }
+    .heatmap span { color: var(--dust); text-align: center; padding: 2px 0; }
+    .heatmap span.row-label { text-align: left; }
+    .heatmap i {
+      display: block; height: 22px; border-radius: 5px; background: var(--paper-warm);
+      border: 1px solid var(--line); position: relative;
+    }
+    .heatmap i[data-level="0"] { opacity: .45; }
+    .heatmap i[data-level="1"] { background: rgba(241, 90, 41, .16); border-color: transparent; }
+    .heatmap i[data-level="2"] { background: rgba(241, 90, 41, .34); border-color: transparent; }
+    .heatmap i[data-level="3"] { background: rgba(241, 90, 41, .58); border-color: transparent; }
+    .heatmap i[data-level="4"] { background: rgba(241, 90, 41, .82); border-color: transparent; }
+    .heat-note { margin: 9px 0 0; color: var(--dust); font-size: 10.5px; }
+
+    .goal-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; margin-bottom: 9px; }
+    .goal-row b { font-size: 12px; font-weight: 600; }
+    .goal-track { grid-column: 1/-1; height: 7px; border-radius: 999px; background: var(--paper-warm); border: 1px solid var(--line); overflow: hidden; }
+    .goal-fill { display: block; height: 100%; border-radius: 999px; background: var(--orange); }
+    .goal-fill.met { background: var(--emerald); }
+    .goal-row small { color: var(--dust); font-size: 10.5px; }
+    .streak { display: inline-flex; gap: 3px; vertical-align: middle; }
+    .streak i { width: 9px; height: 9px; border-radius: 3px; background: var(--line); display: block; }
+    .streak i.on { background: var(--emerald); }
+
+    .action-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+    .action-list li { padding: 10px 12px; border-radius: var(--radius-sm); background: var(--paper-warm); border: 1px solid var(--line); }
+    .action-list b { display: block; font-size: 12.5px; }
+    .action-list span { display: block; margin-top: 3px; color: var(--dust); font-size: 11px; }
+
+    .explorer-tools { display: flex; flex-wrap: wrap; gap: 9px; align-items: flex-end; margin-bottom: 12px; }
+    .explorer-wrap { max-height: 460px; overflow: auto; }
+    .explorer { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .explorer th, .explorer td { padding: 9px 11px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    .explorer th { position: sticky; top: 0; background: var(--paper); z-index: 1; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--dust); }
+    .explorer th button { border: 0; background: none; padding: 0; cursor: pointer; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+    .explorer th button[aria-sort="descending"]::after { content: ' ↓'; color: var(--orange); }
+    .explorer th button[aria-sort="ascending"]::after { content: ' ↑'; color: var(--orange); }
+    .explorer td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .explorer td.caption { white-space: normal; max-width: 320px; color: var(--dust); }
+    .explorer tr:hover td { background: var(--paper-warm); }
+
+    .brand-card { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+    .brand-card .brand-metrics { display: flex; gap: 22px; flex-wrap: wrap; }
+    .brand-card .brand-metrics div span { display: block; color: var(--dust); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+    .brand-card .brand-metrics div b { font: 400 24px/1.1 'DM Serif Display', Georgia, serif; }
+
   </style>
 </head>
 <body>
@@ -1575,7 +1674,7 @@
           <h2 id="arena-title">What do we know right now?</h2>
           <p>Usable signals stay visible while incomplete comparisons remain clearly withheld.</p>
         </div>
-        <div class="section-note">Latest captured public data</div>
+        <div class="section-note" id="arena-note">Latest captured public data</div>
       </div>
       <div class="hero-grid">
         <article class="panel champ" id="champ" aria-live="polite">
@@ -1601,10 +1700,28 @@
           <h2 id="leaderboards-title">Available signals, separated</h2>
           <p>Audience and recent-post observations are shown independently, with confidence limits attached.</p>
         </div>
-        <div class="section-note">Bars are relative within each lane, not percentages</div>
+        <div class="section-note">
+          <div class="window-picker" id="window-picker" role="group" aria-label="Measurement window">
+            <button type="button" data-window="30" aria-pressed="true">30 days</button>
+            <button type="button" data-window="7" aria-pressed="false">7 days</button>
+          </div>
+        </div>
       </div>
       <div class="boards" id="boards"></div>
       <div class="panel trend" id="trend" aria-label="Weekly movement"></div>
+    </section>
+
+    <section class="section reveal" aria-labelledby="history-title" style="--delay:175ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Direction of travel</div>
+          <h2 id="history-title">Is this going up?</h2>
+          <p>Every capture keeps a small numeric point, so a trend can be drawn without republishing a single caption. Points appear only where the underlying value was measured.</p>
+        </div>
+        <div class="section-note" id="history-note">Reading stored captures</div>
+      </div>
+      <div class="chart-grid" id="charts"></div>
+      <article class="panel chart-card brand-card" id="brand-card" hidden></article>
     </section>
 
     <section class="section reveal" aria-labelledby="records-title" style="--delay:190ms">
@@ -1626,6 +1743,43 @@
           <span id="format-confidence">Checking coverage</span>
         </div>
         <div class="format-grid" id="formats"></div>
+      </div>
+      <div class="intel-grid" id="intel"></div>
+    </section>
+
+    <section class="section reveal" aria-labelledby="explorer-title" style="--delay:205ms">
+      <div class="section-heading">
+        <div>
+          <div class="section-label">Every measured post</div>
+          <h2 id="explorer-title">The whole window, not just the winners</h2>
+          <p>All posts from profiles with a provable window, sortable by any column. Interaction rate divides by that profile's followers, so a 700k account and a 400-follower account can sit in the same table.</p>
+        </div>
+        <div class="section-note" id="explorer-note">Awaiting a validated pull</div>
+      </div>
+      <div class="panel">
+        <div class="explorer-tools">
+          <label class="field search-field">
+            <span class="field-label">Search captions and people</span>
+            <input class="search" id="explorer-search" type="search" autocomplete="off" placeholder="Search posts">
+          </label>
+          <label class="field">
+            <span class="field-label">Filter by format</span>
+            <select class="filter" id="explorer-format">
+              <option value="all">All formats</option>
+              <option value="reel">Reels</option>
+              <option value="video">Videos</option>
+              <option value="carousel">Carousels</option>
+              <option value="image">Images</option>
+            </select>
+          </label>
+          <button class="export-button" id="export-posts" type="button">Export posts CSV</button>
+        </div>
+        <div class="explorer-wrap">
+          <table class="explorer" id="explorer">
+            <thead id="explorer-head"></thead>
+            <tbody id="explorer-body"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -1664,6 +1818,12 @@
               <option value="unranked">Unranked</option>
               <option value="attention">Needs attention</option>
               <option value="excluded">Not ranked by role</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Filter by role</span>
+            <select class="filter" id="role-filter">
+              <option value="all">All roles</option>
             </select>
           </label>
           <label class="field">
@@ -1747,7 +1907,10 @@
 
     let DATA = null;
     let REGISTRY = null;
+    let SERIES = null;
     let ROSTER_EXPANDED = false;
+    let ACTIVE_WINDOW = 30;
+    let EXPLORER_SORT = { key: 'interactions', direction: 'desc' };
     const MAX_PUBLIC_AGE_HOURS = 36;
 
     const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -1825,8 +1988,20 @@
         return record.resolved !== true || (employee.confirmed === true && Boolean(expectedHandle));
       });
     };
+    /*
+     * A replay is a recomputation of stored Apify captures: same raw payloads,
+     * same validator, same roster lock — everything except freshness. It is
+     * accepted here so the board can show real measured numbers under their own
+     * capture date, and `isFresh` below is what decides whether those numbers
+     * may be spoken about in the present tense.
+     */
+    const isReplay = () => (
+      DATA?.meta?.source === 'captured' &&
+      DATA?.meta?.validation?.mode === 'replay' &&
+      DATA?.meta?.replay?.of === DATA?.meta?.capturedAt
+    );
     const hasPassedValidator = () => (
-      DATA?.meta?.source === 'live' &&
+      (DATA?.meta?.source === 'live' || isReplay()) &&
       /apify/i.test(DATA?.meta?.provider || '') &&
       DATA?.meta?.measurementVersion === 3 &&
       Array.isArray(DATA?.meta?.platforms) &&
@@ -1841,8 +2016,27 @@
       board().coverage.formula.includes('7 ÷ 30') &&
       Array.isArray(board().coverage?.cadenceAudit)
     );
-    const isAudited = () => hasPassedValidator() && snapshotAgeHours() >= -0.1 && snapshotAgeHours() <= MAX_PUBLIC_AGE_HOURS;
-    const isExpired = () => hasPassedValidator() && snapshotAgeHours() > MAX_PUBLIC_AGE_HOURS;
+    /*
+     * Two different failures used to share one response. Data that is *wrong* —
+     * measured against a roster that has since changed, or never validated — is
+     * still withheld entirely, because showing it would mislead. Data that is
+     * merely *old* is now shown under its own capture date instead of blanking
+     * the page: a verified 27 July board labelled "as of 27 July" tells the
+     * truth, where an empty page just tells nobody anything.
+     *
+     * `isFresh` is therefore the only thing that licenses present-tense
+     * language, and `isArchived` boards carry the date and age everywhere.
+     */
+    const isFresh = () => snapshotAgeHours() >= -0.1 && snapshotAgeHours() <= MAX_PUBLIC_AGE_HOURS;
+    const isAudited = () => hasPassedValidator() && snapshotAgeHours() >= -0.1;
+    const isArchived = () => isAudited() && !isFresh();
+    const isExpired = () => false;
+    const asOfLabel = () => {
+      const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
+      if (!Number.isFinite(timestamp)) return 'date unknown';
+      return new Date(timestamp).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+    };
+    const asOfSuffix = () => (isArchived() ? ` · as of ${asOfLabel()}` : '');
     const auditMap = () => new Map(
       (isAudited() ? board().coverage?.cadenceAudit || [] : []).map(row => [row.handle, row])
     );
@@ -2005,6 +2199,119 @@
       return `${days}d`;
     };
 
+    /* ---------- Trend series ---------- */
+
+    const seriesKey = (platform, handle) => `${platform}::${String(handle || '').toLowerCase()}`;
+    /*
+     * A trend line is a claim about the past, and it has to clear the same bar
+     * as the board: measured against the roster in force now, and accepted by
+     * the validator. Points from a superseded roster are counted and reported,
+     * never quietly drawn — a chart that keeps moving while the rankings are
+     * paused would undo the pause.
+     */
+    const trustedPoints = points => (points || []).filter(point => (
+      point.validated === true && point.rosterVersion === REGISTRY?.rosterVersion
+    ));
+    const setAsidePoints = points => (points || []).length - trustedPoints(points).length;
+    const rawProfilePoints = handle => SERIES?.profiles?.[seriesKey('instagram', handle)]?.points || [];
+    const profilePoints = handle => trustedPoints(rawProfilePoints(handle));
+    const rawTeamPoints = () => {
+      const team = SERIES?.team;
+      return Array.isArray(team) ? team : (team?.instagram || []);
+    };
+    const teamPoints = () => trustedPoints(rawTeamPoints());
+    const pointsWith = (points, key) => (points || [])
+      .filter(point => isNumber(point[key]))
+      .sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
+
+    /*
+     * Change is only reported against a baseline that actually sits in the
+     * requested window. Reaching for the nearest available point instead would
+     * label a two-day move as a weekly one.
+     */
+    const changeOver = (points, key, days, tolerance = 2) => {
+      const usable = pointsWith(points, key);
+      if (usable.length < 2) return null;
+      const latest = usable[usable.length - 1];
+      const target = Date.parse(latest.at) - days * 86400000;
+      let baseline = null;
+      for (const point of usable.slice(0, -1)) {
+        const at = Date.parse(point.at);
+        if (Math.abs(at - target) > tolerance * 86400000) continue;
+        if (!baseline || Math.abs(at - target) < Math.abs(Date.parse(baseline.at) - target)) baseline = point;
+      }
+      if (!baseline) return null;
+      return {
+        from: baseline[key],
+        to: latest[key],
+        delta: latest[key] - baseline[key],
+        pct: baseline[key] ? (latest[key] - baseline[key]) / Math.abs(baseline[key]) : null,
+        days: Math.round((Date.parse(latest.at) - Date.parse(baseline.at)) / 86400000)
+      };
+    };
+
+    const sparkline = (points, key) => {
+      const usable = pointsWith(points, key);
+      if (usable.length < 2) return '';
+      const values = usable.map(point => point[key]);
+      const low = Math.min(...values);
+      const high = Math.max(...values);
+      const span = high - low || 1;
+      const step = 60 / (values.length - 1);
+      const path = values
+        .map((value, index) => `${index ? 'L' : 'M'}${(index * step + 1).toFixed(1)},${(15 - ((value - low) / span) * 12).toFixed(1)}`)
+        .join(' ');
+      const last = values[values.length - 1];
+      const first = values[0];
+      const tone = last > first ? 'spark-up' : last < first ? 'spark-down' : 'spark-flat';
+      const cx = (60 + 1).toFixed(1);
+      const cy = (15 - ((last - low) / span) * 12).toFixed(1);
+      const direction = last > first ? 'rising' : last < first ? 'falling' : 'flat';
+      return `<svg class="spark ${tone}" viewBox="0 0 62 18" role="img" aria-label="${esc(`${usable.length} captures, ${direction}`)}">
+        <path d="${path}"></path><circle class="spark-dot" cx="${cx}" cy="${cy}" r="2"></circle>
+      </svg>`;
+    };
+
+    const lineChart = (points, key, format) => {
+      const usable = pointsWith(points, key);
+      if (usable.length < 2) return '';
+      const values = usable.map(point => point[key]);
+      const low = Math.min(...values);
+      const high = Math.max(...values);
+      const span = high - low || Math.abs(high) || 1;
+      const width = 300;
+      const height = 84;
+      const step = (width - 8) / (usable.length - 1);
+      const y = value => height - 14 - ((value - low) / span) * (height - 26);
+      const coords = values.map((value, index) => [4 + index * step, y(value)]);
+      const line = coords.map(([px, py], index) => `${index ? 'L' : 'M'}${px.toFixed(1)},${py.toFixed(1)}`).join(' ');
+      const area = `${line} L${coords[coords.length - 1][0].toFixed(1)},${height - 2} L${coords[0][0].toFixed(1)},${height - 2} Z`;
+      const firstDay = usable[0].d || usable[0].at.slice(0, 10);
+      const lastDay = usable[usable.length - 1].d || usable[usable.length - 1].at.slice(0, 10);
+      return `<div class="chart">
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(`${key} across ${usable.length} captures, from ${format(low)} to ${format(high)}`)}">
+          <defs><linearGradient id="chartFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--orange)" stop-opacity=".18"></stop>
+            <stop offset="100%" stop-color="var(--orange)" stop-opacity="0"></stop>
+          </linearGradient></defs>
+          <line class="grid-line" x1="0" y1="${height - 14}" x2="${width}" y2="${height - 14}"></line>
+          <path class="area" d="${area}"></path>
+          <path class="line" d="${line}"></path>
+          <circle class="dot" cx="${coords[coords.length - 1][0].toFixed(1)}" cy="${coords[coords.length - 1][1].toFixed(1)}" r="3"></circle>
+          <text class="axis-label" x="0" y="${height - 3}">${esc(firstDay)}</text>
+          <text class="axis-label" x="${width}" y="${height - 3}" text-anchor="end">${esc(lastDay)}</text>
+        </svg>
+      </div>`;
+    };
+
+    const deltaMarkup = (change, format) => {
+      if (!change) return '<span class="chart-delta flat">no comparable baseline</span>';
+      if (!change.delta) return `<span class="chart-delta flat">unchanged over ${change.days}d</span>`;
+      const tone = change.delta > 0 ? 'up' : 'down';
+      const sign = change.delta > 0 ? '+' : '';
+      return `<span class="chart-delta ${tone}">${sign}${esc(format(change.delta))} in ${change.days}d</span>`;
+    };
+
     function snapshotAge() {
       const timestamp = Date.parse(DATA?.meta?.capturedAt || '');
       if (!Number.isFinite(timestamp)) {
@@ -2044,6 +2351,7 @@
           confirmed: employee.confirmed === true,
           needsHumanConfirmation: employee.needsHumanConfirmation === true,
           registryPrivate: employee.private === true,
+          optOut: employee.optOut === true,
           recordMismatch: false,
           record: null
         });
@@ -2063,6 +2371,8 @@
     function statusFor(person, audit, engagementRow) {
       const record = person.record;
       if (!person.dashboardRelevant) return { key: 'excluded', className: 'excluded', label: 'Not ranked · role excluded' };
+      // An opt-out outranks every other state: it is a decision, not a gap.
+      if (person.optOut) return { key: 'excluded', className: 'excluded', label: 'Opted out of measurement' };
       if (!person.handle) return { key: 'attention', className: 'attention', label: 'Handle needed' };
       if (!person.confirmed || person.needsHumanConfirmation) {
         return { key: 'attention', className: 'unconfirmed', label: 'Handle confirmation needed' };
@@ -2070,7 +2380,6 @@
       if (!snapshotMatchesRoster() || person.recordMismatch) {
         return { key: 'attention', className: 'refresh', label: 'Roster changed · refresh required' };
       }
-      if (isExpired()) return { key: 'attention', className: 'refresh', label: 'Snapshot expired · refresh required' };
       if (!hasPassedValidator()) return { key: 'attention', className: 'refresh', label: 'Snapshot verification required' };
       if (person.registryPrivate || record?.isPrivate === true) return { key: 'attention', className: 'private', label: 'Private' };
       if (!record) return { key: 'attention', className: 'awaiting', label: 'Awaiting pull' };
@@ -2103,13 +2412,14 @@
       } else if (meta.validation?.status === 'legacy') {
         label = 'Legacy context only';
         mode = 'warning';
+      } else if (audited && isArchived()) {
+        label = `Validated · as of ${asOfLabel()}`;
+        mode = 'sample';
       } else if (audited && age.tone === 'healthy') {
         label = 'Validated snapshot';
         mode = 'live';
       } else if (audited) {
         label = 'Validated · refresh due soon';
-      } else if (isExpired()) {
-        label = 'Validated · expired';
       }
       const captured = meta.capturedAt
         ? new Date(meta.capturedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
@@ -2130,9 +2440,12 @@
       } else if (!snapshotMatchesRoster()) {
         title = 'Employee roster updated — performance data paused';
         detail = `Roster ${REGISTRY.rosterVersion} does not match this saved Instagram capture. The next successful daily pull will restore rankings; no old handle data is being reused.`;
-      } else if (isExpired()) {
-        title = 'Snapshot expired — performance data paused';
-        detail = `This capture is older than ${MAX_PUBLIC_AGE_HOURS} hours. Rankings and individual metrics will return after the next validated daily pull.`;
+      } else if (isArchived()) {
+        const age = snapshotAge();
+        title = `Showing the validated board as of ${asOfLabel()}`;
+        detail = `${DATA?.meta?.replay
+          ? 'Recomputed from the stored Apify captures of that pull'
+          : 'Captured then'} and re-verified against the current roster — every number below is real public data measured on ${asOfLabel()}, ${age.detail.toLowerCase()}. It is not live: anything published since is not counted here.`;
       } else if (!isAudited() && !isLegacy()) {
         title = 'Snapshot verification incomplete';
         detail = 'Performance answers are withheld until the capture, roster lock, 30-day coverage, and recomputed leaderboards all pass validation.';
@@ -2187,10 +2500,12 @@
           <b>${isLegacy() ? fmt(observed) : (isAudited() ? fmt(activity) : 'Pending')}</b>
           <span>${isLegacy() ? 'Non-pinned posts returned · incomplete sample' : (isAudited() ? `${coverage.completeWindowProfiles} complete profile windows` : 'Waiting for a version-3 audited pull')}</span>
         </article>
-        <article class="kpi ${isAudited() && age.tone === 'healthy' ? 'healthy' : 'attention'}">
-          <span class="micro">Snapshot freshness</span>
-          <b>${snapshotMatchesRoster() ? esc(age.short) : 'Refresh'}</b>
-          <span>${snapshotMatchesRoster() ? esc(age.detail) : 'Current roster has no matching validated pull'}</span>
+        <article class="kpi ${isAudited() && isFresh() ? 'healthy' : 'attention'}">
+          <span class="micro">${isArchived() ? 'Measured on' : 'Snapshot freshness'}</span>
+          <b>${!snapshotMatchesRoster() ? 'Refresh' : isArchived() ? esc(asOfLabel()) : esc(age.short)}</b>
+          <span>${snapshotMatchesRoster()
+            ? `${esc(age.detail)}${isArchived() ? ' · not live' : ''}`
+            : 'Current roster has no matching validated pull'}</span>
         </article>
       `;
     }
@@ -2256,12 +2571,14 @@
       const followers = metricFor(leader.handle, board().mostFollowers, 'followers');
       byId('champ').innerHTML = `
         <div class="champ-top">
-          <div class="stage-eyebrow"><span>●</span> Momentum leader</div>
+          <div class="stage-eyebrow"><span>●</span> Momentum leader${esc(asOfSuffix())}</div>
           <div class="stage-number" aria-hidden="true">01</div>
         </div>
         <h3 class="stage-name">${esc(leader.name)}</h3>
         <p class="stage-role">${esc(leader.role || 'Kirpa team member')}</p>
-        <p class="stage-reason">Leads the normalized Instagram momentum score using only complete, comparable inputs.</p>
+        <p class="stage-reason">${isArchived()
+          ? `Led the normalized Instagram momentum score on ${esc(asOfLabel())}, using only complete, comparable inputs from that capture.`
+          : 'Leads the normalized Instagram momentum score using only complete, comparable inputs.'}</p>
         <div class="stage-metrics">
           <div class="stage-metric"><b>${Math.round(leader.score * 100)}</b><span>Momentum points</span></div>
           <div class="stage-metric"><b>${pct(engagement)}</b><span>Typical engagement</span></div>
@@ -2631,13 +2948,35 @@
       const growthRows = audited && DATA.meta?.trendAvailable
         ? (DATA.trend || []).filter(row => row.platform === 'instagram')
         : [];
-      const engagementRows = audited ? board().engagement || [] : [];
-      const cadenceRows = audited ? board().postingFrequency || [] : [];
-      const participationRows = audited
+      /*
+       * The seven-day view is recomputed server-side from the same posts, so
+       * switching window changes which precomputed board is read — the browser
+       * never re-derives a metric the validator has not seen.
+       */
+      const windowBoard = ACTIVE_WINDOW === 30
+        ? board()
+        : (DATA?.leaderboards?.alternateWindows?.[String(ACTIVE_WINDOW)]?.instagram || null);
+      const windowDays = windowBoard?.coverage?.windowDays || ACTIVE_WINDOW;
+      const engagementRows = audited ? windowBoard?.engagement || [] : [];
+      const cadenceRows = audited ? windowBoard?.postingFrequency || [] : [];
+      const participationRows = audited && ACTIVE_WINDOW === 30
         ? rankBy((board().coverage?.cadenceAudit || []).filter(row => row.complete), 'postsInWindow')
-        : [];
+        : audited
+          ? rankBy((windowBoard?.postingFrequency || []).map(row => ({
+              name: row.name, handle: row.handle, postsInWindow: row.postsInWindow
+            })), 'postsInWindow')
+          : [];
+      const windowMissing = audited && ACTIVE_WINDOW !== 30 && !windowBoard;
 
-      byId('boards').innerHTML = [
+      byId('boards').innerHTML = windowMissing ? boardMarkup({
+        title: `${ACTIVE_WINDOW}-day view`,
+        description: 'Shorter window',
+        rows: [],
+        key: 'x',
+        value: () => '',
+        sub: () => '',
+        unavailable: `This snapshot predates the ${ACTIVE_WINDOW}-day view. It appears after the next validated pull.`
+      }) : [
         boardMarkup({
           title: 'Weekly audience growth',
           description: 'Only against a valid baseline approximately 5–9 days old',
@@ -2649,7 +2988,7 @@
         }),
         boardMarkup({
           title: 'Typical engagement',
-          description: 'Median public likes + comments ÷ followers · minimum 3 posts',
+          description: `Median public likes + comments ÷ followers · minimum 3 posts · ${windowDays}-day window`,
           rows: engagementRows,
           key: 'engagementRate',
           value: row => pct(row.engagementRate),
@@ -2658,7 +2997,7 @@
         }),
         boardMarkup({
           title: 'Publishing cadence',
-          description: 'Unique authored posts × 7 ÷ 30 · complete windows only',
+          description: `Unique authored posts × 7 ÷ ${windowDays} · complete windows only`,
           rows: cadenceRows,
           key: 'postsPerWeek',
           value: row => `${row.postsPerWeek.toFixed(1)}/wk`,
@@ -2666,7 +3005,7 @@
           unavailable
         }),
         boardMarkup({
-          title: '30-day participation',
+          title: `${windowDays}-day participation`,
           description: 'Eligible profiles ordered by posts published in the shared window',
           rows: participationRows,
           key: 'postsInWindow',
@@ -2675,6 +3014,16 @@
           unavailable
         })
       ].join('');
+    }
+
+    function renderWindowPicker() {
+      const available = DATA?.leaderboards?.alternateWindows || {};
+      for (const button of byId('window-picker').querySelectorAll('button')) {
+        const days = Number(button.dataset.window);
+        button.setAttribute('aria-pressed', String(days === ACTIVE_WINDOW));
+        button.disabled = days !== 30 && !available[String(days)];
+        button.title = button.disabled ? 'This snapshot does not carry a shorter window yet.' : '';
+      }
     }
 
     function renderTrend() {
@@ -2807,7 +3156,10 @@
       `;
     }
 
+    const personBlock = handle => (DATA?.people || []).find(person => person.handle === handle) || null;
+
     function nextMove(person, state, audit, engagementRow, benchmarks, legacySignal) {
+      if (person.optOut) return 'Excluded at their own request. Nothing about this account is fetched or measured.';
       if (state.key === 'excluded') return 'Visible in the full roster; excluded from performance rankings by role.';
       if (state.label === 'Handle needed') return 'Confirm the correct public Instagram handle.';
       if (state.label === 'Handle confirmation needed') return 'Verify this candidate handle with Kirpa-owned evidence.';
@@ -2825,6 +3177,14 @@
         return 'Keep as directional context; confirm with the full pull.';
       }
       if (state.className === 'incomplete') return 'Retry the complete 30-day posts query.';
+      /*
+       * The recommendation comes from the validated snapshot, where it was
+       * derived from this person's own formats, timing and cadence and carries
+       * the number that produced it. The generic lines below are only reached
+       * when no such recommendation exists.
+       */
+      const computed = personBlock(person.handle)?.nextActions?.[0];
+      if (computed) return computed.action;
       if (state.key === 'unranked') {
         return audit?.postsInWindow === 0
           ? 'Publish once this week to restart momentum.'
@@ -2846,6 +3206,85 @@
 
     function analyticsKpi(label, value, note = '') {
       return `<div class="person-kpi"><span>${esc(label)}</span><b>${esc(value)}</b>${note ? `<small>${esc(note)}</small>` : ''}</div>`;
+    }
+
+    const GOAL_LABELS = {
+      postsPerWeek: { label: 'Posts per week', format: value => value.toFixed(1) },
+      engagementRate: { label: 'Typical engagement', format: value => pct(value) }
+    };
+
+    /*
+     * Goals, streak and the evidence-backed next steps for one person. Each
+     * block renders only from values the validated snapshot actually carries;
+     * a missing measurement produces an explanation, not an empty bar at zero.
+     */
+    function personProgressMarkup(person, analytics) {
+      const block = personBlock(person.handle);
+      const points = profilePoints(person.handle);
+      const followerChange = changeOver(points, 'followers', 7);
+      const sections = [];
+
+      if (points.length > 1) {
+        sections.push(`
+          <h3 class="analytics-subhead">Their direction of travel</h3>
+          ${chartCard({
+            title: 'Followers',
+            points,
+            key: 'followers',
+            format: value => fmt(value),
+            note: followerChange
+              ? `${followerChange.delta >= 0 ? 'Up' : 'Down'} ${fmt(Math.abs(followerChange.delta))} over ${followerChange.days} days across ${points.length} captures.`
+              : `${points.length} stored captures; no baseline sits in the last seven days.`
+          })}`);
+      }
+
+      const goals = block?.goals?.goals || [];
+      if (goals.length) {
+        sections.push(`
+          <h3 class="analytics-subhead">Targets</h3>
+          <div>${goals.map(goal => {
+            const meta = GOAL_LABELS[goal.metric] || { label: goal.metric, format: value => String(value) };
+            const width = isNumber(goal.progress) ? Math.min(100, Math.max(2, goal.progress * 100)) : 0;
+            return `<div class="goal-row">
+              <b>${esc(meta.label)}</b>
+              <span>${isNumber(goal.value) ? esc(meta.format(goal.value)) : '—'} of ${esc(meta.format(goal.target))}</span>
+              <div class="goal-track"><i class="goal-fill ${goal.met ? 'met' : ''}" style="width:${width}%"></i></div>
+              <small>${goal.met === null
+                ? 'Not measurable in this snapshot — the window could not be proved.'
+                : goal.met ? 'Target met.' : `${Math.round((goal.progress || 0) * 100)}% of target.`}</small>
+            </div>`;
+          }).join('')}</div>`);
+      }
+
+      const cadence = block?.cadence;
+      if (cadence) {
+        const pips = cadence.weeks.slice().reverse()
+          .map(week => `<i class="${week.posts > 0 ? 'on' : ''}" title="${esc(`${week.posts} post${week.posts === 1 ? '' : 's'} in the week to ${week.to.slice(0, 10)}`)}"></i>`)
+          .join('');
+        sections.push(`
+          <h3 class="analytics-subhead">Weekly rhythm</h3>
+          <p style="margin:0 0 8px;color:var(--dust);font-size:12px">
+            <span class="streak">${pips}</span>
+            &nbsp;${cadence.activeWeeks} of ${cadence.weeksMeasured} weeks active · current streak ${cadence.currentStreakWeeks} week${cadence.currentStreakWeeks === 1 ? '' : 's'}${
+              cadence.streakCappedBy ? ` (capped by the ${esc(cadence.streakCappedBy)})` : ''}${
+              isNumber(block.daysSinceLastPost) ? ` · last post ${block.daysSinceLastPost} day${block.daysSinceLastPost === 1 ? '' : 's'} before capture` : ''}
+          </p>`);
+      }
+
+      const actions = block?.nextActions || [];
+      if (actions.length) {
+        sections.push(`
+          <h3 class="analytics-subhead">What to do next</h3>
+          <ul class="action-list">${actions.map(action => `
+            <li><b>${esc(action.action)}</b><span>${esc(action.because)}</span></li>
+          `).join('')}</ul>`);
+      } else if (analytics && !analytics.windowComplete) {
+        sections.push(`
+          <h3 class="analytics-subhead">What to do next</h3>
+          <ul class="action-list"><li><b>No recommendation yet.</b><span>Advice needs a provable 30-day window; this profile's was incomplete at capture.</span></li></ul>`);
+      }
+
+      return sections.join('');
     }
 
     function renderPersonAnalytics(handle) {
@@ -2900,6 +3339,7 @@
             ${analyticsKpi('Total video views', fmt(analytics?.totalViews), 'Reporting videos only')}
             ${analyticsKpi('Latest post', analytics?.latestPostAt ? `${relativeAge(analytics.latestPostAt)} before capture` : '—', 'Relative to snapshot time')}
           </div>
+          ${personProgressMarkup(person, analytics)}
           <h3 class="analytics-subhead">Content mix</h3>
           <div class="person-formats">
             ${formats.length ? formats.map(row => `
@@ -2995,9 +3435,19 @@
       URL.revokeObjectURL(url);
     }
 
+    function renderRoleFilter() {
+      const select = byId('role-filter');
+      const current = select.value;
+      const roles = [...new Set(allEmployees().map(employee => employee.role).filter(Boolean))].sort();
+      select.innerHTML = `<option value="all">All roles</option>${roles
+        .map(role => `<option value="${esc(role)}">${esc(role)}</option>`).join('')}`;
+      if (roles.includes(current)) select.value = current;
+    }
+
     function renderRoster() {
       const query = byId('search').value.trim().toLowerCase();
       const filter = byId('status-filter').value;
+      const roleFilter = byId('role-filter').value;
       const sortMode = byId('sort-by').value;
       const audits = auditMap();
       const legacySignals = legacySignalMap();
@@ -3020,7 +3470,8 @@
         const matchesFilter = filter === 'all'
           || row.state.key === filter
           || (filter === 'attention' && row.state.key === 'attention');
-        return matchesQuery && matchesFilter;
+        const matchesRole = roleFilter === 'all' || row.person.role === roleFilter;
+        return matchesQuery && matchesFilter && matchesRole;
       }).sort((a, b) => {
         if (sortMode === 'name') return a.person.name.localeCompare(b.person.name);
         const key = sortMode === 'interaction' ? 'interactionRate'
@@ -3040,11 +3491,11 @@
       byId('posts-heading').textContent = isAudited() ? '30-day posts' : 'Observed posts';
       byId('cadence-heading').textContent = isAudited() ? 'Cadence' : 'Latest post';
       byId('engagement-heading').textContent = isAudited() ? 'Typical ER' : 'Sample ER';
-      const shouldLimit = !ROSTER_EXPANDED && !query && filter === 'all';
+      const shouldLimit = !ROSTER_EXPANDED && !query && filter === 'all' && roleFilter === 'all';
       const visibleRows = shouldLimit ? rows.slice(0, 12) : rows;
       const more = byId('roster-more');
       const toggle = byId('roster-toggle');
-      more.hidden = rows.length <= 12 || Boolean(query) || filter !== 'all';
+      more.hidden = rows.length <= 12 || Boolean(query) || filter !== 'all' || roleFilter !== 'all';
       toggle.textContent = ROSTER_EXPANDED ? 'Show first 12' : `Show all ${rows.length}`;
       toggle.setAttribute('aria-expanded', String(ROSTER_EXPANDED));
       byId('roster-result').textContent = `${visibleRows.length} of ${rosterPeople().length} people shown${rows.length !== rosterPeople().length ? ` · ${rows.length} match filters` : ''}`;
@@ -3069,7 +3520,9 @@
               }
             </td>
             <td data-label="Input status"><span class="status ${esc(state.className)}">${esc(state.label)}</span></td>
-            <td class="num" data-label="Followers">${mayShowMetrics ? fmt(person.record?.followers) : '—'}</td>
+            <td class="num" data-label="Followers">${mayShowMetrics
+              ? `${fmt(person.record?.followers)} ${sparkline(profilePoints(person.handle), 'followers')}`
+              : '—'}</td>
             <td class="num" data-label="${isAudited() ? '30-day posts' : 'Observed posts'}">${mayShowMetrics ? (isLegacy() ? fmt(analytics?.postsInWindow) : (audit?.complete ? fmt(audit.postsInWindow) : '—')) : '—'}</td>
             <td class="num" data-label="${isAudited() ? 'Cadence' : 'Latest post'}">${mayShowMetrics ? (isLegacy() ? relativeAge(analytics?.latestPostAt) : (audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—')) : '—'}</td>
             <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(analytics?.interactionRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
@@ -3090,17 +3543,334 @@
       `;
     }
 
+    /* ---------- Direction of travel ---------- */
+
+    function chartCard({ title, points, key, format, note, days = 7 }) {
+      const usable = pointsWith(points, key);
+      const latest = usable[usable.length - 1];
+      const chart = lineChart(points, key, format);
+      return `<article class="panel chart-card">
+        <h3>${esc(title)}</h3>
+        <div class="chart-value">
+          <b>${latest ? esc(format(latest[key])) : '—'}</b>
+          ${deltaMarkup(changeOver(points, key, days), format)}
+        </div>
+        ${chart || '<p>Not enough captures yet to draw a line. One point appears per pull.</p>'}
+        <p>${esc(note)}</p>
+      </article>`;
+    }
+
+    function renderCharts() {
+      const team = teamPoints();
+      const captures = team.length;
+      const setAside = setAsidePoints(rawTeamPoints());
+      byId('history-note').textContent = captures
+        ? `${captures} validated capture${captures === 1 ? '' : 's'}${setAside ? ` · ${setAside} set aside` : ''}`
+        : setAside
+          ? `${setAside} stored capture${setAside === 1 ? '' : 's'} set aside`
+          : 'No stored captures yet';
+      if (!captures) {
+        byId('charts').innerHTML = `<article class="panel chart-card"><h3>${setAside ? 'History set aside' : 'No history yet'}</h3>
+          <p>${setAside
+            ? `${setAside} stored capture${setAside === 1 ? ' was' : 's were'} measured against a superseded roster or never passed the validator. Trend lines resume from the next validated pull rather than drawing a line through numbers this board will not rank.`
+            : 'Trend lines appear once more than one pull has been stored. Nothing is drawn from a single point.'}</p></article>`;
+        return;
+      }
+      /*
+       * Followers are a direct observation and stay plotted even while
+       * rankings are withheld: the audience number was measured, whatever the
+       * validator later decided about the derived scores. The rate and cadence
+       * charts only ever receive points from captures with a provable window,
+       * because those are the only ones where the value existed at all.
+       */
+      byId('charts').innerHTML = [
+        chartCard({
+          title: 'Team audience',
+          points: team,
+          key: 'followers',
+          format: value => fmt(value),
+          note: 'Combined followers across measured public profiles, from each stored capture.'
+        }),
+        chartCard({
+          title: 'Profiles posting',
+          points: team,
+          key: 'activeProfiles',
+          format: value => fmt(value),
+          note: 'Profiles with a provable window that published at least once in it.'
+        }),
+        chartCard({
+          title: 'Team engagement benchmark',
+          points: team,
+          key: 'medianEngagementRate',
+          format: value => pct(value),
+          note: 'Median of individual typical engagement rates. Captures without provable windows contribute no point.'
+        }),
+        chartCard({
+          title: 'Team cadence',
+          points: team,
+          key: 'medianPostsPerWeek',
+          format: value => `${value.toFixed(1)}/wk`,
+          note: 'Median posts per week across profiles with complete coverage.'
+        })
+      ].join('');
+    }
+
+    function renderBrand() {
+      const card = byId('brand-card');
+      const brand = (DATA?.brand || []).find(account => account.resolved === true);
+      if (!brand) {
+        card.hidden = true;
+        return;
+      }
+      card.hidden = false;
+      const points = profilePoints(brand.handle);
+      const change = changeOver(points, 'followers', 7);
+      const teamLatest = pointsWith(teamPoints(), 'followers').slice(-1)[0];
+      card.innerHTML = `
+        <div>
+          <div class="section-label">Company account</div>
+          <h3 style="margin:3px 0 2px;font:400 22px/1.1 'DM Serif Display',Georgia,serif">@${esc(brand.handle)}</h3>
+          <p style="margin:0;color:var(--dust);font-size:11.5px">Pulled for context and never ranked against individuals.</p>
+        </div>
+        <div class="brand-metrics">
+          <div><span>Followers</span><b>${esc(fmt(brand.followers))}</b></div>
+          <div><span>7-day change</span><b>${change ? `${change.delta >= 0 ? '+' : ''}${esc(fmt(change.delta))}` : '—'}</b></div>
+          <div><span>Team combined</span><b>${teamLatest ? esc(fmt(teamLatest.followers)) : '—'}</b></div>
+          <div><span>Trend</span><b>${sparkline(points, 'followers') || '—'}</b></div>
+        </div>`;
+    }
+
+    /* ---------- What content works ---------- */
+
+    function heatmapMarkup(timing) {
+      const blocks = ['early', 'morning', 'midday', 'afternoon', 'evening', 'late'];
+      const blockLabels = ['00–06', '06–11', '11–15', '15–19', '19–22', '22–24'];
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const cells = new Map((timing.cells || []).map(cell => [`${cell.day}|${cell.block}`, cell]));
+      const rates = (timing.cells || []).filter(cell => cell.posts >= timing.minPosts && isNumber(cell.medianRate)).map(cell => cell.medianRate);
+      const high = rates.length ? Math.max(...rates) : 0;
+      const rows = days.map((dayName, day) => {
+        const cellMarkup = blocks.map((block, index) => {
+          const cell = cells.get(`${day}|${block}`);
+          // A cell below the minimum sample is drawn empty rather than pale:
+          // one lucky post must not read as a good time to publish.
+          const eligible = cell && cell.posts >= timing.minPosts && isNumber(cell.medianRate);
+          const level = eligible && high ? Math.max(1, Math.ceil((cell.medianRate / high) * 4)) : 0;
+          const title = cell
+            ? `${dayName} ${blockLabels[index]} · ${cell.posts} post${cell.posts === 1 ? '' : 's'}${eligible ? ` · ${pct(cell.medianRate)} typical rate` : ' · below the minimum sample'}`
+            : `${dayName} ${blockLabels[index]} · no posts`;
+          return `<i data-level="${level}" title="${esc(title)}"></i>`;
+        }).join('');
+        return `<span class="row-label">${dayName}</span>${cellMarkup}`;
+      }).join('');
+      return `<div class="heatmap" role="img" aria-label="Interaction rate by day and time block">
+        <span></span>${blockLabels.map(label => `<span>${label}</span>`).join('')}
+        ${rows}
+      </div>`;
+    }
+
+    function renderIntel() {
+      const content = isAudited() ? DATA?.content : null;
+      const target = byId('intel');
+      if (!content) {
+        target.innerHTML = `<article class="panel intel-card">
+          <h3>Content patterns withheld</h3>
+          <p>Hashtag, timing and caption analysis needs a validated pull with provable 30-day windows. Nothing is inferred from a partial feed.</p>
+        </article>`;
+        return;
+      }
+      const hashtags = (content.hashtags || []).slice(0, 10);
+      const captions = content.captions || [];
+      const timing = content.timing || { cells: [], minPosts: 3 };
+      const bestCaption = captions.slice().sort((a, b) => (b.medianRate || 0) - (a.medianRate || 0))[0];
+      target.innerHTML = `
+        <article class="panel intel-card">
+          <h3>Hashtags that earn their place</h3>
+          <p>Ranked by how far the typical post carrying the tag beats <em>that poster's own</em> typical post — so a tag cannot win just by being used by the team's most engaged accounts. Needs ${content.thresholds.minPostsPerHashtag}+ posts across ${content.thresholds.minProfilesPerHashtag}+ profiles.</p>
+          ${hashtags.length ? `<ul class="tag-list">${hashtags.map(tag => `
+            <li class="tag ${tag.authorLift >= 1.3 ? 'strong' : ''}">
+              <b>#${esc(tag.tag)}</b>
+              <span>${tag.authorLift}× own</span>
+              <small>${tag.posts} posts · ${tag.profiles} profiles</small>
+            </li>`).join('')}</ul>`
+            : '<p>No hashtag cleared the minimum sample in this window.</p>'}
+        </article>
+        <article class="panel intel-card">
+          <h3>When posting works</h3>
+          <p>Median interaction rate by ${esc(content.timezone)}. Cells with fewer than ${timing.minPosts} posts stay empty.</p>
+          ${heatmapMarkup(timing)}
+          <p class="heat-note">${timing.best
+            ? `Strongest slot: ${esc(timing.best.dayName)} ${esc(timing.best.blockLabel)} — ${esc(pct(timing.best.medianRate))} across ${timing.best.posts} posts.`
+            : 'No slot yet carries enough posts to call it the best time.'}</p>
+        </article>
+        <article class="panel intel-card">
+          <h3>Caption length</h3>
+          <p>Does writing more help? Buckets need ${content.thresholds.minPostsPerBucket}+ posts.</p>
+          ${captions.length ? `<ul class="tag-list">${captions.map(bucket => `
+            <li class="tag ${bucket === bestCaption ? 'strong' : ''}">
+              <b>${esc(bucket.bucketLabel)}</b>
+              <span>${esc(pct(bucket.medianRate))}</span>
+              <small>${bucket.posts} posts</small>
+            </li>`).join('')}</ul>`
+            : '<p>No caption bucket cleared the minimum sample.</p>'}
+        </article>`;
+    }
+
+    /* ---------- Every measured post ---------- */
+
+    const EXPLORER_COLUMNS = [
+      { key: 'name', label: 'Person', type: 'text' },
+      { key: 'postedAt', label: 'Published', type: 'date' },
+      { key: 'type', label: 'Format', type: 'text' },
+      { key: 'likes', label: 'Likes', type: 'num' },
+      { key: 'comments', label: 'Comments', type: 'num' },
+      { key: 'interactions', label: 'Interactions', type: 'num' },
+      { key: 'rate', label: 'Rate', type: 'num' },
+      { key: 'views', label: 'Views', type: 'num' },
+      { key: 'caption', label: 'Caption', type: 'text' }
+    ];
+
+    function explorerRows() {
+      if (!isAudited()) return [];
+      const capturedAt = Date.parse(DATA?.meta?.capturedAt || '');
+      const windowDays = board().coverage?.windowDays || 30;
+      const cutoff = capturedAt - windowDays * 86400000;
+      const audits = auditMap();
+      const rows = [];
+      for (const record of igRecords()) {
+        if (record.optOut === true || record.resolved !== true || record.isPrivate === true) continue;
+        if (!audits.get(record.handle)?.complete) continue;
+        for (const post of record.recentPosts || []) {
+          const at = Date.parse(post.postedAt || '');
+          if (!Number.isFinite(at) || at < cutoff || at > capturedAt) continue;
+          const interactions = isNumber(post.likes) && isNumber(post.comments) ? post.likes + post.comments : null;
+          rows.push({
+            name: record.name,
+            handle: record.handle,
+            postedAt: post.postedAt,
+            type: post.type,
+            likes: isNumber(post.likes) ? post.likes : null,
+            comments: isNumber(post.comments) ? post.comments : null,
+            interactions,
+            rate: interactions !== null && record.followers > 0 ? interactions / record.followers : null,
+            views: isNumber(post.views) ? post.views : null,
+            caption: post.caption || '',
+            url: post.url || ''
+          });
+        }
+      }
+      return rows;
+    }
+
+    function filteredExplorerRows() {
+      const query = (byId('explorer-search')?.value || '').trim().toLowerCase();
+      const format = byId('explorer-format')?.value || 'all';
+      const rows = explorerRows().filter(row => {
+        if (format !== 'all' && row.type !== format) return false;
+        if (!query) return true;
+        return `${row.name} ${row.handle} ${row.caption}`.toLowerCase().includes(query);
+      });
+      const { key, direction } = EXPLORER_SORT;
+      const column = EXPLORER_COLUMNS.find(item => item.key === key) || EXPLORER_COLUMNS[0];
+      const sign = direction === 'asc' ? 1 : -1;
+      return rows.sort((a, b) => {
+        const left = a[key];
+        const right = b[key];
+        // Unknown values sort last in either direction: a post that never
+        // reported views is not the worst-performing post.
+        if (left === null || left === undefined || left === '') return 1;
+        if (right === null || right === undefined || right === '') return -1;
+        if (column.type === 'num') return sign * (left - right);
+        if (column.type === 'date') return sign * (Date.parse(left) - Date.parse(right));
+        return sign * String(left).localeCompare(String(right));
+      });
+    }
+
+    function renderExplorer() {
+      const rows = filteredExplorerRows();
+      const total = explorerRows().length;
+      const capped = rows.length > 400;
+      byId('explorer-note').textContent = isAudited()
+        ? `${rows.length} of ${total} measured posts${capped ? ' · first 400 shown, export for all' : ''}`
+        : 'Awaiting a validated pull';
+      byId('explorer-head').innerHTML = `<tr>${EXPLORER_COLUMNS.map(column => {
+        const active = EXPLORER_SORT.key === column.key;
+        const sort = active ? (EXPLORER_SORT.direction === 'asc' ? 'ascending' : 'descending') : 'none';
+        return `<th scope="col" class="${column.type === 'num' ? 'num' : ''}">
+          <button type="button" data-sort="${column.key}" aria-sort="${sort}">${esc(column.label)}</button>
+        </th>`;
+      }).join('')}</tr>`;
+      if (!rows.length) {
+        byId('explorer-body').innerHTML = `<tr><td colspan="${EXPLORER_COLUMNS.length}" class="no-results">${
+          isAudited() ? 'No posts match this filter.' : 'Posts appear once a validated snapshot with provable windows is published.'
+        }</td></tr>`;
+        return;
+      }
+      byId('explorer-body').innerHTML = rows.slice(0, 400).map(row => `
+        <tr>
+          <td>${row.url ? `<a href="${esc(safeUrl(row.url))}" target="_blank" rel="noopener noreferrer">${esc(row.name)}</a>` : esc(row.name)}</td>
+          <td>${esc((row.postedAt || '').slice(0, 10))}</td>
+          <td>${esc(row.type)}</td>
+          <td class="num">${esc(fmt(row.likes))}</td>
+          <td class="num">${esc(fmt(row.comments))}</td>
+          <td class="num">${esc(fmt(row.interactions))}</td>
+          <td class="num">${esc(pct(row.rate))}</td>
+          <td class="num">${esc(fmt(row.views))}</td>
+          <td class="caption">${esc(row.caption.slice(0, 140))}${row.caption.length > 140 ? '…' : ''}</td>
+        </tr>`).join('');
+    }
+
+    function exportPostsCsv() {
+      const rows = filteredExplorerRows();
+      if (!rows.length) return;
+      const header = ['name', 'handle', 'postedAt', 'type', 'likes', 'comments', 'interactions', 'interactionRate', 'views', 'url', 'caption'];
+      const csv = [header.join(',')].concat(rows.map(row => [
+        row.name, row.handle, row.postedAt, row.type, row.likes, row.comments, row.interactions,
+        row.rate === null ? '' : row.rate, row.views, row.url, row.caption
+      ].map(value => {
+        const text = value === null || value === undefined ? '' : String(value);
+        return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+      }).join(','))).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `kirpa-posts-${(DATA?.meta?.capturedAt || '').slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    /*
+     * One place decides how the page speaks about time, so a dated board cannot
+     * end up with a present-tense headline sitting above past-tense numbers.
+     */
+    function renderTense() {
+      const archived = isArchived();
+      byId('arena-title').textContent = archived
+        ? `What did we know on ${asOfLabel()}?`
+        : 'What do we know right now?';
+      byId('arena-note').textContent = archived
+        ? `Measured ${asOfLabel()} · not live`
+        : 'Latest captured public data';
+    }
+
     function render() {
       renderStamp();
+      renderTense();
       renderDataAlert();
       renderKpis();
       renderChampion();
       renderSpotlight();
+      renderWindowPicker();
       renderBoards();
       renderTrend();
+      renderCharts();
+      renderBrand();
       renderRecords();
+      renderIntel();
+      renderExplorer();
       renderInsights();
       renderAudit();
+      renderRoleFilter();
       renderRoster();
       renderFooter();
       requestAnimationFrame(() => document.body.classList.add('data-ready'));
@@ -3131,19 +3901,30 @@
       byId('audit').innerHTML = '<div class="audit-item held"><b>Audit unavailable</b><span>The source files did not load.</span></div>';
       byId('tbody').innerHTML = '<tr><td colspan="7" class="no-results">Roster unavailable because the source files did not load.</td></tr>';
       byId('roster-result').textContent = 'Roster unavailable';
+      byId('charts').innerHTML = '<article class="panel chart-card"><h3>Trend unavailable</h3><p>Stored captures could not be read.</p></article>';
+      byId('history-note').textContent = 'Unavailable';
+      byId('brand-card').hidden = true;
+      byId('intel').innerHTML = '<article class="panel intel-card"><h3>Content patterns unavailable</h3><p>No snapshot could be loaded.</p></article>';
+      byId('explorer-body').innerHTML = '<tr><td class="no-results">Post data could not be loaded.</td></tr>';
+      byId('explorer-note').textContent = 'Unavailable';
       requestAnimationFrame(() => document.body.classList.add('data-ready'));
     }
 
     async function load() {
       try {
-        const [snapshotResponse, rosterResponse] = await Promise.all([
+        const [snapshotResponse, rosterResponse, seriesResponse] = await Promise.all([
           fetch('data/latest.json', { cache: 'no-store' }),
-          fetch('handles.json', { cache: 'no-store' })
+          fetch('handles.json', { cache: 'no-store' }),
+          // The trend file is additive history. If it is missing the board
+          // still works, minus the charts — it is never a reason to fail.
+          fetch('data/series.json', { cache: 'no-store' }).catch(() => null)
         ]);
         if (!snapshotResponse.ok) throw new Error('Snapshot request failed');
         DATA = await snapshotResponse.json();
         if (!rosterResponse.ok) throw new Error('Roster request failed');
         REGISTRY = await rosterResponse.json();
+        try { SERIES = seriesResponse && seriesResponse.ok ? await seriesResponse.json() : null; }
+        catch (_) { SERIES = null; }
         render();
       } catch (_) {
         renderFailure();
@@ -3152,7 +3933,27 @@
 
     byId('search').addEventListener('input', () => DATA && renderRoster());
     byId('status-filter').addEventListener('change', () => DATA && renderRoster());
+    byId('role-filter').addEventListener('change', () => DATA && renderRoster());
     byId('sort-by').addEventListener('change', () => DATA && renderRoster());
+    byId('window-picker').addEventListener('click', event => {
+      const button = event.target.closest('button[data-window]');
+      if (!button || button.disabled || !DATA) return;
+      ACTIVE_WINDOW = Number(button.dataset.window);
+      renderWindowPicker();
+      renderBoards();
+    });
+    byId('explorer-search').addEventListener('input', () => DATA && renderExplorer());
+    byId('explorer-format').addEventListener('change', () => DATA && renderExplorer());
+    byId('explorer-head').addEventListener('click', event => {
+      const button = event.target.closest('button[data-sort]');
+      if (!button || !DATA) return;
+      const key = button.dataset.sort;
+      EXPLORER_SORT = EXPLORER_SORT.key === key
+        ? { key, direction: EXPLORER_SORT.direction === 'desc' ? 'asc' : 'desc' }
+        : { key, direction: 'desc' };
+      renderExplorer();
+    });
+    byId('export-posts').addEventListener('click', () => DATA && exportPostsCsv());
     byId('roster-toggle').addEventListener('click', () => {
       ROSTER_EXPANDED = !ROSTER_EXPANDED;
       if (DATA) renderRoster();
