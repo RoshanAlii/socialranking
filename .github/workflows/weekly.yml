@@ -1,15 +1,16 @@
-name: Weekly social snapshot
+name: Daily social snapshot
 
 on:
   schedule:
-    - cron: "0 6 * * 1"
+    - cron: "0 4 * * *"
+    - cron: "0 16 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: weekly-social-snapshot
+  group: daily-social-snapshot
   cancel-in-progress: false
 
 jobs:
@@ -27,6 +28,9 @@ jobs:
 
       - name: Verify formulas and release guards
         run: node test/test.js
+
+      - name: Verify roster integrity
+        run: node src/roster.js verify
 
       - name: Pull public Instagram profiles and complete post windows
         env:
@@ -48,14 +52,18 @@ jobs:
       - name: Re-run tests against the release candidate
         run: node test/test.js
 
-      - name: Commit validated snapshot and source captures
+      - name: Commit validated snapshot and trend series
         run: |
           git config user.name "kirpa-social-bot"
           git config user.email "kirpa-social-bot@users.noreply.github.com"
-          git add data/latest.json data/history data/raw
+          git add data/latest.json data/history data/series.json
           if git diff --cached --quiet; then
             echo "No snapshot changes to commit."
           else
             git commit -m "data: refresh validated Instagram snapshot"
             git push
           fi
+
+      - name: Announce failed refresh
+        if: failure()
+        run: echo "::error title=Social snapshot refresh failed::Open this workflow run and inspect the first failed step."
