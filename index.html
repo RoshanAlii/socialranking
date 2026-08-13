@@ -439,8 +439,8 @@
     .mention-pulse.attention .mention-kicker { color: #ffd597; }
 
     .mention-evidence {
-      margin-top: 12px;
-      padding: 20px;
+      margin-top: 18px;
+      overflow: hidden;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background:
@@ -448,18 +448,61 @@
         var(--paper);
       box-shadow: var(--shadow);
     }
-    .mention-evidence-head {
+    .mention-evidence > summary {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
       gap: 22px;
+      padding: 19px 20px;
+      cursor: pointer;
+      list-style: none;
     }
-    .mention-evidence-head h2 {
+    .mention-evidence > summary::-webkit-details-marker { display: none; }
+    .mention-evidence > summary:focus-visible {
+      outline: 3px solid rgba(240, 101, 58, .3);
+      outline-offset: -3px;
+    }
+    .mention-summary-copy h2 {
       margin: 3px 0 4px;
-      font: 400 25px/1.08 "DM Serif Display", Georgia, serif;
+      font: 400 23px/1.08 "DM Serif Display", Georgia, serif;
       letter-spacing: -.015em;
     }
-    .mention-evidence-head p { margin: 0; color: var(--dust); font-size: 10px; }
+    .mention-summary-copy p { margin: 0; color: var(--dust); font-size: 9px; }
+    .mention-disclosure {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      flex: 0 0 auto;
+      color: var(--dust);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .mention-chevron {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: 15px;
+      transition: transform .22s ease, background .18s ease;
+    }
+    .mention-evidence[open] .mention-chevron { transform: rotate(180deg); background: var(--orange-deep); }
+    .mention-evidence-body {
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--line);
+    }
+    .mention-evidence-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      padding-top: 16px;
+    }
+    .mention-evidence-head p { max-width: 620px; margin: 0; color: var(--dust); font-size: 10px; }
     .mention-actions { display: flex; align-items: flex-end; gap: 8px; }
     .mention-sort-label {
       display: grid;
@@ -1705,7 +1748,9 @@
       .mention-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .mention-metric:nth-child(2) { border-right: 0; }
       .mention-metric:last-child { grid-column: 1 / -1; border-top: 1px solid rgba(255, 255, 255, .1); }
-      .mention-evidence { padding: 16px 13px; }
+      .mention-evidence > summary { align-items: flex-start; padding: 16px 14px; }
+      .mention-disclosure > span:first-child { display: none; }
+      .mention-evidence-body { padding: 0 13px 14px; }
       .mention-reel-grid { grid-template-columns: 1fr; }
       .mention-toolbar { align-items: flex-start; flex-direction: column; }
       .mention-result { text-align: left; }
@@ -1952,37 +1997,6 @@
         <div class="mention-metric"><span>Processing coverage</span><b>—</b><small>No manual review</small></div>
       </div>
     </section>
-    <section class="mention-evidence reveal" id="mention-evidence" aria-labelledby="mention-evidence-title" style="--delay:58ms">
-      <div class="mention-evidence-head">
-        <div>
-          <div class="section-label">Video-level evidence</div>
-          <h2 id="mention-evidence-title">Which Reels mentioned DAMAC?</h2>
-          <p id="mention-evidence-copy">Each public Reel will show its own count and confirmed audio timestamps.</p>
-        </div>
-        <div class="mention-actions">
-          <label class="mention-sort-label" for="mention-sort">Sort
-            <select id="mention-sort" aria-label="Sort Reel evidence">
-              <option value="newest">Newest first</option>
-              <option value="mentions">Most mentions</option>
-              <option value="oldest">Oldest first</option>
-            </select>
-          </label>
-          <button class="mention-export" id="export-mentions" type="button" disabled>Export CSV</button>
-        </div>
-      </div>
-      <div class="mention-toolbar">
-        <div class="mention-filters" id="mention-filters" role="group" aria-label="Filter Reel evidence">
-          <button type="button" data-mention-filter="all" aria-pressed="true">All Reels</button>
-          <button type="button" data-mention-filter="mentions" aria-pressed="false">Mentions only</button>
-          <button type="button" data-mention-filter="zero" aria-pressed="false">No mention</button>
-          <button type="button" data-mention-filter="failed" aria-pressed="false">Needs review</button>
-        </div>
-        <div class="mention-result" id="mention-result" aria-live="polite">Waiting for data</div>
-      </div>
-      <div class="mention-reel-grid" id="mention-reels">
-        <div class="mention-board-empty"><b>Preparing the 30-day evidence board</b><span>The next automatic run will populate each Reel and its spoken DAMAC count.</span></div>
-      </div>
-    </section>
     <aside class="data-alert reveal" id="data-alert" role="status" hidden style="--delay:55ms"></aside>
     <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
       <div class="truth-item"><span class="truth-index">01</span><b>Roster-locked</b><span>A snapshot cannot rank after the employee registry changes.</span></div>
@@ -2204,6 +2218,47 @@
         <div class="method-item">
           <b>Current pinned-post rule</b>
           <p>The version-3 cadence engine counts a pinned post only when its actual publication date is inside the window; old pins fall outside by date. Missing values remain unknown, never zero.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="mention-evidence reveal" id="mention-evidence" style="--delay:340ms">
+      <summary>
+        <div class="mention-summary-copy">
+          <div class="section-label">Video-level evidence</div>
+          <h2 id="mention-evidence-title">Which Reels mentioned DAMAC?</h2>
+          <p>Collapsed to keep the main performance dashboard clear.</p>
+        </div>
+        <div class="mention-disclosure">
+          <span id="mention-summary-status">Open Reel evidence</span>
+          <span class="mention-chevron" aria-hidden="true">⌄</span>
+        </div>
+      </summary>
+      <div class="mention-evidence-body">
+        <div class="mention-evidence-head">
+          <p id="mention-evidence-copy">Each public Reel shows its own spoken DAMAC count, processing state, and confirmed audio timestamps. Full transcripts are not published.</p>
+          <div class="mention-actions">
+            <label class="mention-sort-label" for="mention-sort">Sort
+              <select id="mention-sort" aria-label="Sort Reel evidence">
+                <option value="newest">Newest first</option>
+                <option value="mentions">Most mentions</option>
+                <option value="oldest">Oldest first</option>
+              </select>
+            </label>
+            <button class="mention-export" id="export-mentions" type="button" disabled>Export CSV</button>
+          </div>
+        </div>
+        <div class="mention-toolbar">
+          <div class="mention-filters" id="mention-filters" role="group" aria-label="Filter Reel evidence">
+            <button type="button" data-mention-filter="all" aria-pressed="true">All Reels</button>
+            <button type="button" data-mention-filter="mentions" aria-pressed="false">Mentions only</button>
+            <button type="button" data-mention-filter="zero" aria-pressed="false">No mention</button>
+            <button type="button" data-mention-filter="failed" aria-pressed="false">Needs review</button>
+          </div>
+          <div class="mention-result" id="mention-result" aria-live="polite">Waiting for data</div>
+        </div>
+        <div class="mention-reel-grid" id="mention-reels">
+          <div class="mention-board-empty"><b>Preparing the 30-day evidence board</b><span>The next automatic run will populate each Reel and its spoken DAMAC count.</span></div>
         </div>
       </div>
     </details>
@@ -2879,6 +2934,7 @@
       byId('mention-sort').value = MENTION_SORT;
       exportButton.disabled = !ready;
       if (!ready) {
+        byId('mention-summary-status').textContent = 'Waiting for data';
         result.textContent = 'Waiting for the first 30-day run';
         grid.innerHTML = `
           <div class="mention-board-empty">
@@ -2887,6 +2943,9 @@
           </div>`;
         return;
       }
+
+      const partial = MENTIONS.status === 'partial' || MENTIONS.failedReels > 0;
+      byId('mention-summary-status').textContent = `${partial ? '≥' : ''}${fmt(MENTIONS.totalSpokenMentions)} mention${MENTIONS.totalSpokenMentions === 1 ? '' : 's'} · ${fmt(MENTIONS.processedReels)}/${fmt(MENTIONS.totalReels)} processed`;
 
       let rows = MENTIONS.reels.slice();
       if (MENTION_FILTER === 'mentions') rows = rows.filter(row => isNumber(row.mentionCount) && row.mentionCount > 0);
@@ -4429,6 +4488,7 @@
           <p>The page stopped before presenting any dashboard data.</p>
         </div>`;
       byId('mention-result').textContent = 'Evidence unavailable';
+      byId('mention-summary-status').textContent = 'Evidence unavailable';
       byId('mention-reels').innerHTML = '<div class="mention-board-empty"><b>Reel evidence unavailable</b><span>The source files could not be loaded, so no video-level count is shown.</span></div>';
       byId('export-mentions').disabled = true;
       byId('data-alert').hidden = false;
