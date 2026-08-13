@@ -108,11 +108,23 @@ class ReelMentionTests(unittest.TestCase):
         entry = {
             "sourcePublishedAt": "2026-08-12T10:00:00Z",
             "targetKey": "kirpa",
+            "transcriptionPromptVersion": 2,
             "mentionCount": 1,
             "matches": [{"start": 1, "end": 2, "heardAs": "Kirpa"}],
         }
         self.assertTrue(cache_entry_valid(entry, entry["sourcePublishedAt"], "Kirpa"))
         self.assertFalse(cache_entry_valid(entry, entry["sourcePublishedAt"], "DAMAC"))
+
+    def test_legacy_positive_is_rechecked_but_legacy_zero_stays_cached(self):
+        positive = {
+            "sourcePublishedAt": "2026-08-12T10:00:00Z",
+            "targetKey": "damac",
+            "mentionCount": 1,
+            "matches": [{"start": 49.56, "end": 49.92, "heardAs": "Damak"}],
+        }
+        zero = {**positive, "mentionCount": 0, "matches": []}
+        self.assertFalse(cache_entry_valid(positive, positive["sourcePublishedAt"], "DAMAC"))
+        self.assertTrue(cache_entry_valid(zero, zero["sourcePublishedAt"], "DAMAC"))
 
     def test_repeated_same_timestamp_is_flagged_as_asr_artifact(self):
         matches = [
