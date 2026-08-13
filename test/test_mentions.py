@@ -9,6 +9,7 @@ from src.reel_mentions import (
     build_report,
     cache_entry_valid,
     count_words,
+    match_quality_issue,
     parse_timestamp,
     select_recent_reels,
     variants_for,
@@ -111,6 +112,21 @@ class ReelMentionTests(unittest.TestCase):
             "matches": [{"start": 1, "end": 2, "heardAs": "Kirpa"}],
         }
         self.assertTrue(cache_entry_valid(entry, entry["sourcePublishedAt"], "Kirpa"))
+        self.assertFalse(cache_entry_valid(entry, entry["sourcePublishedAt"], "DAMAC"))
+
+    def test_repeated_same_timestamp_is_flagged_as_asr_artifact(self):
+        matches = [
+            {"start": 10.46, "end": 10.46, "heardAs": "D-MAC"},
+            {"start": 10.46, "end": 10.46, "heardAs": "D-MAC"},
+            {"start": 10.47, "end": 10.47, "heardAs": "D-MAC"},
+        ]
+        self.assertIsNotNone(match_quality_issue(matches))
+        entry = {
+            "sourcePublishedAt": "2026-08-12T10:00:00Z",
+            "targetKey": "damac",
+            "mentionCount": len(matches),
+            "matches": matches,
+        }
         self.assertFalse(cache_entry_valid(entry, entry["sourcePublishedAt"], "DAMAC"))
 
 

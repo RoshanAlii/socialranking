@@ -207,6 +207,29 @@ def count_words(words: Sequence[SpokenWord], variants: set[str]) -> list[dict[st
     return matches
 
 
+def match_quality_issue(matches: Sequence[dict[str, Any]]) -> str | None:
+    """Reject obvious ASR repetition artifacts instead of publishing them.
+
+    A real speaker cannot say the same word three times at the same audio
+    instant. Whisper can emit that shape when music or silence triggers a
+    decoder loop, especially after a brand-heavy prompt.
+    """
+    starts: dict[int, int] = {}
+    zero_length = 0
+    for match in matches:
+        start = float(match.get("start") or 0)
+        end = float(match.get("end") or start)
+        bucket = round(start * 20)  # 50 ms buckets tolerate timestamp jitter.
+        starts[bucket] = starts.get(bucket, 0) + 1
+        if end <= start:
+            zero_length += 1
+    if starts and max(starts.values()) >= 3:
+        return "repeated target words share the same audio timestamp"
+    if zero_length >= 3:
+        return "multiple target words have zero-length audio timestamps"
+    return None
+
+
 def reel_identity(item: dict[str, Any]) -> str | None:
     value = item.get("id") or item.get("shortCode") or item.get("shortcode")
     return str(value) if value not in (None, "") else None
@@ -378,17 +401,11 @@ class LocalTranscriber:
         self.model = WhisperModel(model_name, device="cpu", compute_type="int8", cpu_threads=4)
 
     def transcribe(self, media_path: Path, target: str) -> tuple[list[SpokenWord], str | None, float | None]:
-        if normalize_token(target) == "damac":
-            prompt = (
-                "Kirpa Properties is discussing Dubai real estate. The developer name being checked is "
-                "DAMAC, which may be spoken as Damac, Damak, D-MAC, داماك, or داماک. "
-                "Preserve company and project names exactly."
-            )
-        else:
-            prompt = (
-                f"Kirpa Properties is the company account. The exact name may be spoken as "
-                f"{target}, Kripa, किरपा, कृपा, ਕਿਰਪਾ, or کرپا. Preserve proper names."
-            )
+        prompt = (
+            "Faithfully transcribe this Dubai real-estate Reel. Preserve proper names and brands "
+            "such as DAMAC, Sobha, Emaar and Kirpa only when they are actually audible. "
+            "Do not infer, insert or repeat a company name from context."
+        )
         segments, info = self.model.transcribe(
             str(media_path),
             beam_size=5,
@@ -396,7 +413,7 @@ class LocalTranscriber:
             vad_filter=True,
             word_timestamps=True,
             initial_prompt=prompt,
-            condition_on_previous_text=True,
+            condition_on_previous_text=False,
         )
         words: list[SpokenWord] = []
         for segment in segments:
@@ -421,6 +438,7 @@ def cache_entry_valid(entry: Any, published_at: str, target: str) -> bool:
         and isinstance(entry.get("mentionCount"), int)
         and entry.get("mentionCount") >= 0
         and isinstance(entry.get("matches"), list)
+        and match_quality_issue(entry.get("matches", [])) is None
     )
 
 
@@ -443,6 +461,9 @@ def process_reel(
         download_media(source, media_path)
         words, language, probability = transcriber.transcribe(media_path, target)
     matches = count_words(words, variants)
+    quality_issue = match_quality_issue(matches)
+    if quality_issue:
+        raise MentionCountError(f"Transcript quality gate: {quality_issue}")
     return {
         "sourcePublishedAt": item["_publishedAt"],
         "targetKey": normalize_token(target),

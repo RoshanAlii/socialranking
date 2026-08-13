@@ -2929,6 +2929,7 @@
         const code = row.shortCode || row.id || 'Instagram Reel';
         const state = !processed ? 'Needs review' : hasMention ? `${row.mentionCount} detected` : 'No mention detected';
         const matches = Array.isArray(row.matches) ? row.matches : [];
+        const visibleMatches = matches.slice(0, 10);
         return `
           <article class="mention-reel ${hasMention ? 'has-mention' : ''} ${processed ? '' : 'failed'}">
             <div class="mention-reel-media">
@@ -2945,7 +2946,8 @@
               <p class="mention-caption">${esc(row.captionSnippet || (processed ? 'Public Instagram Reel' : 'Audio could not be processed; this is not counted as zero.'))}</p>
               ${matches.length ? `
                 <div class="mention-matches" aria-label="Matched audio timestamps">
-                  ${matches.map(match => `<span class="mention-match" title="Heard as ${esc(match.heardAs || MENTIONS.target)}">${esc(mentionTimestamp(match.start))} · ${esc(match.heardAs || MENTIONS.target)}</span>`).join('')}
+                  ${visibleMatches.map(match => `<span class="mention-match" title="Heard as ${esc(match.heardAs || MENTIONS.target)}">${esc(mentionTimestamp(match.start))} · ${esc(match.heardAs || MENTIONS.target)}</span>`).join('')}
+                  ${matches.length > visibleMatches.length ? `<span class="mention-match">+${matches.length - visibleMatches.length} more</span>` : ''}
                 </div>` : `<div class="mention-no-match">${processed ? 'No DAMAC word match in the transcribed audio.' : 'Processing failed; manual review may be needed.'}</div>`}
               <div class="mention-reel-foot">
                 <span class="mention-language">${processed ? esc(mentionLanguage(row.language)) : 'Unknown result'}</span>
