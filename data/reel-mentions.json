@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "status": "awaiting-first-run",
+  "metric": "spoken-audio",
+  "account": "kirpa.properties",
+  "target": "Kirpa",
+  "windowDays": 7,
+  "generatedAt": null,
+  "windowStart": null,
+  "windowEnd": null,
+  "totalReels": null,
+  "processedReels": 0,
+  "failedReels": null,
+  "processingCoverage": null,
+  "reelsMentioningTarget": null,
+  "totalSpokenMentions": null,
+  "mentionRate": null,
+  "method": {
+    "collector": "apify~instagram-scraper",
+    "transcriber": "faster-whisper/small",
+    "manualReview": false,
+    "transcriptsPublished": false,
+    "countUnit": "word-level matches after multilingual normalization"
+  },
+  "reels": []
+}
