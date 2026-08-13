@@ -39,6 +39,7 @@ MAX_REELS = 100
 MAX_MEDIA_BYTES = 300 * 1024 * 1024
 CACHE_RETENTION_DAYS = 45
 SCHEMA_VERSION = 2
+TRANSCRIPTION_PROMPT_VERSION = 2
 
 # These are plausible renderings of the same spoken name, not translations of
 # arbitrary words. Faster Whisper can return native script or transliteration
@@ -439,6 +440,13 @@ def cache_entry_valid(entry: Any, published_at: str, target: str) -> bool:
         and entry.get("mentionCount") >= 0
         and isinstance(entry.get("matches"), list)
         and match_quality_issue(entry.get("matches", [])) is None
+        # Recheck legacy positive matches produced by the old brand-heavy
+        # prompt. Confirmed zeros can stay cached; only the questionable
+        # positives need another media download and neutral transcription.
+        and (
+            entry.get("mentionCount") == 0
+            or entry.get("transcriptionPromptVersion") == TRANSCRIPTION_PROMPT_VERSION
+        )
     )
 
 
@@ -467,6 +475,7 @@ def process_reel(
     return {
         "sourcePublishedAt": item["_publishedAt"],
         "targetKey": normalize_token(target),
+        "transcriptionPromptVersion": TRANSCRIPTION_PROMPT_VERSION,
         "processedAt": iso_z(now),
         "language": language,
         "languageProbability": probability,
