@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "updatedAt": "2026-08-13T08:58:35Z",
+  "updatedAt": "2026-08-13T09:20:42Z",
   "retentionDays": 45,
   "reels": {
     "3962557129012880248": {
@@ -156,132 +156,11 @@
     "3957619713916581674": {
       "sourcePublishedAt": "2026-08-06T08:31:42Z",
       "targetKey": "damac",
-      "processedAt": "2026-08-13T08:58:35Z",
+      "processedAt": "2026-08-13T09:20:42Z",
       "language": "pa",
       "languageProbability": 0.7276,
-      "mentionCount": 24,
-      "matches": [
-        {
-          "start": 0.0,
-          "end": 0.52,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 0.72,
-          "end": 0.76,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 2.58,
-          "end": 5.88,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 5.88,
-          "end": 6.72,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 6.72,
-          "end": 7.42,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 7.42,
-          "end": 7.7,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 7.86,
-          "end": 9.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 9.46,
-          "end": 9.74,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 9.94,
-          "end": 10.24,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.24,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.46,
-          "end": 10.46,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.48,
-          "end": 10.56,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 10.62,
-          "end": 12.76,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 12.76,
-          "end": 13.08,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 13.08,
-          "end": 13.1,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 13.1,
-          "end": 13.82,
-          "heardAs": "D -MAC,"
-        },
-        {
-          "start": 14.12,
-          "end": 14.58,
-          "heardAs": "D -MAC,"
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     "3957483471455321845": {
       "sourcePublishedAt": "2026-08-06T04:00:47Z",
@@ -658,6 +537,15 @@
       "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3954584342861267260": {
+      "sourcePublishedAt": "2026-08-02T04:00:50Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T09:20:42Z",
+      "language": "hi",
+      "languageProbability": 0.974,
       "mentionCount": 0,
       "matches": []
     }
