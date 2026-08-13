@@ -48,11 +48,12 @@ jobs:
       - name: Verify mention-count rules
         run: python -m unittest discover -s test -p "test_mentions.py"
 
-      - name: Collect and transcribe recent Kirpa Reels
+      - name: Collect and transcribe the 30-day DAMAC Reel window
         env:
           APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN_MENTION_COUNT }}
           INSTAGRAM_ACCOUNT: kirpa.properties
-          MENTION_TARGET: Kirpa
+          MENTION_TARGET: DAMAC
+          MENTION_WINDOW_DAYS: 30
           WHISPER_MODEL: small
         run: python src/reel_mentions.py
 
@@ -67,7 +68,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No Reel mention changes to commit."
           else
-            git commit -m "data: refresh seven-day Reel mention count"
+            git commit -m "data: refresh 30-day DAMAC Reel mentions"
             git pull --rebase origin main
             git push origin HEAD:main
           fi

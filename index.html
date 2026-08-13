@@ -438,6 +438,202 @@
     .mention-metric small { color: rgba(255, 255, 255, .58); font-size: 8px; line-height: 1.35; }
     .mention-pulse.attention .mention-kicker { color: #ffd597; }
 
+    .mention-evidence {
+      margin-top: 12px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 88% 0, rgba(240, 101, 58, .11), transparent 240px),
+        var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .mention-evidence-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .mention-evidence-head h2 {
+      margin: 3px 0 4px;
+      font: 400 25px/1.08 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.015em;
+    }
+    .mention-evidence-head p { margin: 0; color: var(--dust); font-size: 10px; }
+    .mention-actions { display: flex; align-items: flex-end; gap: 8px; }
+    .mention-sort-label {
+      display: grid;
+      gap: 3px;
+      color: var(--dust);
+      font-size: 7px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .mention-sort-label select,
+    .mention-export {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper-warm);
+      color: var(--ink);
+      font: 700 9px/1 Manrope, sans-serif;
+    }
+    .mention-sort-label select { min-width: 132px; padding: 0 28px 0 10px; }
+    .mention-export { padding: 0 13px; cursor: pointer; }
+    .mention-export:disabled { cursor: not-allowed; opacity: .42; }
+    .mention-export:not(:disabled):hover { border-color: var(--orange); color: var(--orange-deep); }
+    .mention-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 17px 0 13px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .mention-filters { display: flex; flex-wrap: wrap; gap: 5px; }
+    .mention-filters button {
+      min-height: 29px;
+      padding: 0 11px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      cursor: pointer;
+      font: 800 8px/1 Manrope, sans-serif;
+      letter-spacing: .035em;
+    }
+    .mention-filters button[aria-pressed="true"] {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+    .mention-result { color: var(--dust); font-size: 8px; text-align: right; }
+    .mention-reel-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .mention-reel {
+      display: grid;
+      grid-template-columns: 108px minmax(0, 1fr);
+      min-width: 0;
+      min-height: 144px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, .68);
+      box-shadow: var(--shadow-soft);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .mention-reel:hover {
+      transform: translateY(-2px);
+      border-color: rgba(240, 101, 58, .38);
+      box-shadow: 0 14px 32px rgba(62, 43, 31, .1);
+    }
+    .mention-reel.has-mention { border-color: rgba(240, 101, 58, .34); }
+    .mention-reel.failed { border-color: rgba(178, 71, 55, .28); }
+    .mention-reel-media {
+      position: relative;
+      min-height: 144px;
+      overflow: hidden;
+      background:
+        linear-gradient(155deg, rgba(240, 101, 58, .92), rgba(45, 31, 24, .94)),
+        var(--ink);
+    }
+    .mention-reel-media img { width: 100%; height: 100%; object-fit: cover; }
+    .mention-reel-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255, 255, 255, .82);
+      font: 400 28px/1 "DM Serif Display", Georgia, serif;
+    }
+    .mention-reel-media img + .mention-reel-fallback { display: none; }
+    .mention-reel-media img[hidden] + .mention-reel-fallback { display: grid; }
+    .mention-count-badge {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      min-width: 30px;
+      padding: 6px 7px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 9px;
+      background: rgba(34, 23, 17, .88);
+      color: #fff;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .mention-count-badge b { display: block; font-size: 16px; line-height: 1; }
+    .mention-count-badge span { display: block; margin-top: 2px; font-size: 6px; letter-spacing: .07em; text-transform: uppercase; }
+    .has-mention .mention-count-badge { background: rgba(219, 77, 32, .94); }
+    .mention-reel-body { display: flex; min-width: 0; flex-direction: column; padding: 12px 13px; }
+    .mention-reel-meta { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+    .mention-reel-meta time { color: var(--dust); font-size: 7px; font-weight: 700; text-transform: uppercase; }
+    .mention-state {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 6px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .has-mention .mention-state { background: rgba(240, 101, 58, .1); color: var(--orange-deep); }
+    .failed .mention-state { background: rgba(178, 71, 55, .09); color: var(--crimson); }
+    .mention-reel h3 {
+      margin: 7px 0 3px;
+      overflow: hidden;
+      color: var(--ink);
+      font: 800 10px/1.35 Manrope, sans-serif;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mention-caption {
+      display: -webkit-box;
+      min-height: 28px;
+      margin: 0;
+      overflow: hidden;
+      color: var(--dust);
+      font-size: 8px;
+      line-height: 1.55;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+    .mention-matches { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .mention-match {
+      padding: 4px 6px;
+      border-radius: 6px;
+      background: rgba(240, 101, 58, .08);
+      color: var(--orange-deep);
+      font-size: 7px;
+      font-weight: 800;
+    }
+    .mention-no-match { margin-top: 8px; color: var(--dust); font-size: 7px; }
+    .mention-reel-foot {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 8px;
+    }
+    .mention-language { color: var(--dust); font-size: 7px; }
+    .mention-reel-link { color: var(--ink); font-size: 8px; font-weight: 800; text-decoration: none; }
+    .mention-reel-link:hover { color: var(--orange-deep); }
+    .mention-board-empty {
+      grid-column: 1 / -1;
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      padding: 24px;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      color: var(--dust);
+      text-align: center;
+    }
+    .mention-board-empty b { color: var(--ink); font: 400 18px/1.2 "DM Serif Display", Georgia, serif; }
+    .mention-board-empty span { max-width: 510px; margin-top: 5px; font-size: 9px; }
+
     .section { margin-top: 27px; }
     .section-heading {
       display: flex;
@@ -1466,6 +1662,10 @@
       .kpis { grid-template-columns: repeat(2, 1fr); }
       .mention-pulse { grid-template-columns: 1fr; }
       .mention-story { border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, .12); }
+      .mention-evidence-head { align-items: flex-start; flex-direction: column; }
+      .mention-actions { width: 100%; }
+      .mention-sort-label { flex: 1; }
+      .mention-sort-label select { width: 100%; }
       .truth-strip { grid-template-columns: 1fr; }
       .truth-item { border-right: 0; border-bottom: 1px solid var(--line); }
       .truth-item:last-child { border-bottom: 0; }
@@ -1505,6 +1705,10 @@
       .mention-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .mention-metric:nth-child(2) { border-right: 0; }
       .mention-metric:last-child { grid-column: 1 / -1; border-top: 1px solid rgba(255, 255, 255, .1); }
+      .mention-evidence { padding: 16px 13px; }
+      .mention-reel-grid { grid-template-columns: 1fr; }
+      .mention-toolbar { align-items: flex-start; flex-direction: column; }
+      .mention-result { text-align: left; }
       .section { margin-top: 23px; }
       .section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .section-heading h2 { font-size: 22px; }
@@ -1585,6 +1789,8 @@
       .command-title { max-width: 300px; }
       .platform small { display: none; }
       .kpi span { font-size: 8px; }
+      .mention-actions { align-items: stretch; flex-direction: column; }
+      .mention-reel { grid-template-columns: 91px minmax(0, 1fr); }
       .champ { min-height: 395px; }
       .stage-number { font-size: 58px; }
       .rows { padding-inline: 13px; }
@@ -1734,16 +1940,47 @@
       <article class="kpi"><span class="micro">Activity</span><b>—</b><span>Loading 30-day window</span></article>
       <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
     </section>
-    <section class="mention-pulse reveal attention" id="mention-pulse" aria-label="Seven-day spoken brand mentions" aria-live="polite" style="--delay:52ms">
+    <section class="mention-pulse reveal attention" id="mention-pulse" aria-label="30-day spoken DAMAC mentions" aria-live="polite" style="--delay:52ms">
       <div class="mention-story">
-        <div class="mention-kicker">Brand voice · rolling 7 days</div>
-        <h2>Spoken “Kirpa” mentions</h2>
+        <div class="mention-kicker">Developer intelligence · rolling 30 days</div>
+        <h2>Spoken “DAMAC” mentions</h2>
         <p>Waiting for the first automatic multilingual transcription run.</p>
       </div>
       <div class="mention-metrics">
         <div class="mention-metric"><span>Total mentions</span><b>—</b><small>Audio only</small></div>
-        <div class="mention-metric"><span>Reels mentioning Kirpa</span><b>—</b><small>Awaiting first run</small></div>
+        <div class="mention-metric"><span>Reels mentioning DAMAC</span><b>—</b><small>Awaiting first run</small></div>
         <div class="mention-metric"><span>Processing coverage</span><b>—</b><small>No manual review</small></div>
+      </div>
+    </section>
+    <section class="mention-evidence reveal" id="mention-evidence" aria-labelledby="mention-evidence-title" style="--delay:58ms">
+      <div class="mention-evidence-head">
+        <div>
+          <div class="section-label">Video-level evidence</div>
+          <h2 id="mention-evidence-title">Which Reels mentioned DAMAC?</h2>
+          <p id="mention-evidence-copy">Each public Reel will show its own count and confirmed audio timestamps.</p>
+        </div>
+        <div class="mention-actions">
+          <label class="mention-sort-label" for="mention-sort">Sort
+            <select id="mention-sort" aria-label="Sort Reel evidence">
+              <option value="newest">Newest first</option>
+              <option value="mentions">Most mentions</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          </label>
+          <button class="mention-export" id="export-mentions" type="button" disabled>Export CSV</button>
+        </div>
+      </div>
+      <div class="mention-toolbar">
+        <div class="mention-filters" id="mention-filters" role="group" aria-label="Filter Reel evidence">
+          <button type="button" data-mention-filter="all" aria-pressed="true">All Reels</button>
+          <button type="button" data-mention-filter="mentions" aria-pressed="false">Mentions only</button>
+          <button type="button" data-mention-filter="zero" aria-pressed="false">No mention</button>
+          <button type="button" data-mention-filter="failed" aria-pressed="false">Needs review</button>
+        </div>
+        <div class="mention-result" id="mention-result" aria-live="polite">Waiting for data</div>
+      </div>
+      <div class="mention-reel-grid" id="mention-reels">
+        <div class="mention-board-empty"><b>Preparing the 30-day evidence board</b><span>The next automatic run will populate each Reel and its spoken DAMAC count.</span></div>
       </div>
     </section>
     <aside class="data-alert reveal" id="data-alert" role="status" hidden style="--delay:55ms"></aside>
@@ -1995,6 +2232,8 @@
     let REGISTRY = null;
     let SERIES = null;
     let MENTIONS = null;
+    let MENTION_FILTER = 'all';
+    let MENTION_SORT = 'newest';
     let ROSTER_EXPANDED = false;
     let ACTIVE_WINDOW = 30;
     let EXPLORER_SORT = { key: 'interactions', direction: 'desc' };
@@ -2597,32 +2836,147 @@
       `;
     }
 
-    function renderMentions() {
-      const element = byId('mention-pulse');
-      const report = MENTIONS;
-      const ready = report &&
-        report.schemaVersion === 1 &&
+    function validMentionReport(report = MENTIONS) {
+      return Boolean(
+        report &&
+        report.schemaVersion >= 2 &&
         report.metric === 'spoken-audio' &&
         report.account === 'kirpa.properties' &&
-        report.target === 'Kirpa' &&
-        report.windowDays === 7 &&
+        String(report.target || '').toUpperCase() === 'DAMAC' &&
+        report.windowDays === 30 &&
         isNumber(report.totalReels) &&
         isNumber(report.processedReels) &&
         isNumber(report.totalSpokenMentions) &&
-        isNumber(report.reelsMentioningTarget);
+        isNumber(report.reelsMentioningTarget) &&
+        Array.isArray(report.reels)
+      );
+    }
+
+    function mentionTimestamp(seconds) {
+      if (!isNumber(seconds) || seconds < 0) return '—';
+      const whole = Math.floor(seconds);
+      const minutes = Math.floor(whole / 60);
+      const remainder = String(whole % 60).padStart(2, '0');
+      return `${minutes}:${remainder}`;
+    }
+
+    function mentionLanguage(code) {
+      const labels = {
+        ar: 'Arabic', en: 'English', hi: 'Hindi', pa: 'Punjabi',
+        ur: 'Urdu', ml: 'Malayalam', ta: 'Tamil', te: 'Telugu'
+      };
+      return labels[String(code || '').toLowerCase()] || (code ? String(code).toUpperCase() : 'Language unknown');
+    }
+
+    function renderMentionEvidence() {
+      const grid = byId('mention-reels');
+      const result = byId('mention-result');
+      const exportButton = byId('export-mentions');
+      const ready = validMentionReport();
+      for (const button of byId('mention-filters').querySelectorAll('[data-mention-filter]')) {
+        button.setAttribute('aria-pressed', String(button.dataset.mentionFilter === MENTION_FILTER));
+      }
+      byId('mention-sort').value = MENTION_SORT;
+      exportButton.disabled = !ready;
+      if (!ready) {
+        result.textContent = 'Waiting for the first 30-day run';
+        grid.innerHTML = `
+          <div class="mention-board-empty">
+            <b>Preparing the 30-day DAMAC evidence board</b>
+            <span>The next automatic run will list every public Reel, its spoken count, and each matched audio timestamp.</span>
+          </div>`;
+        return;
+      }
+
+      let rows = MENTIONS.reels.slice();
+      if (MENTION_FILTER === 'mentions') rows = rows.filter(row => isNumber(row.mentionCount) && row.mentionCount > 0);
+      if (MENTION_FILTER === 'zero') rows = rows.filter(row => row.status === 'processed' && row.mentionCount === 0);
+      if (MENTION_FILTER === 'failed') rows = rows.filter(row => row.status !== 'processed');
+      rows.sort((left, right) => {
+        const dateDifference = Date.parse(right.publishedAt || '') - Date.parse(left.publishedAt || '');
+        if (MENTION_SORT === 'oldest') return -dateDifference;
+        if (MENTION_SORT === 'mentions') {
+          const countDifference = (isNumber(right.mentionCount) ? right.mentionCount : -1) -
+            (isNumber(left.mentionCount) ? left.mentionCount : -1);
+          return countDifference || dateDifference;
+        }
+        return dateDifference;
+      });
+
+      const label = MENTION_FILTER === 'mentions' ? 'with DAMAC mentions'
+        : MENTION_FILTER === 'zero' ? 'with no detected mention'
+          : MENTION_FILTER === 'failed' ? 'needing review'
+            : 'in the 30-day window';
+      result.textContent = `${rows.length} of ${MENTIONS.totalReels} Reels ${label}`;
+      if (!rows.length) {
+        grid.innerHTML = `
+          <div class="mention-board-empty">
+            <b>No Reels match this filter</b>
+            <span>Choose another evidence view; unknown audio is kept separate from a confirmed zero.</span>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = rows.map(row => {
+        const processed = row.status === 'processed' && isNumber(row.mentionCount);
+        const hasMention = processed && row.mentionCount > 0;
+        const dateValue = Date.parse(row.publishedAt || '');
+        const date = Number.isFinite(dateValue)
+          ? new Date(dateValue).toLocaleDateString([], { dateStyle: 'medium' })
+          : 'Date unavailable';
+        const url = safeUrl(row.url);
+        const thumbnail = safeUrl(row.thumbnailUrl);
+        const code = row.shortCode || row.id || 'Instagram Reel';
+        const state = !processed ? 'Needs review' : hasMention ? `${row.mentionCount} detected` : 'No mention detected';
+        const matches = Array.isArray(row.matches) ? row.matches : [];
+        return `
+          <article class="mention-reel ${hasMention ? 'has-mention' : ''} ${processed ? '' : 'failed'}">
+            <div class="mention-reel-media">
+              ${thumbnail ? `<img src="${esc(thumbnail)}" alt="" loading="lazy">` : ''}
+              <div class="mention-reel-fallback" aria-hidden="true">K</div>
+              <div class="mention-count-badge"><b>${processed ? fmt(row.mentionCount) : '—'}</b><span>mentions</span></div>
+            </div>
+            <div class="mention-reel-body">
+              <div class="mention-reel-meta">
+                <time datetime="${esc(row.publishedAt || '')}">${esc(date)}</time>
+                <span class="mention-state">${esc(state)}</span>
+              </div>
+              <h3>Reel ${esc(code)}</h3>
+              <p class="mention-caption">${esc(row.captionSnippet || (processed ? 'Public Instagram Reel' : 'Audio could not be processed; this is not counted as zero.'))}</p>
+              ${matches.length ? `
+                <div class="mention-matches" aria-label="Matched audio timestamps">
+                  ${matches.map(match => `<span class="mention-match" title="Heard as ${esc(match.heardAs || MENTIONS.target)}">${esc(mentionTimestamp(match.start))} · ${esc(match.heardAs || MENTIONS.target)}</span>`).join('')}
+                </div>` : `<div class="mention-no-match">${processed ? 'No DAMAC word match in the transcribed audio.' : 'Processing failed; manual review may be needed.'}</div>`}
+              <div class="mention-reel-foot">
+                <span class="mention-language">${processed ? esc(mentionLanguage(row.language)) : 'Unknown result'}</span>
+                ${url ? `<a class="mention-reel-link" href="${esc(url)}" target="_blank" rel="noopener">Watch Reel ↗</a>` : ''}
+              </div>
+            </div>
+          </article>`;
+      }).join('');
+      grid.querySelectorAll('.mention-reel-media img').forEach(image => {
+        image.addEventListener('error', () => { image.hidden = true; }, { once: true });
+      });
+    }
+
+    function renderMentions() {
+      const element = byId('mention-pulse');
+      const report = MENTIONS;
+      const ready = validMentionReport(report);
       if (!ready) {
         element.classList.add('attention');
         element.innerHTML = `
           <div class="mention-story">
-            <div class="mention-kicker">Brand voice · rolling 7 days</div>
-            <h2>Spoken “Kirpa” mentions</h2>
+            <div class="mention-kicker">Developer intelligence · rolling 30 days</div>
+            <h2>Spoken “DAMAC” mentions</h2>
             <p>Waiting for the first automatic multilingual transcription run.</p>
           </div>
           <div class="mention-metrics">
             <div class="mention-metric"><span>Total mentions</span><b>—</b><small>Audio only</small></div>
-            <div class="mention-metric"><span>Reels mentioning Kirpa</span><b>—</b><small>Awaiting first run</small></div>
+            <div class="mention-metric"><span>Reels mentioning DAMAC</span><b>—</b><small>Awaiting first run</small></div>
             <div class="mention-metric"><span>Processing coverage</span><b>—</b><small>No manual review</small></div>
           </div>`;
+        renderMentionEvidence();
         return;
       }
 
@@ -2637,7 +2991,7 @@
       element.classList.toggle('attention', partial || stale);
       element.innerHTML = `
         <div class="mention-story">
-          <div class="mention-kicker">Brand voice · rolling 7 days</div>
+          <div class="mention-kicker">Developer intelligence · rolling ${fmt(report.windowDays)} days</div>
           <h2>Spoken “${esc(report.target)}” mentions</h2>
           <p>${partial
             ? `${report.failedReels} Reel${report.failedReels === 1 ? '' : 's'} could not be processed; totals are confirmed minimums.`
@@ -2647,10 +3001,10 @@
           <div class="mention-metric">
             <span>Total spoken mentions</span>
             <b>${prefix}${fmt(report.totalSpokenMentions)}</b>
-            <small>Hindi, English and mixed-language audio</small>
+            <small>Arabic, Hindi, English and mixed-language audio</small>
           </div>
           <div class="mention-metric">
-            <span>Reels mentioning Kirpa</span>
+            <span>Reels mentioning DAMAC</span>
             <b>${prefix}${fmt(report.reelsMentioningTarget)} / ${fmt(report.processedReels)}</b>
             <small>${rate} of successfully processed Reels</small>
           </div>
@@ -2660,6 +3014,33 @@
             <small>Word timestamps retained · transcripts not published</small>
           </div>
         </div>`;
+      renderMentionEvidence();
+    }
+
+    function exportMentionCsv() {
+      if (!validMentionReport()) return;
+      const headings = ['Published at', 'Reel', 'Status', 'DAMAC mentions', 'Matched timestamps', 'Detected language', 'Caption snippet', 'Instagram URL'];
+      const rows = MENTIONS.reels.map(row => [
+        row.publishedAt,
+        row.shortCode || row.id,
+        row.status,
+        row.mentionCount,
+        (row.matches || []).map(match => `${mentionTimestamp(match.start)} (${match.heardAs || MENTIONS.target})`).join(' | '),
+        mentionLanguage(row.language),
+        row.captionSnippet,
+        row.url
+      ]);
+      const csvCell = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+      const csv = [headings, ...rows].map(row => row.map(csvCell).join(',')).join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `kirpa-damac-reel-mentions-${String(MENTIONS.generatedAt || '').slice(0, 10) || 'latest'}.csv`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
     }
 
     function metricFor(handle, rows, key) {
@@ -4041,10 +4422,13 @@
       byId('mention-pulse').classList.add('attention');
       byId('mention-pulse').innerHTML = `
         <div class="mention-story">
-          <div class="mention-kicker">Brand voice · rolling 7 days</div>
-          <h2>Spoken “Kirpa” mentions unavailable</h2>
+          <div class="mention-kicker">Developer intelligence · rolling 30 days</div>
+          <h2>Spoken “DAMAC” mentions unavailable</h2>
           <p>The page stopped before presenting any dashboard data.</p>
         </div>`;
+      byId('mention-result').textContent = 'Evidence unavailable';
+      byId('mention-reels').innerHTML = '<div class="mention-board-empty"><b>Reel evidence unavailable</b><span>The source files could not be loaded, so no video-level count is shown.</span></div>';
+      byId('export-mentions').disabled = true;
       byId('data-alert').hidden = false;
       byId('data-alert').innerHTML = '<div><b>Source files unavailable</b><span>The board stopped before displaying any performance data.</span></div>';
       byId('champ').innerHTML = `
@@ -4100,6 +4484,17 @@
     byId('status-filter').addEventListener('change', () => DATA && renderRoster());
     byId('role-filter').addEventListener('change', () => DATA && renderRoster());
     byId('sort-by').addEventListener('change', () => DATA && renderRoster());
+    byId('mention-filters').addEventListener('click', event => {
+      const button = event.target.closest('[data-mention-filter]');
+      if (!button) return;
+      MENTION_FILTER = button.dataset.mentionFilter;
+      renderMentionEvidence();
+    });
+    byId('mention-sort').addEventListener('change', event => {
+      MENTION_SORT = event.target.value;
+      renderMentionEvidence();
+    });
+    byId('export-mentions').addEventListener('click', exportMentionCsv);
     byId('window-picker').addEventListener('click', event => {
       const button = event.target.closest('button[data-window]');
       if (!button || button.disabled || !DATA) return;

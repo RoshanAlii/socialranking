@@ -124,7 +124,7 @@ src/roster.js         ▼
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards, content intelligence and per-person coaching → write `data/latest.json`, a dated history snapshot, and the appended trend series.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
 - **`.github/workflows/weekly.yml`** — cron at 04:00 and 16:00 UTC plus a manual trigger. Unit-test gate → roster integrity → Instagram pull → full answer recomputation and roster-bound validation stamp → tests → commit → Monday digest. Needs `APIFY_TOKEN` as a repo secret; without it the job stops rather than inventing numbers. A failed run announces itself: silence is the one failure this board cannot notice on its own. Raw captures are uploaded as an artifact and are no longer committed.
-- **`.github/workflows/reel-mention-count.yml`** — a separate daily company-account job for `@kirpa.properties`. It collects the exact rolling seven-day Reel window with `APIFY_TOKEN_MENTION_COUNT`, transcribes unseen audio locally with multilingual Faster Whisper, and publishes spoken “Kirpa” totals to `data/reel-mentions.json`. Processed Reel IDs are cached for 45 days, so existing Reels are not downloaded or transcribed again. Failed media stays unknown and makes the report partial; it is never counted as zero.
+- **`.github/workflows/reel-mention-count.yml`** — a separate daily company-account job for `@kirpa.properties`. It collects the exact rolling 30-day Reel window with `APIFY_TOKEN_MENTION_COUNT`, transcribes unseen audio locally with multilingual Faster Whisper, and publishes spoken “DAMAC” totals plus Reel-level evidence to `data/reel-mentions.json`. Cache entries are isolated by search target, so an older “Kirpa” result can never become a “DAMAC” result. Failed media stays unknown and makes the report partial; it is never counted as zero.
 
 ---
 
@@ -137,13 +137,13 @@ src/roster.js         ▼
 
 ### Automatic spoken Reel mentions
 
-The dashboard's brand-voice strip is powered by a separate zero-manual-review workflow:
+The dashboard's interactive DAMAC evidence board is powered by a separate zero-manual-review workflow:
 
 1. Add the new Apify account's token as the Actions secret `APIFY_TOKEN_MENTION_COUNT`. Do not replace or reuse the leaderboard's `APIFY_TOKEN`.
 2. Run **Daily Reel mention count** once from the Actions page. It then runs every day at 06:15 Asia/Dubai.
-3. The job reads only public Reels from `@kirpa.properties` in the exact rolling seven-day window, transcribes Hindi, English, Punjabi and mixed-language audio on the GitHub runner, and counts multilingual spellings of “Kirpa”.
+3. The job reads only public Reels from `@kirpa.properties` in the exact rolling 30-day window, transcribes Arabic, Hindi, English and mixed-language audio on the GitHub runner, and counts explicit ASR renderings of “DAMAC”.
 
-No media or full transcript is committed. The public output contains only the Reel link, detected language, count, and confirmed word timestamps. A Reel is cached after processing, and unknown/failed audio is reported as unknown rather than silently becoming zero.
+No media or full transcript is committed. The public output contains only the Reel link, public preview/caption snippet, detected language, count, and confirmed word timestamps. The board can filter all Reels, Reels mentioning DAMAC, zero-match Reels, and processing failures, then sort by newest or highest count. A Reel is cached after processing for the same search target, and unknown/failed audio is reported as unknown rather than silently becoming zero.
 
 ### Live-only policy
 
