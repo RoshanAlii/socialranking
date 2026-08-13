@@ -800,6 +800,55 @@
       letter-spacing: .06em;
       text-transform: uppercase;
     }
+    .momentum-formula {
+      margin-top: 12px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .035);
+    }
+    .momentum-formula summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      color: var(--orange-soft);
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      list-style: none;
+      text-transform: uppercase;
+    }
+    .momentum-formula summary::-webkit-details-marker { display: none; }
+    .momentum-formula summary::after {
+      content: "+";
+      color: rgba(255, 255, 255, .72);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .momentum-formula[open] summary::after { content: "−"; }
+    .momentum-formula summary:focus-visible {
+      border-radius: 12px;
+      outline: 2px solid var(--orange-soft);
+      outline-offset: 2px;
+    }
+    .momentum-formula-body {
+      padding: 0 14px 14px;
+      color: rgba(255, 255, 255, .7);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+    .momentum-formula-equation {
+      display: block;
+      margin-bottom: 7px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .momentum-formula-body p { margin: 0; }
+    .momentum-formula-body p + p { margin-top: 6px; }
     .readiness {
       margin-top: 29px;
       max-width: 560px;
@@ -3109,6 +3158,22 @@
       return row && isNumber(row[key]) ? row[key] : null;
     }
 
+    function momentumFormula() {
+      const combined = DATA?.leaderboards?.combined || {};
+      const weights = combined.weights || {};
+      const parts = [
+        ['followers', 'normalized follower base'],
+        ['engagementRate', 'normalized typical engagement'],
+        ['postsPerWeek', 'normalized posting cadence'],
+        ['followerGrowth', 'normalized follower growth']
+      ].filter(([key]) => isNumber(weights[key]));
+      if (!parts.length) return null;
+      return {
+        equation: `Momentum points = 100 × (${parts.map(([key, label]) => `${Math.round(weights[key] * 100)}% ${label}`).join(' + ')})`,
+        growthIncluded: parts.some(([key]) => key === 'followerGrowth')
+      };
+    }
+
     function renderChampion() {
       const combined = DATA?.leaderboards?.combined?.composite || [];
       const leader = isAudited()
@@ -3163,6 +3228,7 @@
       const engagement = metricFor(leader.handle, board().engagement, 'engagementRate');
       const cadence = metricFor(leader.handle, board().postingFrequency, 'postsPerWeek');
       const followers = metricFor(leader.handle, board().mostFollowers, 'followers');
+      const formula = momentumFormula();
       byId('champ').innerHTML = `
         <div class="champ-top">
           <div class="stage-eyebrow"><span>●</span> Momentum leader${esc(asOfSuffix())}</div>
@@ -3178,6 +3244,17 @@
           <div class="stage-metric"><b>${pct(engagement)}</b><span>Typical engagement</span></div>
           <div class="stage-metric"><b>${isNumber(cadence) ? cadence.toFixed(1) : '—'}</b><span>Posts per week · ${fmt(followers)} followers</span></div>
         </div>
+        ${formula ? `<details class="momentum-formula">
+          <summary>How is momentum calculated?</summary>
+          <div class="momentum-formula-body">
+            <span class="momentum-formula-equation">${esc(formula.equation)}</span>
+            <p>Each input is min–max normalized from 0 to 1 across eligible profiles in the selected window, then the active weights are applied.</p>
+            <p>${formula.growthIncluded
+              ? 'This snapshot includes follower growth because a valid 5–9 day baseline exists.'
+              : 'No valid follower-growth baseline is available, so the reviewed fallback is 15% followers, 45% engagement, and 40% cadence.'}</p>
+            <p>Eligibility requires complete window coverage and at least 3 comparable, non-pinned posts. Unknown inputs are never scored as zero.</p>
+          </div>
+        </details>` : ''}
       `;
     }
 
