@@ -50,9 +50,7 @@ jobs:
 
       - name: Collect and transcribe recent Kirpa Reels
         env:
-          # Temporarily reuse the existing repository token. This can be
-          # switched to APIFY_TOKEN_MENTION_COUNT after the token is rotated.
-          APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN }}
+          APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN_MENTION_COUNT }}
           INSTAGRAM_ACCOUNT: kirpa.properties
           MENTION_TARGET: Kirpa
           WHISPER_MODEL: small
