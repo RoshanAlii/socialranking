@@ -369,6 +369,75 @@
     .kpi.attention b { color: var(--amber); }
     .kpi.healthy b { color: var(--emerald); }
 
+    .mention-pulse {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.15fr) minmax(0, 1.85fr);
+      gap: 0;
+      margin-top: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 18px 46px rgba(34, 23, 17, .16);
+    }
+    .mention-story {
+      position: relative;
+      isolation: isolate;
+      padding: 18px 20px;
+      border-right: 1px solid rgba(255, 255, 255, .12);
+    }
+    .mention-story::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 160px;
+      height: 160px;
+      right: -78px;
+      bottom: -105px;
+      border-radius: 50%;
+      background: var(--orange);
+      opacity: .72;
+    }
+    .mention-kicker {
+      color: var(--orange-soft);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .mention-story h2 {
+      margin: 4px 0 2px;
+      font: 400 22px/1.1 "DM Serif Display", Georgia, serif;
+      letter-spacing: -.015em;
+    }
+    .mention-story p { margin: 0; color: rgba(255, 255, 255, .66); font-size: 9px; }
+    .mention-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .mention-metric {
+      min-width: 0;
+      padding: 18px 19px;
+      border-right: 1px solid rgba(255, 255, 255, .1);
+    }
+    .mention-metric:last-child { border-right: 0; }
+    .mention-metric span {
+      display: block;
+      color: rgba(255, 255, 255, .56);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .mention-metric b {
+      display: block;
+      margin: 3px 0 4px;
+      color: #fff;
+      font-size: clamp(21px, 2.2vw, 29px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .mention-metric small { color: rgba(255, 255, 255, .58); font-size: 8px; line-height: 1.35; }
+    .mention-pulse.attention .mention-kicker { color: #ffd597; }
+
     .section { margin-top: 27px; }
     .section-heading {
       display: flex;
@@ -1395,6 +1464,8 @@
       .command-row { align-items: flex-start; flex-direction: column; margin-top: 23px; }
       .platforms { justify-content: flex-start; }
       .kpis { grid-template-columns: repeat(2, 1fr); }
+      .mention-pulse { grid-template-columns: 1fr; }
+      .mention-story { border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, .12); }
       .truth-strip { grid-template-columns: 1fr; }
       .truth-item { border-right: 0; border-bottom: 1px solid var(--line); }
       .truth-item:last-child { border-bottom: 0; }
@@ -1431,6 +1502,9 @@
       .main { margin-top: -18px; padding-bottom: 48px; }
       .kpi { padding: 15px 14px; }
       .kpi b { font-size: 22px; }
+      .mention-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mention-metric:nth-child(2) { border-right: 0; }
+      .mention-metric:last-child { grid-column: 1 / -1; border-top: 1px solid rgba(255, 255, 255, .1); }
       .section { margin-top: 23px; }
       .section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .section-heading h2 { font-size: 22px; }
@@ -1659,6 +1733,18 @@
       <article class="kpi"><span class="micro">Audience</span><b>—</b><span>Loading measured profiles</span></article>
       <article class="kpi"><span class="micro">Activity</span><b>—</b><span>Loading 30-day window</span></article>
       <article class="kpi"><span class="micro">Freshness</span><b>—</b><span>Checking snapshot age</span></article>
+    </section>
+    <section class="mention-pulse reveal attention" id="mention-pulse" aria-label="Seven-day spoken brand mentions" aria-live="polite" style="--delay:52ms">
+      <div class="mention-story">
+        <div class="mention-kicker">Brand voice · rolling 7 days</div>
+        <h2>Spoken “Kirpa” mentions</h2>
+        <p>Waiting for the first automatic multilingual transcription run.</p>
+      </div>
+      <div class="mention-metrics">
+        <div class="mention-metric"><span>Total mentions</span><b>—</b><small>Audio only</small></div>
+        <div class="mention-metric"><span>Reels mentioning Kirpa</span><b>—</b><small>Awaiting first run</small></div>
+        <div class="mention-metric"><span>Processing coverage</span><b>—</b><small>No manual review</small></div>
+      </div>
     </section>
     <aside class="data-alert reveal" id="data-alert" role="status" hidden style="--delay:55ms"></aside>
     <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
@@ -1908,6 +1994,7 @@
     let DATA = null;
     let REGISTRY = null;
     let SERIES = null;
+    let MENTIONS = null;
     let ROSTER_EXPANDED = false;
     let ACTIVE_WINDOW = 30;
     let EXPLORER_SORT = { key: 'interactions', direction: 'desc' };
@@ -2508,6 +2595,71 @@
             : 'Current roster has no matching validated pull'}</span>
         </article>
       `;
+    }
+
+    function renderMentions() {
+      const element = byId('mention-pulse');
+      const report = MENTIONS;
+      const ready = report &&
+        report.schemaVersion === 1 &&
+        report.metric === 'spoken-audio' &&
+        report.account === 'kirpa.properties' &&
+        report.target === 'Kirpa' &&
+        report.windowDays === 7 &&
+        isNumber(report.totalReels) &&
+        isNumber(report.processedReels) &&
+        isNumber(report.totalSpokenMentions) &&
+        isNumber(report.reelsMentioningTarget);
+      if (!ready) {
+        element.classList.add('attention');
+        element.innerHTML = `
+          <div class="mention-story">
+            <div class="mention-kicker">Brand voice · rolling 7 days</div>
+            <h2>Spoken “Kirpa” mentions</h2>
+            <p>Waiting for the first automatic multilingual transcription run.</p>
+          </div>
+          <div class="mention-metrics">
+            <div class="mention-metric"><span>Total mentions</span><b>—</b><small>Audio only</small></div>
+            <div class="mention-metric"><span>Reels mentioning Kirpa</span><b>—</b><small>Awaiting first run</small></div>
+            <div class="mention-metric"><span>Processing coverage</span><b>—</b><small>No manual review</small></div>
+          </div>`;
+        return;
+      }
+
+      const partial = report.status === 'partial' || report.failedReels > 0;
+      const generated = Date.parse(report.generatedAt || '');
+      const stale = Number.isFinite(generated) && (Date.now() - generated) > 36 * 3600000;
+      const measured = Number.isFinite(generated)
+        ? new Date(generated).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+        : 'time unavailable';
+      const rate = isNumber(report.mentionRate) ? `${Math.round(report.mentionRate * 100)}%` : '—';
+      const prefix = partial ? '≥' : '';
+      element.classList.toggle('attention', partial || stale);
+      element.innerHTML = `
+        <div class="mention-story">
+          <div class="mention-kicker">Brand voice · rolling 7 days</div>
+          <h2>Spoken “${esc(report.target)}” mentions</h2>
+          <p>${partial
+            ? `${report.failedReels} Reel${report.failedReels === 1 ? '' : 's'} could not be processed; totals are confirmed minimums.`
+            : `Multilingual audio counted automatically · updated ${esc(measured)}${stale ? ' · refresh overdue' : ''}.`}</p>
+        </div>
+        <div class="mention-metrics">
+          <div class="mention-metric">
+            <span>Total spoken mentions</span>
+            <b>${prefix}${fmt(report.totalSpokenMentions)}</b>
+            <small>Hindi, English and mixed-language audio</small>
+          </div>
+          <div class="mention-metric">
+            <span>Reels mentioning Kirpa</span>
+            <b>${prefix}${fmt(report.reelsMentioningTarget)} / ${fmt(report.processedReels)}</b>
+            <small>${rate} of successfully processed Reels</small>
+          </div>
+          <div class="mention-metric">
+            <span>Processing coverage</span>
+            <b>${fmt(report.processedReels)} / ${fmt(report.totalReels)}</b>
+            <small>Word timestamps retained · transcripts not published</small>
+          </div>
+        </div>`;
     }
 
     function metricFor(handle, rows, key) {
@@ -3858,6 +4010,7 @@
       renderTense();
       renderDataAlert();
       renderKpis();
+      renderMentions();
       renderChampion();
       renderSpotlight();
       renderWindowPicker();
@@ -3885,6 +4038,13 @@
           <span>The snapshot could not be loaded. Refresh the page or check that data/latest.json and handles.json are published beside this file.</span>
         </article>
       `;
+      byId('mention-pulse').classList.add('attention');
+      byId('mention-pulse').innerHTML = `
+        <div class="mention-story">
+          <div class="mention-kicker">Brand voice · rolling 7 days</div>
+          <h2>Spoken “Kirpa” mentions unavailable</h2>
+          <p>The page stopped before presenting any dashboard data.</p>
+        </div>`;
       byId('data-alert').hidden = false;
       byId('data-alert').innerHTML = '<div><b>Source files unavailable</b><span>The board stopped before displaying any performance data.</span></div>';
       byId('champ').innerHTML = `
@@ -3912,12 +4072,15 @@
 
     async function load() {
       try {
-        const [snapshotResponse, rosterResponse, seriesResponse] = await Promise.all([
+        const [snapshotResponse, rosterResponse, seriesResponse, mentionsResponse] = await Promise.all([
           fetch('data/latest.json', { cache: 'no-store' }),
           fetch('handles.json', { cache: 'no-store' }),
           // The trend file is additive history. If it is missing the board
           // still works, minus the charts — it is never a reason to fail.
-          fetch('data/series.json', { cache: 'no-store' }).catch(() => null)
+          fetch('data/series.json', { cache: 'no-store' }).catch(() => null),
+          // Spoken mentions are a separate company-account workflow. Its first
+          // run must never block the existing fair-ranking dashboard.
+          fetch('data/reel-mentions.json', { cache: 'no-store' }).catch(() => null)
         ]);
         if (!snapshotResponse.ok) throw new Error('Snapshot request failed');
         DATA = await snapshotResponse.json();
@@ -3925,6 +4088,8 @@
         REGISTRY = await rosterResponse.json();
         try { SERIES = seriesResponse && seriesResponse.ok ? await seriesResponse.json() : null; }
         catch (_) { SERIES = null; }
+        try { MENTIONS = mentionsResponse && mentionsResponse.ok ? await mentionsResponse.json() : null; }
+        catch (_) { MENTIONS = null; }
         render();
       } catch (_) {
         renderFailure();
