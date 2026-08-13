@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "status": "awaiting-first-run",
+  "status": "complete",
   "metric": "spoken-audio",
   "account": "kirpa.properties",
   "target": "Kirpa",
   "windowDays": 7,
-  "generatedAt": null,
-  "windowStart": null,
-  "windowEnd": null,
-  "totalReels": null,
-  "processedReels": 0,
-  "failedReels": null,
-  "processingCoverage": null,
-  "reelsMentioningTarget": null,
-  "totalSpokenMentions": null,
-  "mentionRate": null,
+  "generatedAt": "2026-08-13T08:29:42Z",
+  "windowStart": "2026-08-06T08:29:42Z",
+  "windowEnd": "2026-08-13T08:29:42Z",
+  "totalReels": 17,
+  "processedReels": 17,
+  "failedReels": 0,
+  "processingCoverage": 1.0,
+  "reelsMentioningTarget": 4,
+  "totalSpokenMentions": 9,
+  "mentionRate": 0.2353,
   "method": {
     "collector": "apify~instagram-scraper",
     "transcriber": "faster-whisper/small",
@@ -22,5 +22,242 @@
     "transcriptsPublished": false,
     "countUnit": "word-level matches after multilingual normalization"
   },
-  "reels": []
+  "reels": [
+    {
+      "id": "3962557129012880248",
+      "shortCode": "Db91LbdASN4",
+      "url": "https://www.instagram.com/p/Db91LbdASN4/",
+      "publishedAt": "2026-08-13T04:01:18Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9641,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3962096674143125983",
+      "shortCode": "Db8Me7cDsHf",
+      "url": "https://www.instagram.com/p/Db8Me7cDsHf/",
+      "publishedAt": "2026-08-12T12:48:14Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9048,
+      "mentionCount": 2,
+      "matches": [
+        {
+          "start": 27.54,
+          "end": 27.66,
+          "heardAs": "Kripa"
+        },
+        {
+          "start": 30.1,
+          "end": 30.5,
+          "heardAs": "Kirpa"
+        }
+      ]
+    },
+    {
+      "id": "3961952911914850931",
+      "shortCode": "Db7ry6bglpz",
+      "url": "https://www.instagram.com/p/Db7ry6bglpz/",
+      "publishedAt": "2026-08-12T08:01:39Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.6656,
+      "mentionCount": 2,
+      "matches": [
+        {
+          "start": 66.5,
+          "end": 66.6,
+          "heardAs": "Kipa."
+        },
+        {
+          "start": 81.78,
+          "end": 82.04,
+          "heardAs": "Kipa."
+        }
+      ]
+    },
+    {
+      "id": "3961832465974814755",
+      "shortCode": "Db7QaMaCegj",
+      "url": "https://www.instagram.com/p/Db7QaMaCegj/",
+      "publishedAt": "2026-08-12T04:01:57Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.799,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3961107823505085793",
+      "shortCode": "Db4rpQhCpVh",
+      "url": "https://www.instagram.com/p/Db4rpQhCpVh/",
+      "publishedAt": "2026-08-11T04:03:43Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9752,
+      "mentionCount": 2,
+      "matches": [
+        {
+          "start": 11.1,
+          "end": 11.44,
+          "heardAs": "Kripa,"
+        },
+        {
+          "start": 56.2,
+          "end": 56.56,
+          "heardAs": "Kirpa."
+        }
+      ]
+    },
+    {
+      "id": "3960564353350588757",
+      "shortCode": "Db2wEufiVlV",
+      "url": "https://www.instagram.com/p/Db2wEufiVlV/",
+      "publishedAt": "2026-08-10T10:02:11Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.8,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3960382535943635615",
+      "shortCode": "Db2Gu71lMKf",
+      "url": "https://www.instagram.com/p/Db2Gu71lMKf/",
+      "publishedAt": "2026-08-10T04:00:28Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.972,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3959929598279600136",
+      "shortCode": "Db0fv0xAsgI",
+      "url": "https://www.instagram.com/p/Db0fv0xAsgI/",
+      "publishedAt": "2026-08-09T13:00:51Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.7705,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3959302617478053619",
+      "shortCode": "DbyRMDZDb7z",
+      "url": "https://www.instagram.com/p/DbyRMDZDb7z/",
+      "publishedAt": "2026-08-08T16:15:20Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9969,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3959198131601653740",
+      "shortCode": "Dbx5blVgb_s",
+      "url": "https://www.instagram.com/p/Dbx5blVgb_s/",
+      "publishedAt": "2026-08-08T12:48:44Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9646,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3959084448012516823",
+      "shortCode": "DbxflRPjz3X",
+      "url": "https://www.instagram.com/p/DbxflRPjz3X/",
+      "publishedAt": "2026-08-08T09:02:05Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9681,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3959022331614138629",
+      "shortCode": "DbxRdW1sxEF",
+      "url": "https://www.instagram.com/p/DbxRdW1sxEF/",
+      "publishedAt": "2026-08-08T06:58:17Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3958480745739899771",
+      "shortCode": "DbvWUPsDNN7",
+      "url": "https://www.instagram.com/p/DbvWUPsDNN7/",
+      "publishedAt": "2026-08-07T13:02:55Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.6485,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3958425106260342818",
+      "shortCode": "DbvJqlYorgi",
+      "url": "https://www.instagram.com/p/DbvJqlYorgi/",
+      "publishedAt": "2026-08-07T11:12:50Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9979,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3958317487893991640",
+      "shortCode": "DbuxMh-I1DY",
+      "url": "https://www.instagram.com/p/DbuxMh-I1DY/",
+      "publishedAt": "2026-08-07T07:39:29Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.7571,
+      "mentionCount": 3,
+      "matches": [
+        {
+          "start": 25.22,
+          "end": 25.5,
+          "heardAs": "Kirpa?"
+        },
+        {
+          "start": 49.16,
+          "end": 49.56,
+          "heardAs": "Kirpa"
+        },
+        {
+          "start": 66.4,
+          "end": 66.7,
+          "heardAs": "Kirpa"
+        }
+      ]
+    },
+    {
+      "id": "3957888946433912091",
+      "shortCode": "DbtPwboo20b",
+      "url": "https://www.instagram.com/p/DbtPwboo20b/",
+      "publishedAt": "2026-08-06T17:56:32Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.4636,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3957619713916581674",
+      "shortCode": "DbsSilUFLcq",
+      "url": "https://www.instagram.com/p/DbsSilUFLcq/",
+      "publishedAt": "2026-08-06T08:31:42Z",
+      "status": "processed",
+      "language": "pa",
+      "languageProbability": 0.7276,
+      "mentionCount": 0,
+      "matches": []
+    }
+  ]
 }
