@@ -31,14 +31,14 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "data" / "reel-mentions.json"
 DEFAULT_CACHE = ROOT / "data" / "reel-mention-cache.json"
 DEFAULT_ACCOUNT = "kirpa.properties"
-DEFAULT_TARGET = "Kirpa"
-DEFAULT_WINDOW_DAYS = 7
+DEFAULT_TARGET = "DAMAC"
+DEFAULT_WINDOW_DAYS = 30
 DEFAULT_MODEL = "small"
 DEFAULT_ACTOR = "apify~instagram-scraper"
 MAX_REELS = 100
 MAX_MEDIA_BYTES = 300 * 1024 * 1024
 CACHE_RETENTION_DAYS = 45
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 # These are plausible renderings of the same spoken name, not translations of
 # arbitrary words. Faster Whisper can return native script or transliteration
@@ -58,6 +58,17 @@ DEFAULT_VARIANTS = {
     "కిర్పా", "కృప", "ಕಿರ್ಪಾ", "ಕೃಪಾ",
     # Sinhala
     "කිර්පා", "කිරපා",
+}
+
+TARGET_VARIANTS = {
+    "damac": {
+        # Common Latin ASR renderings of the developer name.
+        "damac", "damak", "dmac", "demac", "da mac",
+        # Arabic/Perso-Arabic renderings seen in Gulf property content.
+        "داماك", "داماک", "دامك", "دماك",
+    },
+    # Retained for reproducible historical runs.
+    "kirpa": DEFAULT_VARIANTS,
 }
 
 
@@ -116,7 +127,7 @@ def normalize_token(value: Any) -> str:
 
 
 def variants_for(target: str, extras: str | None = None) -> set[str]:
-    values = set(DEFAULT_VARIANTS if normalize_token(target) == "kirpa" else ())
+    values = set(TARGET_VARIANTS.get(normalize_token(target), ()))
     values.add(target)
     if extras:
         values.update(part.strip() for part in extras.split(",") if part.strip())
@@ -132,9 +143,11 @@ def is_target_token(token: str, variants: set[str]) -> bool:
     if normalized in variants:
         return True
 
-    # Keep fuzzy matching deliberately narrow. It covers one-character ASR
-    # substitutions around the Latin brand spelling without treating common
-    # Hindi/Punjabi words or unrelated short words as mentions.
+    # Keep historical Kirpa fuzzy matching deliberately narrow. DAMAC uses an
+    # explicit variant list so ordinary words such as "damage" cannot drift
+    # into the count through approximate matching.
+    if "kirpa" not in variants:
+        return False
     if not _latin(normalized) or not (4 <= len(normalized) <= 6):
         return False
     if normalized[0] not in {"k", "c"} or "p" not in normalized:
@@ -215,6 +228,27 @@ def media_url(item: dict[str, Any]) -> str | None:
     return None
 
 
+def thumbnail_url(item: dict[str, Any]) -> str | None:
+    for key in ("displayUrl", "thumbnailUrl", "imageUrl", "previewUrl"):
+        value = item.get(key)
+        if isinstance(value, str) and value.startswith("https://"):
+            return value
+    images = item.get("images")
+    if isinstance(images, list):
+        for value in images:
+            candidate = value.get("url") if isinstance(value, dict) else value
+            if isinstance(candidate, str) and candidate.startswith("https://"):
+                return candidate
+    return None
+
+
+def caption_snippet(item: dict[str, Any], limit: int = 180) -> str | None:
+    caption = re.sub(r"\s+", " ", str(item.get("caption") or "")).strip()
+    if not caption:
+        return None
+    return caption if len(caption) <= limit else caption[: limit - 1].rstrip() + "…"
+
+
 def select_recent_reels(
     items: Iterable[dict[str, Any]],
     account: str,
@@ -264,7 +298,12 @@ def write_json_atomic(path: Path, value: Any) -> None:
     temporary.replace(path)
 
 
-def fetch_apify_reels(token: str, account: str, actor: str = DEFAULT_ACTOR) -> list[dict[str, Any]]:
+def fetch_apify_reels(
+    token: str,
+    account: str,
+    window_days: int,
+    actor: str = DEFAULT_ACTOR,
+) -> list[dict[str, Any]]:
     try:
         import requests
     except ImportError as error:
@@ -290,7 +329,7 @@ def fetch_apify_reels(token: str, account: str, actor: str = DEFAULT_ACTOR) -> l
             "resultsType": "reels",
             "resultsLimit": MAX_REELS,
             # Fetch one extra day, then apply the exact rolling boundary here.
-            "onlyPostsNewerThan": f"{DEFAULT_WINDOW_DAYS + 1} days",
+            "onlyPostsNewerThan": f"{window_days + 1} days",
         },
         timeout=330,
     )
@@ -339,10 +378,17 @@ class LocalTranscriber:
         self.model = WhisperModel(model_name, device="cpu", compute_type="int8", cpu_threads=4)
 
     def transcribe(self, media_path: Path, target: str) -> tuple[list[SpokenWord], str | None, float | None]:
-        prompt = (
-            f"Kirpa Properties is the brand name being checked. The exact name may be spoken as "
-            f"{target}, Kripa, किरपा, कृपा, ਕਿਰਪਾ, or کرپا. Preserve proper names in the transcript."
-        )
+        if normalize_token(target) == "damac":
+            prompt = (
+                "Kirpa Properties is discussing Dubai real estate. The developer name being checked is "
+                "DAMAC, which may be spoken as Damac, Damak, D-MAC, داماك, or داماک. "
+                "Preserve company and project names exactly."
+            )
+        else:
+            prompt = (
+                f"Kirpa Properties is the company account. The exact name may be spoken as "
+                f"{target}, Kripa, किरपा, कृपा, ਕਿਰਪਾ, or کرپا. Preserve proper names."
+            )
         segments, info = self.model.transcribe(
             str(media_path),
             beam_size=5,
@@ -367,10 +413,11 @@ def safe_failure(error: Exception) -> str:
     return message[:220]
 
 
-def cache_entry_valid(entry: Any, published_at: str) -> bool:
+def cache_entry_valid(entry: Any, published_at: str, target: str) -> bool:
     return bool(
         isinstance(entry, dict)
         and entry.get("sourcePublishedAt") == published_at
+        and entry.get("targetKey") == normalize_token(target)
         and isinstance(entry.get("mentionCount"), int)
         and entry.get("mentionCount") >= 0
         and isinstance(entry.get("matches"), list)
@@ -391,13 +438,14 @@ def process_reel(
     suffix = Path(source.split("?", 1)[0]).suffix.lower()
     if suffix not in {".mp3", ".m4a", ".mp4", ".webm", ".ogg", ".wav"}:
         suffix = ".mp4"
-    with tempfile.TemporaryDirectory(prefix="kirpa-reel-") as directory:
+    with tempfile.TemporaryDirectory(prefix="brand-reel-") as directory:
         media_path = Path(directory) / f"{identity}{suffix}"
         download_media(source, media_path)
         words, language, probability = transcriber.transcribe(media_path, target)
     matches = count_words(words, variants)
     return {
         "sourcePublishedAt": item["_publishedAt"],
+        "targetKey": normalize_token(target),
         "processedAt": iso_z(now),
         "language": language,
         "languageProbability": probability,
@@ -432,6 +480,8 @@ def build_report(
             "id": identity,
             "shortCode": item.get("shortCode") or item.get("shortcode"),
             "url": reel_url(item),
+            "thumbnailUrl": thumbnail_url(item),
+            "captionSnippet": caption_snippet(item),
             "publishedAt": item["_publishedAt"],
         }
         if identity in results:
@@ -503,7 +553,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             raise MentionCountError(
                 "APIFY_TOKEN_MENTION_COUNT is required. The existing APIFY_TOKEN is intentionally not reused."
             )
-        items = fetch_apify_reels(token, args.account, args.actor)
+        items = fetch_apify_reels(token, args.account, args.window_days, args.actor)
     reels = select_recent_reels(items, args.account, start, now)
 
     cache_path = Path(args.cache)
@@ -515,7 +565,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     for item in reels:
         identity = reel_identity(item)
         entry = cache_reels.get(identity)
-        if cache_entry_valid(entry, item["_publishedAt"]):
+        if cache_entry_valid(entry, item["_publishedAt"], args.target):
             results[identity] = entry
         else:
             pending.append(item)
@@ -553,7 +603,11 @@ def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument("--account", default=os.environ.get("INSTAGRAM_ACCOUNT", DEFAULT_ACCOUNT))
     result.add_argument("--target", default=os.environ.get("MENTION_TARGET", DEFAULT_TARGET))
-    result.add_argument("--window-days", type=int, default=DEFAULT_WINDOW_DAYS)
+    result.add_argument(
+        "--window-days",
+        type=int,
+        default=int(os.environ.get("MENTION_WINDOW_DAYS", DEFAULT_WINDOW_DAYS)),
+    )
     result.add_argument("--model", default=os.environ.get("WHISPER_MODEL", DEFAULT_MODEL))
     result.add_argument("--actor", default=os.environ.get("APIFY_REELS_ACTOR", DEFAULT_ACTOR))
     result.add_argument("--output", default=str(DEFAULT_OUTPUT))
