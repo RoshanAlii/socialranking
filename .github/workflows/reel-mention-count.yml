@@ -1,6 +1,14 @@
 name: Daily Reel mention count
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/reel-mention-count.yml
+      - requirements-mentions.txt
+      - src/reel_mentions.py
+      - test/test_mentions.py
   schedule:
     # 06:15 Asia/Dubai. Kept away from the 04:00/16:00 UTC leaderboard pulls.
     - cron: "15 2 * * *"
@@ -42,7 +50,9 @@ jobs:
 
       - name: Collect and transcribe recent Kirpa Reels
         env:
-          APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN_MENTION_COUNT }}
+          # Temporarily reuse the existing repository token. This can be
+          # switched to APIFY_TOKEN_MENTION_COUNT after the token is rotated.
+          APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN }}
           INSTAGRAM_ACCOUNT: kirpa.properties
           MENTION_TARGET: Kirpa
           WHISPER_MODEL: small
