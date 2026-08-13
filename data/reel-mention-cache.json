@@ -1,11 +1,12 @@
 {
-  "schemaVersion": 1,
-  "updatedAt": "2026-08-13T08:29:42Z",
+  "schemaVersion": 2,
+  "updatedAt": "2026-08-13T08:58:35Z",
   "retentionDays": 45,
   "reels": {
     "3962557129012880248": {
       "sourcePublishedAt": "2026-08-13T04:01:18Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.9641,
       "mentionCount": 0,
@@ -13,45 +14,26 @@
     },
     "3962096674143125983": {
       "sourcePublishedAt": "2026-08-12T12:48:14Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.9048,
-      "mentionCount": 2,
-      "matches": [
-        {
-          "start": 27.54,
-          "end": 27.66,
-          "heardAs": "Kripa"
-        },
-        {
-          "start": 30.1,
-          "end": 30.5,
-          "heardAs": "Kirpa"
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     "3961952911914850931": {
       "sourcePublishedAt": "2026-08-12T08:01:39Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.6656,
-      "mentionCount": 2,
-      "matches": [
-        {
-          "start": 66.5,
-          "end": 66.6,
-          "heardAs": "Kipa."
-        },
-        {
-          "start": 81.78,
-          "end": 82.04,
-          "heardAs": "Kipa."
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     "3961832465974814755": {
       "sourcePublishedAt": "2026-08-12T04:01:57Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.799,
       "mentionCount": 0,
@@ -59,34 +41,32 @@
     },
     "3961107823505085793": {
       "sourcePublishedAt": "2026-08-11T04:03:43Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.9752,
-      "mentionCount": 2,
-      "matches": [
-        {
-          "start": 11.1,
-          "end": 11.44,
-          "heardAs": "Kripa,"
-        },
-        {
-          "start": 56.2,
-          "end": 56.56,
-          "heardAs": "Kirpa."
-        }
-      ]
-    },
-    "3960564353350588757": {
-      "sourcePublishedAt": "2026-08-10T10:02:11Z",
-      "processedAt": "2026-08-13T08:29:42Z",
-      "language": "en",
-      "languageProbability": 0.8,
       "mentionCount": 0,
       "matches": []
     },
+    "3960564353350588757": {
+      "sourcePublishedAt": "2026-08-10T10:02:11Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.8,
+      "mentionCount": 1,
+      "matches": [
+        {
+          "start": 49.56,
+          "end": 49.92,
+          "heardAs": "Damak,"
+        }
+      ]
+    },
     "3960382535943635615": {
       "sourcePublishedAt": "2026-08-10T04:00:28Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "hi",
       "languageProbability": 0.972,
       "mentionCount": 0,
@@ -94,7 +74,8 @@
     },
     "3959929598279600136": {
       "sourcePublishedAt": "2026-08-09T13:00:51Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.7705,
       "mentionCount": 0,
@@ -102,7 +83,8 @@
     },
     "3959302617478053619": {
       "sourcePublishedAt": "2026-08-08T16:15:20Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.9969,
       "mentionCount": 0,
@@ -110,7 +92,8 @@
     },
     "3959198131601653740": {
       "sourcePublishedAt": "2026-08-08T12:48:44Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "hi",
       "languageProbability": 0.9646,
       "mentionCount": 0,
@@ -118,7 +101,8 @@
     },
     "3959084448012516823": {
       "sourcePublishedAt": "2026-08-08T09:02:05Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.9681,
       "mentionCount": 0,
@@ -126,7 +110,8 @@
     },
     "3959022331614138629": {
       "sourcePublishedAt": "2026-08-08T06:58:17Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.3339,
       "mentionCount": 0,
@@ -134,7 +119,8 @@
     },
     "3958480745739899771": {
       "sourcePublishedAt": "2026-08-07T13:02:55Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "hi",
       "languageProbability": 0.6485,
       "mentionCount": 0,
@@ -142,7 +128,8 @@
     },
     "3958425106260342818": {
       "sourcePublishedAt": "2026-08-07T11:12:50Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "hi",
       "languageProbability": 0.9979,
       "mentionCount": 0,
@@ -150,31 +137,17 @@
     },
     "3958317487893991640": {
       "sourcePublishedAt": "2026-08-07T07:39:29Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.7571,
-      "mentionCount": 3,
-      "matches": [
-        {
-          "start": 25.22,
-          "end": 25.5,
-          "heardAs": "Kirpa?"
-        },
-        {
-          "start": 49.16,
-          "end": 49.56,
-          "heardAs": "Kirpa"
-        },
-        {
-          "start": 66.4,
-          "end": 66.7,
-          "heardAs": "Kirpa"
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     "3957888946433912091": {
       "sourcePublishedAt": "2026-08-06T17:56:32Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "en",
       "languageProbability": 0.4636,
       "mentionCount": 0,
@@ -182,9 +155,509 @@
     },
     "3957619713916581674": {
       "sourcePublishedAt": "2026-08-06T08:31:42Z",
-      "processedAt": "2026-08-13T08:29:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
       "language": "pa",
       "languageProbability": 0.7276,
+      "mentionCount": 24,
+      "matches": [
+        {
+          "start": 0.0,
+          "end": 0.52,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 0.72,
+          "end": 0.76,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 2.58,
+          "end": 5.88,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 5.88,
+          "end": 6.72,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 6.72,
+          "end": 7.42,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 7.42,
+          "end": 7.7,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 7.86,
+          "end": 9.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 9.46,
+          "end": 9.74,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 9.94,
+          "end": 10.24,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.24,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.48,
+          "end": 10.56,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.62,
+          "end": 12.76,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 12.76,
+          "end": 13.08,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 13.08,
+          "end": 13.1,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 13.1,
+          "end": 13.82,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 14.12,
+          "end": 14.58,
+          "heardAs": "D -MAC,"
+        }
+      ]
+    },
+    "3957483471455321845": {
+      "sourcePublishedAt": "2026-08-06T04:00:47Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.8041,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3957039548073713434": {
+      "sourcePublishedAt": "2026-08-05T13:19:02Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3956903917175230604": {
+      "sourcePublishedAt": "2026-08-05T08:49:34Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9905,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3956305642810727821": {
+      "sourcePublishedAt": "2026-08-04T13:00:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.903,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3956033864602514709": {
+      "sourcePublishedAt": "2026-08-04T04:00:46Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.9447,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3955580917929585071": {
+      "sourcePublishedAt": "2026-08-03T13:00:59Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "ur",
+      "languageProbability": 0.7683,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3955309175282480059": {
+      "sourcePublishedAt": "2026-08-03T04:00:37Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9809,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3954856549742676674": {
+      "sourcePublishedAt": "2026-08-02T13:02:16Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9808,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3953860054626100995": {
+      "sourcePublishedAt": "2026-08-01T04:01:59Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.7522,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3953406029790620385": {
+      "sourcePublishedAt": "2026-07-31T12:59:53Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.5776,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3953135224335899147": {
+      "sourcePublishedAt": "2026-07-31T04:01:22Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3951960852576099751": {
+      "sourcePublishedAt": "2026-07-29T13:08:35Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3951685368030325300": {
+      "sourcePublishedAt": "2026-07-29T04:01:27Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.7336,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3951227159218319995": {
+      "sourcePublishedAt": "2026-07-28T12:50:51Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.8778,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3950960447344201729": {
+      "sourcePublishedAt": "2026-07-28T04:00:50Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.9756,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3950507461429724207": {
+      "sourcePublishedAt": "2026-07-27T13:00:41Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.5223,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3949783133750885484": {
+      "sourcePublishedAt": "2026-07-26T13:02:02Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.43,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3949511303651553549": {
+      "sourcePublishedAt": "2026-07-26T04:01:34Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9972,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3949058307352805067": {
+      "sourcePublishedAt": "2026-07-25T13:01:50Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3948786639875178739": {
+      "sourcePublishedAt": "2026-07-25T04:01:34Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.6942,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3948333275961965421": {
+      "sourcePublishedAt": "2026-07-24T13:01:16Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.9969,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3947487576240135464": {
+      "sourcePublishedAt": "2026-07-23T09:00:24Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "ur",
+      "languageProbability": 0.5137,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3946750195895531143": {
+      "sourcePublishedAt": "2026-07-22T08:35:55Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9599,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3946611839279491479": {
+      "sourcePublishedAt": "2026-07-22T04:01:11Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.513,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3946158846226036942": {
+      "sourcePublishedAt": "2026-07-21T13:00:40Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9732,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3946038034449567616": {
+      "sourcePublishedAt": "2026-07-21T09:00:38Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3945887096640629597": {
+      "sourcePublishedAt": "2026-07-21T04:01:05Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.93,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3945434059648628281": {
+      "sourcePublishedAt": "2026-07-20T13:01:11Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9906,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3945178819307203798": {
+      "sourcePublishedAt": "2026-07-20T04:34:42Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.991,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3944437752401771208": {
+      "sourcePublishedAt": "2026-07-19T04:01:25Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.5039,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3943984626406476831": {
+      "sourcePublishedAt": "2026-07-18T13:01:00Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.9913,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3943864072907641687": {
+      "sourcePublishedAt": "2026-07-18T09:01:25Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3943712679412302111": {
+      "sourcePublishedAt": "2026-07-18T04:00:40Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.6173,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3943259789329079186": {
+      "sourcePublishedAt": "2026-07-17T13:01:05Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.9515,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3943138921341614639": {
+      "sourcePublishedAt": "2026-07-17T09:00:53Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.7943,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3942987919426483364": {
+      "sourcePublishedAt": "2026-07-17T04:00:33Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3942574244500751582": {
+      "sourcePublishedAt": "2026-07-16T14:19:03Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9834,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3942294226241496642": {
+      "sourcePublishedAt": "2026-07-16T05:03:00Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "hi",
+      "languageProbability": 0.9122,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3941802585963456642": {
+      "sourcePublishedAt": "2026-07-15T12:45:32Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.9735,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3941694349801353251": {
+      "sourcePublishedAt": "2026-07-15T09:10:35Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3941085733481710383": {
+      "sourcePublishedAt": "2026-07-14T13:01:26Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.1602,
+      "mentionCount": 0,
+      "matches": []
+    },
+    "3940965276762523276": {
+      "sourcePublishedAt": "2026-07-14T09:02:53Z",
+      "targetKey": "damac",
+      "processedAt": "2026-08-13T08:58:35Z",
+      "language": "en",
+      "languageProbability": 0.3339,
       "mentionCount": 0,
       "matches": []
     }

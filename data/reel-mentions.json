@@ -1,20 +1,20 @@
 {
-  "schemaVersion": 1,
-  "status": "complete",
+  "schemaVersion": 2,
+  "status": "partial",
   "metric": "spoken-audio",
   "account": "kirpa.properties",
-  "target": "Kirpa",
-  "windowDays": 7,
-  "generatedAt": "2026-08-13T08:29:42Z",
-  "windowStart": "2026-08-06T08:29:42Z",
-  "windowEnd": "2026-08-13T08:29:42Z",
-  "totalReels": 17,
-  "processedReels": 17,
-  "failedReels": 0,
-  "processingCoverage": 1.0,
-  "reelsMentioningTarget": 4,
-  "totalSpokenMentions": 9,
-  "mentionRate": 0.2353,
+  "target": "DAMAC",
+  "windowDays": 30,
+  "generatedAt": "2026-08-13T08:58:35Z",
+  "windowStart": "2026-07-14T08:58:35Z",
+  "windowEnd": "2026-08-13T08:58:35Z",
+  "totalReels": 62,
+  "processedReels": 59,
+  "failedReels": 3,
+  "processingCoverage": 0.9516,
+  "reelsMentioningTarget": 2,
+  "totalSpokenMentions": 25,
+  "mentionRate": 0.0339,
   "method": {
     "collector": "apify~instagram-scraper",
     "transcriber": "faster-whisper/small",
@@ -27,6 +27,8 @@
       "id": "3962557129012880248",
       "shortCode": "Db91LbdASN4",
       "url": "https://www.instagram.com/p/Db91LbdASN4/",
+      "thumbnailUrl": "https://scontent-mad1-1.cdninstagram.com/v/t51.71878-15/765929494_1076480431847417_4647055160311316998_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mad1-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2gHbDJTdTCOJlcmTYQTERa4YA_uCVQosT9WKmnUjxsHi2X9dRlut0YmQz5V3TsyVQCI&_nc_ohc=l_rkd_yFQ00Q7kNvwHD2Wm6&_nc_gid=gxBkfvJLSiRwkMzHb-IjNQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFuDqGptWgWj7WMc-v7fwVS1Tz5mIJkye04nIwlZxY-IA&oe=6A836DDA&_nc_sid=c6f216",
+      "captionSnippet": "Congratulations to @sarvnihal.kirpa on closing a deal at the last minute under the exclusive Sobha 20/80 offer! Your hard work, dedication and determination truly paid off. So pro…",
       "publishedAt": "2026-08-13T04:01:18Z",
       "status": "processed",
       "language": "en",
@@ -38,50 +40,34 @@
       "id": "3962096674143125983",
       "shortCode": "Db8Me7cDsHf",
       "url": "https://www.instagram.com/p/Db8Me7cDsHf/",
+      "thumbnailUrl": "https://scontent-mxp1-1.cdninstagram.com/v/t51.71878-15/774362769_1722979525624995_1791523024800499526_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mxp1-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGq-pHslM2NO3nbkG_w9HnUUWI-SsYhE5nkLOvW2y3CYjHrgtpsKWTmspuaImHnR4s&_nc_ohc=15YHvPggXoEQ7kNvwHKFL6L&_nc_gid=7XFwpZzUrOIpRFVClsV_8A&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEfJ1HwalknhSMFxQhdxAbWFrhPDVJJLF6u7aXyM1yYWA&oe=6A836875&_nc_sid=c6f216",
+      "captionSnippet": "Big congratulations to @sarafaisal.kirpa for securing the #3 spot as our Top Performer! 🏆 Your dedication, consistency and hard work continue to make a difference. Keep pushing bo…",
       "publishedAt": "2026-08-12T12:48:14Z",
       "status": "processed",
       "language": "en",
       "languageProbability": 0.9048,
-      "mentionCount": 2,
-      "matches": [
-        {
-          "start": 27.54,
-          "end": 27.66,
-          "heardAs": "Kripa"
-        },
-        {
-          "start": 30.1,
-          "end": 30.5,
-          "heardAs": "Kirpa"
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     {
       "id": "3961952911914850931",
       "shortCode": "Db7ry6bglpz",
       "url": "https://www.instagram.com/p/Db7ry6bglpz/",
+      "thumbnailUrl": "https://scontent-cdg4-3.cdninstagram.com/v/t51.82787-15/772707333_17941465605304259_2627157104177648668_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-cdg4-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gEQ7frVO-T42cekmyfuZxuaGnmKQDWAgBNC3-HMz3VF2XzmjIlN-6i5ttui4p6_7FCiHkhv3qF-2It4Pl25OlZ3&_nc_ohc=z9wOtlKjGHAQ7kNvwG9L95C&_nc_gid=rhD7XbVEynVce4qv1jXI1w&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFAfnzzzbDrrMhJAOBoJ892bWibJPvJ7IpdqyQu7PIIQw&oe=6A8345D3&_nc_sid=c6f216",
+      "captionSnippet": "Big congratulations to @lipika.kirpa for securing the #1 spot as our Top Performer! 🏆 Your consistency, dedication and relentless hard work have truly set you apart. Keep pushing,…",
       "publishedAt": "2026-08-12T08:01:39Z",
       "status": "processed",
       "language": "en",
       "languageProbability": 0.6656,
-      "mentionCount": 2,
-      "matches": [
-        {
-          "start": 66.5,
-          "end": 66.6,
-          "heardAs": "Kipa."
-        },
-        {
-          "start": 81.78,
-          "end": 82.04,
-          "heardAs": "Kipa."
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     {
       "id": "3961832465974814755",
       "shortCode": "Db7QaMaCegj",
       "url": "https://www.instagram.com/p/Db7QaMaCegj/",
+      "thumbnailUrl": "https://scontent-man2-1.cdninstagram.com/v/t51.71878-15/772108847_1603670511369203_698262146576008305_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-man2-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGHXNaV6K110GDH33qgJEozZ3j14bZCukO6NakC4pJuPn3xqJ1oPNsfjEl0CQQioRUlQg6gQvHa_Mfq_EOb2sf_&_nc_ohc=nYhAuH5KVO8Q7kNvwEqvm0c&_nc_gid=iaHyZCJ9EoefOHUSASR37w&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGClVRpRhaD5UieSnP7PYb7NXttA_Nagoce9IMcMuVerA&oe=6A834FC8&_nc_sid=c6f216",
+      "captionSnippet": "Big congratulations to @vaishali.kirpa for securing the #2 spot as our Top Performer! 🏆 Your consistency, dedication and hard work truly deserve this recognition. Keep pushing, ke…",
       "publishedAt": "2026-08-12T04:01:57Z",
       "status": "processed",
       "language": "en",
@@ -93,39 +79,40 @@
       "id": "3961107823505085793",
       "shortCode": "Db4rpQhCpVh",
       "url": "https://www.instagram.com/p/Db4rpQhCpVh/",
+      "thumbnailUrl": "https://scontent-fra3-2.cdninstagram.com/v/t51.71878-15/771462738_1598027305308328_7456806408422088309_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-fra3-2.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2gEQ7zRBakZRcU3Og4oHUqGaET4lJ0K_kr5iSQDbTZQ5fS70prkfpVzNZKOgtyUzeZYB6xoMCCuCC-s5xtVtg9t_&_nc_ohc=Bcl0XW8ISXsQ7kNvwFD4FTT&_nc_gid=qZqKheNCPCDPDCIdcZ1-cg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGZabO7mNgwUDaeoAZbpVYZ1VLihKKxKF0hye4mJbRIHg&oe=6A8360F3&_nc_sid=c6f216",
+      "captionSnippet": "Congratulations to @priyanka.kirpa on her well-deserved promotion to Team Leader! Your hard work, dedication, and leadership have truly paid off. Here’s to stepping into this new…",
       "publishedAt": "2026-08-11T04:03:43Z",
       "status": "processed",
       "language": "en",
       "languageProbability": 0.9752,
-      "mentionCount": 2,
-      "matches": [
-        {
-          "start": 11.1,
-          "end": 11.44,
-          "heardAs": "Kripa,"
-        },
-        {
-          "start": 56.2,
-          "end": 56.56,
-          "heardAs": "Kirpa."
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     {
       "id": "3960564353350588757",
       "shortCode": "Db2wEufiVlV",
       "url": "https://www.instagram.com/p/Db2wEufiVlV/",
+      "thumbnailUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.71878-15/767507332_1983794035608849_5569906569171873601_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gEzqzdWVNttV5zek2aESoZ0Zzn3XAO8VI87Mr6IJLbkoc3k0o46cIoK4QU0ZSZnyQw&_nc_ohc=T0fdTOtvgGsQ7kNvwG4uDI6&_nc_gid=SDpIYlzJ-dYCYBafrw_n8Q&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGpro62vLLTsf8FUNBbbL5HwrRgdbN38s4UqMQOWa_PEw&oe=6A83552C&_nc_sid=c6f216",
+      "captionSnippet": "Congratulations to Lipika on closing 2 units with Sobha Realty! 🎉 Your hard work and dedication truly show. So proud of you, Lipika! Keep shining and closing bigger.",
       "publishedAt": "2026-08-10T10:02:11Z",
       "status": "processed",
       "language": "en",
       "languageProbability": 0.8,
-      "mentionCount": 0,
-      "matches": []
+      "mentionCount": 1,
+      "matches": [
+        {
+          "start": 49.56,
+          "end": 49.92,
+          "heardAs": "Damak,"
+        }
+      ]
     },
     {
       "id": "3960382535943635615",
       "shortCode": "Db2Gu71lMKf",
       "url": "https://www.instagram.com/p/Db2Gu71lMKf/",
+      "thumbnailUrl": "https://scontent-cdg4-2.cdninstagram.com/v/t51.71878-15/772560539_1379220104180401_1552118995690091851_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=100&ig_cache_key=Mzk2MDM4MjUzNTk0MzYzNTYxNTE3OTQxMTAwNzkzMzA0MjU5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjY0MC5zZHIudmlkZW9fbmZyYW1lX2NvdmVyX2ZyYW1lLkMzIn0%3D&_nc_ohc=o8Ng1v20TgYQ7kNvwH_NQR3&_nc_oc=AdqAFN6U6mroZ7EdW0kHURIHtZjDHOqOZ0jFcSyHWrIjasKXsq3Fmmh4Z4gNDbuStzVbkD1FM-gnoGq4zlp5eZpL&_nc_zt=23&_nc_ht=scontent-cdg4-2.cdninstagram.com&_nc_gid=ijM2-udFM0KwHgmOvM4HKg&_nc_ss=72689&oh=00_AQGQ2wDzSeQsjkf_MihFjLrofeDJZJnvKcYZ73YWaNVpYA&oe=6A834056",
+      "captionSnippet": "Save this life hack and thank us later.",
       "publishedAt": "2026-08-10T04:00:28Z",
       "status": "processed",
       "language": "hi",
@@ -137,6 +124,8 @@
       "id": "3959929598279600136",
       "shortCode": "Db0fv0xAsgI",
       "url": "https://www.instagram.com/p/Db0fv0xAsgI/",
+      "thumbnailUrl": "https://scontent-fra3-1.cdninstagram.com/v/t51.71878-15/769032753_1057151167046197_6669985522030019004_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-fra3-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gFiabFFOCQrfM_-5buOjdqgFPYwfwC-L1KUpaK_kd8R-DJVCU1uAv_4PAuN5nYMr60&_nc_ohc=3mXId_9urkkQ7kNvwG8ydJ3&_nc_gid=lxcv7vdT6jsxY5r6NL4IJw&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGl3QKoEf1OHVcBOPReV-2JvKuHuhZo7JMalBRWV9eKkg&oe=6A836E94&_nc_sid=c6f216",
+      "captionSnippet": "Could you have guessed where these iconic spots in the world are?",
       "publishedAt": "2026-08-09T13:00:51Z",
       "status": "processed",
       "language": "en",
@@ -148,6 +137,8 @@
       "id": "3959302617478053619",
       "shortCode": "DbyRMDZDb7z",
       "url": "https://www.instagram.com/p/DbyRMDZDb7z/",
+      "thumbnailUrl": "https://scontent-ams2-1.cdninstagram.com/v/t51.71878-15/766075506_2032908110699283_4900661613228837530_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGLiTbZYjshmURuMrm7QsYOxze0xc6HLJ7lxtOAfo3SagVG5xQRnvTLiEwvQgvQ_e1zDiwZQTwN1BjafSe60nMe&_nc_ohc=DBJahUE5zuUQ7kNvwH9rVVx&_nc_gid=vIJOPQg5KFQ4fuyE9RviLQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQF8c5aiSAoCt8n9vUeMYV-ieTANrRQ0g8RCf7ij-eutPg&oe=6A835D6D&_nc_sid=c6f216",
+      "captionSnippet": "20% now. 80% after 3 years. Sobha Realty’s limited-time payment plan gives you the flexibility to pay just 20% during construction and the remaining 80% on handover after 3 years.…",
       "publishedAt": "2026-08-08T16:15:20Z",
       "status": "processed",
       "language": "en",
@@ -159,6 +150,8 @@
       "id": "3959198131601653740",
       "shortCode": "Dbx5blVgb_s",
       "url": "https://www.instagram.com/p/Dbx5blVgb_s/",
+      "thumbnailUrl": "https://instagram.ffsd2-1.fna.fbcdn.net/v/t51.71878-15/769385829_2275140646595496_2494990976961514318_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.ffsd2-1.fna.fbcdn.net&_nc_cat=100&_nc_oc=Q6cZ2gHofrMpq9iJU29fgVxDr3ecL4aATbLdaYTTgbQu9Txp2m_BIquh0VTkPNCbJbMH2Gc&_nc_ohc=iHiZBL2EnrsQ7kNvwGoGm45&_nc_gid=coE_wJfTbAq_gG8CcFkiFA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQENHVtPs48iQ2igilUR_zpeC3sFFaHg1Y58KsLgoq4ewQ&oe=6A836B73&_nc_sid=c6f216",
+      "captionSnippet": "A 26 Cr home with just 5 Cr down payment. Pay the remaining amount 3 years later on handover. 🔥 Offer valid for 24 hours only. DM us to know more. 📩 - info@kirpaproperties.com Wha…",
       "publishedAt": "2026-08-08T12:48:44Z",
       "status": "processed",
       "language": "hi",
@@ -170,6 +163,8 @@
       "id": "3959084448012516823",
       "shortCode": "DbxflRPjz3X",
       "url": "https://www.instagram.com/p/DbxflRPjz3X/",
+      "thumbnailUrl": "https://scontent-ams2-1.cdninstagram.com/v/t51.71878-15/769375059_1569034431601767_4204931186966406475_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gH6my_OXjAAEwZeBuIBUZ1AoxPUzDU_TZmtAIcxcYd5wxehal1GhppZj1IW3I83Ra4&_nc_ohc=jTv3FhK_j30Q7kNvwEO5MZq&_nc_gid=jImRrAs_Yi8CIeCh6GqDcQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFo5bhTshSxFvj2XWK7g9WwTMjsmkgqSqI4bzRisWYhkQ&oe=6A8348CB&_nc_sid=c6f216",
+      "captionSnippet": "Off-plan vs Ready Property: Which one is the better choice? The right option depends on your goals, timeline, and investment strategy. Looking for expert guidance to make the righ…",
       "publishedAt": "2026-08-08T09:02:05Z",
       "status": "processed",
       "language": "en",
@@ -181,6 +176,8 @@
       "id": "3959022331614138629",
       "shortCode": "DbxRdW1sxEF",
       "url": "https://www.instagram.com/p/DbxRdW1sxEF/",
+      "thumbnailUrl": "https://instagram.fbcn4-2.fna.fbcdn.net/v/t51.82787-15/769840574_17940764217304259_2933583990791047934_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fbcn4-2.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gGy2XtZPxDiyC0CGnwBY2Ch4iT5JhaVJ4MsKSc11Ruu4KVigJ-AEiB7_dj78VxB7MI&_nc_ohc=AUSY3VxLQxwQ7kNvwG0MQE5&_nc_gid=fdt3ke14jPJg06SUF6Mvrg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEqiTBAIuiptxuyXCIZ7rTKvJEFiSY3NT9vwK1wFFgttQ&oe=6A837618&_nc_sid=c6f216",
+      "captionSnippet": null,
       "publishedAt": "2026-08-08T06:58:17Z",
       "status": "processed",
       "language": "en",
@@ -192,6 +189,8 @@
       "id": "3958480745739899771",
       "shortCode": "DbvWUPsDNN7",
       "url": "https://www.instagram.com/p/DbvWUPsDNN7/",
+      "thumbnailUrl": "https://scontent-yyz1-1.cdninstagram.com/v/t51.71878-15/769113319_3133754146828453_3902091780746480672_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gEE9d0kJrbppiqL_6pupZTbOY3U_-_S0VzzfULdC3BTVylkq736W0g8-1SXAiG1c8k&_nc_ohc=9-Zb-X7AvTUQ7kNvwGd_iFe&_nc_gid=q18vQps3D0mGO92Xy-E3IA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGB4Zo8_xnsMJXY6FNmqM9Sqjrts9pGaOH6Qd4jxSDvhg&oe=6A8351EF&_nc_sid=c6f216",
+      "captionSnippet": "Who's most likely to...?",
       "publishedAt": "2026-08-07T13:02:55Z",
       "status": "processed",
       "language": "hi",
@@ -203,6 +202,8 @@
       "id": "3958425106260342818",
       "shortCode": "DbvJqlYorgi",
       "url": "https://www.instagram.com/p/DbvJqlYorgi/",
+      "thumbnailUrl": "https://scontent-mxp2-1.cdninstagram.com/v/t51.82787-15/763824739_17940622338304259_1576682486201818719_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mxp2-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gEMaCmJ1KSj3IMpANgEjBwjMMw9tPa05cpOPWvfM4tkWQiAc0RyIk7LOnT_Psjqj8k&_nc_ohc=rd6padyvgfUQ7kNvwHQSbFh&_nc_gid=Jk-fwhSshHvWWm7uDJvHxA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEXyCEhBlCP-f_7YFx5QO0TR3zNZ-CEcGp_L9dsT1c-YQ&oe=6A833F6D&_nc_sid=c6f216",
+      "captionSnippet": "📩 info@kirpaproperties.com 📲 WhatsApp: +971 54 367 3063",
       "publishedAt": "2026-08-07T11:12:50Z",
       "status": "processed",
       "language": "hi",
@@ -214,33 +215,21 @@
       "id": "3958317487893991640",
       "shortCode": "DbuxMh-I1DY",
       "url": "https://www.instagram.com/p/DbuxMh-I1DY/",
+      "thumbnailUrl": "https://scontent-muc2-1.cdninstagram.com/v/t51.82787-15/768452524_17940598929304259_850814463096818762_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-muc2-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gFMlQUgQwuMuGvVG83qFzZ93dGldEJKTykSVCa_vEqbUnvTIn2-Y5UpRT8Qg1W2Gzk&_nc_ohc=kIZkEBrK1TgQ7kNvwFczAcK&_nc_gid=mJyzhyl1GVbJ7q0yTzFXHg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFIzakIPIazR-q2OF3vX0VYk1uQs1YUsIEUliuD66RO6Q&oe=6A83729F&_nc_sid=c6f216",
+      "captionSnippet": null,
       "publishedAt": "2026-08-07T07:39:29Z",
       "status": "processed",
       "language": "en",
       "languageProbability": 0.7571,
-      "mentionCount": 3,
-      "matches": [
-        {
-          "start": 25.22,
-          "end": 25.5,
-          "heardAs": "Kirpa?"
-        },
-        {
-          "start": 49.16,
-          "end": 49.56,
-          "heardAs": "Kirpa"
-        },
-        {
-          "start": 66.4,
-          "end": 66.7,
-          "heardAs": "Kirpa"
-        }
-      ]
+      "mentionCount": 0,
+      "matches": []
     },
     {
       "id": "3957888946433912091",
       "shortCode": "DbtPwboo20b",
       "url": "https://www.instagram.com/p/DbtPwboo20b/",
+      "thumbnailUrl": "https://instagram.fpit1-1.fna.fbcdn.net/v/t51.82787-15/768962886_17940488754304259_7733262001715648321_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=instagram.fpit1-1.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gF-946rZsAGDR9RsFhHKXtPUEh5Gu2J_1JYfLeX-uV50zERj4WkECN_i7iSCkHnxAw&_nc_ohc=jtPLk0gpwSEQ7kNvwE_AC5O&_nc_gid=hN5o-HcEbIST9EPS-DDDuw&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGzKf8FJ9ud9hvKZ65qNI2IzQ4fLSgvT9lOP8r1NJTqkA&oe=6A83467C&_nc_sid=c6f216",
+      "captionSnippet": null,
       "publishedAt": "2026-08-06T17:56:32Z",
       "status": "processed",
       "language": "en",
@@ -252,10 +241,721 @@
       "id": "3957619713916581674",
       "shortCode": "DbsSilUFLcq",
       "url": "https://www.instagram.com/p/DbsSilUFLcq/",
+      "thumbnailUrl": "https://scontent-itm1-1.cdninstagram.com/v/t51.71878-15/768398484_2201710357281261_1207228636870067836_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-itm1-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gF7qfPgU_HjKE2Yz9V9tqyu6r3VHXr4Of66O6R9QDIluu-y1o1foC1qFpeDabmnLPQ&_nc_ohc=y79tsi42-swQ7kNvwFec8Pt&_nc_gid=TUFmRFjuLx6E_OrdNQaFAg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEePXI8iQk9swxvtlBv7B1wo6EU_L1CRjGLCHTSX9ldeg&oe=6A8355AD&_nc_sid=c6f216",
+      "captionSnippet": "Diljit Dosanjh coming soon to Kirpa...Stay Tuned!",
       "publishedAt": "2026-08-06T08:31:42Z",
       "status": "processed",
       "language": "pa",
       "languageProbability": 0.7276,
+      "mentionCount": 24,
+      "matches": [
+        {
+          "start": 0.0,
+          "end": 0.52,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 0.72,
+          "end": 0.76,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 2.58,
+          "end": 5.88,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 5.88,
+          "end": 6.72,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 6.72,
+          "end": 7.42,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 7.42,
+          "end": 7.7,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 7.86,
+          "end": 9.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 9.46,
+          "end": 9.74,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 9.94,
+          "end": 10.24,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.24,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.46,
+          "end": 10.46,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.48,
+          "end": 10.56,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 10.62,
+          "end": 12.76,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 12.76,
+          "end": 13.08,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 13.08,
+          "end": 13.1,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 13.1,
+          "end": 13.82,
+          "heardAs": "D -MAC,"
+        },
+        {
+          "start": 14.12,
+          "end": 14.58,
+          "heardAs": "D -MAC,"
+        }
+      ]
+    },
+    {
+      "id": "3957483471455321845",
+      "shortCode": "Dbrzj_okv71",
+      "url": "https://www.instagram.com/p/Dbrzj_okv71/",
+      "thumbnailUrl": "https://scontent-ams2-1.cdninstagram.com/v/t51.71878-15/767101506_1691960935395013_5551933152680391688_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gE9F4tMePjCsKMhUQNQLcUefpJrVh1L309POhbQlOz5LPvsHNfe6BdgbmCmrFFe6KA&_nc_ohc=IrAaVGWqmawQ7kNvwF1D--Q&_nc_gid=DmMKSBvHrZ6OyiVQlbom3w&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEOy7A-HxffjFZLhnHm7UjVvodzoSriBxm_LWrMgvO-eg&oe=6A834F29&_nc_sid=c6f216",
+      "captionSnippet": "Who's most likely to...? 👀",
+      "publishedAt": "2026-08-06T04:00:47Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.8041,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3957039548073713434",
+      "shortCode": "DbqOoDxGx8a",
+      "url": "https://www.instagram.com/p/DbqOoDxGx8a/",
+      "thumbnailUrl": "https://instagram.fgrq1-1.fna.fbcdn.net/v/t51.71878-15/763944092_1739521830410165_3883376011619599039_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fgrq1-1.fna.fbcdn.net&_nc_cat=105&_nc_oc=Q6cZ2gHWk3vXZs-MkpTknP5BZgyEV5HpNS4eoGK63anJd1DHOeOM8qZ4hNrI5E7QgpL1zu0&_nc_ohc=DEaCPKG4gGwQ7kNvwEqoRTT&_nc_gid=rDk3VwseAJObDzEVomPBmA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGeqi94bRdWlRjunzR5rwQB6yHe3f-0VRLyAneVSEZTqg&oe=6A8362B3&_nc_sid=c6f216",
+      "captionSnippet": "When the manager asks to call clients but didn't ask to speak to them",
+      "publishedAt": "2026-08-05T13:19:02Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3956903917175230604",
+      "shortCode": "DbpvyXplNCM",
+      "url": "https://www.instagram.com/p/DbpvyXplNCM/",
+      "thumbnailUrl": "https://instagram.frtm1-2.fna.fbcdn.net/v/t51.71878-15/764720269_1774007490301240_8553352473368651285_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.frtm1-2.fna.fbcdn.net&_nc_cat=104&_nc_oc=Q6cZ2gElmEl5Rgd4FqPa17-pDQWihHYHCBBqISW5Z9WLkA9Ryf9fXuxYDa0ZOp-ekUDpLGM&_nc_ohc=1BKRCby3YEcQ7kNvwGuSYAW&_nc_gid=Fd_ucakHQEC5nO0Fn6PVzw&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFTCaEu7ZBo94gWkQ3sF6YfK5svEHRQfyfN1vuInrCs9g&oe=6A835364&_nc_sid=c6f216",
+      "captionSnippet": "The UAE isn't just shaping skylines. It's shaping global media, innovation, and intellectual property. What surprised you the most? Let us know in the comments. . . [UAE, Abu Dhab…",
+      "publishedAt": "2026-08-05T08:49:34Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9905,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3956305642810727821",
+      "shortCode": "DbnnwVOm12N",
+      "url": "https://www.instagram.com/p/DbnnwVOm12N/",
+      "thumbnailUrl": "https://instagram.ffcm1-1.fna.fbcdn.net/v/t51.71878-15/762432262_2521589208283947_7142287455523280322_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.ffcm1-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gFCzaONnELLEzAg_3ENCdGrwgElxmOPwtsjjNkdZjrtZUjmxEGLePRud8OEkBaCIc7l1BFjopOhwMvVDZR71aiK&_nc_ohc=QOhqgdLdwFIQ7kNvwErFHPk&_nc_gid=bRqaMAHsUCAoLwdZXy400A&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHz7Rtf3ELmdc4IfEQyyzADdXSboIbs6zDYdt9shkk1aQ&oe=6A835ED4&_nc_sid=c6f216",
+      "captionSnippet": "We're looking for a talented Videographer cum Video Editor to join the Kirpa Properties team. If you're passionate about creating high-quality content, capturing compelling storie…",
+      "publishedAt": "2026-08-04T13:00:42Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.903,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3956033864602514709",
+      "shortCode": "Dbmp9cDDHUV",
+      "url": "https://www.instagram.com/p/Dbmp9cDDHUV/",
+      "thumbnailUrl": "https://scontent-icn2-1.cdninstagram.com/v/t51.71878-15/763944032_1599503208412703_7786273671197417355_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-icn2-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gG6mW1gnvGKigb390hBINMi9o2ocFIvLAcZMu76d2ZW4569DPHtfGrpX5klFnpW6Mg&_nc_ohc=Y3F7-YK3lCwQ7kNvwGYktnP&_nc_gid=DBUdknFDMbpDAAN2J64w4A&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHmcy8b5SI1fYpSNXTtmYJRNoPOaO4ppYiunf7mfraO4Q&oe=6A835B55&_nc_sid=c6f216",
+      "captionSnippet": "Everything you need to know about the Dubai property market. Which answer surprised you the most? [Dubai real estate, Dubai property, property investment, invest in Dubai, off-pla…",
+      "publishedAt": "2026-08-04T04:00:46Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9447,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3955580917929585071",
+      "shortCode": "DblC-Mlgamv",
+      "url": "https://www.instagram.com/p/DblC-Mlgamv/",
+      "thumbnailUrl": "https://scontent-waw2-1.cdninstagram.com/v/t51.71878-15/764382466_1772627350540999_1893773235851033596_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-waw2-1.cdninstagram.com&_nc_cat=107&_nc_oc=Q6cZ2gGD1mWAnU-lQTahCVGCdDR3k7ej8BEXY1OrKPY9WgSgU2lNFLAbVksO1LNcvcQuw-A&_nc_ohc=PYBRi2HcN1UQ7kNvwFRyHsF&_nc_gid=RMlEjsOD2vceyy3zhEV_Dw&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFNu3jP5yCjUi9JCG4arGlnFALlxoifCOPe-XQ4GTlgtA&oe=6A83741B&_nc_sid=c6f216",
+      "captionSnippet": "When you spot your client with another realtor. 👀😂 No worries... we'll make sure they know why Kirpa Properties is the right choice!",
+      "publishedAt": "2026-08-03T13:00:59Z",
+      "status": "processed",
+      "language": "ur",
+      "languageProbability": 0.7683,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3955309175282480059",
+      "shortCode": "DbkFL0hjjO7",
+      "url": "https://www.instagram.com/p/DbkFL0hjjO7/",
+      "thumbnailUrl": "https://scontent-bcn1-1.cdninstagram.com/v/t51.71878-15/762864314_1790408385471428_1696982210637885156_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-bcn1-1.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2gHuy7VJoUkt1_qgfeZoigxGM6vSuOEshAUCtthuSFFEo9jYnek7Ent2T8sS82-Qeo4&_nc_ohc=8IZklUWqvVkQ7kNvwFh034Z&_nc_gid=wToU2iY0Bcd7vbjR3KamEg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGT6mstEoDuFHiHR2aLq_kXvKtaAq14UoCldkh_5V5YUA&oe=6A834087&_nc_sid=c6f216",
+      "captionSnippet": "A mall bigger than the Dubai Mall? 🤯 Dubai is about to redefine the meaning of shopping, entertainment, and luxury with a mega project that aims to be bigger than the world’s curr…",
+      "publishedAt": "2026-08-03T04:00:37Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9809,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3954856549742676674",
+      "shortCode": "DbieRQJCgrC",
+      "url": "https://www.instagram.com/p/DbieRQJCgrC/",
+      "thumbnailUrl": "https://scontent-waw2-1.cdninstagram.com/v/t51.71878-15/762691240_915150674959792_2357080648259128096_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-waw2-1.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2gELClTlHp8c7XP0QMDPXFpyzulI3apUeDxwbf2us1bD9z4UlpVCgMfe7rqtBZHBRRo&_nc_ohc=vrR1HkNJumAQ7kNvwGgTMye&_nc_gid=Aht6eYeBhRLPxM800Gs6og&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEJwQsJWKT6pD4fd695j2rF4LQo0VfimIqPtK0RYHPtow&oe=6A8370DE&_nc_sid=c6f216",
+      "captionSnippet": "POV: You followed the instructions exactly as said #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-08-02T13:02:16Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9808,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3954584342861267260",
+      "shortCode": "DbhgYHukUE8",
+      "url": "https://www.instagram.com/p/DbhgYHukUE8/",
+      "thumbnailUrl": "https://instagram.fcps4-1.fna.fbcdn.net/v/t51.71878-15/760965792_1036701042285272_1551909273851825595_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fcps4-1.fna.fbcdn.net&_nc_cat=108&_nc_oc=Q6cZ2gFqavnVUwTE-Eu48Rv2N4asUnX7y2e_OkpRqiy08MZ2bMW_1ZnZPm9XwxraVEpQjBsdIgurECpGN41-7jBEc8-E&_nc_ohc=gu9tDYyLCecQ7kNvwFS5OAS&_nc_gid=G01ijGUcOqAw7h4V8W5iNw&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFpC5ShPXNcrstvCP7bJMNIryNSP0LrwMfeuZnsavTOaA&oe=6A837587&_nc_sid=c6f216",
+      "captionSnippet": "Dubai is building a future where you can walk, connect, and explore the city like never before. A 93 km climate-controlled walkable network is set to transform how people experien…",
+      "publishedAt": "2026-08-02T04:00:50Z",
+      "status": "failed",
+      "language": null,
+      "languageProbability": null,
+      "mentionCount": null,
+      "matches": [],
+      "error": "HTTPSConnectionPool(host='instagram.fcps4-1.fna.fbcdn.net', port=443): Max retries exceeded with url: /o1/v/t2/f2/m86/AQMVitdc5NJAqeHCRlH6z4zlr1Gwy8W45Q4fxAF6DsLfykmQCoRF_KgDW7DDTA6gL2LkWxmt0_fdU0O_UaxH_W2Hwhi53NM7w1C07_"
+    },
+    {
+      "id": "3953860054626100995",
+      "shortCode": "Dbe7sVvmGcD",
+      "url": "https://www.instagram.com/p/Dbe7sVvmGcD/",
+      "thumbnailUrl": "https://instagram.fman2-2.fna.fbcdn.net/v/t51.71878-15/762623741_1015498424656735_498175352667085714_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fman2-2.fna.fbcdn.net&_nc_cat=107&_nc_oc=Q6cZ2gHDsBcweucuJ7qPPO40Nszwpmp9xS3VnRE4LUSFH6RerC0pBg1XW0kOn5093g6A0xw&_nc_ohc=9ctHJUO8JikQ7kNvwERmB8B&_nc_gid=E1xwTt97Vba3aSjp4qdzJA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQG0CB59NQUWLOL-fj5M2roSjU-lfxxFVwZP9KhZbAx6sQ&oe=6A835318&_nc_sid=c6f216",
+      "captionSnippet": "A Closer Look at the People Behind Kirpa Properties #Part2 #LifeAtKirpa #MeetTheTeam #BeyondRealEstate #BehindTheScenes #RealPeopleRealStories #TeamCulture #DubaiCommunity #UAECom…",
+      "publishedAt": "2026-08-01T04:01:59Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.7522,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3953406029790620385",
+      "shortCode": "DbdUdaKjqrh",
+      "url": "https://www.instagram.com/p/DbdUdaKjqrh/",
+      "thumbnailUrl": "https://scontent-ams2-1.cdninstagram.com/v/t51.71878-15/757851914_1569790044846106_6592942888368096298_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2gGHEgWu8pAiCfejbcSkDDpyKebvaYt4wRRM2rL00CvmJ1MsRgt22ctx7KxUlw6MCX9-5ZhwcA-fT8kXaHbTFaze&_nc_ohc=iJVaYnwjgiMQ7kNvwE8Hl9m&_nc_gid=Jb8pUkSO5D0_0kRVccKQwQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQH_YivzArI6clth8MpU96DknoP09aE_wnSeh62rXKHaJQ&oe=6A835F37&_nc_sid=c6f216",
+      "captionSnippet": "A Closer Look at the People Behind Kirpa Properties #LifeAtKirpa #MeetTheTeam #BeyondRealEstate #BehindTheScenes #RealPeopleRealStories #TeamCulture #DubaiCommunity #UAECommunity…",
+      "publishedAt": "2026-07-31T12:59:53Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.5776,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3953135224335899147",
+      "shortCode": "DbcW4q7oBoL",
+      "url": "https://www.instagram.com/p/DbcW4q7oBoL/",
+      "thumbnailUrl": "https://scontent-mad2-1.cdninstagram.com/v/t51.71878-15/760746995_1687707175676639_3552339144942162630_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mad2-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gE6DwyNCcKBRceBnQTiNOiaTq8-YkVZ1KPRnIfTJeEyIKvoTlh3f7rN09uHslK9OQE&_nc_ohc=Kbwz8bOTsRUQ7kNvwFCIRLu&_nc_gid=JwGbWkMrF90NnFL9vP11EA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHR3ojlQ5QL9Rai925KbRqNqKcgeh83WXc0UdGBotyQRw&oe=6A835CAB&_nc_sid=c6f216",
+      "captionSnippet": "When the client asks for the CEO and the CEO hears \"main character entry\" #KirpaProperties #PropertiesinDubai #DubaiProperties #DubaiInvestment #RealEstate #RealEstateDubai",
+      "publishedAt": "2026-07-31T04:01:22Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3951960852576099751",
+      "shortCode": "DbYL3UADF2n",
+      "url": "https://www.instagram.com/p/DbYL3UADF2n/",
+      "thumbnailUrl": "https://scontent-mrs2-1.cdninstagram.com/v/t51.71878-15/756814768_2122397198632485_1663502618187691991_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mrs2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gEVNrob2ly6OH7MSD4VsUIAVIWMAqx0SRJT05hRfGwWVHj-dPN8kCSolbDo0W-wkQsmkucDErUYV8H_q3GpKrsV&_nc_ohc=wJAZenHxxAUQ7kNvwHRO9hU&_nc_gid=mP-3o1pZFJlVcwi4mOwcLQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGEj8nWqc8-EUSUgvn061AhXCLAQxNGvUefjEbLo4BLWA&oe=6A83482B&_nc_sid=c6f216",
+      "captionSnippet": "Working with GenZ be like... #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-29T13:08:35Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3951685368030325300",
+      "shortCode": "DbXNOfBjmo0",
+      "url": "https://www.instagram.com/p/DbXNOfBjmo0/",
+      "thumbnailUrl": "https://scontent-ams2-1.cdninstagram.com/v/t51.71878-15/757937621_27612653728384247_7896441005024923919_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gHzy30wp36DNdr78H7g-S50Vgkb-RbSvjnJ2LaqQC7xL99nYj_azwp3fFrE2em-seRhAegH-o-nkQsn2OaTyHea&_nc_ohc=pJfuXyuPB-QQ7kNvwGscp_O&_nc_gid=y4nV8bpydLDM45sYK8D7RQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHTeCUVhmrv6y-GBZCE_0XHv1wLWMv6uI-V1jMr6N-8NA&oe=6A83743F&_nc_sid=c6f216",
+      "captionSnippet": "It's never too late. Get in touch with us! 📩 info@kirpaproperties.com 📲 WhatsApp: +971 54 367 3063 #KirpaProperties #PropertiesinDubai #DubaiProperties #DubaiInvestment #RealEstat…",
+      "publishedAt": "2026-07-29T04:01:27Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.7336,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3951227159218319995",
+      "shortCode": "DbVlCq0FXJ7",
+      "url": "https://www.instagram.com/p/DbVlCq0FXJ7/",
+      "thumbnailUrl": "https://scontent-mad1-1.cdninstagram.com/v/t51.71878-15/757798199_1499781745237445_7971022970715882119_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-mad1-1.cdninstagram.com&_nc_cat=105&_nc_oc=Q6cZ2gE_z6iSHaRqaM2PAfYLVuRcFxv5pI8JCZqqEaue2ZuijvpfgN2T8Tf5lLwdUNsofso&_nc_ohc=bFDon8D07ZIQ7kNvwGKPe9S&_nc_gid=L47xZW0LlaRQo10jmW4xhA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQF-PNFivrhj3VgwdRNm6BtFE4qPXuMuwdb9NSWJEZKcOw&oe=6A837155&_nc_sid=c6f216",
+      "captionSnippet": "When the matcha kicks in… #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-28T12:50:51Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.8778,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3950960447344201729",
+      "shortCode": "DbUoZgBkdAB",
+      "url": "https://www.instagram.com/p/DbUoZgBkdAB/",
+      "thumbnailUrl": "https://scontent-ber1-1.cdninstagram.com/v/t51.71878-15/755868005_4524478674503862_829739793610009602_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ber1-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gF76EBJIQeeLxNbeeVqTuDQPMgwiphM6GT4AqEpZq8rjR1-3y9bzkevqwwd02pTUrI&_nc_ohc=f2SSEcDRoUAQ7kNvwH9Ns57&_nc_gid=u84nOqLiPBSi1qsL0lsmsQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQH2hwifSb1vODe_p9WuukXfEmDbcAhfZm3YyqDk5Knn_g&oe=6A83624F&_nc_sid=c6f216",
+      "captionSnippet": "Oscar-winning composer A.R. Rahman has invested in Mercedes-Benz Places by Binghatti, highlighting Dubai's growing reputation as a global destination for luxury real estate and hi…",
+      "publishedAt": "2026-07-28T04:00:50Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9756,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3950507461429724207",
+      "shortCode": "DbTBZsBDIQv",
+      "url": "https://www.instagram.com/p/DbTBZsBDIQv/",
+      "thumbnailUrl": "https://instagram.fblq1-1.fna.fbcdn.net/v/t51.71878-15/755868159_1318627766924711_7104997217124197194_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fblq1-1.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gEYN-alH7wL9XT9EdUMiwc-cH2RIzjxTWUIbsFzZoo2YizZ_qm1zcATwjo46Ugw_NI&_nc_ohc=q2wk3d5bwmMQ7kNvwEab0rb&_nc_gid=y-c6HNMVZfbf9fY3yC2vkQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEHrQIBz1DAdTnu8qNqjr3otPyNt08Xb2VhHrKJL1UGgQ&oe=6A836121&_nc_sid=c6f216",
+      "captionSnippet": "Office drama just got interesting! #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-27T13:00:41Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.5223,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3950235691610471893",
+      "shortCode": "DbSDm6pgv3V",
+      "url": "https://www.instagram.com/p/DbSDm6pgv3V/",
+      "thumbnailUrl": "https://instagram.fwaw7-1.fna.fbcdn.net/v/t51.71878-15/755264476_1960677251390922_4537187802639632922_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fwaw7-1.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gE1svbsP3G3S_TqOBiQ_9STWRdNWCwPsrL12RDOHJizeZTZOH5EObYK7SVZD4W1HuU&_nc_ohc=_NHzxMvFpLMQ7kNvwHBjXD7&_nc_gid=ymHOWV61lQEuXBRMsNr1-Q&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEP7fIZka4-LTA3dlHbp4EHZxp2v8Y7_AOwOfseAdunKg&oe=6A834674&_nc_sid=c6f216",
+      "captionSnippet": "Still waiting for the right sign to invest? You've just found it. Let's help you discover the right property for your investment goals. 📩 info@kirpaproperties.com 📲 WhatsApp: +971…",
+      "publishedAt": "2026-07-27T04:01:19Z",
+      "status": "failed",
+      "language": null,
+      "languageProbability": null,
+      "mentionCount": null,
+      "matches": [],
+      "error": "tuple index out of range"
+    },
+    {
+      "id": "3949783133750885484",
+      "shortCode": "DbQctVTDPxs",
+      "url": "https://www.instagram.com/p/DbQctVTDPxs/",
+      "thumbnailUrl": "https://instagram.fbcn7-2.fna.fbcdn.net/v/t51.71878-15/755807125_1057931833551804_7951467419247151944_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fbcn7-2.fna.fbcdn.net&_nc_cat=100&_nc_oc=Q6cZ2gFyKEXQL312mGr8iMoOpB213TC4QkHz-6xure9UXrn9ITtxGyh0WbCu5EDSzZ6cOrM&_nc_ohc=t5Bc_YyMvGIQ7kNvwFIGmP6&_nc_gid=fybxu3SxzogYBot5hN1JYg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGJW_tQvc6oZpQ3F1dV6jiJkN0vW1wCEXppJ10dam5GsQ&oe=6A834D14&_nc_sid=c6f216",
+      "captionSnippet": "The quickest way to increase sales. Follow us for more such tips! #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-26T13:02:02Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.43,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3949511303651553549",
+      "shortCode": "DbPe5ryinEN",
+      "url": "https://www.instagram.com/p/DbPe5ryinEN/",
+      "thumbnailUrl": "https://scontent-ham3-1.cdninstagram.com/v/t51.71878-15/755373781_1371117231645891_2688270695566903672_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ham3-1.cdninstagram.com&_nc_cat=103&_nc_oc=Q6cZ2gGudOKgw6xJBng5ls3ZXrIKZ4xK0i77HwsspL2ttEc43_i5RqKSDJGq1vyF6myuHbw&_nc_ohc=vDlYjsOjy4cQ7kNvwG8wqbn&_nc_gid=LJZeJuA-Ayot15G1SzpglA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFXHJyDdiiBAigmBdaImsrYhrnBl567-WsmzGRvtklI7A&oe=6A835560&_nc_sid=c6f216",
+      "captionSnippet": "9 UAE mega projects that are set to transform the future 🚀 From Etihad Rail to Dubai Loop, Palm Jebel Ali and Disney Abu Dhabi, these developments are changing the way we live, in…",
+      "publishedAt": "2026-07-26T04:01:34Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9972,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3949058307352805067",
+      "shortCode": "DbN35uHEb7L",
+      "url": "https://www.instagram.com/p/DbN35uHEb7L/",
+      "thumbnailUrl": "https://scontent-cdg4-3.cdninstagram.com/v/t51.71878-15/755451208_37235638936082854_2095297526383280039_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-cdg4-3.cdninstagram.com&_nc_cat=110&_nc_oc=Q6cZ2gES5Mckc4YuM4napTIsxNonRgVa77rkWc8efbttWdP-9hXADhGWHHruvzwiZVGs7-7VF0eyRmeat7TpBKdx1pgt&_nc_ohc=IZ4FES_lA9sQ7kNvwGJmqUW&_nc_gid=YCK9v8KPa52qKz1Ri-BYoQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFRa-Q_6v9NsTtxEuFHdagyBDDhisNh6TTFqmEK3oiWtQ&oe=6A8347DA&_nc_sid=c6f216",
+      "captionSnippet": "Was it worth having a 1-hour meeting with the manager instead? #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-25T13:01:50Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3948786639875178739",
+      "shortCode": "DbM6IcDkYDz",
+      "url": "https://www.instagram.com/p/DbM6IcDkYDz/",
+      "thumbnailUrl": "https://instagram.fbne5-1.fna.fbcdn.net/v/t51.71878-15/756533060_1767879174392860_5823224911459612698_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fbne5-1.fna.fbcdn.net&_nc_cat=104&_nc_oc=Q6cZ2gHiG4b2GbOKeBbhoW9G02F-LAGMM0M0ZyLvfx-agbBcTYRhkZWlzrB0M74VcWJOJyL1uSDmieU6xeASM_I5MknF&_nc_ohc=KfTvK0FuQwUQ7kNvwETvSu6&_nc_gid=BrpQqPeFAHGnaT5PQ3GSJg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEqFPoIZ0DEBPXw-50LOE9TeH3YUcLZGZFBT_cft935JA&oe=6A837484&_nc_sid=c6f216",
+      "captionSnippet": "We're watching you 👀 and we know you’re curious about Dubai’s best projects. Ready to explore your next investment? Get in touch with us today. 📩 info@kirpaproperties.com 📲 WhatsA…",
+      "publishedAt": "2026-07-25T04:01:34Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.6942,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3948333275961965421",
+      "shortCode": "DbLTDIAkTtt",
+      "url": "https://www.instagram.com/p/DbLTDIAkTtt/",
+      "thumbnailUrl": "https://scontent-fra5-2.cdninstagram.com/v/t51.71878-15/753397110_2902190720151042_7269405440494951745_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-fra5-2.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gFHqTPHoHQhI12qZmhKlT263t9LSHfpTsnJ0wWDxrvalFREOnGBoOdUxiQwR8KfN3M&_nc_ohc=shmntoNhttsQ7kNvwGSqU6v&_nc_gid=RYv99-QzbpE7VzQV8_94Qg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEBoxy4Cit93U3gCTbbaPVqqd0SxetCGkRwGKYUHxVS3g&oe=6A836414&_nc_sid=c6f216",
+      "captionSnippet": "When everything about us says KIRPA! #KirpaArmy #KirpaProperties #KirpaDubai",
+      "publishedAt": "2026-07-24T13:01:16Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9969,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3947608329329518302",
+      "shortCode": "DbIuNw2Dybe",
+      "url": "https://www.instagram.com/p/DbIuNw2Dybe/",
+      "thumbnailUrl": "https://instagram.fybz1-1.fna.fbcdn.net/v/t51.71878-15/752924039_1643737344431222_4832356448802321972_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fybz1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2gF2n1PUC9E6qGPNqoElWs-chYe1KunAsNhwlF11jrBufIqIb_9ZvaAuCnfxW4Ejfl0&_nc_ohc=MWIZrciIZxcQ7kNvwEUioLE&_nc_gid=Z7iAGbgt261Ya0I3wvzrtQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGFv6XI6_P3h3b-LqaKemIXpSaqTlyZjoCBPOLhhkF1OA&oe=6A835BDA&_nc_sid=c6f216",
+      "captionSnippet": "Is the Dubai market slowing down? DM us \"2026\", and we'll send you the full report #DubaiRealEstate #DubaiProperty #DubaiInvestment #InvestInDubai #DubaiInvestors #RealEstateDubai…",
+      "publishedAt": "2026-07-23T13:03:29Z",
+      "status": "failed",
+      "language": null,
+      "languageProbability": null,
+      "mentionCount": null,
+      "matches": [],
+      "error": "tuple index out of range"
+    },
+    {
+      "id": "3947487576240135464",
+      "shortCode": "DbISwkxD50o",
+      "url": "https://www.instagram.com/p/DbISwkxD50o/",
+      "thumbnailUrl": "https://scontent-dfw5-2.cdninstagram.com/v/t51.71878-15/753337589_1628079092226928_7413432726184917523_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2gHkCxsx97AJBNQd4LY7zC77xA6hoqiDCaGt450rEbtlNpdCuNjqEXuDoN6MaA_3gPQ&_nc_ohc=wsv2uglM0ZEQ7kNvwHZ-CLR&_nc_gid=qzH9aB9KU4brf2mLWCQiEQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGiLYwrkDMZp6uK4VINHz59rtC064F8aVqM9kYuqhIKMQ&oe=6A837102&_nc_sid=c6f216",
+      "captionSnippet": "Send it to your Gossip Lover Colleague #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-23T09:00:24Z",
+      "status": "processed",
+      "language": "ur",
+      "languageProbability": 0.5137,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3946750195895531143",
+      "shortCode": "DbFrGRzjnaH",
+      "url": "https://www.instagram.com/p/DbFrGRzjnaH/",
+      "thumbnailUrl": "https://scontent-syd2-1.cdninstagram.com/v/t51.71878-15/752267966_1366535612099373_4469784930308348186_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=103&ig_cache_key=Mzk0Njc1MDE5NTg5NTUzMTE0MzE3OTM3NjUzNjM0MzA0MjU5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjY0MC5zZHIudmlkZW9fbmZyYW1lX2NvdmVyX2ZyYW1lLkMzIn0%3D&_nc_ohc=BCT3VWsGI-IQ7kNvwFA1-UL&_nc_oc=Adoc_yUq_UyWNNvlyC1TbNoshIRJaBV0G6TDSCJ6yCObTAd7TwwzkNFpGmo4FWTpnXA&_nc_zt=23&_nc_ht=scontent-syd2-1.cdninstagram.com&_nc_gid=cts9XLk4fwDZhomOd8nkRw&_nc_ss=7ca8c&oh=00_AQHrZdJZt_95k1Jy_q4pWqLF7zCHmZIXbnNeqL_bzEvkPA&oe=6A835315",
+      "captionSnippet": "We’re at the RAW District Phase 2 launch! EOI token allocation is happening on a first-come, first-serve basis. Understanding the numbers, location, and fundamentals is key before…",
+      "publishedAt": "2026-07-22T08:35:55Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9599,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3946611839279491479",
+      "shortCode": "DbFLo7KmumX",
+      "url": "https://www.instagram.com/p/DbFLo7KmumX/",
+      "thumbnailUrl": "https://scontent-icn2-1.cdninstagram.com/v/t51.71878-15/753197208_1831331221583073_1501229418846810620_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-icn2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gF2UJ5clsfgNgMDqSH_-Glihm51Ye8vFxqqbhTu9A2PWFei0rUhPXii1a3LdrEemb0&_nc_ohc=E-9TsHrD_9IQ7kNvwHPR-eM&_nc_gid=_mx5GrwF3P2BHXZYUCvLVA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGMjf93UlXHw5icLZ4KjIfL1Ldo2CrRNyk3ZSMTmqmP_Q&oe=6A834776&_nc_sid=c6f216",
+      "captionSnippet": "When you walk into the wrong door at a real estate office #KirpaArmy #officehumour #officememes #realestatememes #officesituations",
+      "publishedAt": "2026-07-22T04:01:11Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.513,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3946158846226036942",
+      "shortCode": "DbDkpAgkXjO",
+      "url": "https://www.instagram.com/p/DbDkpAgkXjO/",
+      "thumbnailUrl": "https://scontent-fco2-1.cdninstagram.com/v/t51.71878-15/753225261_1393243545994086_2727121174097234543_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-fco2-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gHTRWZcoKDiHV8F8H9PtcDFz19A7xvDxQ5zHWiGdwOJb88_qvfjHAHeTlrYojXGjrg&_nc_ohc=_aO9Rnh61qcQ7kNvwFkkMqY&_nc_gid=InW3XH_mxE9VdvU0pCJssg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQH18g3PpEQlcBuXQN6LKO3kIbVJidLxnHVYJZNLlNhm9w&oe=6A83550F&_nc_sid=c6f216",
+      "captionSnippet": "RAW District isn't just another launch. It's where business, lifestyle, and investment come together. Phase 1 sold out fast. Now, Phase 2 is your chance to get in early. Want to k…",
+      "publishedAt": "2026-07-21T13:00:40Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9732,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3946038034449567616",
+      "shortCode": "DbDJK9xjA-A",
+      "url": "https://www.instagram.com/p/DbDJK9xjA-A/",
+      "thumbnailUrl": "https://scontent-waw2-1.cdninstagram.com/v/t51.71878-15/752638847_1584164986383628_4160286960946158657_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-waw2-1.cdninstagram.com&_nc_cat=104&_nc_oc=Q6cZ2gEMdOpceVTEikczHofrNbFmqJmRhrI6O2aldjKNLwRflFb9dtUk5UY5f5RbCswdnN8&_nc_ohc=L8ethW3hul8Q7kNvwG-nd8p&_nc_gid=iwQHZtr7R_T06PzHxS5imA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHtmm3gAMzYslk5dQR32zf8V_jGam6FM3_3ObV2W9MIRA&oe=6A8357B9&_nc_sid=c6f216",
+      "captionSnippet": "DM us to know about investment opportunities 📩 - info@kirpaproperties.com WhatsApp +971543673063 #KirpaProperties #PropertiesinDubai #DubaiProperties #DubaiInvestment #RealEstate…",
+      "publishedAt": "2026-07-21T09:00:38Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3945887096640629597",
+      "shortCode": "DbCm2h_D-td",
+      "url": "https://www.instagram.com/p/DbCm2h_D-td/",
+      "thumbnailUrl": "https://scontent-muc2-1.cdninstagram.com/v/t51.71878-15/744954753_1012270588319433_5677437366768794217_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-muc2-1.cdninstagram.com&_nc_cat=109&_nc_oc=Q6cZ2gFVlu541yQtshf-pAyuef3XoN-F9cdXcnsiSuF9QeaIno71Ivm47bAo9HS6SS9MKKw&_nc_ohc=glWiYucHa2kQ7kNvwGcPSk-&_nc_gid=k314gNkq-ijq-8JGg_whiQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQF_d20YDZN1Lo_0389-naKsedPTdbJaoETIlsU0phjvuw&oe=6A836D2C&_nc_sid=c6f216",
+      "captionSnippet": "Wait for it... When Kirpa Army pitched Dubai property to Amitabh Bachchan",
+      "publishedAt": "2026-07-21T04:01:05Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.93,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3945434059648628281",
+      "shortCode": "DbA_1-aFXY5",
+      "url": "https://www.instagram.com/p/DbA_1-aFXY5/",
+      "thumbnailUrl": "https://instagram.fscn1-1.fna.fbcdn.net/v/t51.71878-15/752631724_2327006691373606_6477121399037381342_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fscn1-1.fna.fbcdn.net&_nc_cat=110&_nc_oc=Q6cZ2gG4gOPiVn0dg91vfQIkeDYua0kJ8MuUdedKfQmqSez9-Z5YH2MjFFzL13JDGn6o7CM&_nc_ohc=x7XR8D9XSAEQ7kNvwETjNx4&_nc_gid=AlnFfJmn2h0ONEBScDQ6ng&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFH_7WO7aQZQvmhy6-dfO4lt3yLHodc0jhU3jHN_8U55w&oe=6A83745A&_nc_sid=c6f216",
+      "captionSnippet": "RAW District Phase 2 is here! Phase 1 sold out in just 24 hours. Now it's your chance to be part of Dubai's next landmark mixed-use destination. Invest in RAW District Phase 2 by…",
+      "publishedAt": "2026-07-20T13:01:11Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9906,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3945178819307203798",
+      "shortCode": "DbAFzvUM2zW",
+      "url": "https://www.instagram.com/p/DbAFzvUM2zW/",
+      "thumbnailUrl": "https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/752189404_17937231528304259_2330353279080020247_n.jpg?stp=dst-jpg_e35_p1080x1080_sh2.08_tt6&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGBRhnmMkEG4B73mAClbwt0_FJuWLK4ZmemNrzJkvTeKFNlGzop7FjJd1dV2o4kjS5-yfo7VUg2HOxp-Zgt76Ej&_nc_ohc=e7o6AyeCcUYQ7kNvwGT4Ns6&_nc_gid=r85JgXyqi9pguOAzzf0aDA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEnq11N3nIeRgK2PY1fs0XHvZ2QXXXFLFs_AsNaFwmAXQ&oe=6A834373&_nc_sid=c6f216",
+      "captionSnippet": "Luxury 5-Bedroom Home Just 10 Minutes Away! Step into elegance with this stunning property featuring a spacious garage and beautifully designed interiors. Situated on an impressiv…",
+      "publishedAt": "2026-07-20T04:34:42Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.991,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3944437752401771208",
+      "shortCode": "Da9dTy-jDrI",
+      "url": "https://www.instagram.com/p/Da9dTy-jDrI/",
+      "thumbnailUrl": "https://instagram.fagp4-1.fna.fbcdn.net/v/t51.71878-15/752325792_1004221515577138_4161836173423247761_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fagp4-1.fna.fbcdn.net&_nc_cat=110&_nc_oc=Q6cZ2gEZGJVE3Bv8p6Q1g-WrFDm2LrqFy6rDcnSTLbmyAwri1Rsu_3o9oO-IAS_7jMVdaWA&_nc_ohc=63Q9vrjoJXAQ7kNvwFM2iIH&_nc_gid=0mR7J55f1xyW721dSwiX4w&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQE09sBssjXZc30t5fdjzkygzIGDP43nViT09DVgEdnoeg&oe=6A836186&_nc_sid=c6f216",
+      "captionSnippet": "Wait till you find out what our team did before real estate 🤯",
+      "publishedAt": "2026-07-19T04:01:25Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.5039,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3943984626406476831",
+      "shortCode": "Da72R8gj0wf",
+      "url": "https://www.instagram.com/p/Da72R8gj0wf/",
+      "thumbnailUrl": "https://scontent-cdg4-2.cdninstagram.com/v/t51.71878-15/751692391_1568176301614308_5735649955737430913_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-cdg4-2.cdninstagram.com&_nc_cat=100&_nc_oc=Q6cZ2gECjYHzMCIdyMPG7FmOIS7LWsicJe9tc47yabAK_CgIOu1g-Srhg73FYt8sJ0cF0TU&_nc_ohc=7_JkXSjjXs4Q7kNvwGIlYN4&_nc_gid=KnWFOmow-6vhgjO3eqjQdQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFpk60IT9JVsc44z_49Gx1XBEyYqrg08w4lEA0xPAIXlA&oe=6A836DF6&_nc_sid=c6f216",
+      "captionSnippet": "Introducing Raw District by Imtiaz. A master-planned mixed-use destination in Downtown Jebel Ali with premium residences, commercial spaces, lifestyle retail and direct metro conn…",
+      "publishedAt": "2026-07-18T13:01:00Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9913,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3943864072907641687",
+      "shortCode": "Da7a3qUFdNX",
+      "url": "https://www.instagram.com/p/Da7a3qUFdNX/",
+      "thumbnailUrl": "https://instagram.frix7-1.fna.fbcdn.net/v/t51.71878-15/749928646_27460349786968203_561022381259846170_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.frix7-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2gGWpB1tgp6WW421BQYnyRCECtEVZeo_cry1gQSFJE5_K9FaXfpHCl6Zw2iyXf0D01k&_nc_ohc=gHeJVknVy8kQ7kNvwHv-Hhe&_nc_gid=1W3J9ZJ6Bd91i1mCg-mrhQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQGywQlgtMcLI0E-Ivhhx-6zDK90IAtSctS2mvdgQtkvKg&oe=6A835278&_nc_sid=c6f216",
+      "captionSnippet": "Honoured to be recognised with the Excellence Award by Danube Properties. Thank you for this incredible recognition. Here's to raising the bar and achieving even more together. 🏆✨…",
+      "publishedAt": "2026-07-18T09:01:25Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3943712679412302111",
+      "shortCode": "Da64cmIkwEf",
+      "url": "https://www.instagram.com/p/Da64cmIkwEf/",
+      "thumbnailUrl": "https://instagram.fmxp13-1.fna.fbcdn.net/v/t51.71878-15/751125272_2509582976203619_3564146396302092416_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fmxp13-1.fna.fbcdn.net&_nc_cat=111&_nc_oc=Q6cZ2gGPGLgVGv8DK983-gBz8gj_X8kA8B98Y6FBlvz0Kj9bgrA8-dc6A5BNJrYPZyif7Ui5kw-V-a7QMJySj8xDTV8U&_nc_ohc=vFRqL01jV8cQ7kNvwHJfWUr&_nc_gid=ALTaJFlOsiAdQHmvk3_HNg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHF_I0adiZgV573lDIz8Otao1R0GgrcLl82tL5WE-O_RA&oe=6A8362D3&_nc_sid=c6f216",
+      "captionSnippet": "Your next business address is here. Discover RAW District Phase 2, a modern commercial destination featuring premium office spaces, a fully equipped gym, the 6 AM Coffee Club, a p…",
+      "publishedAt": "2026-07-18T04:00:40Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.6173,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3943259789329079186",
+      "shortCode": "Da5ReLYCpuS",
+      "url": "https://www.instagram.com/p/Da5ReLYCpuS/",
+      "thumbnailUrl": "https://instagram.frns1-1.fna.fbcdn.net/v/t51.71878-15/749132752_2875656246120542_2240800964818047297_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.frns1-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2gGIZkcUj1mH7e4mfQSx1aeqP28VyxQaPGTJyg3dEDAGhVciwliGJEf09NRgwx6NSBY&_nc_ohc=f4jT-QbDUb4Q7kNvwHpkl4A&_nc_gid=GDBVBc4R7_DRLovcgkgb0w&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFPiCSFhlMLqSQLn6V2s0R2kdnak9K8E742NP9lxdHs0Q&oe=6A836AB1&_nc_sid=c6f216",
+      "captionSnippet": "When you work with Gen Z",
+      "publishedAt": "2026-07-17T13:01:05Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9515,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3943138921341614639",
+      "shortCode": "Da41_USlXov",
+      "url": "https://www.instagram.com/p/Da41_USlXov/",
+      "thumbnailUrl": "https://scontent-nrt6-1.cdninstagram.com/v/t51.71878-15/747625932_2469279066905850_7909236732338077361_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-nrt6-1.cdninstagram.com&_nc_cat=106&_nc_oc=Q6cZ2gGsfLp-HPKNkNqIhwopWMSrENQc5NX88pNBoyq06AQPolHpZOn6rUJaeYqVam6MGjw&_nc_ohc=2Hi8Jhg0UuEQ7kNvwH3ukWH&_nc_gid=d2QYugvkumvDyn2zF7T8FA&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQE--95_Stsg085HKinPpNbkgNgCZgvDeV5BPSeH8DK9HQ&oe=6A837464&_nc_sid=c6f216",
+      "captionSnippet": "Experience the all-new RAW District Phase 2. After Phase 1 sold out in just 48 hours, the next opportunity is here. Secure your EOI today and invest in a location with strong futu…",
+      "publishedAt": "2026-07-17T09:00:53Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.7943,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3942987919426483364",
+      "shortCode": "Da4Tp8zEnSk",
+      "url": "https://www.instagram.com/p/Da4Tp8zEnSk/",
+      "thumbnailUrl": "https://scontent-qro3-1.cdninstagram.com/v/t51.71878-15/749896273_942932738828576_4368591733853391835_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-qro3-1.cdninstagram.com&_nc_cat=108&_nc_oc=Q6cZ2gFk88wmnZJ4vEoOfDaNafPX7J3o2EIKn0budgKXth2gI8W6CcnTrFchkUDDhD2rUdXih-e-15xD1Je9ebACobiy&_nc_ohc=IQAZDUSKOEsQ7kNvwE07qzL&_nc_gid=rOtYVC-oHbttFsmlPO0cFg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHhXnhNRl279EFW72SYFKjpV-9jcNulsR3-2ydjGB3s_Q&oe=6A836076&_nc_sid=c6f216",
+      "captionSnippet": "The Kirpa Army headed to @modondevelopments in Abu Dhabi to explore the latest developments, upcoming projects, and the vision shaping the future of the city. Every visit helps us…",
+      "publishedAt": "2026-07-17T04:00:33Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3942574244500751582",
+      "shortCode": "Da21mMAEkTe",
+      "url": "https://www.instagram.com/p/Da21mMAEkTe/",
+      "thumbnailUrl": "https://instagram.flhr3-4.fna.fbcdn.net/v/t51.71878-15/748954469_1062801746093694_7106619440197999831_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=108&ig_cache_key=Mzk0MjU3NDI0NDUwMDc1MTU4MjE3OTM2NjE2NDM4MzA0MjU5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjY0MC5zZHIudmlkZW9fbmZyYW1lX2NvdmVyX2ZyYW1lLkMzIn0%3D&_nc_ohc=RecdFf4icgQQ7kNvwHOgULm&_nc_oc=AdrW55DT46BE_tDeJCtw_5cko-2ZtjbF0ZwzWgVQq5J5cYGP1BmvTkGh78pdFpLOahKvugwJM1f3cj9B7PXpx93A&_nc_zt=23&_nc_ht=instagram.flhr3-4.fna&_nc_gid=QiT5E3PpbmnYZQBZijdAlQ&_nc_ss=72689&oh=00_AQHilFIizbufYOOGJRlSUeCN4XS5NYS_I4vMQEB1cd0O8g&oe=6A834E0B",
+      "captionSnippet": "Send this to someone who overshares!",
+      "publishedAt": "2026-07-16T14:19:03Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9834,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3942294226241496642",
+      "shortCode": "Da117YrMqZC",
+      "url": "https://www.instagram.com/p/Da117YrMqZC/",
+      "thumbnailUrl": "https://scontent-ber1-1.cdninstagram.com/v/t51.82787-15/749354727_17936550642304259_6607316802699286018_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=scontent-ber1-1.cdninstagram.com&_nc_cat=111&_nc_oc=Q6cZ2gGcWVI4jZYfU2XIQLU1FapRZBmpfsbrPL3CA10ppxrDZINK8iB78OXxUmhYmV8O6bc&_nc_ohc=vj8-nDklCdQQ7kNvwFz-t0r&_nc_gid=2O5PMuUWjCweUYWiRDCfbg&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQFHM8nABHXi7tjQ5brmT1lpOn3Dw-Pmow13-IsXj4DSYw&oe=6A83423C&_nc_sid=c6f216",
+      "captionSnippet": "Invest in Imtiaz Raw District 2 right now. DM us for more details",
+      "publishedAt": "2026-07-16T05:03:00Z",
+      "status": "processed",
+      "language": "hi",
+      "languageProbability": 0.9122,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3941802585963456642",
+      "shortCode": "Da0GJE_EWiC",
+      "url": "https://www.instagram.com/p/Da0GJE_EWiC/",
+      "thumbnailUrl": "https://scontent-ams2-1.cdninstagram.com/v/t51.71878-15/747111816_1344308183892651_1583809847798510263_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=104&ig_cache_key=Mzk0MTgwMjU4NTk2MzQ1NjY0MjE3OTM2NDM0NDM3MzA0MjU5.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkNMSVBTLnhwaWRzLjY0MC5zZHIudmlkZW9fbmZyYW1lX2NvdmVyX2ZyYW1lLkMzIn0%3D&_nc_ohc=Lj-yEktUw0UQ7kNvwHlh0vO&_nc_oc=AdrlaEJ0cK-nBp8m3r2djG8W3JNDa7Ql8LUtKzUn5VTUBxj4y09mKUrAL0ywuuuVbZHqWipH4amEtZ35FnY8Bn9L&_nc_zt=23&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_gid=Pi2ib7fBLj7fN4BF2cxtpw&_nc_ss=72689&oh=00_AQHPjhOyPwwoVIL-TNoCEMn3T9UtXJOatpla89UyJXCbgw&oe=6A836F3D",
+      "captionSnippet": "We are giving away a Rolex to whoever closes 40 million dirhams this month. Let's see how the team is doing #KirpaProperties #PropertiesinDubai #DubaiProperties #RolexChallenge #F…",
+      "publishedAt": "2026-07-15T12:45:32Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.9735,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3941694349801353251",
+      "shortCode": "DaztiCNEvAj",
+      "url": "https://www.instagram.com/p/DaztiCNEvAj/",
+      "thumbnailUrl": "https://instagram.fsyd12-1.fna.fbcdn.net/v/t51.71878-15/749085068_1868725680769142_4880731891101868388_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fsyd12-1.fna.fbcdn.net&_nc_cat=102&_nc_oc=Q6cZ2gHfTd6FpYeeDknw1-alFOLJvj5sz3QN_pRltrBAxXTQzRxAOOUYtmzfM6m5JKo1wB9LKHIXeAfZlf0xV6oU8Fnd&_nc_ohc=NVSy8le6YwQQ7kNvwHDxtJu&_nc_gid=EGaPK3T8cTI0gGf3D24JQQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQHlzxxFxVD8vnIGDYiF_c3ugnC9c9xMPcFJT81Sh6M-Ww&oe=6A83741E&_nc_sid=c6f216",
+      "captionSnippet": "The Kirpa Army was on the ground at the exclusive launch of Imtiaz RAW District Phase 2, @imtiazdevelopments exploring one of Dubai's newest mixed-use developments designed for mo…",
+      "publishedAt": "2026-07-15T09:10:35Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3941085733481710383",
+      "shortCode": "DaxjJgFiYMv",
+      "url": "https://www.instagram.com/p/DaxjJgFiYMv/",
+      "thumbnailUrl": "https://instagram.fcjs4-1.fna.fbcdn.net/v/t51.71878-15/747217335_28103401455930988_354708374816062664_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fcjs4-1.fna.fbcdn.net&_nc_cat=104&_nc_oc=Q6cZ2gGgP2j9r8W2bxfwVxgiEW4m-MjOND9UhIiknboFUkpPnfTSDw4RClfsbOvI918G8MspSpcouSkbTvh4b2tDXcHK&_nc_ohc=etCWHzJmzisQ7kNvwG_Or3s&_nc_gid=_EBPl396z0YoQWGTeqb1LQ&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQE5qOYxAp2KJKyXMCZS0fpGSSSpdiJiGbju46XwBBe5cw&oe=6A836D50&_nc_sid=c6f216",
+      "captionSnippet": "When your phone rings during a meeting #KirpaProperties #PropertiesinDubai #Office",
+      "publishedAt": "2026-07-14T13:01:26Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.1602,
+      "mentionCount": 0,
+      "matches": []
+    },
+    {
+      "id": "3940965276762523276",
+      "shortCode": "DaxHwoBlEaM",
+      "url": "https://www.instagram.com/p/DaxHwoBlEaM/",
+      "thumbnailUrl": "https://instagram.fist14-1.fna.fbcdn.net/v/t51.71878-15/746729877_1006019848928884_773259190637984090_n.jpg?stp=dst-jpg_e15_tt6&_nc_ht=instagram.fist14-1.fna.fbcdn.net&_nc_cat=104&_nc_oc=Q6cZ2gFOslcSepAdPC-Su5EdtFmZKT5et8JsJWjZM6JlQgzue0Y5aZ_tNOlepBxOTAq6hH8&_nc_ohc=ixBIlWJ6MfQQ7kNvwE57yrb&_nc_gid=t6jQO8wbLLWWs25bgnlP3g&edm=ADp7STQBAAAA&ccb=7-5&oh=00_AQEbkxbtAbO4SAIr8_354F4yYUs3oa-TTi5zAk_0rB3voQ&oe=6A835235&_nc_sid=c6f216",
+      "captionSnippet": "Thank you, @hredevelopment for hosting such a wonderful event. It was a pleasure being part of an evening filled with great conversations and connections. #KirpaProperties #RealEs…",
+      "publishedAt": "2026-07-14T09:02:53Z",
+      "status": "processed",
+      "language": "en",
+      "languageProbability": 0.3339,
       "mentionCount": 0,
       "matches": []
     }
