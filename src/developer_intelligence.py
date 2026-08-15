@@ -16,6 +16,7 @@ import math
 import os
 import re
 import tempfile
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Sequence
@@ -50,6 +51,8 @@ MAX_TOTAL_ITEMS = 1200
 SCHEMA_VERSION = 3
 TRANSCRIPT_VERSION = 1
 KIRPA_HANDLE_PATTERN = re.compile(r"\.kirpaa?(?:\.|$)", re.IGNORECASE)
+APIFY_TERMINAL_STATES = {"SUCCEEDED", "FAILED", "TIMED-OUT", "ABORTED"}
+APIFY_RUN_TIMEOUT_SECONDS = 30 * 60
 
 
 def active_creators(roster: dict[str, Any]) -> list[dict[str, str]]:
@@ -265,6 +268,38 @@ def cache_entry_valid(
     )
 
 
+def wait_for_apify_run(
+    requests_module: Any,
+    token: str,
+    initial_run: dict[str, Any],
+    timeout_seconds: int = APIFY_RUN_TIMEOUT_SECONDS,
+) -> dict[str, Any]:
+    """Wait through Apify's 60-second response cap until the run is terminal."""
+    run = initial_run
+    run_id = run.get("id")
+    if not run_id:
+        raise MentionCountError("Apify run response omitted the run id")
+    deadline = time.monotonic() + timeout_seconds
+    while run.get("status") not in APIFY_TERMINAL_STATES:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise MentionCountError(f"Apify run {run_id} did not finish within {timeout_seconds} seconds")
+        response = requests_module.get(
+            f"https://api.apify.com/v2/actor-runs/{run_id}",
+            params={"waitForFinish": max(1, min(60, int(remaining)))},
+            headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
+            timeout=max(5, min(70, int(remaining) + 5)),
+        )
+        if response.status_code >= 400:
+            raise MentionCountError(
+                f"Apify run status returned HTTP {response.status_code}: "
+                f"{response.text[:300].replace(token, '[redacted]')}"
+            )
+        payload = response.json() or {}
+        run = payload.get("data", payload)
+    return run
+
+
 def apify_collect(
     token: str, handles: Sequence[str], lookback_days: int, actor: str = DEFAULT_ACTOR
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -289,7 +324,7 @@ def apify_collect(
             f"Apify returned HTTP {started.status_code}: {started.text[:500].replace(token, '[redacted]')}"
         )
     payload = started.json() or {}
-    run = payload.get("data", payload)
+    run = wait_for_apify_run(requests, token, payload.get("data", payload))
     if run.get("status") != "SUCCEEDED":
         raise MentionCountError(
             f"Apify run {run.get('id', 'unknown')} ended {run.get('status', 'without a status')}"

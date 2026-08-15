@@ -697,6 +697,18 @@ const soloRegistry = {
     }), /400/);
     assert.strictEqual(badRequests, 1, 'a wrong request is not paid for three times');
   });
+  await test('a nonterminal Apify run is polled instead of treated as failed', async () => {
+    const statuses = ['RUNNING', 'SUCCEEDED'];
+    let calls = 0;
+    let clock = 0;
+    const run = await P.waitForApifyRun({ id: 'run-1', status: 'READY' }, 'token', 10000, {
+      request: async () => ({ data: { id: 'run-1', status: statuses[calls++] } }),
+      now: () => clock,
+      sleep: async ms => { clock += ms; },
+    });
+    assert.strictEqual(run.status, 'SUCCEEDED');
+    assert.strictEqual(calls, 2);
+  });
   await test('actor runs are counted for cost tracing', async () => {
     const provider = new P.ApifyProvider('token', {
       runSync: async (actor, input, token, opts) => {

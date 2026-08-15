@@ -61,25 +61,30 @@ jobs:
         run: python -m unittest discover -s test -p "test_mentions.py"
 
       - name: Collect once, transcribe once, and match all configured developers
+        id: collect
         if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        continue-on-error: true
         env:
           APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN_MENTION_COUNT }}
           WHISPER_MODEL: small
         run: python src/developer_intelligence.py
 
       - name: Validate published JSON
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: (github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true') && steps.collect.outcome == 'success'
         run: |
           python -m json.tool data/developer-intelligence.json > /dev/null
           python -m json.tool data/developer-intelligence-cache.json > /dev/null
           python -m json.tool data/developer-intelligence-status.json > /dev/null
 
       - name: Commit refreshed intelligence and cache
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: always() && (github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true')
         run: |
           git config user.name "kirpa-mention-bot"
           git config user.email "kirpa-mention-bot@users.noreply.github.com"
-          git add -- data/developer-intelligence.json data/developer-intelligence-cache.json data/developer-intelligence-status.json
+          git add -- data/developer-intelligence-cache.json data/developer-intelligence-status.json
+          if [ -f data/developer-intelligence.json ]; then
+            git add -- data/developer-intelligence.json
+          fi
           if git diff --cached --quiet; then
             echo "No developer intelligence changes to commit."
           else
@@ -87,6 +92,10 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+
+      - name: Fail after preserving refresh state
+        if: steps.collect.outcome == 'failure'
+        run: exit 1
 
       - name: Announce failed mention refresh
         if: failure()
