@@ -67,6 +67,10 @@ jobs:
             echo "No snapshot changes to commit."
           else
             git commit -m "data: refresh validated Instagram snapshot"
+            # Raw captures are retained in the workflow artifact, not repository
+            # history. Restore them before rebasing so an expected audit-only
+            # change cannot block publication of the validated data/status.
+            git restore --source=HEAD --worktree -- data/raw
             git pull --rebase origin main
             git push origin HEAD:main
           fi
