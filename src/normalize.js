@@ -26,7 +26,10 @@ function toIso(raw) {
   return Number.isFinite(date.getTime()) ? date.toISOString() : null;
 }
 function normalizePost(raw, platform) {
-  const rawType = String(raw.type || raw.mediaType || raw.productType || '').toLowerCase();
+  // Instagram rows often say type=Video and productType=clips. Looking at one
+  // field only loses the fact that the public URL is a Reel.
+  const rawType = [raw.type, raw.mediaType, raw.productType, raw.url, raw.postUrl, raw.permalink]
+    .filter(Boolean).join(' ').toLowerCase();
   let type = 'image';
   if (/reel|clips/.test(rawType)) type = 'reel';
   else if (/video|feed_video/.test(rawType) || raw.isVideo === true) type = 'video';
@@ -91,6 +94,10 @@ function normalizeRecord(entry, raw, capturedAt) {
       rawPostCount: 0,
       authoredPostCount: 0,
       duplicatePostCount: 0,
+      incremental: false,
+      incrementalLookbackDays: null,
+      freshPostCount: 0,
+      reusedPostCount: 0,
     },
     warnings: [],
   };
@@ -111,6 +118,10 @@ function normalizeRecord(entry, raw, capturedAt) {
     postsTruncated: raw._postsTruncated === true,
     postsOwnershipComplete: raw._postsOwnershipComplete === true,
     missingOwnerCount: n(raw._missingOwnerCount) ?? 0,
+    incremental: raw._incremental === true,
+    incrementalLookbackDays: n(raw._incrementalLookbackDays),
+    freshPostCount: n(raw._freshPostCount) ?? 0,
+    reusedPostCount: n(raw._reusedPostCount) ?? 0,
   });
   if (base.isPrivate) return base;
 

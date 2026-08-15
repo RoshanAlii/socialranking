@@ -18,7 +18,10 @@ const path = require('path');
 const https = require('https');
 const { teamHistory, changeOver } = require('./series');
 
-const MAX_PUBLIC_AGE_HOURS = 36;
+// Monday/Thursday captures can be 96 hours apart. Keep a small allowance for
+// Actor and workflow delays while still forcing every message to name stale
+// data rather than presenting it as current.
+const MAX_PUBLIC_AGE_HOURS = 108;
 
 function arg(flag, defaultValue) {
   const index = process.argv.indexOf(flag);

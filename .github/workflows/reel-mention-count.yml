@@ -1,4 +1,4 @@
-name: Daily Reel mention count
+name: Fortnightly developer intelligence
 
 on:
   push:
@@ -6,11 +6,15 @@ on:
       - main
     paths:
       - .github/workflows/reel-mention-count.yml
+      - developer-dictionary.json
+      - handles.json
       - requirements-mentions.txt
+      - src/developer_intelligence.py
       - src/reel_mentions.py
       - test/test_mentions.py
   schedule:
-    # 06:15 Asia/Dubai. Kept away from the 04:00/16:00 UTC leaderboard pulls.
+    # A cheap due check runs daily; the paid collection/transcription path runs
+    # only when the last successful report is at least 14 days old.
     - cron: "15 2 * * *"
   workflow_dispatch:
 
@@ -18,7 +22,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: daily-reel-mention-count
+  group: fortnightly-developer-intelligence
   cancel-in-progress: false
 
 jobs:
@@ -29,7 +33,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v5
 
+      - name: Check whether the 14-day analysis is due
+        id: due
+        run: python src/developer_intelligence.py --check-due
+
       - name: Set up Python
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
@@ -37,38 +46,44 @@ jobs:
           cache-dependency-path: requirements-mentions.txt
 
       - name: Restore multilingual speech model
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
           key: ${{ runner.os }}-faster-whisper-small-v1
 
       - name: Install local transcription dependencies
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
         run: python -m pip install --requirement requirements-mentions.txt
 
       - name: Verify mention-count rules
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
         run: python -m unittest discover -s test -p "test_mentions.py"
 
-      - name: Collect and transcribe the 30-day DAMAC Reel window
+      - name: Collect once, transcribe once, and match all configured developers
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
         env:
           APIFY_TOKEN_MENTION_COUNT: ${{ secrets.APIFY_TOKEN_MENTION_COUNT }}
-          INSTAGRAM_ACCOUNT: kirpa.properties
-          MENTION_TARGET: DAMAC
-          MENTION_WINDOW_DAYS: 30
           WHISPER_MODEL: small
-        run: python src/reel_mentions.py
+        run: python src/developer_intelligence.py
 
       - name: Validate published JSON
-        run: python -m json.tool data/reel-mentions.json > /dev/null
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        run: |
+          python -m json.tool data/developer-intelligence.json > /dev/null
+          python -m json.tool data/developer-intelligence-cache.json > /dev/null
+          python -m json.tool data/developer-intelligence-status.json > /dev/null
 
-      - name: Commit refreshed count and cache
+      - name: Commit refreshed intelligence and cache
+        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
         run: |
           git config user.name "kirpa-mention-bot"
           git config user.email "kirpa-mention-bot@users.noreply.github.com"
-          git add -- data/reel-mentions.json data/reel-mention-cache.json
+          git add -- data/developer-intelligence.json data/developer-intelligence-cache.json data/developer-intelligence-status.json
           if git diff --cached --quiet; then
-            echo "No Reel mention changes to commit."
+            echo "No developer intelligence changes to commit."
           else
-            git commit -m "data: refresh 30-day DAMAC Reel mentions"
+            git commit -m "data: refresh developer intelligence"
             git pull --rebase origin main
             git push origin HEAD:main
           fi

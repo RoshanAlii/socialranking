@@ -4,9 +4,13 @@ const fs = require('fs');
 const path = require('path');
 const { normalizeRecord } = require('./normalize');
 const { buildLeaderboards, growth, median, engagementRate, windowCoverage, WINDOW_DAYS } = require('./rank');
-const { buildContentIntelligence, postingWeeks, daysSinceLastPost, goalProgress, nextActions } = require('./content');
+const {
+  buildContentIntelligence, postingWeeks, daysSinceLastPost, goalProgress, nextActions,
+  personContentPillars, personPostingTime,
+} = require('./content');
 const { appendSnapshot, emptySeries } = require('./series');
 const { MockProvider, ApifyProvider, CapturedProvider, PROFILE_ACTOR, POSTS_ACTOR, INSTAGRAM_POST_LOOKBACK_DAYS, INSTAGRAM_POST_RESULTS_LIMIT } = require('./provider');
+const U = require('./usage');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const GROWTH_TARGET_DAYS = 7;
@@ -20,6 +24,24 @@ function arg(flag, defaultValue) {
   return index > -1 ? process.argv[index + 1] : defaultValue;
 }
 function has(flag) { return process.argv.includes(flag); }
+
+function safeError(value) {
+  return String(value?.message || value || 'Provider refresh failed')
+    .replace(/token=[^&\s]+/gi, 'token=[redacted]')
+    .slice(0, 500);
+}
+
+function writeGithubOutput(values) {
+  const file = process.env.GITHUB_OUTPUT;
+  if (!file) return;
+  fs.appendFileSync(file, Object.entries(values).map(([key, value]) => `${key}=${value}\n`).join(''));
+}
+
+function writeRefreshStatus(outDir, value) {
+  const file = path.join(outDir, 'refresh-status.json');
+  fs.mkdirSync(outDir, { recursive: true });
+  U.atomicWrite(file, value);
+}
 
 async function run(registry, provider, platforms, capturedAt, opts = {}) {
   const employees = registry.employees.filter(employee => employee.dashboardRelevant !== false);
@@ -146,12 +168,26 @@ function buildPeople(records, registry, content, leaderboards, now, days = WINDO
   const benchmarks = benchmarksFrom(leaderboards);
   const defaults = registry.targets || DEFAULT_TARGETS;
   const hashtags = (content?.hashtags || []).slice(0, 12);
+  const board = leaderboards?.instagram || {};
+  const composite = leaderboards?.combined?.composite || [];
   return records.filter(record => (
     record.platform === 'instagram' && record.optOut !== true && record.resolved === true && record.isPrivate === false
   )).map(record => {
     const employee = employees.get(record.name);
     const complete = windowCoverage(record, now, days).complete;
     const rate = complete ? engagementRate(record, now, days) : null;
+    const analytics = (board.analytics || []).find(row => row.handle === record.handle) || null;
+    const score = composite.find(row => row.handle === record.handle) || null;
+    const cadenceRank = (board.postingFrequency || []).find(row => row.handle === record.handle) || null;
+    const achievements = [];
+    if (score?.rank === 1) achievements.push({ key: 'momentum-leader', label: 'Momentum leader', evidence: `Rank 1 of ${composite.filter(row => row.rank).length}` });
+    else if (score?.rank && score.rank <= Math.max(1, Math.ceil(composite.filter(row => row.rank).length * 0.1))) {
+      achievements.push({ key: 'top-momentum', label: 'Top 10% momentum', evidence: `Rank ${score.rank} of ${composite.filter(row => row.rank).length}` });
+    }
+    if (cadenceRank?.rank === 1) achievements.push({ key: 'cadence-leader', label: 'Cadence leader', evidence: `${cadenceRank.postsPerWeek.toFixed(2)} posts/week` });
+    if ((postingWeeks(record, now, days)?.currentStreakWeeks || 0) >= 4) achievements.push({ key: 'consistent', label: '4-week consistency', evidence: 'Published in every measured week' });
+    if (analytics?.viewEfficiency >= 1) achievements.push({ key: 'beyond-following', label: 'Beyond the following', evidence: `Typical reported video views are ${(analytics.viewEfficiency).toFixed(1)}× followers` });
+    if ((score?.components?.followerGrowth || 0) > 0) achievements.push({ key: 'growing', label: 'Audience growing', evidence: `${(score.components.followerGrowth * 100).toFixed(2)}% weekly-equivalent growth` });
     return {
       name: record.name,
       handle: record.handle,
@@ -159,6 +195,12 @@ function buildPeople(records, registry, content, leaderboards, now, days = WINDO
       daysSinceLastPost: daysSinceLastPost(record, now, days),
       cadence: postingWeeks(record, now, days),
       goals: goalProgress(record, employee, defaults, now, days),
+      score: score ? { rank: score.rank, value: score.score, components: score.components, held: score.rank === null } : null,
+      teamBenchmarks: board.teamBenchmarks || null,
+      teamPercentiles: analytics?.percentiles || null,
+      postingTime: personPostingTime(record, now, days),
+      contentPillars: personContentPillars(record, now, days),
+      achievements,
       nextActions: nextActions(record, {
         now, days, benchmarks, hashtags,
         timing: content?.timing,
@@ -215,9 +257,6 @@ async function main() {
   }
 
   const useLive = !!process.env.APIFY_TOKEN && !useCaptured;
-  const provider = useCaptured
-    ? new CapturedProvider(path.join(outDir, 'raw'))
-    : useLive ? new ApifyProvider() : new MockProvider();
   const source = useLive ? 'live' : useCaptured ? 'captured' : 'sample';
   /*
    * A replay must wear the timestamp of the capture it replays. Stamping stored
@@ -229,6 +268,12 @@ async function main() {
   if (asOf && !useCaptured) throw new Error('--as-of only applies to a --captured replay.');
   if (asOf && !Number.isFinite(Date.parse(asOf))) throw new Error(`--as-of needs an ISO timestamp, got ${asOf}`);
   const capturedAt = asOf || new Date().toISOString();
+  const latestPath = path.join(outDir, 'latest.json');
+  let previousSnapshot = null;
+  try { previousSnapshot = JSON.parse(fs.readFileSync(latestPath, 'utf8')); } catch (_) { /* first live run */ }
+  const provider = useCaptured
+    ? new CapturedProvider(path.join(outDir, 'raw'))
+    : useLive ? new ApifyProvider(undefined, { previousSnapshot, capturedAt }) : new MockProvider();
   const baseline = loadWeeklyBaseline(outDir, capturedAt);
   const { records, states, relevantCount } = await run(
     registry, provider, platforms, capturedAt,
@@ -246,7 +291,50 @@ async function main() {
   });
   const content = buildContentIntelligence(records, 'instagram', { now: nowMs, days: WINDOW_DAYS });
   const people = buildPeople(records, registry, content, leaderboards, nowMs, WINDOW_DAYS);
+  const expectedPulls = registry.employees.filter(employee => (
+    employee.dashboardRelevant !== false && employee.confirmed === true && employee.optOut !== true && employee.handles?.instagram
+  )).length;
+  const resolvedProfiles = records.filter(record => record.resolved && !record.isPrivate).length;
+  const completeProfiles = leaderboards.instagram?.coverage?.completeWindowProfiles || 0;
+  const requiredResolved = expectedPulls ? Math.ceil(expectedPulls * 0.8) : 0;
+  const requiredComplete = resolvedProfiles ? Math.ceil(resolvedProfiles * 0.8) : 0;
+
+  const usagePath = path.join(outDir, 'apify-usage.json');
+  let usageLedger = useLive
+    ? U.appendTelemetry(U.loadLedger(usagePath), provider.telemetry, capturedAt)
+    : U.loadLedger(usagePath);
+  const recordedTelemetryEvents = provider.telemetry?.events?.length || 0;
+  const usageSummary = U.currentSummary(usageLedger, capturedAt);
+
+  if (useLive && (resolvedProfiles < requiredResolved || completeProfiles < requiredComplete)) {
+    const providerError = states.unresolved.find(item => item.error)?.error ||
+      records.find(record => record.fetchMeta?.postsQueryError)?.fetchMeta?.postsQueryError ||
+      `coverage ${resolvedProfiles}/${expectedPulls} profiles and ${completeProfiles}/${resolvedProfiles} complete windows`;
+    U.atomicWrite(usagePath, usageLedger);
+    writeRefreshStatus(outDir, {
+      schemaVersion: 1,
+      outcome: 'preserved',
+      attemptedAt: capturedAt,
+      lastValidSnapshotAt: previousSnapshot?.meta?.validation?.status === 'passed' ? previousSnapshot.meta.capturedAt : null,
+      reason: safeError(providerError),
+      dataPreserved: true,
+      resolvedProfiles,
+      expectedProfiles: expectedPulls,
+      completeProfiles,
+      usage: usageSummary,
+    });
+    writeGithubOutput({ published: 'false', preserved: 'true' });
+    console.warn(`[ingest] provider refresh could not clear coverage gates; preserved the validated ${previousSnapshot?.meta?.capturedAt || 'existing'} snapshot`);
+    console.warn(`[ingest] ${safeError(providerError)}`);
+    return;
+  }
+
   const brand = await runBrandAccounts(registry, provider, capturedAt, useLive ? { rawDir: path.join(outDir, 'raw') } : {});
+  if (useLive) {
+    usageLedger = U.appendTelemetry(usageLedger, {
+      events: (provider.telemetry?.events || []).slice(recordedTelemetryEvents),
+    }, capturedAt);
+  }
   const payload = {
     meta: {
       company: registry.company,
@@ -259,7 +347,7 @@ async function main() {
       provider: useCaptured ? 'Apify captured run' : useLive ? 'Apify' : 'mock',
       platforms,
       relevantCount,
-      resolvedProfiles: records.filter(record => record.resolved && !record.isPrivate).length,
+      resolvedProfiles,
       cadenceFormula: 'postsPerWeek = unique authored Instagram posts in the last 30 days × 7 ÷ 30',
       cadenceWindowDays: WINDOW_DAYS,
       postLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
@@ -276,7 +364,7 @@ async function main() {
         ? 'SAMPLE data for layout testing only.'
         : source === 'captured'
           ? `Recomputed from the stored provider captures of ${capturedAt}. Every number is real public data from that pull; it is not a fresh capture.`
-          : 'Live public Instagram profile details plus a dedicated date-bounded posts pull. TikTok and Facebook are available soon.',
+          : 'Live public Instagram profile details plus a dedicated date-bounded posts pull. Production remains Instagram-only.',
       replay: useCaptured
         ? { of: capturedAt, rawSource: path.join(outDir, 'raw'), reason: 'Recomputed from stored captures against the current roster.' }
         : null,
@@ -290,7 +378,10 @@ async function main() {
       timezone: content.timezone,
       brandAccounts: brand.length,
       providerTelemetry: provider.telemetry
-        ? Object.assign({}, provider.telemetry, { costNote: 'Actor runs are the billed unit. Compare run counts against the Apify plan before widening coverage or cadence.' })
+        ? Object.assign({}, provider.telemetry, {
+          monthly: U.currentSummary(usageLedger, capturedAt),
+          costNote: 'Run ids and exact charges are retained when Apify reports them; the dashboard warns before the configured monthly soft limit.',
+        })
         : null,
     },
     records,
@@ -302,15 +393,7 @@ async function main() {
     brand,
   };
 
-  const attempted = records.filter(record => record.handle).length;
-  if (useLive && attempted > 0 && payload.meta.resolvedProfiles === 0) {
-    const reason = states.unresolved.find(item => item.error)?.error || 'no profiles returned';
-    console.error(`\n[ingest] FAILED — attempted ${attempted} handle(s), resolved 0. First error: ${reason}\n`);
-    process.exit(3);
-  }
-
   fs.mkdirSync(path.join(outDir, 'history'), { recursive: true });
-  const latestPath = path.join(outDir, 'latest.json');
   const pendingPath = path.join(outDir, '.latest.pending.json');
   fs.writeFileSync(pendingPath, JSON.stringify(payload, null, 2));
   fs.renameSync(pendingPath, latestPath);
@@ -319,8 +402,7 @@ async function main() {
 
   /*
    * The trend file is the only history the dashboard reads. It carries numbers
-   * and no post bodies, so a year of daily captures stays in the low hundreds
-   * of kilobytes instead of the third of a gigabyte the full snapshots weigh.
+   * and no post bodies, so a year of twice-weekly captures stays very small.
    */
   const seriesPath = path.join(outDir, 'series.json');
   const existingSeries = fs.existsSync(seriesPath)
@@ -330,6 +412,23 @@ async function main() {
   const seriesPending = path.join(outDir, '.series.pending.json');
   fs.writeFileSync(seriesPending, JSON.stringify(series));
   fs.renameSync(seriesPending, seriesPath);
+
+  if (useLive) {
+    U.atomicWrite(usagePath, usageLedger);
+    writeRefreshStatus(outDir, {
+      schemaVersion: 1,
+      outcome: 'success',
+      attemptedAt: capturedAt,
+      lastValidSnapshotAt: capturedAt,
+      reason: null,
+      dataPreserved: false,
+      resolvedProfiles,
+      expectedProfiles: expectedPulls,
+      completeProfiles,
+      usage: U.currentSummary(usageLedger, capturedAt),
+    });
+  }
+  writeGithubOutput({ published: 'true', preserved: 'false' });
 
   const coverage = payload.leaderboards.instagram?.coverage;
   console.log(`[ingest] ${source} ${platforms.join('+')} snapshot @ ${capturedAt} — ${payload.meta.resolvedProfiles} profiles, ${coverage?.completeWindowProfiles || 0} complete cadence windows, ${Object.keys(series.profiles).length} tracked in series`);

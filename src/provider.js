@@ -5,7 +5,7 @@ const https = require('https');
 const PROFILE_ACTOR = process.env.APIFY_IG_PROFILE_ACTOR || 'apify~instagram-profile-scraper';
 const POSTS_ACTOR = process.env.APIFY_IG_POSTS_ACTOR || 'apify~instagram-scraper';
 const TIKTOK_ACTOR = process.env.APIFY_TIKTOK_ACTOR || 'clockworks~tiktok-scraper';
-// A run-sync call that never returns holds the whole daily job hostage until the
+// A run-sync call that never returns holds the whole scheduled job hostage until the
 // workflow's 45-minute ceiling kills it, which reads as "the board is broken"
 // rather than "one actor stalled". Bound it, retry the failures worth retrying.
 const RUN_TIMEOUT_MS = Number(process.env.APIFY_RUN_TIMEOUT_MS || 6 * 60 * 1000);
@@ -13,6 +13,9 @@ const RUN_RETRIES = Number(process.env.APIFY_RUN_RETRIES || 3);
 const RUN_RETRY_BASE_MS = Number(process.env.APIFY_RUN_RETRY_BASE_MS || 2000);
 const INSTAGRAM_POST_RESULTS_LIMIT = Number(process.env.APIFY_IG_POST_RESULTS_LIMIT || 200);
 const INSTAGRAM_POST_LOOKBACK_DAYS = Number(process.env.APIFY_IG_POST_LOOKBACK_DAYS || 31);
+const INSTAGRAM_INCREMENTAL_MIN_DAYS = Number(process.env.APIFY_IG_INCREMENTAL_MIN_DAYS || 8);
+const POST_CACHE_RETENTION_DAYS = Number(process.env.APIFY_POST_CACHE_RETENTION_DAYS || 45);
+const APIFY_MAX_RUN_CHARGE_USD = Number(process.env.APIFY_MAX_RUN_CHARGE_USD || 0.75);
 // The default Apify account limit is 16 GB and this Actor requests 4 GB per
 // run. Keep one slot of headroom so profile-run cleanup cannot starve a post
 // pull with actor-memory-limit-exceeded errors.
@@ -42,14 +45,20 @@ function profileUrl(handle) { return `https://www.instagram.com/${handle}/`; }
 function instagramProfileInput(handles) {
   return { usernames: [...new Set((handles || []).filter(Boolean))] };
 }
-function instagramPostsInput(handle) {
+function instagramPostsInput(handle, lookbackDays = INSTAGRAM_POST_LOOKBACK_DAYS) {
   return {
     directUrls: [profileUrl(handle)],
     resultsType: 'posts',
     resultsLimit: INSTAGRAM_POST_RESULTS_LIMIT,
-    onlyPostsNewerThan: `${INSTAGRAM_POST_LOOKBACK_DAYS} days`,
+    onlyPostsNewerThan: `${lookbackDays} days`,
     addParentData: true,
   };
+}
+
+function instagramPostsBatchInput(handles, lookbackDays = INSTAGRAM_POST_LOOKBACK_DAYS) {
+  return Object.assign(instagramPostsInput((handles || [])[0] || '' , lookbackDays), {
+    directUrls: [...new Set((handles || []).filter(Boolean).map(profileUrl))],
+  });
 }
 
 function groupProfileItems(handles, items) {
@@ -97,12 +106,15 @@ function groupPostItems(handle, items) {
   });
 }
 
-function apifyRunOnce(actor, input, token, timeoutMs = RUN_TIMEOUT_MS) {
-  const body = JSON.stringify(input);
-  const requestPath = `/v2/acts/${actor}/run-sync-get-dataset-items?token=${encodeURIComponent(token)}`;
+function apifyRequest(method, requestPath, token, body = null, timeoutMs = RUN_TIMEOUT_MS) {
+  const payload = body === null ? null : JSON.stringify(body);
+  const separator = requestPath.includes('?') ? '&' : '?';
   const opts = {
-    method: 'POST', hostname: 'api.apify.com', path: requestPath,
-    headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+    method, hostname: 'api.apify.com',
+    path: `${requestPath}${separator}token=${encodeURIComponent(token)}`,
+    headers: payload === null
+      ? { Accept: 'application/json' }
+      : { Accept: 'application/json', 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
   };
   return new Promise((resolve, reject) => {
     const req = https.request(opts, res => {
@@ -121,9 +133,44 @@ function apifyRunOnce(actor, input, token, timeoutMs = RUN_TIMEOUT_MS) {
       req.destroy(Object.assign(new Error(`Apify run timed out after ${timeoutMs}ms`), { retryable: true }));
     });
     req.on('error', reject);
-    req.write(body);
+    if (payload !== null) req.write(payload);
     req.end();
   });
+}
+
+/*
+ * Start an Actor run explicitly, then read its dataset. The older
+ * run-sync-get-dataset-items shortcut returned only rows, which made the real
+ * run id and charge invisible. The explicit run response carries both, so each
+ * refresh can be tied back to Apify without estimating from elapsed time.
+ */
+async function apifyRunOnce(actor, input, token, timeoutMs = RUN_TIMEOUT_MS) {
+  const waitSeconds = Math.max(1, Math.min(300, Math.floor(timeoutMs / 1000)));
+  const started = await apifyRequest(
+    'POST',
+    `/v2/acts/${actor}/runs?waitForFinish=${waitSeconds}&memory=1024&maxTotalChargeUsd=${APIFY_MAX_RUN_CHARGE_USD}`,
+    token,
+    input,
+    timeoutMs,
+  );
+  const run = started?.data || started;
+  if (!run?.id || !run?.defaultDatasetId) throw new Error('Apify run response omitted the run or dataset id');
+  if (run.status !== 'SUCCEEDED') {
+    const error = new Error(`Apify run ${run.id} ended ${run.status || 'without a status'}${run.statusMessage ? `: ${run.statusMessage}` : ''}`);
+    error.retryable = ['FAILED', 'TIMED-OUT', 'ABORTED'].includes(run.status);
+    error.run = run;
+    throw error;
+  }
+  const rows = await apifyRequest(
+    'GET',
+    `/v2/datasets/${run.defaultDatasetId}/items?clean=true&format=json`,
+    token,
+    null,
+    timeoutMs,
+  );
+  if (!Array.isArray(rows)) throw new Error(`Apify run ${run.id} dataset was not an item list`);
+  Object.defineProperty(rows, '_apifyRun', { value: run, enumerable: false });
+  return rows;
 }
 
 function isRetryable(error) {
@@ -149,11 +196,24 @@ async function apifyRunSync(actor, input, token, opts = {}) {
     const startedAt = Date.now();
     try {
       const result = await runOnce(actor, input, token, timeoutMs);
-      onAttempt({ actor, attempt, ok: true, ms: Date.now() - startedAt, items: Array.isArray(result) ? result.length : null });
+      const run = result?._apifyRun || null;
+      onAttempt({
+        actor, attempt, ok: true, ms: Date.now() - startedAt,
+        items: Array.isArray(result) ? result.length : null,
+        runId: run?.id || null,
+        costUsd: typeof run?.usageTotalUsd === 'number' ? run.usageTotalUsd : null,
+        status: run?.status || 'SUCCEEDED',
+      });
       return result;
     } catch (error) {
       lastError = error;
-      onAttempt({ actor, attempt, ok: false, ms: Date.now() - startedAt, error: String(error.message || error) });
+      onAttempt({
+        actor, attempt, ok: false, ms: Date.now() - startedAt,
+        error: String(error.message || error),
+        runId: error?.run?.id || null,
+        costUsd: typeof error?.run?.usageTotalUsd === 'number' ? error.run.usageTotalUsd : null,
+        status: error?.run?.status || 'FAILED',
+      });
       if (attempt >= attempts || !isRetryable(error)) break;
       const backoff = backoffBase * Math.pow(2, attempt - 1);
       await sleep(backoff + Math.floor(Math.random() * (backoffBase ? 500 : 0)));
@@ -183,29 +243,72 @@ class ApifyProvider {
     this.token = token;
     this.runSync = opts.runSync || apifyRunSync;
     this.postConcurrency = opts.postConcurrency || POST_FETCH_CONCURRENCY;
+    this.previousSnapshot = opts.previousSnapshot || null;
+    this.capturedAt = opts.capturedAt || new Date().toISOString();
     /*
      * Actor runs are the unit Apify bills. Recording them means an unexplained
      * bill can be traced to a run count in the snapshot that produced it,
      * instead of being discovered on an invoice a month later.
      */
-    this.telemetry = { runs: 0, failedRuns: 0, retries: 0, totalMs: 0, byActor: {} };
+    this.telemetry = { runs: 0, failedRuns: 0, retries: 0, totalMs: 0, costUsd: 0, costKnownRuns: 0, events: [], byActor: {} };
   }
 
   record(event) {
-    const actor = this.telemetry.byActor[event.actor] || { runs: 0, failures: 0, ms: 0, items: 0 };
+    const actor = this.telemetry.byActor[event.actor] || { runs: 0, failures: 0, ms: 0, items: 0, costUsd: 0 };
     actor.runs++;
     actor.ms += event.ms || 0;
     if (event.ok) actor.items += event.items || 0;
     else actor.failures++;
+    if (typeof event.costUsd === 'number') actor.costUsd += event.costUsd;
     this.telemetry.byActor[event.actor] = actor;
     this.telemetry.runs++;
     this.telemetry.totalMs += event.ms || 0;
     if (!event.ok) this.telemetry.failedRuns++;
     if (event.attempt > 1) this.telemetry.retries++;
+    if (typeof event.costUsd === 'number') {
+      this.telemetry.costUsd += event.costUsd;
+      this.telemetry.costKnownRuns++;
+    }
+    this.telemetry.events.push(Object.assign({ at: new Date().toISOString() }, event));
   }
 
   call(actor, input) {
     return this.runSync(actor, input, this.token, { onAttempt: event => this.record(event) });
+  }
+
+  previousRecord(handle) {
+    return (this.previousSnapshot?.records || []).find(record => (
+      record.platform === 'instagram' && canonicalHandle(record.handle) === canonicalHandle(handle) &&
+      record.resolved === true && record.isPrivate === false && record.fetchMeta?.postsQuerySucceeded === true
+    )) || null;
+  }
+
+  incrementalLookbackDays(handles) {
+    const now = new Date(this.capturedAt).getTime();
+    if (!Number.isFinite(now)) return INSTAGRAM_POST_LOOKBACK_DAYS;
+    let required = INSTAGRAM_INCREMENTAL_MIN_DAYS;
+    for (const handle of handles || []) {
+      const prior = this.previousRecord(handle);
+      const at = prior?.capturedAt ? new Date(prior.capturedAt).getTime() : NaN;
+      if (!Number.isFinite(at)) return INSTAGRAM_POST_LOOKBACK_DAYS;
+      const age = Math.ceil(Math.max(0, now - at) / dayMs());
+      required = Math.max(required, age + 2);
+    }
+    return Math.min(INSTAGRAM_POST_LOOKBACK_DAYS, required);
+  }
+
+  mergePosts(handle, freshRows) {
+    const cutoff = new Date(this.capturedAt).getTime() - POST_CACHE_RETENTION_DAYS * dayMs();
+    const prior = this.previousRecord(handle)?.recentPosts || [];
+    const combined = [...(freshRows || []), ...prior];
+    const seen = new Set();
+    return combined.filter(item => {
+      const key = item?.id ? `id:${item.id}` : item?.url ? `url:${item.url}` : `fallback:${item?.postedAt || item?.timestamp || ''}|${item?.caption || ''}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      const at = new Date(item?.postedAt || item?.timestamp || item?.takenAtIso || 0).getTime();
+      return !Number.isFinite(at) || at >= cutoff;
+    });
   }
 
   async fetchProfiles(platform, handles) {
@@ -217,18 +320,27 @@ class ApifyProvider {
     const profiles = groupProfileItems(wanted, profileItems);
     const out = new Map();
 
-    await mapLimit(wanted, this.postConcurrency, async handle => {
+    const lookbackDays = this.incrementalLookbackDays(wanted);
+    let rows = [];
+    let batchError = null;
+    try {
+      rows = await this.call(POSTS_ACTOR, instagramPostsBatchInput(wanted, lookbackDays));
+    } catch (error) {
+      batchError = error;
+    }
+    const rawRows = Array.isArray(rows) ? rows : [];
+    const missingOwnerCount = rawRows.filter(item => !postOwner(item)).length;
+
+    for (const handle of wanted) {
       const details = profiles.get(handle);
       if (!details) {
         out.set(handle, { notFound: true });
-        return;
+        continue;
       }
 
-      try {
-        const rows = await this.call(POSTS_ACTOR, instagramPostsInput(handle));
-        const posts = groupPostItems(handle, rows);
-        const rawRows = Array.isArray(rows) ? rows : [];
-        const missingOwnerCount = rawRows.filter(item => !postOwner(item)).length;
+      if (!batchError) {
+        const freshPosts = groupPostItems(handle, rows);
+        const posts = this.mergePosts(handle, freshPosts);
         const postsOwnershipComplete = missingOwnerCount === 0;
         out.set(handle, Object.assign({}, details, {
           recentPosts: posts,
@@ -238,21 +350,27 @@ class ApifyProvider {
           _postsQueryError: postsOwnershipComplete
             ? null
             : `${missingOwnerCount} post row(s) had no verifiable owner`,
-          _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
+          _postsLookbackDays: this.previousRecord(handle) && lookbackDays < INSTAGRAM_POST_LOOKBACK_DAYS
+            ? INSTAGRAM_POST_LOOKBACK_DAYS
+            : lookbackDays,
           _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
-          _postsTruncated: rawRows.length >= INSTAGRAM_POST_RESULTS_LIMIT,
+          _postsTruncated: freshPosts.length >= INSTAGRAM_POST_RESULTS_LIMIT,
           _postsOwnershipComplete: postsOwnershipComplete,
           _missingOwnerCount: missingOwnerCount,
-          _rawPostCount: rawRows.length,
+          _rawPostCount: posts.length,
+          _incremental: lookbackDays < INSTAGRAM_POST_LOOKBACK_DAYS,
+          _incrementalLookbackDays: lookbackDays,
+          _freshPostCount: freshPosts.length,
+          _reusedPostCount: Math.max(0, posts.length - freshPosts.length),
         }));
-      } catch (error) {
+      } else {
         out.set(handle, Object.assign({}, details, {
           recentPosts: [],
           _profileSource: PROFILE_ACTOR,
           _postSource: POSTS_ACTOR,
           _postsQuerySucceeded: false,
-          _postsQueryError: String(error.message || error),
-          _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
+          _postsQueryError: String(batchError.message || batchError),
+          _postsLookbackDays: lookbackDays,
           _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
           _postsTruncated: false,
           _postsOwnershipComplete: false,
@@ -260,7 +378,7 @@ class ApifyProvider {
           _rawPostCount: 0,
         }));
       }
-    });
+    }
 
     return out;
   }
@@ -402,9 +520,13 @@ module.exports = {
   tiktokOwner,
   INSTAGRAM_POST_RESULTS_LIMIT,
   INSTAGRAM_POST_LOOKBACK_DAYS,
+  INSTAGRAM_INCREMENTAL_MIN_DAYS,
+  POST_CACHE_RETENTION_DAYS,
+  APIFY_MAX_RUN_CHARGE_USD,
   POST_FETCH_CONCURRENCY,
   instagramProfileInput,
   instagramPostsInput,
+  instagramPostsBatchInput,
   groupProfileItems,
   groupPostItems,
   canonicalHandle,

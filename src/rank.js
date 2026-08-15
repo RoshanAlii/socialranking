@@ -344,6 +344,9 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
     const bestLikes = bestPost(posts, 'likes');
     const bestComments = bestPost(posts, 'comments');
     const bestViews = bestPost(videos, 'views');
+    const comparableReels = posts.filter(post => post.type === 'reel' && postEngagement(post) !== null)
+      .map(post => Object.assign({ interactions: postEngagement(post) }, post))
+      .sort((a, b) => b.interactions - a.interactions);
     const latest = posts.slice().sort((a, b) => ts(b) - ts(a))[0] || null;
     return {
       name: record.name,
@@ -376,6 +379,12 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       averageLikes: complete ? average(likes) : null,
       averageComments: complete ? average(comments) : null,
       averageViews: complete ? average(views) : null,
+      viewEfficiency: complete && record.followers > 0 && views.length
+        ? median(views) / record.followers
+        : null,
+      totalViewEfficiency: complete && record.followers > 0 && views.length
+        ? views.reduce((sum, value) => sum + value, 0) / record.followers
+        : null,
       medianInteractions: complete ? median(interactions) : null,
       averageInteractions: complete ? average(interactions) : null,
       interactionRate: complete && record.followers > 0 && comparable.length >= MIN_ENGAGEMENT_POSTS
@@ -383,6 +392,9 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
         : null,
       commentRate: complete && record.followers > 0 && comments.length >= MIN_ENGAGEMENT_POSTS
         ? median(comments) / record.followers
+        : null,
+      commentToLikeRatio: complete && likes.length && comments.length && median(likes) > 0
+        ? median(comments) / median(likes)
         : null,
       videoCount: complete ? videos.length : null,
       carouselCount: complete ? posts.filter(post => post.type === 'carousel').length : null,
@@ -392,6 +404,8 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       mostLikedPost: complete && bestLikes ? bestLikes.post : null,
       mostCommentedPost: complete && bestComments ? bestComments.post : null,
       mostViewedPost: complete && bestViews ? bestViews.post : null,
+      topReels: complete ? comparableReels.slice(0, 5) : null,
+      lowestReels: complete ? comparableReels.slice().reverse().slice(0, 5) : null,
       metricCoverage: complete ? {
         posts: posts.length,
         likes: likes.length,
@@ -402,6 +416,31 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       } : null,
     };
   });
+}
+
+function teamBenchmarks(analytics) {
+  const complete = (analytics || []).filter(row => row.windowComplete === true);
+  const keys = [
+    'followers', 'postsInWindow', 'postsPerWeek', 'activeDays', 'interactionRate',
+    'medianInteractions', 'medianViews', 'viewEfficiency', 'totalViews', 'commentToLikeRatio',
+  ];
+  return Object.fromEntries(keys.map(key => [key, median(complete
+    .map(row => row[key]).filter(value => typeof value === 'number' && Number.isFinite(value)))]));
+}
+
+function percentile(values, value) {
+  const numbers = values.filter(item => typeof item === 'number' && Number.isFinite(item));
+  if (typeof value !== 'number' || !Number.isFinite(value) || !numbers.length) return null;
+  return Math.round(100 * numbers.filter(item => item <= value).length / numbers.length);
+}
+
+function withTeamComparisons(analytics) {
+  const rows = analytics || [];
+  const keys = ['followers', 'postsPerWeek', 'interactionRate', 'medianViews', 'viewEfficiency', 'totalViews'];
+  const pools = Object.fromEntries(keys.map(key => [key, rows.map(row => row[key])]));
+  return rows.map(row => Object.assign({}, row, {
+    percentiles: Object.fromEntries(keys.map(key => [key, percentile(pools[key], row[key])])),
+  }));
 }
 function formatAnalytics(records, platform, now = asOf(records), days = WINDOW_DAYS) {
   const completeRecords = forPlatform(records, platform).filter(record => (
@@ -577,6 +616,7 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
     const completePosts = completeRecords.flatMap(record => windowPosts(record, now, days));
     const videos = completePosts.filter(post => post.type === 'video' || post.type === 'reel');
     const videosWithViews = videos.filter(post => typeof post.views === 'number');
+    const analytics = profileAnalytics(records, platform, now, days);
     out[platform] = {
       mostFollowers: mostFollowers(records, platform),
       engagement: engagementLeaderboard(records, platform, now, days),
@@ -587,7 +627,8 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
       mostViewed: mostViewed(records, platform, now, days),
       mostCommented: mostCommented(records, platform, now, days),
       mostShared: mostShared(records, platform, now, days),
-      analytics: profileAnalytics(records, platform, now, days),
+      analytics: withTeamComparisons(analytics),
+      teamBenchmarks: teamBenchmarks(analytics),
       formatAnalytics: formatAnalytics(records, platform, now, days),
       coverage: {
         windowDays: days,
@@ -675,6 +716,7 @@ module.exports = {
   windowCoverage, uniquePosts, median, asOf, mostFollowers,
   engagementLeaderboard, postingFrequency, topPost, topVideo, mostViewed,
   mostLiked, mostCommented, mostShared, profileAnalytics, formatAnalytics,
+  teamBenchmarks, withTeamComparisons, percentile,
   compositeLeaderboard, growth, buildLeaderboards, activeWeights, resolveWeights,
   DEFAULT_WEIGHTS, BASE_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MEASURED,
 };
