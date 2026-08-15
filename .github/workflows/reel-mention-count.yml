@@ -28,7 +28,10 @@ concurrency:
 jobs:
   count:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    # The first roster-wide cache can include hundreds of Reels. Incremental
+    # runs are much shorter, but the initial pass needs enough room to finish
+    # without discarding already-completed local transcriptions.
+    timeout-minutes: 240
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
