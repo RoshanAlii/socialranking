@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
-  "outcome": "pending",
-  "attemptedAt": null,
-  "lastSuccessfulAt": null,
-  "reason": "The first roster-wide developer analysis will run after deployment.",
-  "dataPreserved": false
+  "outcome": "partial",
+  "attemptedAt": "2026-08-15T09:47:46Z",
+  "lastSuccessfulAt": "2026-08-15T09:47:46Z",
+  "reason": null,
+  "processingCoverage": 0.9016,
+  "failedReels": 24
 }
