@@ -856,6 +856,8 @@ const soloRegistry = {
     assert.match(html, /validatorVersion === 2/);
     assert.match(html, /MAX_PUBLIC_AGE_HOURS = 108/);
     assert.match(html, /snapshotMatchesRoster/);
+    assert.match(html, /const usageCandidates = \[/, 'fresh console observations must be considered alongside refresh telemetry');
+    assert.match(html, /Date\.parse\(b\.observedAt/, 'the spend card must select the freshest telemetry source');
   });
   await test('developer intelligence is fortnightly, roster-wide, cached, and configurable', () => {
     const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'reel-mention-count.yml'), 'utf8');
