@@ -14,6 +14,7 @@ const ROSTER = require('../src/roster');
 const { buildDigest } = require('../src/digest');
 const { validateSnapshot } = require('../src/validate-snapshot');
 const { rebuildDerived } = require('../src/rebuild-derived');
+const U = require('../src/usage');
 
 let passed = 0;
 let failed = 0;
@@ -175,6 +176,10 @@ const soloRegistry = {
     const normalized = N.normalizePost({ id: 'x', takenAtTimestamp: Math.floor(nowMs / 1000) }, 'instagram');
     assert.strictEqual(normalized.postedAt, now);
   });
+  await test('Instagram clips and Reel URLs stay typed as Reels even when the provider says Video', () => {
+    assert.strictEqual(N.normalizePost({ type: 'Video', productType: 'clips' }, 'instagram').type, 'reel');
+    assert.strictEqual(N.normalizePost({ type: 'Video', url: 'https://instagram.com/reel/ABC/' }, 'instagram').type, 'reel');
+  });
   await test('foreign authors and duplicates are removed', () => {
     const raw = {
       followersCount: 1000, postsCount: 100,
@@ -198,20 +203,51 @@ const soloRegistry = {
     assert.strictEqual(input.onlyPostsNewerThan, '31 days');
     assert.ok(input.resultsLimit >= 200);
   });
-  await test('provider merges profile details with one date-bounded post query per handle', async () => {
+  await test('provider batches all profiles and posts into two actor runs', async () => {
     const calls = [];
     const runSync = async (actor, input) => {
       calls.push({ actor, input });
-      if (actor === P.PROFILE_ACTOR) return [{ username: 'a', followersCount: 1000, postsCount: 50 }];
-      return [rawPost(1)];
+      if (actor === P.PROFILE_ACTOR) return [
+        { username: 'a', followersCount: 1000, postsCount: 50 },
+        { username: 'b', followersCount: 2000, postsCount: 80 },
+      ];
+      return [rawPost(1), rawPost(2, { id: 'b-2', ownerUsername: 'b' })];
     };
     const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
-    const result = await provider.fetchProfiles('instagram', ['a']);
+    const result = await provider.fetchProfiles('instagram', ['a', 'b']);
     const raw = result.get('a');
     assert.strictEqual(raw.followersCount, 1000);
     assert.strictEqual(raw.recentPosts.length, 1);
+    assert.strictEqual(result.get('b').recentPosts.length, 1);
     assert.strictEqual(raw._postsQuerySucceeded, true);
+    assert.strictEqual(calls.filter(c => c.actor === P.PROFILE_ACTOR).length, 1);
     assert.strictEqual(calls.filter(c => c.actor === P.POSTS_ACTOR).length, 1);
+    assert.deepStrictEqual(
+      calls.find(c => c.actor === P.POSTS_ACTOR).input.directUrls,
+      ['https://www.instagram.com/a/', 'https://www.instagram.com/b/'],
+    );
+  });
+  await test('incremental post collection reuses history and deduplicates by Reel id', async () => {
+    const priorCapturedAt = new Date(nowMs - 4 * day).toISOString();
+    const previousSnapshot = {
+      records: [rec({ capturedAt: priorCapturedAt, recentPosts: [
+        post(5, { id: 'shared' }),
+        post(12, { id: 'history-only' }),
+      ] })],
+    };
+    let postInput = null;
+    const runSync = async (actor, input) => {
+      if (actor === P.PROFILE_ACTOR) return [{ username: 'a', followersCount: 1000, postsCount: 50 }];
+      postInput = input;
+      return [rawPost(5, { id: 'shared' }), rawPost(1, { id: 'fresh' })];
+    };
+    const provider = new P.ApifyProvider('token', { runSync, previousSnapshot, capturedAt: now });
+    const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
+    assert.strictEqual(postInput.onlyPostsNewerThan, '8 days');
+    assert.deepStrictEqual(raw.recentPosts.map(row => row.id), ['shared', 'fresh', 'history-only']);
+    assert.strictEqual(raw._incremental, true);
+    assert.strictEqual(raw._freshPostCount, 2);
+    assert.strictEqual(raw._reusedPostCount, 1);
   });
   await test('provider rejects post rows with unverifiable owners', async () => {
     const runSync = async actor => actor === P.PROFILE_ACTOR
@@ -534,6 +570,13 @@ const soloRegistry = {
     const unprovable = rec({ fetchMeta: Object.assign({}, rec().fetchMeta, { postsQuerySucceeded: false }) });
     assert.deepStrictEqual(C.nextActions(unprovable, { now: nowMs }), [], 'no advice from a partial feed');
   });
+  await test('content pillars are deterministic and thin team samples are not emphasized', () => {
+    assert.strictEqual(C.classifyContentPillar('Dubai property investment tips').key, 'investment-advice');
+    const records = [rec({ recentPosts: [post(1, { caption: 'A new villa tour' })] })];
+    const pillar = C.pillarPerformance(records, 'instagram', nowMs)[0];
+    assert.strictEqual(pillar.key, 'property-showcase');
+    assert.strictEqual(pillar.eligibleForPerformanceComparison, false);
+  });
 
   console.log('\nSCORE, OPT-OUT AND WINDOWS');
   await test('follower growth joins the momentum score only when a baseline exists', () => {
@@ -738,7 +781,7 @@ const soloRegistry = {
   });
   await test('the digest refuses to summarise an unvalidated or stale snapshot', () => {
     const registry = { rosterVersion: 'r1' };
-    const stale = { meta: { capturedAt: new Date(Date.now() - 80 * 3600000).toISOString(), company: 'Kirpa', validation: { status: 'passed', validatorVersion: 2, rosterVersion: 'r1' } } };
+    const stale = { meta: { capturedAt: new Date(Date.now() - 120 * 3600000).toISOString(), company: 'Kirpa', validation: { status: 'passed', validatorVersion: 2, rosterVersion: 'r1' } } };
     assert.strictEqual(buildDigest(stale, null, registry).ok, false);
     assert.match(buildDigest(stale, null, registry).text, /hours old/);
     const unvalidated = { meta: { capturedAt: new Date().toISOString(), validation: { status: 'pending' } } };
@@ -763,24 +806,50 @@ const soloRegistry = {
   });
 
   console.log('\nRELEASE GUARDS');
-  await test('published workflow runs and stamps the full validator', () => {
+  await test('twice-weekly workflow runs and stamps the full validator', () => {
     const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'weekly.yml'), 'utf8');
     assert.match(workflow, /node src\/validate-snapshot\.js --stamp/);
-    assert.match(workflow, /cron: "0 4 \* \* \*"/);
-    assert.match(workflow, /cron: "0 16 \* \* \*"/, 'a second daily attempt keeps the 36-hour gate reachable');
+    assert.match(workflow, /cron: "0 4 \* \* 1,4"/);
+    assert.ok(!/cron: "0 16/.test(workflow), 'the old twice-daily spend path is removed');
+    assert.match(workflow, /APIFY_TOKEN_MENTION_COUNT \|\| secrets\.APIFY_TOKEN/);
     assert.match(workflow, /if: failure\(\)/, 'a silent failure looks exactly like a stalled board');
     assert.match(workflow, /node src\/roster\.js verify/);
     assert.ok(!/git add[^\n]*data\/raw/.test(workflow), 'raw captures are an artifact, not repository history');
-    assert.match(workflow, /git add data\/latest\.json data\/history data\/series\.json/);
+    assert.match(workflow, /data\/apify-usage\.json data\/refresh-status\.json/);
     const ignore = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
     assert.match(ignore, /data\/raw\//);
   });
-  await test('dashboard requires roster lock, validator v2, and a 36-hour freshness gate', () => {
+  await test('dashboard requires roster lock, validator v2, and a 108-hour freshness gate', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
     assert.match(html, /validation\?\.status === 'passed'/);
     assert.match(html, /validatorVersion === 2/);
-    assert.match(html, /MAX_PUBLIC_AGE_HOURS = 36/);
+    assert.match(html, /MAX_PUBLIC_AGE_HOURS = 108/);
     assert.match(html, /snapshotMatchesRoster/);
+  });
+  await test('developer intelligence is fortnightly, roster-wide, cached, and configurable', () => {
+    const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'reel-mention-count.yml'), 'utf8');
+    const script = fs.readFileSync(path.join(__dirname, '..', 'src', 'developer_intelligence.py'), 'utf8');
+    const dictionary = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'developer-dictionary.json'), 'utf8'));
+    assert.match(workflow, /--check-due/);
+    assert.match(workflow, /src\/developer_intelligence\.py/);
+    assert.match(script, /RUN_INTERVAL_DAYS = 14/);
+    assert.match(script, /oneTranscriptPerReel/);
+    assert.ok(dictionary.developers.length >= 20);
+    assert.ok(dictionary.developers.some(row => row.key === 'damac'));
+    assert.ok(dictionary.developers.some(row => row.key === 'emaar'));
+  });
+  await test('usage telemetry produces a soft warning without guessing unknown run costs', () => {
+    const ledger = U.emptyLedger();
+    ledger.observations.push({ at: '2026-08-15T00:00:00.000Z', periodStart: '2026-08-12T00:00:00.000Z', periodEnd: '2026-09-11T23:59:59.999Z', platformUsageUsd: 4.1 });
+    const summary = U.currentSummary(ledger, '2026-08-16T00:00:00.000Z');
+    assert.strictEqual(summary.usageUsd, 4.1);
+    assert.strictEqual(summary.softWarning, false);
+    ledger.runs.push({ at: '2026-08-16T00:00:00.000Z', runId: 'known', costUsd: 0.2 });
+    ledger.runs.push({ at: '2026-08-16T00:00:00.000Z', runId: 'unknown', costUsd: null });
+    const updated = U.currentSummary(ledger, '2026-08-16T01:00:00.000Z');
+    assert.strictEqual(updated.usageUsd, 4.3);
+    assert.strictEqual(updated.softWarning, true);
+    assert.strictEqual(updated.unknownCostRuns, 1);
   });
   await test('a replay is validated on everything except freshness', () => {
     const records = [rec()];

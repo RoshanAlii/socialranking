@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "outcome": "preserved",
+  "attemptedAt": "2026-08-15T04:23:36Z",
+  "lastValidSnapshotAt": "2026-08-13T05:30:06.953Z",
+  "reason": "Apify monthly usage hard limit was returned by the legacy APIFY_TOKEN; the validated snapshot was preserved.",
+  "dataPreserved": true,
+  "resolvedProfiles": 0,
+  "expectedProfiles": 31,
+  "completeProfiles": 0,
+  "usage": {
+    "month": "2026-08",
+    "usageUsd": 1.05,
+    "knownRunCostUsd": 0,
+    "softLimitUsd": 4.25,
+    "planLimitUsd": 5,
+    "remainingToSoftLimitUsd": 3.2,
+    "softWarning": false,
+    "runs": 0,
+    "successfulRuns": 0,
+    "failedRuns": 0,
+    "costKnownRuns": 0,
+    "observedAt": "2026-08-15T09:05:00Z",
+    "periodStart": "2026-08-12T00:00:00Z",
+    "periodEnd": "2026-09-11T23:59:59Z"
+  }
+}

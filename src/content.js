@@ -62,6 +62,20 @@ const CAPTION_BUCKETS = [
   { key: 'long', label: '301–800 characters', from: 301, to: 801 },
   { key: 'story', label: '800+ characters', from: 801, to: Infinity },
 ];
+/*
+ * Caption-only pillar classification is intentionally conservative and
+ * rule-based. It is feasible on every public post without sending employee
+ * content to another model, and the exact keyword set is auditable here.
+ */
+const CONTENT_PILLARS = [
+  { key: 'property-showcase', label: 'Property showcase', pattern: /\b(tour|showcase|walkthrough|unit|apartment|villa|penthouse|townhouse|bedroom|handover|amenit)/i },
+  { key: 'investment-advice', label: 'Investment advice', pattern: /\b(invest(?:ment|or|ing)?|roi|return|yield|payment plan|capital appreciation|portfolio|mortgage|cash flow)\b/i },
+  { key: 'market-update', label: 'Market update', pattern: /\b(market update|transaction|sales volume|price growth|quarter|report|forecast|trend)\b/i },
+  { key: 'educational', label: 'Educational', pattern: /\b(how to|guide|tips?|explained|mistakes?|things to know|faq|question|learn|brn|rera)\b/i },
+  { key: 'developer-news', label: 'Developer news', pattern: /\b(developer|launch|new phase|masterplan|master plan|sold out|release|booking)\b/i },
+  { key: 'area-guide', label: 'Area guide', pattern: /\b(community|area guide|neighbou?rhood|location|minutes from|dubai marina|downtown|business bay|creek|jvc|palm)\b/i },
+  { key: 'lifestyle', label: 'Lifestyle & personal', pattern: /\b(lifestyle|day in|behind the scenes|team|event|award|celebrat|office|coffee|family)\b/i },
+];
 
 function round(value, places) {
   if (typeof value !== 'number' || !Number.isFinite(value)) return null;
@@ -84,6 +98,11 @@ function captionBucket(caption) {
 function hashtagsIn(caption) {
   const matches = String(caption || '').match(/#[\p{L}\p{N}_]+/gu) || [];
   return [...new Set(matches.map(tag => tag.slice(1).toLowerCase()))];
+}
+function classifyContentPillar(caption) {
+  const text = String(caption || '').replace(/#[\p{L}\p{N}_]+/gu, match => match.replace(/^#/, ' '));
+  const match = CONTENT_PILLARS.find(pillar => pillar.pattern.test(text));
+  return match ? { key: match.key, label: match.label } : { key: 'other', label: 'Other / unclear' };
 }
 function interactionRate(post, followers) {
   const interactions = postEngagement(post);
@@ -224,6 +243,81 @@ function captionPerformance(records, platform, now = asOf(records), days = WINDO
   }).filter(row => row.posts >= minPosts);
 }
 
+function pillarPerformance(records, platform, now = asOf(records), days = WINDOW_DAYS) {
+  const rows = measurablePosts(records, platform, now, days);
+  const buckets = new Map();
+  for (const row of rows) {
+    const pillar = classifyContentPillar(row.post.caption);
+    if (!buckets.has(pillar.key)) buckets.set(pillar.key, { pillar, rows: [] });
+    buckets.get(pillar.key).rows.push(row);
+  }
+  return [...buckets.values()].map(bucket => {
+    const stats = summarize(bucket.rows);
+    return Object.assign({
+      key: bucket.pillar.key,
+      label: bucket.pillar.label,
+      classification: 'caption keyword rules',
+      eligibleForPerformanceComparison: stats.posts >= MIN_POSTS_PER_HASHTAG && stats.profiles >= MIN_PROFILES_PER_HASHTAG,
+    }, stats);
+  }).sort((a, b) => b.posts - a.posts);
+}
+
+function personContentPillars(record, now = asOf([record]), days = WINDOW_DAYS) {
+  if (!isUsable(record) || !windowCoverage(record, now, days).complete) return null;
+  const posts = windowPosts(record, now, days);
+  const buckets = new Map();
+  for (const post of posts) {
+    const pillar = classifyContentPillar(post.caption);
+    if (!buckets.has(pillar.key)) buckets.set(pillar.key, { key: pillar.key, label: pillar.label, posts: [] });
+    buckets.get(pillar.key).posts.push(post);
+  }
+  return [...buckets.values()].map(bucket => {
+    const interactions = bucket.posts.map(postEngagement).filter(value => value !== null);
+    const rates = bucket.posts.map(post => interactionRate(post, record.followers)).filter(value => typeof value === 'number');
+    return {
+      key: bucket.key,
+      label: bucket.label,
+      posts: bucket.posts.length,
+      share: posts.length ? round(bucket.posts.length / posts.length, 3) : null,
+      medianInteractions: median(interactions),
+      medianRate: round(median(rates), 6),
+      comparablePosts: interactions.length,
+    };
+  }).sort((a, b) => b.posts - a.posts);
+}
+
+function personPostingTime(record, now = asOf([record]), days = WINDOW_DAYS) {
+  if (!isUsable(record) || !windowCoverage(record, now, days).complete) return null;
+  const posts = windowPosts(record, now, days);
+  const dayBuckets = DAY_NAMES.map((dayName, day) => ({
+    day, dayName,
+    posts: posts.filter(post => localParts(post.postedAt)?.day === day),
+  })).filter(row => row.posts.length);
+  const blockBuckets = HOUR_BLOCKS.map(block => ({
+    block: block.key, blockLabel: block.label,
+    posts: posts.filter(post => hourBlock(localParts(post.postedAt)?.hour)?.key === block.key),
+  })).filter(row => row.posts.length);
+  function metric(row) {
+    const rates = row.posts.map(post => interactionRate(post, record.followers)).filter(value => typeof value === 'number');
+    return Object.assign({}, row, {
+      posts: row.posts.length,
+      ratedPosts: rates.length,
+      medianRate: round(median(rates), 6),
+    });
+  }
+  const daysRanked = dayBuckets.map(metric);
+  const blocksRanked = blockBuckets.map(metric);
+  const eligible = rows => rows.filter(row => row.ratedPosts >= 2 && row.medianRate !== null)
+    .sort((a, b) => b.medianRate - a.medianRate);
+  return {
+    timezone: TZ_LABEL,
+    byDay: daysRanked,
+    byBlock: blocksRanked,
+    bestDay: eligible(daysRanked)[0] || null,
+    bestBlock: eligible(blocksRanked)[0] || null,
+  };
+}
+
 /*
  * Weekly buckets counted back from the capture instant, so "this week" means
  * the last seven days rather than whatever the calendar says. A 30-day window
@@ -338,6 +432,7 @@ function nextActions(record, context = {}) {
   const weeks = postingWeeks(record, now, days);
   const silentDays = daysSinceLastPost(record, now, days);
   const mix = personFormatMix(record, now, days);
+  const pillars = personContentPillars(record, now, days) || [];
   const rated = mix.filter(row => row.medianRate !== null && row.ratedPosts >= 2);
   const targets = context.targets || {};
   const benchmarks = context.benchmarks || {};
@@ -387,6 +482,20 @@ function nextActions(record, context = {}) {
           because: `${best.type}s earn ${lift}× the typical rate of ${most.type}s here, but are ${Math.round((best.share || 0) * 100)}% of posts versus ${Math.round((most.share || 0) * 100)}%.`,
         });
       }
+    }
+  }
+
+  const ratedPillars = pillars.filter(row => row.medianRate !== null && row.comparablePosts >= 2);
+  if (ratedPillars.length >= 2) {
+    const best = ratedPillars.slice().sort((a, b) => b.medianRate - a.medianRate)[0];
+    const most = pillars.slice().sort((a, b) => b.posts - a.posts)[0];
+    const lift = most?.medianRate > 0 ? best.medianRate / most.medianRate : null;
+    if (best.key !== most?.key && lift >= 1.25) {
+      actions.push({
+        priority: 3,
+        action: `Make 2 of the next 4 posts ${best.label.toLowerCase()} content.`,
+        because: `${best.label} delivers ${round(lift, 2)}× the typical rate of ${most.label} across ${best.comparablePosts} comparable posts.`,
+      });
     }
   }
 
@@ -463,15 +572,19 @@ function buildContentIntelligence(records, platform, opts = {}) {
     hashtags: hashtagPerformance(records, platform, now, days, opts),
     timing: timingPerformance(records, platform, now, days, opts),
     captions: captionPerformance(records, platform, now, days, opts),
+    pillars: pillarPerformance(records, platform, now, days),
+    pillarMethod: `Caption-only deterministic keyword classification; unclear posts remain Other / unclear. Performance emphasis requires ${MIN_POSTS_PER_HASHTAG}+ posts across ${MIN_PROFILES_PER_HASHTAG}+ profiles.`,
   };
 }
 
 module.exports = {
-  buildContentIntelligence, hashtagPerformance, timingPerformance, captionPerformance,
+  buildContentIntelligence, hashtagPerformance, timingPerformance, captionPerformance, pillarPerformance,
   postingWeeks, daysSinceLastPost, goalProgress, targetsFor, nextActions,
-  personFormatMix, measurablePosts, hashtagsIn, localParts, hourBlock, captionBucket,
+  personFormatMix, personContentPillars, personPostingTime, measurablePosts, hashtagsIn, localParts, hourBlock, captionBucket,
+  classifyContentPillar,
   interactionRate, summarize,
   TZ_LABEL, TZ_OFFSET_HOURS, DAY_NAMES, HOUR_BLOCKS, CAPTION_BUCKETS,
   MIN_POSTS_PER_HASHTAG, MIN_PROFILES_PER_HASHTAG, MIN_POSTS_PER_BUCKET,
   MIN_POSTS_FOR_TEAM_ADVICE, MIN_PROFILES_FOR_TEAM_ADVICE, MIN_TIMING_LIFT,
+  CONTENT_PILLARS,
 };

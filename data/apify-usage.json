@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-15T09:05:00Z",
+  "softLimitUsd": 4.25,
+  "planLimitUsd": 5,
+  "observations": [
+    {
+      "at": "2026-08-15T09:05:00Z",
+      "platformUsageUsd": 1.05,
+      "periodStart": "2026-08-12T00:00:00Z",
+      "periodEnd": "2026-09-11T23:59:59Z",
+      "source": "Apify console current-period read"
+    }
+  ],
+  "runs": []
+}

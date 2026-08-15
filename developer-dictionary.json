@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "dictionaryVersion": "2026-08-15-dubai-major-v1",
+  "market": "Dubai, UAE",
+  "matching": "Exact normalized word or adjacent-token phrase match only; no broad fuzzy matching.",
+  "developers": [
+    { "key": "emaar", "name": "Emaar", "variants": ["emaar", "emaar properties", "emar", "عمار", "إعمار"] },
+    { "key": "damac", "name": "DAMAC", "variants": ["damac", "damak", "d mac", "dmac", "demac", "داماك", "داماک", "دامك", "دماك"] },
+    { "key": "nakheel", "name": "Nakheel", "variants": ["nakheel", "nakhil", "nakil", "نخيل"] },
+    { "key": "sobha", "name": "Sobha", "variants": ["sobha", "shobha", "sobha realty", "شوبا", "سوبها"] },
+    { "key": "meraas", "name": "Meraas", "variants": ["meraas", "meras", "مراس"] },
+    { "key": "dubai-properties", "name": "Dubai Properties", "variants": ["dubai properties", "dubai property", "دبي للعقارات", "دبي بروبرتيز"] },
+    { "key": "azizi", "name": "Azizi", "variants": ["azizi", "azizi developments", "azeezi", "عزيزي"] },
+    { "key": "binghatti", "name": "Binghatti", "variants": ["binghatti", "bingatti", "بن غاطي", "بنغاطي"] },
+    { "key": "danube", "name": "Danube", "variants": ["danube", "danube properties", "danoob", "دانوب"] },
+    { "key": "aldar", "name": "Aldar", "variants": ["aldar", "al dar", "الدار"] },
+    { "key": "ellington", "name": "Ellington", "variants": ["ellington", "ellington properties", "elington", "إلينغتون"] },
+    { "key": "omniyat", "name": "OMNIYAT", "variants": ["omniyat", "omniyath", "أمنيات"] },
+    { "key": "select-group", "name": "Select Group", "variants": ["select group", "select properties", "سيليكت جروب"] },
+    { "key": "majid-al-futtaim", "name": "Majid Al Futtaim", "variants": ["majid al futtaim", "majid al futaim", "ماجد الفطيم"] },
+    { "key": "wasl", "name": "Wasl", "variants": ["wasl", "wasl properties", "وصل", "واصل"] },
+    { "key": "deyaar", "name": "Deyaar", "variants": ["deyaar", "deyar", "ديار"] },
+    { "key": "arada", "name": "Arada", "variants": ["arada", "arada developments", "أرادَ", "ارادَ"] },
+    { "key": "samana", "name": "Samana", "variants": ["samana", "samana developers", "سمانا"] },
+    { "key": "imtiaz", "name": "Imtiaz", "variants": ["imtiaz", "imtiaz developments", "امتياز"] },
+    { "key": "tiger", "name": "Tiger Properties", "variants": ["tiger properties", "tiger group", "تايجر العقارية"] },
+    { "key": "reportage", "name": "Reportage", "variants": ["reportage", "reportage properties", "ريبورتاج"] },
+    { "key": "mag", "name": "MAG", "variants": ["mag", "mag properties", "mag lifestyle", "ماج"] },
+    { "key": "nshama", "name": "Nshama", "variants": ["nshama", "نشاما"] },
+    { "key": "bloom", "name": "Bloom", "variants": ["bloom", "bloom properties", "بلوم"] }
+  ]
+}
