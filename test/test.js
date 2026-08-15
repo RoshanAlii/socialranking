@@ -827,6 +827,7 @@ const soloRegistry = {
     assert.match(workflow, /if: failure\(\)/, 'a silent failure looks exactly like a stalled board');
     assert.match(workflow, /node src\/roster\.js verify/);
     assert.ok(!/git add[^\n]*data\/raw/.test(workflow), 'raw captures are an artifact, not repository history');
+    assert.match(workflow, /git restore --source=HEAD --worktree -- data\/raw/, 'audit-only captures cannot block the publish rebase');
     assert.match(workflow, /data\/apify-usage\.json data\/refresh-status\.json/);
     const ignore = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
     assert.match(ignore, /data\/raw\//);
