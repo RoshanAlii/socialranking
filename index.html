@@ -2391,18 +2391,39 @@
       return Number.isFinite(timestamp) ? (Date.now() - timestamp) / 3600000 : Infinity;
     };
     const currentUsage = () => {
-      const reported = REFRESH_STATUS?.usage || DATA?.meta?.providerTelemetry?.monthly;
-      if (reported && isNumber(reported.usageUsd)) return reported;
       const observations = (APIFY_USAGE?.observations || []).filter(row => isNumber(row.platformUsageUsd));
-      const latest = observations.sort((a, b) => Date.parse(b.at || '') - Date.parse(a.at || ''))[0];
-      return latest ? {
-        usageUsd: latest.platformUsageUsd,
-        softLimitUsd: APIFY_USAGE?.softLimitUsd,
-        planLimitUsd: APIFY_USAGE?.planLimitUsd,
-        softWarning: latest.platformUsageUsd >= APIFY_USAGE?.softLimitUsd,
-        remainingToSoftLimitUsd: Math.max(0, (APIFY_USAGE?.softLimitUsd || 0) - latest.platformUsageUsd),
-        observedAt: latest.at
-      } : null;
+      const usageCandidates = [
+        REFRESH_STATUS?.usage,
+        DATA?.meta?.providerTelemetry?.monthly,
+        ...observations.map(row => ({
+          usageUsd: row.platformUsageUsd,
+          softLimitUsd: APIFY_USAGE?.softLimitUsd,
+          planLimitUsd: APIFY_USAGE?.planLimitUsd,
+          observedAt: row.at
+        }))
+      ].filter(row => row && isNumber(row.usageUsd));
+      const latest = usageCandidates.sort((a, b) => {
+        const timeDifference = Date.parse(b.observedAt || '') - Date.parse(a.observedAt || '');
+        return Number.isFinite(timeDifference) && timeDifference !== 0
+          ? timeDifference
+          : b.usageUsd - a.usageUsd;
+      })[0];
+      if (!latest) return null;
+      const softLimitUsd = isNumber(latest.softLimitUsd)
+        ? latest.softLimitUsd
+        : APIFY_USAGE?.softLimitUsd;
+      const planLimitUsd = isNumber(latest.planLimitUsd)
+        ? latest.planLimitUsd
+        : APIFY_USAGE?.planLimitUsd;
+      return {
+        ...latest,
+        softLimitUsd,
+        planLimitUsd,
+        softWarning: isNumber(softLimitUsd) ? latest.usageUsd >= softLimitUsd : false,
+        remainingToSoftLimitUsd: isNumber(softLimitUsd)
+          ? Math.max(0, softLimitUsd - latest.usageUsd)
+          : null
+      };
     };
     const registryIsValid = () => {
       const employees = REGISTRY?.employees || [];
