@@ -863,6 +863,7 @@ const soloRegistry = {
     const dictionary = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'developer-dictionary.json'), 'utf8'));
     assert.match(workflow, /--check-due/);
     assert.match(workflow, /src\/developer_intelligence\.py/);
+    assert.match(workflow, /ref: main/, 'a queued run must evaluate the latest successful report');
     assert.match(script, /RUN_INTERVAL_DAYS = 14/);
     assert.match(script, /oneTranscriptPerReel/);
     assert.ok(dictionary.developers.length >= 20);

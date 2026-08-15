@@ -35,6 +35,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          # A run can wait behind an earlier roster-wide transcription pass.
+          # Re-check the current report on main instead of an obsolete queued SHA,
+          # otherwise that queued run can repeat the same paid Actor collection.
+          ref: main
 
       - name: Check whether the 14-day analysis is due
         id: due
