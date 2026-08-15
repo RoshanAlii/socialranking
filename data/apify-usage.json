@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-15T09:05:00Z",
+  "updatedAt": "2026-08-15T09:58:55Z",
   "softLimitUsd": 4.25,
   "planLimitUsd": 5,
   "observations": [
@@ -10,7 +10,41 @@
       "periodStart": "2026-08-12T00:00:00Z",
       "periodEnd": "2026-09-11T23:59:59Z",
       "source": "Apify console current-period read"
+    },
+    {
+      "at": "2026-08-15T09:58:55Z",
+      "platformUsageUsd": 4.2,
+      "periodStart": "2026-08-12T00:00:00Z",
+      "periodEnd": "2026-09-11T23:59:59Z",
+      "source": "Apify console current-period read after live recovery"
     }
   ],
-  "runs": []
+  "runs": [
+    {
+      "at": "2026-08-15T09:48:17Z",
+      "captureAt": "2026-08-15T09:47:52.000Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "Ny1fPGEgaMWh7rhxb",
+      "itemCount": 31,
+      "durationMs": 24000,
+      "costUsd": 0.081,
+      "error": null
+    },
+    {
+      "at": "2026-08-15T09:49:28Z",
+      "captureAt": "2026-08-15T09:47:52.000Z",
+      "actor": "apify~instagram-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "Hieqhlme3LtyeUMLs",
+      "itemCount": 277,
+      "durationMs": 71000,
+      "costUsd": 0.748,
+      "error": null
+    }
+  ]
 }
