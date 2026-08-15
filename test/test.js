@@ -259,6 +259,24 @@ const soloRegistry = {
     assert.strictEqual(raw._postsOwnershipComplete, false);
     assert.strictEqual(raw.recentPosts.length, 0);
   });
+  await test('provider accepts an attributable no-items control row without counting it as a post', async () => {
+    const runSync = async actor => actor === P.PROFILE_ACTOR
+      ? [{ username: 'a', followersCount: 1000, postsCount: 50 }]
+      : [{
+        url: 'https://www.instagram.com/a/',
+        inputUrl: 'https://www.instagram.com/a/',
+        requestErrorMessages: [],
+        error: 'no_items',
+        errorDescription: 'Empty or private data for provided input',
+      }];
+    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
+    const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
+    assert.strictEqual(raw._postsQuerySucceeded, true);
+    assert.strictEqual(raw._postsOwnershipComplete, true);
+    assert.strictEqual(raw._postsNoItems, true);
+    assert.strictEqual(raw._missingOwnerCount, 0);
+    assert.strictEqual(raw.recentPosts.length, 0);
+  });
 
   console.log('\nLEADERBOARD CROSS-CHECK');
   await test('postingFrequency stores the explicit formula inputs', () => {

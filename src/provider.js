@@ -79,6 +79,25 @@ function postOwner(item) {
       item.authorMeta?.name || item.owner?.username || item.owner?.userName)
   );
 }
+function postInputHandle(item) {
+  // Only inputUrl identifies the requested profile. A post's own /p/... URL
+  // must never be mistaken for owner evidence.
+  const value = item && item.inputUrl;
+  if (!value) return null;
+  try {
+    const parts = new URL(value).pathname.split('/').filter(Boolean);
+    return canonicalHandle(parts[0]);
+  } catch (_) {
+    return null;
+  }
+}
+function isNoItemsControlRow(item) {
+  return Boolean(
+    item && !postOwner(item) && item.error === 'no_items' &&
+    /empty or private data/i.test(String(item.errorDescription || '')) &&
+    postInputHandle(item)
+  );
+}
 function tiktokInput(handle) {
   const since = new Date(Date.now() - INSTAGRAM_POST_LOOKBACK_DAYS * 24 * 60 * 60 * 1000);
   return {
@@ -362,7 +381,9 @@ class ApifyProvider {
       batchError = error;
     }
     const rawRows = Array.isArray(rows) ? rows : [];
-    const missingOwnerCount = rawRows.filter(item => !postOwner(item)).length;
+    const ownerlessRows = rawRows.filter(item => !postOwner(item));
+    const noItemsHandles = new Set(ownerlessRows.filter(isNoItemsControlRow).map(postInputHandle));
+    const problematicOwnerlessRows = ownerlessRows.filter(item => !isNoItemsControlRow(item));
 
     for (const handle of wanted) {
       const details = profiles.get(handle);
@@ -374,6 +395,11 @@ class ApifyProvider {
       if (!batchError) {
         const freshPosts = groupPostItems(handle, rows);
         const posts = this.mergePosts(handle, freshPosts);
+        const handleProblems = problematicOwnerlessRows.filter(item => {
+          const inputHandle = postInputHandle(item);
+          return !inputHandle || inputHandle === canonicalHandle(handle);
+        });
+        const missingOwnerCount = handleProblems.length;
         const postsOwnershipComplete = missingOwnerCount === 0;
         out.set(handle, Object.assign({}, details, {
           recentPosts: posts,
@@ -390,6 +416,7 @@ class ApifyProvider {
           _postsTruncated: freshPosts.length >= INSTAGRAM_POST_RESULTS_LIMIT,
           _postsOwnershipComplete: postsOwnershipComplete,
           _missingOwnerCount: missingOwnerCount,
+          _postsNoItems: noItemsHandles.has(canonicalHandle(handle)),
           _rawPostCount: posts.length,
           _incremental: lookbackDays < INSTAGRAM_POST_LOOKBACK_DAYS,
           _incrementalLookbackDays: lookbackDays,
@@ -562,6 +589,8 @@ module.exports = {
   instagramPostsBatchInput,
   groupProfileItems,
   groupPostItems,
+  postInputHandle,
+  isNoItemsControlRow,
   canonicalHandle,
   waitForApifyRun,
   apifyRunSync,
