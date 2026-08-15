@@ -20,6 +20,7 @@ const APIFY_MAX_RUN_CHARGE_USD = Number(process.env.APIFY_MAX_RUN_CHARGE_USD || 
 // run. Keep one slot of headroom so profile-run cleanup cannot starve a post
 // pull with actor-memory-limit-exceeded errors.
 const POST_FETCH_CONCURRENCY = Number(process.env.APIFY_IG_POST_CONCURRENCY || 3);
+const APIFY_TERMINAL_STATES = new Set(['SUCCEEDED', 'FAILED', 'TIMED-OUT', 'ABORTED']);
 
 function seed(str) {
   let h = 2166136261;
@@ -138,6 +139,39 @@ function apifyRequest(method, requestPath, token, body = null, timeoutMs = RUN_T
   });
 }
 
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+async function waitForApifyRun(initialRun, token, timeoutMs = RUN_TIMEOUT_MS, opts = {}) {
+  let run = initialRun;
+  if (!run?.id) throw new Error('Apify run response omitted the run id');
+  const request = opts.request || apifyRequest;
+  const now = opts.now || Date.now;
+  const pause = opts.sleep || sleep;
+  const deadline = now() + timeoutMs;
+  while (!APIFY_TERMINAL_STATES.has(run.status)) {
+    const remaining = deadline - now();
+    if (remaining <= 0) {
+      const error = new Error(`Apify run ${run.id} did not finish within ${timeoutMs}ms`);
+      error.retryable = true;
+      error.run = run;
+      throw error;
+    }
+    const waitSeconds = Math.max(1, Math.min(60, Math.floor(remaining / 1000)));
+    const result = await request(
+      'GET',
+      `/v2/actor-runs/${encodeURIComponent(run.id)}?waitForFinish=${waitSeconds}`,
+      token,
+      null,
+      Math.max(5000, Math.min(70000, remaining + 1000)),
+    );
+    run = result?.data || result;
+    if (!APIFY_TERMINAL_STATES.has(run?.status) && deadline > now()) {
+      await pause(Math.min(1000, Math.max(0, deadline - now())));
+    }
+  }
+  return run;
+}
+
 /*
  * Start an Actor run explicitly, then read its dataset. The older
  * run-sync-get-dataset-items shortcut returned only rows, which made the real
@@ -145,7 +179,7 @@ function apifyRequest(method, requestPath, token, body = null, timeoutMs = RUN_T
  * refresh can be tied back to Apify without estimating from elapsed time.
  */
 async function apifyRunOnce(actor, input, token, timeoutMs = RUN_TIMEOUT_MS) {
-  const waitSeconds = Math.max(1, Math.min(300, Math.floor(timeoutMs / 1000)));
+  const waitSeconds = Math.max(1, Math.min(60, Math.floor(timeoutMs / 1000)));
   const started = await apifyRequest(
     'POST',
     `/v2/acts/${actor}/runs?waitForFinish=${waitSeconds}&memory=1024&maxTotalChargeUsd=${APIFY_MAX_RUN_CHARGE_USD}`,
@@ -153,8 +187,9 @@ async function apifyRunOnce(actor, input, token, timeoutMs = RUN_TIMEOUT_MS) {
     input,
     timeoutMs,
   );
-  const run = started?.data || started;
-  if (!run?.id || !run?.defaultDatasetId) throw new Error('Apify run response omitted the run or dataset id');
+  let run = started?.data || started;
+  run = await waitForApifyRun(run, token, timeoutMs);
+  if (!run?.defaultDatasetId) throw new Error('Apify run response omitted the dataset id');
   if (run.status !== 'SUCCEEDED') {
     const error = new Error(`Apify run ${run.id} ended ${run.status || 'without a status'}${run.statusMessage ? `: ${run.statusMessage}` : ''}`);
     error.retryable = ['FAILED', 'TIMED-OUT', 'ABORTED'].includes(run.status);
@@ -182,8 +217,6 @@ function isRetryable(error) {
   if (status === 429 || (status >= 500 && status < 600)) return true;
   return /ECONNRESET|ETIMEDOUT|EAI_AGAIN|ENOTFOUND|socket hang up|timed out/i.test(String(error?.message || ''));
 }
-
-function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
 async function apifyRunSync(actor, input, token, opts = {}) {
   const attempts = Math.max(1, opts.retries ?? RUN_RETRIES);
@@ -530,6 +563,7 @@ module.exports = {
   groupProfileItems,
   groupPostItems,
   canonicalHandle,
+  waitForApifyRun,
   apifyRunSync,
   mapLimit,
 };

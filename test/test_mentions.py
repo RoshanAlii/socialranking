@@ -23,6 +23,7 @@ from src.developer_intelligence import (
     incremental_lookback,
     normalized_dictionary,
     select_roster_reels,
+    wait_for_apify_run,
 )
 
 
@@ -127,6 +128,31 @@ class ReelMentionTests(unittest.TestCase):
 
 
 class DeveloperIntelligenceTests(unittest.TestCase):
+    def test_nonterminal_apify_run_is_polled_until_success(self):
+        class Response:
+            status_code = 200
+            text = ""
+
+            def __init__(self, status):
+                self.status = status
+
+            def json(self):
+                return {"data": {"id": "run-1", "status": self.status, "defaultDatasetId": "data-1"}}
+
+        class Requests:
+            def __init__(self):
+                self.statuses = iter(["RUNNING", "SUCCEEDED"])
+                self.calls = 0
+
+            def get(self, *_args, **_kwargs):
+                self.calls += 1
+                return Response(next(self.statuses))
+
+        requests = Requests()
+        run = wait_for_apify_run(requests, "token", {"id": "run-1", "status": "READY"}, 5)
+        self.assertEqual(run["status"], "SUCCEEDED")
+        self.assertEqual(requests.calls, 2)
+
     def test_active_roster_uses_only_confirmed_kirpa_instagram_creators(self):
         roster = {
             "activePlatforms": ["instagram"],
