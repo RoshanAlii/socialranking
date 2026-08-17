@@ -27,8 +27,8 @@ It runs on a schedule with **no Instagram logins and no passwords**. It reads on
 - **CSV export is reproducible.** The roster explorer can export all people and all supported analytics, including confidence and metric-coverage columns, for independent checking.
 - **Trends are drawn from a separate, tiny history file.** Every successful capture appends one small numeric point per profile to `data/series.json` — no captions, no post bodies. Failed pulls append nothing. The file is derived state and can be rebuilt from history at any time with `node src/backfill-series.js`.
 - **A chart clears the same bar as a ranking.** Each trend point records the roster version it was measured against and whether the validator accepted it. Points from a superseded roster, or from a capture that never passed validation, are counted and reported as *set aside* rather than plotted. A line that kept moving while the rankings were paused would quietly undo the pause.
-- **Improvement is inside the score.** When a valid 5–9 day baseline exists, follower growth becomes a weighted component of the momentum score (10% followers / 40% engagement / 30% cadence / 20% growth). Without a baseline the score falls back to the reviewed 15/45/40 set, and the composition in force is published beside the board. A profile with no baseline is held, not scored as flat.
-- **Content analysis is judged against each poster's own baseline.** Rate alone still carries the account inside it: a hashtag used mainly by two small, highly engaged profiles looks like a brilliant hashtag when it is really just those two profiles. So a tag, time slot or caption length is scored by how far its typical post beat *that post's own author's* typical post. A hashtag needs 5+ posts across 3+ profiles, a time slot needs 3+ posts, or it is withheld. Times are stated in Asia/Dubai (UTC+4).
+- **Improvement is inside the score.** When a valid same-roster baseline 5–11 days old exists, follower growth is normalized to a seven-day rate and becomes a weighted component of the momentum score (10% followers / 40% engagement / 30% cadence / 20% growth). Without a baseline the score falls back to the reviewed 15/45/40 set, and the composition in force is published beside the board. A profile with no baseline is held, not scored as flat. The components use mid-rank percentiles instead of outlier-sensitive min/max scaling; follower base and cadence are log-scaled, and engagement is reliability-adjusted toward the team median with a five-post minimum.
+- **Content analysis is judged against each poster's own baseline.** Rate alone still carries the account inside it: a hashtag used mainly by two small, highly engaged profiles looks like a brilliant hashtag when it is really just those two profiles. So a tag, time slot or caption length is scored by how far its typical post beat *that post's own author's* typical post. A hashtag needs 5+ posts across 3+ profiles; a time slot needs 8+ posts across 3+ profiles, or it is withheld. Times are stated in Asia/Dubai (UTC+4).
 - **There is no hashtag recommendation.** The panel publishes what the data says; it does not turn it into advice. On the first real run the tags that cleared every sample bar were the generic ones everybody already uses, and the engine cheerfully recommended `#insta` to 22 of 31 people. That is a statistic pretending to be a suggestion, and it was removed rather than tuned.
 - **Advice carries the number that produced it.** Each person gets up to three next actions derived from their own format mix, cadence, quiet time and the team's timing data — "reels earn 2.3× the typical rate of your images but are 20% of your posts" rather than "repeat what works". Profiles without a provable window get no advice at all.
 - **Opting out is honoured at the network boundary.** `optOut: true` in the registry means no fetch, no stored posts, no leaderboard row, no analytics, no export line — the person keeps a roster row reading *Opted out of measurement*. `node src/roster.js opt-out "Name"` also removes their handle from the published registry, and the validator fails the snapshot if an opted-out account appears anywhere in it.
@@ -40,14 +40,14 @@ The product brief and complete scorecard are in [`PRODUCT_PLAN.md`](PRODUCT_PLAN
 
 ### What the board currently shows
 
-The published `data/latest.json` is the last validator-passed **live capture from 13 August 2026**. A later provider attempt hit the legacy token's account limit, so the dashboard correctly retained this snapshot while publishing the refresh failure separately:
+The published `data/latest.json` is a validator-passed **captured replay from 15 August 2026**. A later provider attempt did not clear the coverage gate, so the dashboard correctly retained this snapshot while publishing the refresh failure separately:
 
 | | |
 |---|---|
 | Profiles resolved | 31 of 31 confirmed handles |
-| Complete 30-day windows | 28 |
-| Posts measured in the window | 887 |
-| Ranked on momentum | 21 |
+| Complete 30-day windows | 31 |
+| Posts measured in the window | 838 |
+| Ranked on momentum | 22 |
 | No confirmed handle in the workbook | 7 |
 
 The twice-weekly workflow now prefers the active `APIFY_TOKEN_MENTION_COUNT`

@@ -119,22 +119,13 @@
       min-width: 0;
     }
     .brand-mark {
-      width: 42px;
+      width: 142px;
       height: 42px;
       flex: 0 0 auto;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: var(--ink);
-      color: #fff;
-      box-shadow: 0 8px 25px rgba(23, 23, 23, .18);
+      display: block;
+      color: var(--ink);
     }
-    .brand-mark::before {
-      content: "✦";
-      font-size: 24px;
-      line-height: 1;
-      transform: translateY(-1px);
-    }
+    .brand-mark svg { display: block; width: 100%; height: 100%; }
     .brand-name {
       margin: 0;
       font-size: 17px;
@@ -412,6 +403,19 @@
       letter-spacing: -.015em;
     }
     .mention-story p { margin: 0; color: rgba(255, 255, 255, .66); font-size: 9px; }
+    .developer-breakdown { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 11px; }
+    .developer-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .07);
+      font-size: 8px;
+    }
+    .developer-chip b { color: #fff; }
+    .developer-chip span { color: rgba(255, 255, 255, .66); }
     .mention-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .mention-metric {
       min-width: 0;
@@ -1162,7 +1166,7 @@
     }
     .record-card {
       min-width: 0;
-      min-height: 190px;
+      min-height: 290px;
       padding: 17px;
       overflow: hidden;
     }
@@ -1210,8 +1214,30 @@
       font: 400 29px/1 "DM Serif Display", Georgia, serif;
       letter-spacing: -.03em;
     }
+    .record-list { display: grid; gap: 0; margin: 9px 0 0; padding: 0; list-style: none; }
+    .record-list li {
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 8px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+    }
+    .record-card.featured .record-list li { border-color: rgba(255, 255, 255, .11); }
+    .record-rank {
+      width: 19px;
+      height: 19px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--paper-warm);
+      color: var(--dust);
+      font-size: 7px;
+      font-weight: 800;
+    }
+    .record-card.featured .record-rank { background: rgba(255, 255, 255, .1); color: var(--orange-soft); }
+    .record-entry { min-width: 0; }
     .record-person {
-      margin-top: 10px;
+      margin-left: 7px;
       font-size: 10px;
       font-weight: 800;
     }
@@ -1227,7 +1253,7 @@
     .record-card.featured .record-caption { color: rgba(255,255,255,.62); }
     .record-link {
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 5px;
       color: var(--orange-deep);
       font-size: 8.5px;
       font-weight: 800;
@@ -1286,6 +1312,7 @@
       font: 400 23px/1 "DM Serif Display", Georgia, serif;
     }
     .format-card > p { margin: 4px 0 0; color: var(--dust); font-size: 8px; }
+    .format-card > p.format-definition { min-height: 32px; margin-top: 8px; line-height: 1.45; }
     .format-bars {
       display: grid;
       gap: 5px;
@@ -1657,7 +1684,7 @@
     .status.private { background: #f7e8e8; color: var(--crimson); }
     .status.awaiting { background: #e9eef7; color: var(--blue); }
     .status.attention,
-    .status.unranked,
+    .status.limited,
     .status.incomplete { background: #fbf0df; color: var(--amber); }
     .status.context { background: #fff0e9; color: var(--orange-deep); }
     .status.unconfirmed { background: #fce9e2; color: var(--orange-deep); }
@@ -1785,7 +1812,7 @@
       .command { min-height: 238px; }
       .command-inner { padding-top: 17px; }
       .command-top { gap: 12px; }
-      .brand-mark { width: 37px; height: 37px; border-radius: 11px; }
+      .brand-mark { width: 112px; height: 37px; }
       .brand-name { font-size: 14px; }
       .brand-sub { font-size: 8px; }
       .stamp { min-width: 0; max-width: 145px; font-size: 9px; }
@@ -1951,16 +1978,31 @@
     .heatmap { display: grid; grid-template-columns: 42px repeat(6, 1fr); gap: 3px; font-size: 9.5px; }
     .heatmap span { color: var(--dust); text-align: center; padding: 2px 0; }
     .heatmap span.row-label { text-align: left; }
-    .heatmap i {
-      display: block; height: 22px; border-radius: 5px; background: var(--paper-warm);
-      border: 1px solid var(--line); position: relative;
+    .heatmap button {
+      display: block; width: 100%; height: 24px; padding: 0; border-radius: 5px; background: var(--paper-warm);
+      border: 1px solid var(--line); position: relative; cursor: pointer;
     }
-    .heatmap i[data-level="0"] { opacity: .45; }
-    .heatmap i[data-level="1"] { background: rgba(241, 90, 41, .16); border-color: transparent; }
-    .heatmap i[data-level="2"] { background: rgba(241, 90, 41, .34); border-color: transparent; }
-    .heatmap i[data-level="3"] { background: rgba(241, 90, 41, .58); border-color: transparent; }
-    .heatmap i[data-level="4"] { background: rgba(241, 90, 41, .82); border-color: transparent; }
+    .heatmap button:disabled { cursor: default; }
+    .heatmap button:focus-visible { outline: 3px solid rgba(241, 90, 41, .28); outline-offset: 1px; }
+    .heatmap button[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--ink); }
+    .heatmap button[data-level="0"] { opacity: .45; }
+    .heatmap button[data-level="1"] { background: rgba(241, 90, 41, .16); border-color: transparent; }
+    .heatmap button[data-level="2"] { background: rgba(241, 90, 41, .34); border-color: transparent; }
+    .heatmap button[data-level="3"] { background: rgba(241, 90, 41, .58); border-color: transparent; }
+    .heatmap button[data-level="4"] { background: rgba(241, 90, 41, .82); border-color: transparent; }
     .heat-note { margin: 9px 0 0; color: var(--dust); font-size: 10.5px; }
+    .timing-detail {
+      display: grid;
+      gap: 2px;
+      min-height: 48px;
+      margin-top: 9px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper-warm);
+      font-size: 10px;
+    }
+    .timing-detail span { color: var(--dust); }
 
     .goal-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: center; margin-bottom: 9px; }
     .goal-row b { font-size: 12px; font-weight: 600; }
@@ -2003,9 +2045,17 @@
     <div class="command-inner">
       <div class="command-top">
         <div class="brand">
-          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-mark">
+            <svg viewBox="1 0.1 2731.6 804.6" role="img" aria-label="Kirpa Properties">
+              <path fill="currentColor" d="M324.5 323.7c.4-1.7 35.6-165.8 0-323.5-35.6 157.4-.5 321.2 0 323.5C323 321.6 184.1 125.1 2 1.1c132.4 190.6 321 321.5 322.5 322.5C166 287.8 1 323.6 1 323.6s165 35.8 323.5 0C141.5 448.3 2 646.2 2 646.2s189.6-131.1 322.5-322.5c-35.8 158.5 0 323.5 0 323.5s35.8-165 0-323.5C457.4 515.1 647 646.2 647 646.2s-139.5-198-322.5-322.5c.7.1 165.4 35.7 323.5 0-158-35.7-322.6-.2-323.5 0 2.2-1.5 190.4-132.2 322.5-322.5-182.2 124-321.2 320.6-322.5 322.5"/>
+              <path fill="currentColor" d="M863.1.1v242.4L1081.5 48c17.5-15.7 35.9-31.3 41.5-47.9h130.9L996.8 231.4l205.5 349.3c12 20.3 35.9 51.6 53.4 64.5h-118.9L929.4 290.4 863 350.3v230.4c0 27.6 7.4 48.8 15.7 64.5H773.6V64.7c0-27.6-7.4-48.8-15.7-64.5H863Z"/>
+              <path fill="currentColor" d="M1386.1 580.7c0 27.6 7.4 48.8 15.7 64.5h-102.3V221.3c0-27.6-7.4-48.8-15.7-64.5h102.3z"/>
+              <path fill="currentColor" d="M1576.2 580.7c0 27.6 7.4 48.8 15.7 64.5h-102.3V221.3c0-27.6-7.4-48.8-15.7-64.5h102.3v61.7c23-43.3 82-70 146.5-63.6l-10.1 90.3c-67.3-17.5-120.7 13.8-136.4 68.2z"/>
+              <path fill="currentColor" d="M1785 804.7V221.3c0-27.6-7.4-48.8-15.7-64.5h102.3v63.6c33.2-41.5 93.1-72.8 168.7-72.8 146.5 0 246.1 103.2 246.1 253.4s-99.5 253.4-246.1 253.4-135.5-31.3-168.7-72.8v158.5c0 27.6 7.4 48.8 15.7 64.5H1785Zm86.6-504.1v200.9c30.4 41.5 101.4 74.6 161.3 74.6 98.6 0 166.8-72.8 166.8-175.1s-68.2-175.1-166.8-175.1-130.9 33.2-161.3 74.6Z"/>
+              <path fill="currentColor" d="m2367.6 264.6-18.4-84.8c37.8-16.6 102.3-32.3 162.2-32.3 104.1 0 205.5 44.2 205.5 175.1v258c0 27.6 7.4 48.8 15.7 64.5h-99.5v-55.3c-29.5 38.7-69.1 64.5-142.9 64.5s-154.8-51.6-154.8-133.6 24.9-111.5 165-143.8l129.9-29.5v-23c0-48.8-32.2-98.6-119.8-98.6s-108.8 15.7-142.8 38.7Zm262.6 250.7v-97.7l-107.8 28.6c-86.6 23-100.4 42.4-100.4 73.7s35.9 59 80.2 59 99.5-27.6 128.1-63.6Z"/>
+            </svg>
+          </span>
           <div>
-            <h1 class="brand-name">KIRPA</h1>
             <div class="brand-sub">Properties · Social performance</div>
           </div>
         </div>
@@ -2202,7 +2252,6 @@
             <select class="filter" id="status-filter">
               <option value="all">All statuses</option>
               <option value="measured">Measured</option>
-              <option value="unranked">Unranked</option>
               <option value="attention">Needs attention</option>
               <option value="excluded">Not ranked by role</option>
             </select>
@@ -2857,7 +2906,7 @@
         return { key: 'attention', className: 'incomplete', label: 'Incomplete 30-day coverage' };
       }
       if (!engagementRow) {
-        return { key: 'unranked', className: 'unranked', label: 'Unranked — insufficient comparable data' };
+        return { key: 'measured', className: 'limited', label: 'Measured · building comparison sample' };
       }
       return { key: 'measured', className: 'measured', label: 'Measured' };
     }
@@ -2911,10 +2960,6 @@
       } else if (REFRESH_STATUS?.outcome === 'preserved') {
         title = 'Latest refresh did not replace validated data';
         detail = `${REFRESH_STATUS.reason || 'The provider refresh did not clear its data-quality gates.'} The board remains on the last validated snapshot from ${asOfLabel()}; missing data was not converted to zero.`;
-      } else if (currentUsage()?.softWarning) {
-        const usage = currentUsage();
-        title = 'Apify monthly soft spend warning';
-        detail = `$${Number(usage.usageUsd).toFixed(2)} has been observed against the $${Number(usage.softLimitUsd).toFixed(2)} soft limit. Validated data remains visible while paid refreshes are reviewed.`;
       } else if (isArchived()) {
         const age = snapshotAge();
         title = `Showing the validated board as of ${asOfLabel()}`;
@@ -3146,7 +3191,8 @@
         : 'time unavailable';
       const rate = isNumber(report.developerShare) ? `${Math.round(report.developerShare * 100)}%` : '—';
       const prefix = partial ? '≥' : '';
-      const topDevelopers = (report.developers || []).filter(row => row.reels > 0).slice(0, 3);
+      const mentionedDevelopers = (report.developers || []).filter(row => row.reels > 0);
+      const topDevelopers = mentionedDevelopers.slice(0, 3);
       element.classList.toggle('attention', partial || stale);
       element.innerHTML = `
         <div class="mention-story">
@@ -3155,6 +3201,9 @@
           <p>${partial
             ? `${report.failedReels} Reel${report.failedReels === 1 ? '' : 's'} could not be processed; totals are confirmed minimums.`
             : `${fmt(report.activeCreators)} active confirmed creators · ${fmt(report.developerDiversity)} developers detected · updated ${esc(measured)}${stale ? ' · refresh overdue' : ''}.`}</p>
+          ${mentionedDevelopers.length ? `<div class="developer-breakdown" aria-label="Developer mention breakdown">
+            ${mentionedDevelopers.map(row => `<span class="developer-chip"><b>${esc(row.name)}</b><span>${prefix}${fmt(row.totalMentions)} mention${row.totalMentions === 1 ? '' : 's'} · ${prefix}${fmt(row.reels)} Reel${row.reels === 1 ? '' : 's'}</span></span>`).join('')}
+          </div>` : ''}
         </div>
         <div class="mention-metrics">
           <div class="mention-metric">
@@ -3300,11 +3349,11 @@
           <summary>How is momentum calculated?</summary>
           <div class="momentum-formula-body">
             <span class="momentum-formula-equation">${esc(formula.equation)}</span>
-            <p>Each input is min–max normalized from 0 to 1 across eligible profiles in the selected window, then the active weights are applied.</p>
+            <p>Each input is converted to an outlier-resistant mid-rank percentile across eligible profiles. Follower base and cadence are log-scaled; engagement is adjusted toward the team median when its sample is smaller.</p>
             <p>${formula.growthIncluded
-              ? 'This snapshot includes follower growth because a valid 5–9 day baseline exists.'
+              ? 'This snapshot includes seven-day-normalized follower growth from the nearest same-roster baseline 5–11 days old.'
               : 'No valid follower-growth baseline is available, so the reviewed fallback is 15% followers, 45% engagement, and 40% cadence.'}</p>
-            <p>Eligibility requires complete window coverage and at least 3 comparable, non-pinned posts. Unknown inputs are never scored as zero.</p>
+            <p>Eligibility requires complete window coverage and at least 5 comparable posts. Unknown inputs are never scored as zero.</p>
           </div>
         </details>` : ''}
       `;
@@ -3331,7 +3380,7 @@
             <div class="spot-media">
               ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${sampleTop.name} observed post preview`)}">` : ''}
               <div class="media-fallback" ${thumb ? 'hidden' : ''}>
-                <div><span class="fallback-mark">${esc(initials(sampleTop.name))}</span><b>Preview unavailable</b><span>The public post link may still be available.</span></div>
+                <div><span class="fallback-mark">${esc(initials(sampleTop.name))}</span><b>Instagram highlight</b><span>Open the public post for the original media.</span></div>
               </div>
             </div>
             <div class="spot-body">
@@ -3386,8 +3435,8 @@
           <div class="media-fallback" ${thumb ? 'hidden' : ''}>
             <div>
               <span class="fallback-mark">${esc(initials(top.name))}</span>
-              <b>Preview unavailable</b>
-              <span>The post link still opens the public source.</span>
+              <b>Instagram highlight</b>
+              <span>Open the public post for the original media.</span>
             </div>
           </div>
         </div>
@@ -3437,8 +3486,8 @@
       });
     }
 
-    function contentRecordCard({ title, value, item, basis, icon, featured = false }) {
-      const postUrl = safeUrl(item?.post?.url);
+    function contentRecordCard({ title, value, items, basis, icon, featured = false }) {
+      const rankedItems = (items || []).slice(0, 3);
       return `
         <article class="panel record-card ${featured ? 'featured' : ''}">
           <div class="record-top">
@@ -3446,12 +3495,17 @@
             <span class="record-basis">${esc(basis)}</span>
           </div>
           <h3>${esc(title)}</h3>
-          ${item ? `
-            <div class="record-value">${esc(value)}</div>
-            <div class="record-person">${esc(item.name)}</div>
-            <div class="record-caption">${esc(item.post?.caption || `${item.post?.type || 'Instagram'} post`)}</div>
-            ${postUrl ? `<a class="record-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open post ↗</a>` : ''}
-          ` : `<div class="record-empty">This metric is not publicly reported in the current snapshot.</div>`}
+          ${rankedItems.length ? `<ol class="record-list">${rankedItems.map((item, index) => {
+            const postUrl = safeUrl(item?.post?.url);
+            return `<li>
+              <span class="record-rank">${index + 1}</span>
+              <div class="record-entry">
+                <div><span class="record-value">${esc(value(item))}</span><span class="record-person">${esc(item.name)}</span></div>
+                <div class="record-caption">${esc(item.post?.caption || `${item.post?.type || 'Instagram'} post`)}</div>
+                ${postUrl ? `<a class="record-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open post ↗</a>` : ''}
+              </div>
+            </li>`;
+          }).join('')}</ol>` : `<div class="record-empty">This metric is not publicly reported in the current snapshot.</div>`}
         </article>
       `;
     }
@@ -3459,61 +3513,61 @@
     function renderRecords() {
       const rows = contentRows();
       const basis = isAudited() ? 'Validated 30-day window' : 'Observed legacy sample';
-      const mostInteractions = rows.filter(row => isNumber(row.interactions)).sort((a, b) => b.interactions - a.interactions)[0];
-      const mostLikes = rows.filter(row => isNumber(row.post.likes)).sort((a, b) => b.post.likes - a.post.likes)[0];
-      const mostComments = rows.filter(row => isNumber(row.post.comments)).sort((a, b) => b.post.comments - a.post.comments)[0];
+      const mostInteractions = rows.filter(row => isNumber(row.interactions)).sort((a, b) => b.interactions - a.interactions).slice(0, 3);
+      const mostLikes = rows.filter(row => isNumber(row.post.likes)).sort((a, b) => b.post.likes - a.post.likes).slice(0, 3);
+      const mostComments = rows.filter(row => isNumber(row.post.comments)).sort((a, b) => b.post.comments - a.post.comments).slice(0, 3);
       const mostViews = rows.filter(row => (
         (row.post.type === 'video' || row.post.type === 'reel') && isNumber(row.post.views)
-      )).sort((a, b) => b.post.views - a.post.views)[0];
+      )).sort((a, b) => b.post.views - a.post.views).slice(0, 3);
       const topVideo = rows.filter(row => (
         (row.post.type === 'video' || row.post.type === 'reel') && isNumber(row.interactions)
-      )).sort((a, b) => b.interactions - a.interactions)[0];
+      )).sort((a, b) => b.interactions - a.interactions).slice(0, 3);
       const latest = rows.filter(row => Number.isFinite(Date.parse(row.post.postedAt || '')))
-        .sort((a, b) => Date.parse(b.post.postedAt) - Date.parse(a.post.postedAt))[0];
+        .sort((a, b) => Date.parse(b.post.postedAt) - Date.parse(a.post.postedAt)).slice(0, 3);
       byId('records-note').textContent = isAudited()
         ? 'Verified against complete profile windows'
         : 'Directional records inside the returned sample';
       byId('records').innerHTML = [
         contentRecordCard({
           title: 'Highest supported interactions',
-          value: fmt(mostInteractions?.interactions),
-          item: mostInteractions,
+          value: item => fmt(item.interactions),
+          items: mostInteractions,
           basis,
           icon: 'Σ',
           featured: true
         }),
         contentRecordCard({
           title: 'Most liked post',
-          value: fmt(mostLikes?.post?.likes),
-          item: mostLikes,
+          value: item => fmt(item.post?.likes),
+          items: mostLikes,
           basis,
           icon: '♥'
         }),
         contentRecordCard({
           title: 'Highest comments',
-          value: fmt(mostComments?.post?.comments),
-          item: mostComments,
+          value: item => fmt(item.post?.comments),
+          items: mostComments,
           basis,
           icon: '↳'
         }),
         contentRecordCard({
           title: 'Most viewed video',
-          value: fmt(mostViews?.post?.views),
-          item: mostViews,
-          basis: mostViews ? `${basis} · public views` : basis,
+          value: item => fmt(item.post?.views),
+          items: mostViews,
+          basis: mostViews.length ? `${basis} · public views` : basis,
           icon: '▶'
         }),
         contentRecordCard({
           title: 'Top video interactions',
-          value: fmt(topVideo?.interactions),
-          item: topVideo,
+          value: item => fmt(item.interactions),
+          items: topVideo,
           basis,
           icon: 'V'
         }),
         contentRecordCard({
           title: 'Latest observed post',
-          value: latest ? `${relativeAge(latest.post.postedAt)} before capture` : '—',
-          item: latest,
+          value: item => `${relativeAge(item.post.postedAt)} before capture`,
+          items: latest,
           basis,
           icon: '●'
         })
@@ -3522,6 +3576,12 @@
     }
 
     function renderFormats(content) {
+      const formatDefinitions = {
+        reel: 'Instagram content explicitly identified by Instagram as a Reel or clip.',
+        video: 'A standard feed video that Instagram did not label as a Reel; it stays separate rather than being guessed.',
+        image: 'A single-image feed post.',
+        carousel: 'A swipeable feed post containing multiple images or videos.'
+      };
       const rows = isAudited() ? (board().formatAnalytics || []) : ['image', 'carousel', 'video', 'reel'].map(type => {
         const posts = content.filter(row => row.post.type === type);
         const interactions = posts.map(row => row.interactions).filter(isNumber);
@@ -3549,6 +3609,7 @@
         return `
           <article class="format-card">
             <div class="format-type"><span>${esc(row.type)}</span><span>${fmt(row.posts)} posts · ${fmt(row.profiles)} profiles</span></div>
+            <p class="format-definition">${esc(formatDefinitions[row.type] || 'Instagram feed content reported with this format.')}</p>
             <div class="format-metric">${fmt(row.medianInteractions)}</div>
             <p>Median supported interactions · ${fmt(row.comparablePosts)}/${fmt(row.posts)} reporting</p>
             <div class="format-bars">
@@ -3582,7 +3643,7 @@
               <div><h3>${esc(title)}</h3><div class="board-desc">${esc(description)}</div></div>
               <span class="board-count">Unavailable</span>
             </div>
-            <div class="empty-state"><div><b>Not ranked yet</b><p>${esc(unavailable)}</p></div></div>
+            <div class="empty-state"><div><b>Comparison pending</b><p>${esc(unavailable)}</p></div></div>
           </article>
         `;
       }
@@ -3702,12 +3763,12 @@
       }) : [
         boardMarkup({
           title: 'Weekly audience growth',
-          description: 'Only against a valid baseline approximately 5–9 days old',
+          description: 'Seven-day-normalized change from the nearest same-roster baseline 5–11 days old',
           rows: growthRows,
           key: 'followerPct',
           value: row => pct(row.followerPct),
           sub: row => `${row.followerDelta >= 0 ? '+' : ''}${fmt(Math.round(row.followerDelta))} weekly-equivalent · @${row.handle}`,
-          unavailable: audited ? 'No valid weekly baseline is attached to this snapshot.' : unavailable
+          unavailable: audited ? 'A matching same-roster weekly baseline will appear after enough history has accumulated.' : unavailable
         }),
         boardMarkup({
           title: 'Typical engagement',
@@ -3764,7 +3825,7 @@
         ? `<span class="trend-label">Movement tape</span>${rows.map(row => `
             <span class="movement">${row.followerDelta >= 0 ? '↗' : '↘'} ${esc(row.name)} ${esc(pct(row.followerPct))}<small>${row.followerDelta >= 0 ? '+' : ''}${esc(fmt(Math.round(row.followerDelta)))}/wk</small></span>
           `).join('')}`
-        : `<span class="trend-label">Movement tape</span><span class="trend-empty">A valid 5–9 day baseline will unlock verified weekly movement.</span>`;
+        : `<span class="trend-label">Movement tape</span><span class="trend-empty">A same-roster baseline 5–11 days old will unlock verified weekly movement.</span>`;
     }
 
     function attentionItems() {
@@ -3854,7 +3915,7 @@
             <h3>Apify usage</h3>
             <div class="insight-value">${usage ? `$${Number(usage.usageUsd).toFixed(2)}` : 'Pending'}</div>
             <p>${usage
-              ? `${usage.softWarning ? 'Soft warning reached.' : `$${Number(usage.remainingToSoftLimitUsd || 0).toFixed(2)} remains to the`} $${Number(usage.softLimitUsd).toFixed(2)} monthly soft limit. Run ids and exact charges are retained when reported.`
+              ? `Observed platform usage for this month. Run ids and exact charges are retained when reported.`
               : 'Cost telemetry will appear after the next Actor run.'}</p>
           </article>
         </div>
@@ -3917,7 +3978,7 @@
        */
       const computed = personBlock(person.handle)?.nextActions?.[0];
       if (computed) return computed.action;
-      if (state.key === 'unranked') {
+      if (state.className === 'limited') {
         return audit?.postsInWindow === 0
           ? 'Publish once this week to restart momentum.'
           : `Reach ${board().coverage?.minimumEngagementPosts || 3} comparable posts in 30 days.`;
@@ -4467,23 +4528,25 @@
       const blockLabels = ['00–06', '06–11', '11–15', '15–19', '19–22', '22–24'];
       const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       const cells = new Map((timing.cells || []).map(cell => [`${cell.day}|${cell.block}`, cell]));
-      const rates = (timing.cells || []).filter(cell => cell.posts >= timing.minPosts && isNumber(cell.medianRate)).map(cell => cell.medianRate);
-      const high = rates.length ? Math.max(...rates) : 0;
+      const lifts = (timing.cells || []).filter(cell => (
+        cell.posts >= timing.minPosts && cell.profiles >= timing.minProfiles && isNumber(cell.authorLift)
+      )).map(cell => cell.authorLift);
+      const high = lifts.length ? Math.max(...lifts) : 0;
       const rows = days.map((dayName, day) => {
         const cellMarkup = blocks.map((block, index) => {
           const cell = cells.get(`${day}|${block}`);
           // A cell below the minimum sample is drawn empty rather than pale:
           // one lucky post must not read as a good time to publish.
-          const eligible = cell && cell.posts >= timing.minPosts && isNumber(cell.medianRate);
-          const level = eligible && high ? Math.max(1, Math.ceil((cell.medianRate / high) * 4)) : 0;
+          const eligible = cell && cell.posts >= timing.minPosts && cell.profiles >= timing.minProfiles && isNumber(cell.authorLift);
+          const level = eligible && high ? Math.max(1, Math.ceil((cell.authorLift / high) * 4)) : 0;
           const title = cell
-            ? `${dayName} ${blockLabels[index]} · ${cell.posts} post${cell.posts === 1 ? '' : 's'}${eligible ? ` · ${pct(cell.medianRate)} typical rate` : ' · below the minimum sample'}`
+            ? `${dayName} ${blockLabels[index]} · ${cell.posts} post${cell.posts === 1 ? '' : 's'} from ${cell.profiles} profile${cell.profiles === 1 ? '' : 's'}${eligible ? ` · ${cell.authorLift.toFixed(2)}× each author's own typical rate` : ' · below the comparison sample'}`
             : `${dayName} ${blockLabels[index]} · no posts`;
-          return `<i data-level="${level}" title="${esc(title)}"></i>`;
+          return `<button type="button" class="timing-cell" data-level="${level}" data-cell-key="${day}|${block}" aria-label="${esc(title)}" aria-pressed="false" title="${esc(title)}" ${cell ? '' : 'disabled'}></button>`;
         }).join('');
         return `<span class="row-label">${dayName}</span>${cellMarkup}`;
       }).join('');
-      return `<div class="heatmap" role="img" aria-label="Interaction rate by day and time block">
+      return `<div class="heatmap" role="group" aria-label="Performance lift by Dubai day and time block">
         <span></span>${blockLabels.map(label => `<span>${label}</span>`).join('')}
         ${rows}
       </div>`;
@@ -4502,7 +4565,7 @@
       const hashtags = (content.hashtags || []).slice(0, 10);
       const captions = content.captions || [];
       const pillars = content.pillars || [];
-      const timing = content.timing || { cells: [], minPosts: 3 };
+      const timing = content.timing || { cells: [], minPosts: 3, minProfiles: 3 };
       const bestCaption = captions.slice().sort((a, b) => (b.medianRate || 0) - (a.medianRate || 0))[0];
       target.innerHTML = `
         <article class="panel intel-card">
@@ -4518,11 +4581,12 @@
         </article>
         <article class="panel intel-card">
           <h3>When posting works</h3>
-          <p>Median interaction rate by ${esc(content.timezone)}. Cells with fewer than ${timing.minPosts} posts stay empty.</p>
+          <p>Compared by ${esc(content.timezone)} using median lift versus each author's own typical post. A comparable cell needs ${timing.minPosts}+ posts from ${timing.minProfiles}+ creators. Select a cell for its evidence.</p>
           ${heatmapMarkup(timing)}
+          <div class="timing-detail" id="timing-detail" aria-live="polite"><b>Select a measured time cell</b><span>Its post count, creator coverage, raw median rate and author-adjusted lift will appear here.</span></div>
           <p class="heat-note">${timing.best
-            ? `Strongest slot: ${esc(timing.best.dayName)} ${esc(timing.best.blockLabel)} — ${esc(pct(timing.best.medianRate))} across ${timing.best.posts} posts.`
-            : 'No slot yet carries enough posts to call it the best time.'}</p>
+            ? `Strongest comparable slot: ${esc(timing.best.dayName)} ${esc(timing.best.blockLabel)} — ${esc(timing.best.authorLift.toFixed(2))}× each author's own typical rate across ${timing.best.posts} posts from ${timing.best.profiles} creators.`
+            : 'No slot yet clears both sample thresholds, so no best time is claimed.'}</p>
         </article>
         <article class="panel intel-card">
           <h3>Content pillars</h3>
@@ -4545,6 +4609,23 @@
             </li>`).join('')}</ul>`
             : '<p>No caption bucket cleared the minimum sample.</p>'}
         </article>`;
+
+      const timingCells = new Map((timing.cells || []).map(cell => [`${cell.day}|${cell.block}`, cell]));
+      const timingDetail = byId('timing-detail');
+      const selectTimingCell = key => {
+        const cell = timingCells.get(key);
+        if (!cell || !timingDetail) return;
+        const eligible = cell.posts >= timing.minPosts && cell.profiles >= timing.minProfiles && isNumber(cell.authorLift);
+        timingDetail.innerHTML = `<b>${esc(cell.dayName)} · ${esc(cell.blockLabel)} ${esc(content.timezone)}</b><span>${fmt(cell.posts)} posts from ${fmt(cell.profiles)} creators · raw median rate ${pct(cell.medianRate)} · ${eligible ? `${cell.authorLift.toFixed(2)}× each author's own typical rate` : `needs ${Math.max(0, timing.minPosts - cell.posts)} more posts and ${Math.max(0, timing.minProfiles - cell.profiles)} more creators before comparison`}.</span>`;
+        target.querySelectorAll('.timing-cell').forEach(button => {
+          button.setAttribute('aria-pressed', button.dataset.cellKey === key ? 'true' : 'false');
+        });
+      };
+      target.querySelectorAll('.timing-cell:not(:disabled)').forEach(button => {
+        button.addEventListener('click', () => selectTimingCell(button.dataset.cellKey));
+      });
+      const initialTimingKey = timing.best ? `${timing.best.day}|${timing.best.block}` : target.querySelector('.timing-cell:not(:disabled)')?.dataset.cellKey;
+      if (initialTimingKey) selectTimingCell(initialTimingKey);
     }
 
     /* ---------- Every measured post ---------- */

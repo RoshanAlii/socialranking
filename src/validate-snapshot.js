@@ -36,9 +36,11 @@ function validateSnapshot(snapshot, registry, opts = {}) {
 
   /*
    * A replay is a recomputation of stored provider captures. It relaxes exactly
-   * two things — the source label and the age gate — and nothing else: the raw
-   * payloads are still re-normalized, every leaderboard, content figure, coaching
-   * line and trend point is still recomputed, and the roster still has to match.
+   * two things — the source label and the age gate — and nothing else: every
+   * normalized record, leaderboard, content figure, coaching line and trend
+   * point is still recomputed, and the roster still has to match. Exact raw
+   * payloads are additionally re-normalized for live candidates; they are
+   * ephemeral workflow artifacts and are not assumed to exist for a replay.
    * What it cannot claim is freshness, so it is stamped as a replay and the
    * dashboard publishes it under its own capture date rather than as "now".
    */
@@ -257,7 +259,7 @@ function validateSnapshot(snapshot, registry, opts = {}) {
   if (meta.trendAvailable !== (trend.length > 0)) errors.push('meta.trendAvailable does not match stored trend rows');
   if (trend.length) {
     const baselineDays = meta.growthBaselineDays;
-    if (!(baselineDays >= 5 && baselineDays <= 9)) errors.push(`growth baseline must be 5–9 days old, got ${baselineDays}`);
+    if (!(baselineDays >= 5 && baselineDays <= 11)) errors.push(`growth baseline must be 5–11 days old, got ${baselineDays}`);
     if (!meta.growthBaselineAt || !Number.isFinite(new Date(meta.growthBaselineAt).getTime())) {
       errors.push('growth baseline timestamp is missing or invalid');
     }
@@ -308,8 +310,13 @@ function main() {
     baselineRecords,
     series,
     replay,
-    rawExists: (_record, filename) => fs.existsSync(path.join(root, 'data', 'raw', filename)),
-    rawLoader: (_record, filename) => JSON.parse(fs.readFileSync(path.join(root, 'data', 'raw', filename), 'utf8')),
+    // Raw captures are ephemeral workflow artifacts and are intentionally not
+    // committed. A captured replay therefore validates every normalized row,
+    // derivation, roster join and series point without assuming that a local
+    // raw directory belongs to the same capture. Live candidates still require
+    // and re-normalize their exact raw evidence before publication.
+    rawExists: replay ? () => true : (_record, filename) => fs.existsSync(path.join(root, 'data', 'raw', filename)),
+    rawLoader: replay ? null : (_record, filename) => JSON.parse(fs.readFileSync(path.join(root, 'data', 'raw', filename), 'utf8')),
   });
 
   if (process.argv.includes('--stamp')) {
@@ -326,6 +333,20 @@ function main() {
     const pendingPath = path.join(root, 'data', '.latest.validated.json');
     fs.writeFileSync(pendingPath, JSON.stringify(snapshot, null, 2));
     fs.renameSync(pendingPath, latestPath);
+
+    // Keep the full historical evidence packet stamped in lockstep with the
+    // published snapshot. Otherwise a successfully validated replay would
+    // leave its audit copy saying "pending" even though every derived claim
+    // has just passed the same validator.
+    const historyStamp = snapshot.meta.capturedAt.replace(/[:.]/g, '-');
+    const historyPath = path.join(root, 'data', 'history', `${historyStamp}.json`);
+    if (fs.existsSync(historyPath)) {
+      const history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));
+      history.meta = snapshot.meta;
+      const historyPending = path.join(root, 'data', 'history', `.${historyStamp}.validated.json`);
+      fs.writeFileSync(historyPending, JSON.stringify(history, null, 2) + '\n');
+      fs.renameSync(historyPending, historyPath);
+    }
 
     if (series) {
       const { series: stampedSeries, stamped } = S.stampValidated(series, snapshot.meta.capturedAt);

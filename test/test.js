@@ -451,14 +451,17 @@ const soloRegistry = {
     const output = await run(registry, new P.MockProvider(), ['instagram'], now);
     assert.deepStrictEqual([...new Set(output.records.map(r => r.platform))], ['instagram']);
   });
-  await test('weekly baseline must be 5-9 days old and nearest seven', () => {
+  await test('weekly baseline must be 5-11 days old, same-roster, and nearest seven', () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'kirpa-history-'));
     fs.mkdirSync(path.join(dir, 'history'));
-    for (const age of [1, 5.5, 7.2, 8.8]) {
-      fs.writeFileSync(path.join(dir, 'history', `${age}.json`), JSON.stringify({ meta: { capturedAt: new Date(nowMs - age * day).toISOString() }, records: [rec()] }));
+    for (const [age, rosterVersion] of [[1, 'r1'], [5.5, 'r1'], [7.2, 'old'], [10.5, 'r1'], [12, 'r1']]) {
+      fs.writeFileSync(path.join(dir, 'history', `${age}.json`), JSON.stringify({ meta: { capturedAt: new Date(nowMs - age * day).toISOString(), rosterVersion }, records: [rec()] }));
     }
-    const baseline = loadWeeklyBaseline(dir, now);
-    assert.ok(Math.abs(baseline.ageDays - 7.2) < 0.001);
+    const baseline = loadWeeklyBaseline(dir, now, 'r1');
+    assert.ok(Math.abs(baseline.ageDays - 5.5) < 0.001, 'the nearest matching roster wins');
+    fs.unlinkSync(path.join(dir, 'history', '5.5.json'));
+    const wider = loadWeeklyBaseline(dir, now, 'r1');
+    assert.ok(Math.abs(wider.ageDays - 10.5) < 0.001, 'a twice-weekly miss can still use the careful 11-day guardrail');
   });
   await test('growth is normalized to a seven-day equivalent and ranked by percentage', () => {
     const previous = [
@@ -550,6 +553,28 @@ const soloRegistry = {
     const thin = C.timingPerformance([rec({ recentPosts: [posts[0]] })], 'instagram', Date.UTC(2026, 6, 20));
     assert.strictEqual(thin.best, null, 'one post is not a best time to post');
   });
+  await test('timing ranks author-adjusted lift only after three creators contribute', () => {
+    const records = [1, 2, 3].map(author => rec({
+      name: `Author ${author}`,
+      handle: `author${author}`,
+      followers: 10000,
+      recentPosts: [
+        post(0, { id: `a${author}-high-0`, postedAt: '2026-06-29T06:00:00.000Z', likes: 200, comments: 0 }),
+        post(1, { id: `a${author}-high-1`, postedAt: '2026-07-06T06:00:00.000Z', likes: 200, comments: 0 }),
+        post(2, { id: `a${author}-high-2`, postedAt: '2026-07-13T06:00:00.000Z', likes: 200, comments: 0 }),
+        post(0, { id: `a${author}-low-0`, postedAt: '2026-06-30T12:00:00.000Z', likes: 20, comments: 0 }),
+        post(3, { id: `a${author}-low-1`, postedAt: '2026-07-07T12:00:00.000Z', likes: 20, comments: 0 }),
+        post(4, { id: `a${author}-low-2`, postedAt: '2026-07-14T12:00:00.000Z', likes: 20, comments: 0 }),
+      ],
+    }));
+    const timing = C.timingPerformance(records, 'instagram', Date.parse('2026-07-20T00:00:00.000Z'));
+    assert.strictEqual(timing.minProfiles, 3);
+    assert.strictEqual(timing.best.block, 'morning');
+    assert.strictEqual(timing.best.profiles, 3);
+    assert.ok(timing.best.authorLift > 1.5);
+    const twoCreators = C.timingPerformance(records.slice(0, 2), 'instagram', Date.parse('2026-07-20T00:00:00.000Z'));
+    assert.strictEqual(twoCreators.best, null, 'two creators cannot establish a team posting-time pattern');
+  });
   await test('streaks and quiet time come from the gated window', () => {
     const weekly = rec({
       recentPosts: [0, 3, 8, 15, 22].map(offset => post(offset, { postedAt: new Date(nowMs - offset * day).toISOString() })),
@@ -627,7 +652,37 @@ const soloRegistry = {
     const board = R.buildLeaderboards(records, ['instagram'], { now: nowMs, growth: trend });
     const held = board.combined.composite.find(row => row.name === 'New');
     assert.strictEqual(held.rank, null);
-    assert.match(held.note, /no 5–9 day follower baseline/);
+    assert.match(held.note, /no 5–11 day follower baseline/);
+  });
+  await test('momentum resists a thin viral outlier and publishes its audit inputs', () => {
+    const measured = [
+      rec({
+        name: 'Steady', handle: 'steady', followers: 10000,
+        recentPosts: Array.from({ length: 6 }, (_, i) => post(i, { id: `steady-${i}`, likes: 300, comments: 20 })),
+      }),
+      rec({
+        name: 'Prolific', handle: 'prolific', followers: 50000,
+        recentPosts: Array.from({ length: 12 }, (_, i) => post(i, { id: `prolific-${i}`, likes: 500, comments: 30 })),
+      }),
+    ];
+    const baseline = R.buildLeaderboards(measured, ['instagram'], { now: nowMs }).combined;
+    const thinOutlier = rec({
+      name: 'Viral but thin', handle: 'viral', followers: 1000,
+      recentPosts: Array.from({ length: 4 }, (_, i) => post(i, { id: `viral-${i}`, likes: 20000, comments: 500 })),
+    });
+    const expanded = R.buildLeaderboards([...measured, thinOutlier], ['instagram'], { now: nowMs }).combined;
+    for (const name of ['Steady', 'Prolific']) {
+      const before = baseline.composite.find(row => row.name === name);
+      const after = expanded.composite.find(row => row.name === name);
+      assert.strictEqual(after.score, before.score, 'an ineligible outlier cannot distort an eligible score');
+      assert.ok(Object.values(after.normalizedComponents).every(value => value >= 0 && value <= 1));
+    }
+    const held = expanded.composite.find(row => row.name === 'Viral but thin');
+    assert.strictEqual(held.provisional, true);
+    assert.strictEqual(held.sample.minimumComparablePosts, 5);
+    assert.match(held.note, /4\/5 comparable posts/);
+    assert.strictEqual(expanded.normalization.method, 'mid-rank percentile');
+    assert.match(expanded.note, /reliability-adjusted/);
   });
   await test('a shorter window is recomputed from the same posts', () => {
     const board = R.buildLeaderboards([rec()], ['instagram'], { now: nowMs, alternateWindows: [7] });
@@ -858,6 +913,29 @@ const soloRegistry = {
     assert.match(html, /snapshotMatchesRoster/);
     assert.match(html, /const usageCandidates = \[/, 'fresh console observations must be considered alongside refresh telemetry');
     assert.match(html, /Date\.parse\(b\.observedAt/, 'the spend card must select the freshest telemetry source');
+  });
+  await test('dashboard feedback safeguards stay visible and prohibited placeholders stay absent', () => {
+    const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+    for (const prohibited of ['Preview unavailable', 'Apify monthly soft spend warning', 'Not ranked yet', 'Unranked — insufficient comparable data', 'No valid weekly baseline is attached']) {
+      assert.ok(!html.includes(prohibited), `${prohibited} must not return to the page`);
+    }
+    assert.match(html, /aria-label="Kirpa Properties"/);
+    assert.match(html, /Developer mention breakdown/);
+    assert.match(html, /row\.totalMentions/);
+    assert.match(html, /slice\(0, 3\)/, 'record cards retain the first three results');
+    assert.match(html, /Instagram content explicitly identified by Instagram as a Reel/);
+    assert.match(html, /standard feed video that Instagram did not label as a Reel/);
+    assert.match(html, /class="timing-cell"/);
+    assert.match(html, /author's own typical rate/);
+    assert.match(html, /Measured · building comparison sample/);
+  });
+  await test('published replay and its historical evidence carry the same passed validation', () => {
+    const latest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
+    const stamp = latest.meta.capturedAt.replace(/[:.]/g, '-');
+    const history = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'history', `${stamp}.json`), 'utf8'));
+    assert.strictEqual(latest.meta.validation.status, 'passed');
+    assert.deepStrictEqual(history.meta.validation, latest.meta.validation);
+    assert.strictEqual(history.meta.growthBaselineAt, latest.meta.growthBaselineAt);
   });
   await test('developer intelligence is fortnightly, roster-wide, cached, and configurable', () => {
     const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'reel-mention-count.yml'), 'utf8');

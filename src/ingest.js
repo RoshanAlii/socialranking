@@ -15,7 +15,7 @@ const U = require('./usage');
 const DAY_MS = 24 * 60 * 60 * 1000;
 const GROWTH_TARGET_DAYS = 7;
 const GROWTH_MIN_DAYS = 5;
-const GROWTH_MAX_DAYS = 9;
+const GROWTH_MAX_DAYS = 11;
 const SHORT_WINDOW_DAYS = 7;
 const DEFAULT_TARGETS = { postsPerWeek: 3, engagementRate: 0.02 };
 
@@ -219,7 +219,7 @@ function parseHistoryFile(file) {
     return Number.isFinite(at) && Array.isArray(payload.records) ? { payload, at, file } : null;
   } catch (_) { return null; }
 }
-function loadWeeklyBaseline(dir, currentCapturedAt) {
+function loadWeeklyBaseline(dir, currentCapturedAt, rosterVersion = null) {
   const historyDir = path.join(dir, 'history');
   if (!fs.existsSync(historyDir)) return null;
   const current = new Date(currentCapturedAt).getTime();
@@ -228,6 +228,7 @@ function loadWeeklyBaseline(dir, currentCapturedAt) {
     .filter(file => file.endsWith('.json'))
     .map(file => parseHistoryFile(path.join(historyDir, file)))
     .filter(Boolean)
+    .filter(item => !rosterVersion || item.payload?.meta?.rosterVersion === rosterVersion)
     .map(item => Object.assign(item, { ageDays: (current - item.at) / DAY_MS }))
     .filter(item => item.ageDays >= GROWTH_MIN_DAYS && item.ageDays <= GROWTH_MAX_DAYS)
     .sort((a, b) => Math.abs(a.ageDays - GROWTH_TARGET_DAYS) - Math.abs(b.ageDays - GROWTH_TARGET_DAYS));
@@ -274,7 +275,7 @@ async function main() {
   const provider = useCaptured
     ? new CapturedProvider(path.join(outDir, 'raw'))
     : useLive ? new ApifyProvider(undefined, { previousSnapshot, capturedAt }) : new MockProvider();
-  const baseline = loadWeeklyBaseline(outDir, capturedAt);
+  const baseline = loadWeeklyBaseline(outDir, capturedAt, registry.rosterVersion);
   const { records, states, relevantCount } = await run(
     registry, provider, platforms, capturedAt,
     useLive ? { rawDir: path.join(outDir, 'raw') } : {},
@@ -371,7 +372,7 @@ async function main() {
       trendAvailable: trend.length > 0,
       growthBaselineAt: baseline?.payload?.meta?.capturedAt || null,
       growthBaselineDays: baselineDays,
-      growthWindowRule: 'Baseline must be 5–9 days old; nearest to 7 days is used.',
+      growthWindowRule: 'Baseline must be 5–11 days old and use the same confirmed roster; nearest to 7 days is used and normalized to a weekly rate.',
       shortWindowDays: SHORT_WINDOW_DAYS,
       optedOut: states.optedOut.length,
       targets: registry.targets || DEFAULT_TARGETS,
