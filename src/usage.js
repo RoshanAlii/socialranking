@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 
-const DEFAULT_SOFT_LIMIT_USD = Number(process.env.APIFY_MONTHLY_SOFT_LIMIT_USD || 4.25);
-const DEFAULT_PLAN_LIMIT_USD = Number(process.env.APIFY_PLAN_LIMIT_USD || 5);
+const DEFAULT_SOFT_LIMIT_USD = Number(process.env.APIFY_MONTHLY_SOFT_LIMIT_USD || 23.2);
+const DEFAULT_PLAN_LIMIT_USD = Number(process.env.APIFY_PLAN_LIMIT_USD || 29);
 
 function roundMoney(value) {
   return Math.round((Number(value) || 0) * 10000) / 10000;
@@ -79,7 +79,10 @@ function currentSummary(ledger, at = new Date().toISOString()) {
     ? runs.filter(run => Date.parse(run.at || run.captureAt || '') > observedAt)
       .reduce((sum, run) => sum + (typeof run.costUsd === 'number' ? run.costUsd : 0), 0)
     : knownCost;
-  const usageUsd = roundMoney(Math.max(knownCost, observed + postObservationCost));
+  // A fresh console observation is the billing system's authoritative total.
+  // This also handles an in-month plan upgrade/reset: older run costs remain
+  // auditable but are not incorrectly added back above the new observed total.
+  const usageUsd = roundMoney(observation ? observed + postObservationCost : knownCost);
   const softLimitUsd = Number(ledger?.softLimitUsd || DEFAULT_SOFT_LIMIT_USD);
   const planLimitUsd = Number(ledger?.planLimitUsd || DEFAULT_PLAN_LIMIT_USD);
   return {

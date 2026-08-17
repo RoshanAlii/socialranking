@@ -38,8 +38,10 @@ jobs:
           # The mention token is the active Kirpa Apify account; keep the legacy
           # token as a fallback while repositories rotate secrets.
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN_MENTION_COUNT || secrets.APIFY_TOKEN }}
-          APIFY_MONTHLY_SOFT_LIMIT_USD: "4.25"
-          APIFY_PLAN_LIMIT_USD: "5.00"
+          # Starter includes $29 of monthly platform usage. Warn at 80% so a
+          # normal refresh can finish without silently consuming the reserve.
+          APIFY_MONTHLY_SOFT_LIMIT_USD: "23.20"
+          APIFY_PLAN_LIMIT_USD: "29.00"
         run: node src/ingest.js
 
       - name: Quarantine candidate snapshot and raw captures

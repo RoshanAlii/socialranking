@@ -350,6 +350,13 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       .map(post => Object.assign({ interactions: postEngagement(post) }, post))
       .sort((a, b) => b.interactions - a.interactions);
     const latest = posts.slice().sort((a, b) => ts(b) - ts(a))[0] || null;
+    const supportedTotal = (values, eligibleItems) => {
+      if (!complete) return null;
+      if (values.length) return values.reduce((sum, value) => sum + value, 0);
+      // With no eligible content, zero is an observed fact. If content exists
+      // but the provider omitted the metric, it must remain unknown.
+      return eligibleItems === 0 ? 0 : null;
+    };
     return {
       name: record.name,
       role: record.role,
@@ -371,10 +378,10 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       commentsReporting: complete ? comments.length : null,
       sharesReporting: complete ? shares.length : null,
       viewsReporting: complete ? views.length : null,
-      totalLikes: complete && likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
-      totalComments: complete && comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
-      totalShares: complete && shares.length ? shares.reduce((sum, value) => sum + value, 0) : null,
-      totalViews: complete && views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+      totalLikes: supportedTotal(likes, posts.length),
+      totalComments: supportedTotal(comments, posts.length),
+      totalShares: supportedTotal(shares, posts.length),
+      totalViews: supportedTotal(views, videos.length),
       medianLikes: complete ? median(likes) : null,
       medianComments: complete ? median(comments) : null,
       medianViews: complete ? median(views) : null,
@@ -392,7 +399,13 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       interactionRate: complete && record.followers > 0 && comparable.length >= MIN_ENGAGEMENT_POSTS
         ? median(interactions) / record.followers
         : null,
+      observedInteractionRate: complete && record.followers > 0 && comparable.length
+        ? median(interactions) / record.followers
+        : null,
       commentRate: complete && record.followers > 0 && comments.length >= MIN_ENGAGEMENT_POSTS
+        ? median(comments) / record.followers
+        : null,
+      observedCommentRate: complete && record.followers > 0 && comments.length
         ? median(comments) / record.followers
         : null,
       commentToLikeRatio: complete && likes.length && comments.length && median(likes) > 0

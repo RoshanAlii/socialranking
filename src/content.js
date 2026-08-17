@@ -22,7 +22,7 @@
  */
 
 const {
-  isUsable, windowCoverage, windowPosts, postEngagement, engagementRate, median, asOf, WINDOW_DAYS,
+  isUsable, windowCoverage, windowPosts, postEngagement, median, asOf, WINDOW_DAYS,
 } = require('./rank');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -383,9 +383,17 @@ function targetsFor(employee, defaults) {
 function goalProgress(record, employee, defaults, now = asOf([record]), days = WINDOW_DAYS) {
   const targets = targetsFor(employee, defaults);
   const complete = isUsable(record) && windowCoverage(record, now, days).complete;
+  const posts = complete ? windowPosts(record, now, days) : [];
+  const comparable = posts.map(postEngagement).filter(value => typeof value === 'number' && Number.isFinite(value));
+  const personalInteractionRate = complete && record.followers > 0 && comparable.length
+    ? median(comparable) / record.followers
+    : null;
   const measured = {
-    postsPerWeek: complete ? windowPosts(record, now, days).length * 7 / days : null,
-    engagementRate: complete ? engagementRate(record, now, days) : null,
+    postsPerWeek: complete ? posts.length * 7 / days : null,
+    // Goal progress belongs to the individual, so a complete one- or two-post
+    // sample is still a measured personal result. Team comparison and momentum
+    // keep their independent three-post minimum in rank.js.
+    engagementRate: personalInteractionRate,
   };
   const goals = Object.keys(targets).map(key => {
     const value = measured[key] === undefined ? null : measured[key];
@@ -395,6 +403,7 @@ function goalProgress(record, employee, defaults, now = asOf([record]), days = W
       value: typeof value === 'number' ? round(value, 6) : null,
       progress: typeof value === 'number' ? round(value / targets[key], 3) : null,
       met: typeof value === 'number' ? value >= targets[key] : null,
+      sampleSize: key === 'engagementRate' ? comparable.length : posts.length,
     };
   });
   return {

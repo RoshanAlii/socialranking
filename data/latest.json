@@ -24,7 +24,7 @@
       "validatorVersion": 2,
       "snapshotCapturedAt": "2026-08-15T09:47:52.000Z",
       "rosterVersion": "2026-07-30-kirpa-workbook-v1",
-      "validatedAt": "2026-08-17T06:28:00.247Z",
+      "validatedAt": "2026-08-17T06:50:38.983Z",
       "mode": "replay"
     },
     "note": "Recomputed from the stored provider captures of 2026-08-15T09:47:52.000Z. Every number is real public data from that pull; it is not a fresh capture.",
@@ -15735,7 +15735,9 @@
           "medianInteractions": 3854,
           "averageInteractions": 7459.556962025316,
           "interactionRate": 0.005249472532890928,
+          "observedInteractionRate": 0.005249472532890928,
           "commentRate": 0.000055845452477563065,
+          "observedCommentRate": 0.000055845452477563065,
           "commentToLikeRatio": 0.010752688172043012,
           "videoCount": 73,
           "carouselCount": 6,
@@ -16034,7 +16036,9 @@
           "medianInteractions": 193.5,
           "averageInteractions": 643.1935483870968,
           "interactionRate": 0.004069999789664093,
+          "observedInteractionRate": 0.004069999789664093,
           "commentRate": 0.00012620154386555328,
+          "observedCommentRate": 0.00012620154386555328,
           "commentToLikeRatio": 0.0316622691292876,
           "videoCount": 59,
           "carouselCount": 3,
@@ -16174,7 +16178,7 @@
             "interactionRate": 8,
             "medianViews": 56,
             "viewEfficiency": 8,
-            "totalViews": 76
+            "totalViews": 81
           }
         },
         {
@@ -16213,7 +16217,9 @@
           "medianInteractions": 358,
           "averageInteractions": 623.578947368421,
           "interactionRate": 0.032673176964497584,
+          "observedInteractionRate": 0.032673176964497584,
           "commentRate": 0.0008213927169845761,
+          "observedCommentRate": 0.0008213927169845761,
           "commentToLikeRatio": 0.025787965616045846,
           "videoCount": 50,
           "carouselCount": 6,
@@ -16321,7 +16327,7 @@
             "interactionRate": 79,
             "medianViews": 68,
             "viewEfficiency": 80,
-            "totalViews": 84
+            "totalViews": 87
           }
         },
         {
@@ -16360,7 +16366,9 @@
           "medianInteractions": 316,
           "averageInteractions": 601.4375,
           "interactionRate": 0.00980392156862745,
+          "observedInteractionRate": 0.00980392156862745,
           "commentRate": 0.0004808885579548275,
+          "observedCommentRate": 0.0004808885579548275,
           "commentToLikeRatio": 0.05525846702317291,
           "videoCount": 29,
           "carouselCount": 3,
@@ -16620,7 +16628,7 @@
             "interactionRate": 46,
             "medianViews": 84,
             "viewEfficiency": 48,
-            "totalViews": 72
+            "totalViews": 77
           }
         },
         {
@@ -16659,7 +16667,9 @@
           "medianInteractions": 105.5,
           "averageInteractions": 85.5,
           "interactionRate": 0.005940649811363253,
+          "observedInteractionRate": 0.005940649811363253,
           "commentRate": 0.0006194042457345571,
+          "observedCommentRate": 0.0006194042457345571,
           "commentToLikeRatio": 0.12290502793296089,
           "videoCount": 4,
           "carouselCount": 2,
@@ -16889,7 +16899,7 @@
             "interactionRate": 21,
             "medianViews": 36,
             "viewEfficiency": 20,
-            "totalViews": 28
+            "totalViews": 42
           }
         },
         {
@@ -16928,7 +16938,9 @@
           "medianInteractions": 207,
           "averageInteractions": 385.60869565217394,
           "interactionRate": 0.012335379298015613,
+          "observedInteractionRate": 0.012335379298015613,
           "commentRate": 0.00041713843036767775,
+          "observedCommentRate": 0.00041713843036767775,
           "commentToLikeRatio": 0.034653465346534656,
           "videoCount": 20,
           "carouselCount": 2,
@@ -17036,7 +17048,7 @@
             "interactionRate": 50,
             "medianViews": 72,
             "viewEfficiency": 60,
-            "totalViews": 68
+            "totalViews": 74
           }
         },
         {
@@ -17060,10 +17072,10 @@
           "commentsReporting": 0,
           "sharesReporting": 0,
           "viewsReporting": 0,
-          "totalLikes": null,
-          "totalComments": null,
-          "totalShares": null,
-          "totalViews": null,
+          "totalLikes": 0,
+          "totalComments": 0,
+          "totalShares": 0,
+          "totalViews": 0,
           "medianLikes": null,
           "medianComments": null,
           "medianViews": null,
@@ -17075,7 +17087,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": 0,
           "carouselCount": 0,
@@ -17130,7 +17144,7 @@
             "interactionRate": null,
             "medianViews": null,
             "viewEfficiency": null,
-            "totalViews": null
+            "totalViews": 19
           }
         },
         {
@@ -17169,7 +17183,9 @@
           "medianInteractions": 66,
           "averageInteractions": 82.6,
           "interactionRate": 0.009444762449914138,
+          "observedInteractionRate": 0.009444762449914138,
           "commentRate": 0.0007155123068116772,
+          "observedCommentRate": 0.0007155123068116772,
           "commentToLikeRatio": 0.08196721311475409,
           "videoCount": 4,
           "carouselCount": 1,
@@ -17277,7 +17293,7 @@
             "interactionRate": 42,
             "medianViews": 44,
             "viewEfficiency": 52,
-            "totalViews": 24
+            "totalViews": 39
           }
         },
         {
@@ -17316,7 +17332,9 @@
           "medianInteractions": 23,
           "averageInteractions": 78.33333333333333,
           "interactionRate": 0.00796398891966759,
+          "observedInteractionRate": 0.00796398891966759,
           "commentRate": 0.001038781163434903,
+          "observedCommentRate": 0.001038781163434903,
           "commentToLikeRatio": 0.15,
           "videoCount": 2,
           "carouselCount": 1,
@@ -17486,7 +17504,7 @@
             "interactionRate": 33,
             "medianViews": 48,
             "viewEfficiency": 92,
-            "totalViews": 16
+            "totalViews": 32
           }
         },
         {
@@ -17525,7 +17543,9 @@
           "medianInteractions": 1003,
           "averageInteractions": 1734,
           "interactionRate": 0.0385235827316024,
+          "observedInteractionRate": 0.0385235827316024,
           "commentRate": 0.0024773390689814103,
+          "observedCommentRate": 0.0024773390689814103,
           "commentToLikeRatio": 0.07226890756302522,
           "videoCount": 20,
           "carouselCount": 3,
@@ -17785,7 +17805,7 @@
             "interactionRate": 88,
             "medianViews": 88,
             "viewEfficiency": 72,
-            "totalViews": 80
+            "totalViews": 84
           }
         },
         {
@@ -17824,7 +17844,9 @@
           "medianInteractions": 49,
           "averageInteractions": 49.18181818181818,
           "interactionRate": 0.035688273852876914,
+          "observedInteractionRate": 0.035688273852876914,
           "commentRate": 0.0014566642388929353,
+          "observedCommentRate": 0.0014566642388929353,
           "commentToLikeRatio": 0.0425531914893617,
           "videoCount": 9,
           "carouselCount": 1,
@@ -17932,7 +17954,7 @@
             "interactionRate": 83,
             "medianViews": 4,
             "viewEfficiency": 36,
-            "totalViews": 12
+            "totalViews": 29
           }
         },
         {
@@ -17971,7 +17993,9 @@
           "medianInteractions": 67,
           "averageInteractions": 190.64705882352942,
           "interactionRate": 0.02009598080383923,
+          "observedInteractionRate": 0.02009598080383923,
           "commentRate": 0.0014997000599880025,
+          "observedCommentRate": 0.0014997000599880025,
           "commentToLikeRatio": 0.08333333333333333,
           "videoCount": 17,
           "carouselCount": 0,
@@ -18079,7 +18103,7 @@
             "interactionRate": 63,
             "medianViews": 24,
             "viewEfficiency": 44,
-            "totalViews": 48
+            "totalViews": 58
           }
         },
         {
@@ -18118,7 +18142,9 @@
           "medianInteractions": 120,
           "averageInteractions": 172.76,
           "interactionRate": 0.008858703676362026,
+          "observedInteractionRate": 0.008858703676362026,
           "commentRate": 0.0002952901225454009,
+          "observedCommentRate": 0.0002952901225454009,
           "commentToLikeRatio": 0.03333333333333333,
           "videoCount": 68,
           "carouselCount": 6,
@@ -18378,7 +18404,7 @@
             "interactionRate": 38,
             "medianViews": 28,
             "viewEfficiency": 24,
-            "totalViews": 56
+            "totalViews": 65
           }
         },
         {
@@ -18417,7 +18443,9 @@
           "medianInteractions": 137,
           "averageInteractions": 199.8,
           "interactionRate": 0.03251067869008068,
+          "observedInteractionRate": 0.03251067869008068,
           "commentRate": 0.006881822496440437,
+          "observedCommentRate": 0.006881822496440437,
           "commentToLikeRatio": 0.26851851851851855,
           "videoCount": 5,
           "carouselCount": 0,
@@ -18525,7 +18553,7 @@
             "interactionRate": 75,
             "medianViews": 32,
             "viewEfficiency": 64,
-            "totalViews": 36
+            "totalViews": 48
           }
         },
         {
@@ -18564,7 +18592,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -18622,7 +18652,9 @@
           "medianInteractions": 868,
           "averageInteractions": 1405.1929824561403,
           "interactionRate": 0.00701113866384498,
+          "observedInteractionRate": 0.00701113866384498,
           "commentRate": 0.0001453922764391816,
+          "observedCommentRate": 0.0001453922764391816,
           "commentToLikeRatio": 0.02102803738317757,
           "videoCount": 51,
           "carouselCount": 4,
@@ -18762,7 +18794,7 @@
             "interactionRate": 29,
             "medianViews": 92,
             "viewEfficiency": 28,
-            "totalViews": 92
+            "totalViews": 94
           }
         },
         {
@@ -18801,7 +18833,9 @@
           "medianInteractions": 1478,
           "averageInteractions": 1478,
           "interactionRate": null,
+          "observedInteractionRate": 0.1487071133916893,
           "commentRate": null,
+          "observedCommentRate": 0.0024147298520977964,
           "commentToLikeRatio": 0.016506189821182942,
           "videoCount": 1,
           "carouselCount": 0,
@@ -18909,7 +18943,7 @@
             "interactionRate": null,
             "medianViews": 76,
             "viewEfficiency": 84,
-            "totalViews": 20
+            "totalViews": 35
           }
         },
         {
@@ -18948,7 +18982,9 @@
           "medianInteractions": 1123.5,
           "averageInteractions": 1298.75,
           "interactionRate": 0.8428357089272318,
+          "observedInteractionRate": 0.8428357089272318,
           "commentRate": 0.015003750937734433,
+          "observedCommentRate": 0.015003750937734433,
           "commentToLikeRatio": 0.018091361374943465,
           "videoCount": 3,
           "carouselCount": 4,
@@ -19148,7 +19184,7 @@
             "interactionRate": 100,
             "medianViews": 80,
             "viewEfficiency": 100,
-            "totalViews": 44
+            "totalViews": 55
           }
         },
         {
@@ -19187,7 +19223,9 @@
           "medianInteractions": 129,
           "averageInteractions": 197.64615384615385,
           "interactionRate": 0.0065082488270016645,
+          "observedInteractionRate": 0.0065082488270016645,
           "commentRate": 0.0004036123303566924,
+          "observedCommentRate": 0.0004036123303566924,
           "commentToLikeRatio": 0.06451612903225806,
           "videoCount": 59,
           "carouselCount": 2,
@@ -19447,7 +19485,7 @@
             "interactionRate": 25,
             "medianViews": 40,
             "viewEfficiency": 16,
-            "totalViews": 64
+            "totalViews": 71
           }
         },
         {
@@ -19471,10 +19509,10 @@
           "commentsReporting": 0,
           "sharesReporting": 0,
           "viewsReporting": 0,
-          "totalLikes": null,
-          "totalComments": null,
-          "totalShares": null,
-          "totalViews": null,
+          "totalLikes": 0,
+          "totalComments": 0,
+          "totalShares": 0,
+          "totalViews": 0,
           "medianLikes": null,
           "medianComments": null,
           "medianViews": null,
@@ -19486,7 +19524,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": 0,
           "carouselCount": 0,
@@ -19541,7 +19581,7 @@
             "interactionRate": null,
             "medianViews": null,
             "viewEfficiency": null,
-            "totalViews": null
+            "totalViews": 19
           }
         },
         {
@@ -19580,7 +19620,9 @@
           "medianInteractions": 40,
           "averageInteractions": 110.60606060606061,
           "interactionRate": 0.020387359836901122,
+          "observedInteractionRate": 0.020387359836901122,
           "commentRate": 0.0010193679918450561,
+          "observedCommentRate": 0.0010193679918450561,
           "commentToLikeRatio": 0.05,
           "videoCount": 30,
           "carouselCount": 3,
@@ -19688,7 +19730,7 @@
             "interactionRate": 67,
             "medianViews": 20,
             "viewEfficiency": 68,
-            "totalViews": 40
+            "totalViews": 52
           }
         },
         {
@@ -19727,7 +19769,9 @@
           "medianInteractions": 48,
           "averageInteractions": 204,
           "interactionRate": 0.004182277598675612,
+          "observedInteractionRate": 0.004182277598675612,
           "commentRate": 0.0006099154831401935,
+          "observedCommentRate": 0.0006099154831401935,
           "commentToLikeRatio": 0.17073170731707318,
           "videoCount": 4,
           "carouselCount": 0,
@@ -19835,7 +19879,7 @@
             "interactionRate": 13,
             "medianViews": 96,
             "viewEfficiency": 96,
-            "totalViews": 52
+            "totalViews": 61
           }
         },
         {
@@ -19874,7 +19918,9 @@
           "medianInteractions": 26,
           "averageInteractions": 26.625,
           "interactionRate": 0.0010102972605401204,
+          "observedInteractionRate": 0.0010102972605401204,
           "commentRate": 0.000038857586943850786,
+          "observedCommentRate": 0.000038857586943850786,
           "commentToLikeRatio": 0.0392156862745098,
           "videoCount": 3,
           "carouselCount": 5,
@@ -19982,7 +20028,7 @@
             "interactionRate": 4,
             "medianViews": 12,
             "viewEfficiency": 4,
-            "totalViews": 4
+            "totalViews": 23
           }
         },
         {
@@ -20006,10 +20052,10 @@
           "commentsReporting": 0,
           "sharesReporting": 0,
           "viewsReporting": 0,
-          "totalLikes": null,
-          "totalComments": null,
-          "totalShares": null,
-          "totalViews": null,
+          "totalLikes": 0,
+          "totalComments": 0,
+          "totalShares": 0,
+          "totalViews": 0,
           "medianLikes": null,
           "medianComments": null,
           "medianViews": null,
@@ -20021,7 +20067,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": 0,
           "carouselCount": 0,
@@ -20076,7 +20124,7 @@
             "interactionRate": null,
             "medianViews": null,
             "viewEfficiency": null,
-            "totalViews": null
+            "totalViews": 19
           }
         },
         {
@@ -20115,7 +20163,9 @@
           "medianInteractions": 38,
           "averageInteractions": 43.851851851851855,
           "interactionRate": 0.046228710462287104,
+          "observedInteractionRate": 0.046228710462287104,
           "commentRate": 0.009732360097323601,
+          "observedCommentRate": 0.009732360097323601,
           "commentToLikeRatio": 0.2857142857142857,
           "videoCount": 25,
           "carouselCount": 0,
@@ -20223,7 +20273,7 @@
             "interactionRate": 96,
             "medianViews": 16,
             "viewEfficiency": 56,
-            "totalViews": 32
+            "totalViews": 45
           }
         },
         {
@@ -20262,7 +20312,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -20320,7 +20372,9 @@
           "medianInteractions": 19,
           "averageInteractions": 25.666666666666668,
           "interactionRate": 0.012450851900393184,
+          "observedInteractionRate": 0.012450851900393184,
           "commentRate": 0.001310615989515072,
+          "observedCommentRate": 0.001310615989515072,
           "commentToLikeRatio": 0.125,
           "videoCount": 12,
           "carouselCount": 1,
@@ -20580,7 +20634,7 @@
             "interactionRate": 54,
             "medianViews": 8,
             "viewEfficiency": 32,
-            "totalViews": 8
+            "totalViews": 26
           }
         },
         {
@@ -20604,10 +20658,10 @@
           "commentsReporting": 0,
           "sharesReporting": 0,
           "viewsReporting": 0,
-          "totalLikes": null,
-          "totalComments": null,
-          "totalShares": null,
-          "totalViews": null,
+          "totalLikes": 0,
+          "totalComments": 0,
+          "totalShares": 0,
+          "totalViews": 0,
           "medianLikes": null,
           "medianComments": null,
           "medianViews": null,
@@ -20619,7 +20673,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": 0,
           "carouselCount": 0,
@@ -20674,7 +20730,7 @@
             "interactionRate": null,
             "medianViews": null,
             "viewEfficiency": null,
-            "totalViews": null
+            "totalViews": 19
           }
         },
         {
@@ -20713,7 +20769,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -20771,7 +20829,9 @@
           "medianInteractions": 474,
           "averageInteractions": 1090.5742574257426,
           "interactionRate": 0.021189092534644613,
+          "observedInteractionRate": 0.021189092534644613,
           "commentRate": 0.000894054537326777,
+          "observedCommentRate": 0.000894054537326777,
           "commentToLikeRatio": 0.04395604395604396,
           "videoCount": 87,
           "carouselCount": 11,
@@ -20911,7 +20971,7 @@
             "interactionRate": 71,
             "medianViews": 64,
             "viewEfficiency": 40,
-            "totalViews": 96
+            "totalViews": 97
           }
         },
         {
@@ -20950,7 +21010,9 @@
           "medianInteractions": 141,
           "averageInteractions": 247.51282051282053,
           "interactionRate": 0.041976778803215244,
+          "observedInteractionRate": 0.041976778803215244,
           "commentRate": 0.003870199464126228,
+          "observedCommentRate": 0.003870199464126228,
           "commentToLikeRatio": 0.10317460317460317,
           "videoCount": 37,
           "carouselCount": 0,
@@ -21210,7 +21272,7 @@
             "interactionRate": 92,
             "medianViews": 52,
             "viewEfficiency": 88,
-            "totalViews": 60
+            "totalViews": 68
           }
         },
         {
@@ -21249,7 +21311,9 @@
           "medianInteractions": 115,
           "averageInteractions": 1049.1728395061727,
           "interactionRate": 0.018161718256475046,
+          "observedInteractionRate": 0.018161718256475046,
           "commentRate": 0.0009475679090334807,
+          "observedCommentRate": 0.0009475679090334807,
           "commentToLikeRatio": 0.057692307692307696,
           "videoCount": 73,
           "carouselCount": 8,
@@ -21509,7 +21573,7 @@
             "interactionRate": 58,
             "medianViews": 60,
             "viewEfficiency": 76,
-            "totalViews": 88
+            "totalViews": 90
           }
         },
         {
@@ -21533,10 +21597,10 @@
           "commentsReporting": 0,
           "sharesReporting": 0,
           "viewsReporting": 0,
-          "totalLikes": null,
-          "totalComments": null,
-          "totalShares": null,
-          "totalViews": null,
+          "totalLikes": 0,
+          "totalComments": 0,
+          "totalShares": 0,
+          "totalViews": 0,
           "medianLikes": null,
           "medianComments": null,
           "medianViews": null,
@@ -21548,7 +21612,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": 0,
           "carouselCount": 0,
@@ -21603,7 +21669,7 @@
             "interactionRate": null,
             "medianViews": null,
             "viewEfficiency": null,
-            "totalViews": null
+            "totalViews": 19
           }
         },
         {
@@ -21642,7 +21708,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -21685,10 +21753,10 @@
           "commentsReporting": 0,
           "sharesReporting": 0,
           "viewsReporting": 0,
-          "totalLikes": null,
-          "totalComments": null,
-          "totalShares": null,
-          "totalViews": null,
+          "totalLikes": 0,
+          "totalComments": 0,
+          "totalShares": 0,
+          "totalViews": 0,
           "medianLikes": null,
           "medianComments": null,
           "medianViews": null,
@@ -21700,7 +21768,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": 0,
           "carouselCount": 0,
@@ -21755,7 +21825,7 @@
             "interactionRate": null,
             "medianViews": null,
             "viewEfficiency": null,
-            "totalViews": null
+            "totalViews": 19
           }
         },
         {
@@ -21794,7 +21864,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -21852,7 +21924,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -21910,7 +21984,9 @@
           "medianInteractions": null,
           "averageInteractions": null,
           "interactionRate": null,
+          "observedInteractionRate": null,
           "commentRate": null,
+          "observedCommentRate": null,
           "commentToLikeRatio": null,
           "videoCount": null,
           "carouselCount": null,
@@ -21942,7 +22018,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "formatAnalytics": [
@@ -27820,14 +27896,16 @@
             "target": 3,
             "value": 18.433333,
             "progress": 6.144,
-            "met": true
+            "met": true,
+            "sampleSize": 79
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.005249,
             "progress": 0.262,
-            "met": false
+            "met": false,
+            "sampleSize": 79
           }
         ],
         "metCount": 1,
@@ -27842,7 +27920,13 @@
           "postsPerWeek": 18.433333333333334,
           "followerGrowth": 0.004311376787608845
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 79,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.888
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -27853,7 +27937,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -28099,14 +28183,16 @@
             "target": 3,
             "value": 14.466667,
             "progress": 4.822,
-            "met": true
+            "met": true,
+            "sampleSize": 62
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.00407,
             "progress": 0.203,
-            "met": false
+            "met": false,
+            "sampleSize": 62
           }
         ],
         "metCount": 1,
@@ -28121,7 +28207,13 @@
           "postsPerWeek": 14.466666666666667,
           "followerGrowth": 0.0128503634889936
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 62,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.861
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -28132,7 +28224,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -28141,7 +28233,7 @@
         "interactionRate": 8,
         "medianViews": 56,
         "viewEfficiency": 8,
-        "totalViews": 76
+        "totalViews": 81
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -28362,14 +28454,16 @@
             "target": 3,
             "value": 13.3,
             "progress": 4.433,
-            "met": true
+            "met": true,
+            "sampleSize": 57
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.032673,
             "progress": 1.634,
-            "met": true
+            "met": true,
+            "sampleSize": 57
           }
         ],
         "metCount": 2,
@@ -28384,7 +28478,13 @@
           "postsPerWeek": 13.3,
           "followerGrowth": 0.03338149709917482
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 57,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.851
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -28395,7 +28495,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -28404,7 +28504,7 @@
         "interactionRate": 79,
         "medianViews": 68,
         "viewEfficiency": 80,
-        "totalViews": 84
+        "totalViews": 87
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -28650,14 +28750,16 @@
             "target": 3,
             "value": 7.466667,
             "progress": 2.489,
-            "met": true
+            "met": true,
+            "sampleSize": 32
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.009804,
             "progress": 0.49,
-            "met": false
+            "met": false,
+            "sampleSize": 32
           }
         ],
         "metCount": 1,
@@ -28672,7 +28774,13 @@
           "postsPerWeek": 7.466666666666667,
           "followerGrowth": 0.007014838162774817
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 32,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.762
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -28683,7 +28791,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -28692,7 +28800,7 @@
         "interactionRate": 46,
         "medianViews": 84,
         "viewEfficiency": 48,
-        "totalViews": 72
+        "totalViews": 77
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -28920,14 +29028,16 @@
             "target": 3,
             "value": 1.4,
             "progress": 0.467,
-            "met": false
+            "met": false,
+            "sampleSize": 6
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.005941,
             "progress": 0.297,
-            "met": false
+            "met": false,
+            "sampleSize": 6
           }
         ],
         "metCount": 0,
@@ -28942,7 +29052,13 @@
           "postsPerWeek": 1.4,
           "followerGrowth": 0.10016010913535789
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 6,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.375
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -28953,7 +29069,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -28962,7 +29078,7 @@
         "interactionRate": 21,
         "medianViews": 36,
         "viewEfficiency": 20,
-        "totalViews": 28
+        "totalViews": 42
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -29123,14 +29239,16 @@
             "target": 3,
             "value": 5.366667,
             "progress": 1.789,
-            "met": true
+            "met": true,
+            "sampleSize": 23
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.012335,
             "progress": 0.617,
-            "met": false
+            "met": false,
+            "sampleSize": 23
           }
         ],
         "metCount": 1,
@@ -29145,7 +29263,13 @@
           "postsPerWeek": 5.366666666666666,
           "followerGrowth": 0.01093798729312856
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 23,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.697
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -29156,7 +29280,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -29165,7 +29289,7 @@
         "interactionRate": 50,
         "medianViews": 72,
         "viewEfficiency": 60,
-        "totalViews": 68
+        "totalViews": 74
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -29368,14 +29492,16 @@
             "target": 3,
             "value": 0,
             "progress": 0,
-            "met": false
+            "met": false,
+            "sampleSize": 0
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": null,
             "progress": null,
-            "met": null
+            "met": null,
+            "sampleSize": 0
           }
         ],
         "metCount": 0,
@@ -29390,7 +29516,16 @@
           "postsPerWeek": 0,
           "followerGrowth": 0.016889419407549733
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 0,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0
+        },
+        "eligibilityReasons": [
+          "0/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -29401,7 +29536,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -29410,7 +29545,7 @@
         "interactionRate": null,
         "medianViews": null,
         "viewEfficiency": null,
-        "totalViews": null
+        "totalViews": 19
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -29479,14 +29614,16 @@
             "target": 3,
             "value": 1.166667,
             "progress": 0.389,
-            "met": false
+            "met": false,
+            "sampleSize": 5
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.009445,
             "progress": 0.472,
-            "met": false
+            "met": false,
+            "sampleSize": 5
           }
         ],
         "metCount": 0,
@@ -29501,7 +29638,13 @@
           "postsPerWeek": 1.1666666666666667,
           "followerGrowth": -0.00019555349065647487
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 5,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.333
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -29512,7 +29655,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -29521,7 +29664,7 @@
         "interactionRate": 42,
         "medianViews": 44,
         "viewEfficiency": 52,
-        "totalViews": 24
+        "totalViews": 39
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -29676,14 +29819,16 @@
             "target": 3,
             "value": 0.7,
             "progress": 0.233,
-            "met": false
+            "met": false,
+            "sampleSize": 3
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.007964,
             "progress": 0.398,
-            "met": false
+            "met": false,
+            "sampleSize": 3
           }
         ],
         "metCount": 0,
@@ -29698,7 +29843,15 @@
           "postsPerWeek": 0.7,
           "followerGrowth": 0.0026114603323166286
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 3,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.231
+        },
+        "eligibilityReasons": [
+          "3/5 comparable posts"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -29709,7 +29862,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -29718,7 +29871,7 @@
         "interactionRate": 33,
         "medianViews": 48,
         "viewEfficiency": 92,
-        "totalViews": 16
+        "totalViews": 32
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -29852,14 +30005,16 @@
             "target": 3,
             "value": 5.6,
             "progress": 1.867,
-            "met": true
+            "met": true,
+            "sampleSize": 24
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.038524,
             "progress": 1.926,
-            "met": true
+            "met": true,
+            "sampleSize": 24
           }
         ],
         "metCount": 2,
@@ -29874,7 +30029,13 @@
           "postsPerWeek": 5.6,
           "followerGrowth": 0.011905672709590531
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 24,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.706
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -29885,7 +30046,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -29894,7 +30055,7 @@
         "interactionRate": 88,
         "medianViews": 88,
         "viewEfficiency": 72,
-        "totalViews": 80
+        "totalViews": 84
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -30147,14 +30308,16 @@
             "target": 3,
             "value": 2.566667,
             "progress": 0.856,
-            "met": false
+            "met": false,
+            "sampleSize": 11
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.035688,
             "progress": 1.784,
-            "met": true
+            "met": true,
+            "sampleSize": 11
           }
         ],
         "metCount": 1,
@@ -30169,7 +30332,13 @@
           "postsPerWeek": 2.566666666666667,
           "followerGrowth": 0.0014960405199788696
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 11,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.524
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -30180,7 +30349,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -30189,7 +30358,7 @@
         "interactionRate": 83,
         "medianViews": 4,
         "viewEfficiency": 36,
-        "totalViews": 12
+        "totalViews": 29
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -30377,14 +30546,16 @@
             "target": 3,
             "value": 3.966667,
             "progress": 1.322,
-            "met": true
+            "met": true,
+            "sampleSize": 17
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.020096,
             "progress": 1.005,
-            "met": true
+            "met": true,
+            "sampleSize": 17
           }
         ],
         "metCount": 2,
@@ -30399,7 +30570,13 @@
           "postsPerWeek": 3.966666666666667,
           "followerGrowth": 0.3240604825559077
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 17,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.63
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -30410,7 +30587,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -30419,7 +30596,7 @@
         "interactionRate": 63,
         "medianViews": 24,
         "viewEfficiency": 44,
-        "totalViews": 48
+        "totalViews": 58
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -30612,14 +30789,16 @@
             "target": 3,
             "value": 17.5,
             "progress": 5.833,
-            "met": true
+            "met": true,
+            "sampleSize": 75
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.008859,
             "progress": 0.443,
-            "met": false
+            "met": false,
+            "sampleSize": 25
           }
         ],
         "metCount": 1,
@@ -30634,7 +30813,13 @@
           "postsPerWeek": 17.5,
           "followerGrowth": 0.014900004761934538
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 25,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.714
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -30645,7 +30830,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -30654,7 +30839,7 @@
         "interactionRate": 38,
         "medianViews": 28,
         "viewEfficiency": 24,
-        "totalViews": 56
+        "totalViews": 65
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -30886,14 +31071,16 @@
             "target": 3,
             "value": 1.166667,
             "progress": 0.389,
-            "met": false
+            "met": false,
+            "sampleSize": 5
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.032511,
             "progress": 1.626,
-            "met": true
+            "met": true,
+            "sampleSize": 5
           }
         ],
         "metCount": 1,
@@ -30908,7 +31095,13 @@
           "postsPerWeek": 1.1666666666666667,
           "followerGrowth": 0.008687596129178576
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 5,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.333
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -30919,7 +31112,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -30928,7 +31121,7 @@
         "interactionRate": 75,
         "medianViews": 32,
         "viewEfficiency": 64,
-        "totalViews": 36
+        "totalViews": 48
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -31074,14 +31267,16 @@
             "target": 3,
             "value": 13.3,
             "progress": 4.433,
-            "met": true
+            "met": true,
+            "sampleSize": 57
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.007011,
             "progress": 0.351,
-            "met": false
+            "met": false,
+            "sampleSize": 57
           }
         ],
         "metCount": 1,
@@ -31096,7 +31291,13 @@
           "postsPerWeek": 13.3,
           "followerGrowth": 0.008072904868399178
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 57,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.851
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -31107,7 +31308,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -31116,7 +31317,7 @@
         "interactionRate": 29,
         "medianViews": 92,
         "viewEfficiency": 28,
-        "totalViews": 92
+        "totalViews": 94
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -31339,18 +31540,20 @@
             "target": 3,
             "value": 0.233333,
             "progress": 0.078,
-            "met": false
+            "met": false,
+            "sampleSize": 1
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
-            "value": null,
-            "progress": null,
-            "met": null
+            "value": 0.148707,
+            "progress": 7.435,
+            "met": true,
+            "sampleSize": 1
           }
         ],
-        "metCount": 0,
-        "measurableCount": 1
+        "metCount": 1,
+        "measurableCount": 2
       },
       "score": {
         "rank": null,
@@ -31361,7 +31564,16 @@
           "postsPerWeek": 0.23333333333333334,
           "followerGrowth": 0.004911667548645138
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 1,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.091
+        },
+        "eligibilityReasons": [
+          "1/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -31372,7 +31584,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -31381,7 +31593,7 @@
         "interactionRate": null,
         "medianViews": 76,
         "viewEfficiency": 84,
-        "totalViews": 20
+        "totalViews": 35
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -31486,14 +31698,16 @@
             "target": 3,
             "value": 1.633333,
             "progress": 0.544,
-            "met": false
+            "met": false,
+            "sampleSize": 7
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.842836,
             "progress": 42.142,
-            "met": true
+            "met": true,
+            "sampleSize": 4
           }
         ],
         "metCount": 1,
@@ -31508,7 +31722,15 @@
           "postsPerWeek": 1.6333333333333333,
           "followerGrowth": 0.11414896048705803
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 4,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.286
+        },
+        "eligibilityReasons": [
+          "4/5 comparable posts"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -31519,7 +31741,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -31528,7 +31750,7 @@
         "interactionRate": 100,
         "medianViews": 80,
         "viewEfficiency": 100,
-        "totalViews": 44
+        "totalViews": 55
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -31705,14 +31927,16 @@
             "target": 3,
             "value": 15.166667,
             "progress": 5.056,
-            "met": true
+            "met": true,
+            "sampleSize": 65
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.006508,
             "progress": 0.325,
-            "met": false
+            "met": false,
+            "sampleSize": 65
           }
         ],
         "metCount": 1,
@@ -31727,7 +31951,13 @@
           "postsPerWeek": 15.166666666666666,
           "followerGrowth": 0.01865970844937692
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 65,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.867
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -31738,7 +31968,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -31747,7 +31977,7 @@
         "interactionRate": 25,
         "medianViews": 40,
         "viewEfficiency": 16,
-        "totalViews": 64
+        "totalViews": 71
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -31977,14 +32207,16 @@
             "target": 3,
             "value": 0,
             "progress": 0,
-            "met": false
+            "met": false,
+            "sampleSize": 0
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": null,
             "progress": null,
-            "met": null
+            "met": null,
+            "sampleSize": 0
           }
         ],
         "metCount": 0,
@@ -31999,7 +32231,16 @@
           "postsPerWeek": 0,
           "followerGrowth": -0.004922368440289926
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 0,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0
+        },
+        "eligibilityReasons": [
+          "0/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -32010,7 +32251,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -32019,7 +32260,7 @@
         "interactionRate": null,
         "medianViews": null,
         "viewEfficiency": null,
-        "totalViews": null
+        "totalViews": 19
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -32082,14 +32323,16 @@
             "target": 3,
             "value": 7.7,
             "progress": 2.567,
-            "met": true
+            "met": true,
+            "sampleSize": 33
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.020387,
             "progress": 1.019,
-            "met": true
+            "met": true,
+            "sampleSize": 33
           }
         ],
         "metCount": 2,
@@ -32104,7 +32347,13 @@
           "postsPerWeek": 7.7,
           "followerGrowth": 0.0980677487342414
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 33,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.767
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -32115,7 +32364,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -32124,7 +32373,7 @@
         "interactionRate": 67,
         "medianViews": 20,
         "viewEfficiency": 68,
-        "totalViews": 40
+        "totalViews": 52
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -32350,14 +32599,16 @@
             "target": 3,
             "value": 1.166667,
             "progress": 0.389,
-            "met": false
+            "met": false,
+            "sampleSize": 5
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.004182,
             "progress": 0.209,
-            "met": false
+            "met": false,
+            "sampleSize": 5
           }
         ],
         "metCount": 0,
@@ -32372,7 +32623,13 @@
           "postsPerWeek": 1.1666666666666667,
           "followerGrowth": 0.008727280495290257
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 5,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.333
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -32383,7 +32640,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -32392,7 +32649,7 @@
         "interactionRate": 13,
         "medianViews": 96,
         "viewEfficiency": 96,
-        "totalViews": 52
+        "totalViews": 61
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -32558,14 +32815,16 @@
             "target": 3,
             "value": 1.866667,
             "progress": 0.622,
-            "met": false
+            "met": false,
+            "sampleSize": 8
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.00101,
             "progress": 0.051,
-            "met": false
+            "met": false,
+            "sampleSize": 8
           }
         ],
         "metCount": 0,
@@ -32580,7 +32839,13 @@
           "postsPerWeek": 1.8666666666666667,
           "followerGrowth": -0.0006103376775373759
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 8,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.444
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -32591,7 +32856,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -32600,7 +32865,7 @@
         "interactionRate": 4,
         "medianViews": 12,
         "viewEfficiency": 4,
-        "totalViews": 4
+        "totalViews": 23
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -32778,14 +33043,16 @@
             "target": 3,
             "value": 0,
             "progress": 0,
-            "met": false
+            "met": false,
+            "sampleSize": 0
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": null,
             "progress": null,
-            "met": null
+            "met": null,
+            "sampleSize": 0
           }
         ],
         "metCount": 0,
@@ -32800,7 +33067,16 @@
           "postsPerWeek": 0,
           "followerGrowth": 0.0019010978069453621
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 0,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0
+        },
+        "eligibilityReasons": [
+          "0/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -32811,7 +33087,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -32820,7 +33096,7 @@
         "interactionRate": null,
         "medianViews": null,
         "viewEfficiency": null,
-        "totalViews": null
+        "totalViews": 19
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -32889,14 +33165,16 @@
             "target": 3,
             "value": 6.3,
             "progress": 2.1,
-            "met": true
+            "met": true,
+            "sampleSize": 27
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.046229,
             "progress": 2.311,
-            "met": true
+            "met": true,
+            "sampleSize": 27
           }
         ],
         "metCount": 2,
@@ -32911,7 +33189,13 @@
           "postsPerWeek": 6.3,
           "followerGrowth": 0.0374026819560489
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 27,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.73
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -32922,7 +33206,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -32931,7 +33215,7 @@
         "interactionRate": 96,
         "medianViews": 16,
         "viewEfficiency": 56,
-        "totalViews": 32
+        "totalViews": 45
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -33161,14 +33445,16 @@
             "target": 3,
             "value": 3.5,
             "progress": 1.167,
-            "met": true
+            "met": true,
+            "sampleSize": 15
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.012451,
             "progress": 0.623,
-            "met": false
+            "met": false,
+            "sampleSize": 15
           }
         ],
         "metCount": 1,
@@ -33183,7 +33469,13 @@
           "postsPerWeek": 3.5,
           "followerGrowth": 0.00495650229087663
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 15,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.6
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -33194,7 +33486,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -33203,7 +33495,7 @@
         "interactionRate": 54,
         "medianViews": 8,
         "viewEfficiency": 32,
-        "totalViews": 8
+        "totalViews": 26
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -33417,14 +33709,16 @@
             "target": 3,
             "value": 0,
             "progress": 0,
-            "met": false
+            "met": false,
+            "sampleSize": 0
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": null,
             "progress": null,
-            "met": null
+            "met": null,
+            "sampleSize": 0
           }
         ],
         "metCount": 0,
@@ -33439,7 +33733,16 @@
           "postsPerWeek": 0,
           "followerGrowth": 0.007867068840164748
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 0,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0
+        },
+        "eligibilityReasons": [
+          "0/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -33450,7 +33753,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -33459,7 +33762,7 @@
         "interactionRate": null,
         "medianViews": null,
         "viewEfficiency": null,
-        "totalViews": null
+        "totalViews": 19
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -33528,14 +33831,16 @@
             "target": 3,
             "value": 23.566667,
             "progress": 7.856,
-            "met": true
+            "met": true,
+            "sampleSize": 101
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.021189,
             "progress": 1.059,
-            "met": true
+            "met": true,
+            "sampleSize": 101
           }
         ],
         "metCount": 2,
@@ -33550,7 +33855,13 @@
           "postsPerWeek": 23.566666666666666,
           "followerGrowth": 0.03178159921814827
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 101,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.91
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -33561,7 +33872,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -33570,7 +33881,7 @@
         "interactionRate": 71,
         "medianViews": 64,
         "viewEfficiency": 40,
-        "totalViews": 96
+        "totalViews": 97
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -33814,14 +34125,16 @@
             "target": 3,
             "value": 9.1,
             "progress": 3.033,
-            "met": true
+            "met": true,
+            "sampleSize": 39
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.041977,
             "progress": 2.099,
-            "met": true
+            "met": true,
+            "sampleSize": 39
           }
         ],
         "metCount": 2,
@@ -33836,7 +34149,13 @@
           "postsPerWeek": 9.1,
           "followerGrowth": 0.11912123038402722
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 39,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.796
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -33847,7 +34166,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -33856,7 +34175,7 @@
         "interactionRate": 92,
         "medianViews": 52,
         "viewEfficiency": 88,
-        "totalViews": 60
+        "totalViews": 68
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -34104,14 +34423,16 @@
             "target": 3,
             "value": 18.9,
             "progress": 6.3,
-            "met": true
+            "met": true,
+            "sampleSize": 81
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": 0.018162,
             "progress": 0.908,
-            "met": false
+            "met": false,
+            "sampleSize": 81
           }
         ],
         "metCount": 1,
@@ -34126,7 +34447,13 @@
           "postsPerWeek": 18.9,
           "followerGrowth": 0.07956118016571878
         },
-        "held": false
+        "held": false,
+        "sample": {
+          "comparablePosts": 81,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0.89
+        },
+        "eligibilityReasons": []
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -34137,7 +34464,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -34146,7 +34473,7 @@
         "interactionRate": 58,
         "medianViews": 60,
         "viewEfficiency": 76,
-        "totalViews": 88
+        "totalViews": 90
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -34392,14 +34719,16 @@
             "target": 3,
             "value": 0,
             "progress": 0,
-            "met": false
+            "met": false,
+            "sampleSize": 0
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": null,
             "progress": null,
-            "met": null
+            "met": null,
+            "sampleSize": 0
           }
         ],
         "metCount": 0,
@@ -34414,7 +34743,16 @@
           "postsPerWeek": 0,
           "followerGrowth": 0.059900433933567365
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 0,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0
+        },
+        "eligibilityReasons": [
+          "0/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -34425,7 +34763,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -34434,7 +34772,7 @@
         "interactionRate": null,
         "medianViews": null,
         "viewEfficiency": null,
-        "totalViews": null
+        "totalViews": 19
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",
@@ -34503,14 +34841,16 @@
             "target": 3,
             "value": 0,
             "progress": 0,
-            "met": false
+            "met": false,
+            "sampleSize": 0
           },
           {
             "metric": "engagementRate",
             "target": 0.02,
             "value": null,
             "progress": null,
-            "met": null
+            "met": null,
+            "sampleSize": 0
           }
         ],
         "metCount": 0,
@@ -34525,7 +34865,16 @@
           "postsPerWeek": 0,
           "followerGrowth": 0.03902279817488363
         },
-        "held": true
+        "held": true,
+        "sample": {
+          "comparablePosts": 0,
+          "minimumComparablePosts": 5,
+          "engagementReliability": 0
+        },
+        "eligibilityReasons": [
+          "0/5 comparable posts",
+          "engagementRate unavailable"
+        ]
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -34536,7 +34885,7 @@
         "medianInteractions": 129,
         "medianViews": 1383,
         "viewEfficiency": 0.1728677733257012,
-        "totalViews": 85324,
+        "totalViews": 31920,
         "commentToLikeRatio": 0.05525846702317291
       },
       "teamPercentiles": {
@@ -34545,7 +34894,7 @@
         "interactionRate": null,
         "medianViews": null,
         "viewEfficiency": null,
-        "totalViews": null
+        "totalViews": 19
       },
       "postingTime": {
         "timezone": "Asia/Dubai (UTC+4)",

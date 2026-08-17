@@ -199,7 +199,7 @@ continuing to rank people against a roster that no longer exists.
 
 ## Cost
 
-The regular refresh uses four Actor runs: roster profiles, roster posts, company profile and company posts. Post collection is incremental after the first complete snapshot. `data/apify-usage.json` records exact run IDs and any cost reported by Apify, anchored to a current-period console observation. The dashboard warns at the configurable `$4.25` soft limit before the `$5.00` plan ceiling; unknown charges stay labelled unknown rather than estimated.
+The regular refresh batches the active roster into two Actor runs: one profile run and one incremental posts run. `data/apify-usage.json` records exact run IDs and any cost reported by Apify, anchored to a current-period console observation. The Starter plan guard warns at the configurable `$23.20` soft limit (80% of the `$29.00` monthly usage credit); unknown charges stay labelled unknown rather than estimated. Developer transcription stays on its independent 14-day schedule so it does not spend credit during every social refresh.
 
 ## Swapping the provider
 

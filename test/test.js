@@ -318,6 +318,8 @@ const soloRegistry = {
     assert.strictEqual(analytics.medianComments, 30);
     assert.strictEqual(analytics.medianInteractions, 115);
     assert.strictEqual(analytics.interactionRate, 0.115);
+    assert.strictEqual(analytics.observedInteractionRate, 0.115);
+    assert.strictEqual(analytics.observedCommentRate, 0.03);
     assert.strictEqual(analytics.videoCount, 2);
     assert.strictEqual(analytics.carouselCount, 1);
     assert.strictEqual(analytics.imageCount, 1);
@@ -325,6 +327,29 @@ const soloRegistry = {
     assert.deepStrictEqual(analytics.metricCoverage, {
       posts: 4, likes: 4, comments: 4, shares: 0, videos: 2, videoViews: 2,
     });
+  });
+  await test('complete individual analytics show small samples without admitting them to team comparison', () => {
+    const r = rec({ followers: 1000, recentPosts: [
+      post(1, { id: 'only', likes: 100, comments: 10 }),
+    ], fetchMeta: Object.assign({}, rec().fetchMeta, { authoredPostCount: 1, rawPostCount: 1 }) });
+    const analytics = R.profileAnalytics([r], 'instagram', nowMs)[0];
+    assert.strictEqual(analytics.windowComplete, true);
+    assert.strictEqual(analytics.comparablePosts, 1);
+    assert.strictEqual(analytics.interactionRate, null);
+    assert.strictEqual(analytics.commentRate, null);
+    assert.strictEqual(analytics.observedInteractionRate, 0.11);
+    assert.strictEqual(analytics.observedCommentRate, 0.01);
+  });
+  await test('a verified zero-post window reports known zero totals without inventing rates', () => {
+    const r = rec({ recentPosts: [], fetchMeta: Object.assign({}, rec().fetchMeta, { authoredPostCount: 0, rawPostCount: 0 }) });
+    const analytics = R.profileAnalytics([r], 'instagram', nowMs)[0];
+    assert.strictEqual(analytics.windowComplete, true);
+    assert.strictEqual(analytics.postsInWindow, 0);
+    assert.strictEqual(analytics.totalLikes, 0);
+    assert.strictEqual(analytics.totalComments, 0);
+    assert.strictEqual(analytics.totalShares, 0);
+    assert.strictEqual(analytics.totalViews, 0);
+    assert.strictEqual(analytics.observedInteractionRate, null);
   });
   await test('team format analytics never mixes unsupported values into zero', () => {
     const r = rec({ recentPosts: [
@@ -603,6 +628,16 @@ const soloRegistry = {
     const override = C.targetsFor({ targets: { postsPerWeek: 5 } }, targets);
     assert.strictEqual(override.postsPerWeek, 5);
     assert.strictEqual(override.engagementRate, 0.02);
+  });
+  await test('personal engagement goal uses a complete small sample without changing team eligibility', () => {
+    const onePost = rec({ followers: 1000, recentPosts: [post(1, { likes: 100, comments: 10 })],
+      fetchMeta: Object.assign({}, rec().fetchMeta, { authoredPostCount: 1, rawPostCount: 1 }) });
+    const progress = C.goalProgress(onePost, {}, { engagementRate: 0.02 }, nowMs);
+    const goal = progress.goals.find(row => row.metric === 'engagementRate');
+    assert.strictEqual(goal.value, 0.11);
+    assert.strictEqual(goal.sampleSize, 1);
+    assert.strictEqual(goal.met, true);
+    assert.strictEqual(R.engagementRate(onePost, nowMs), null, 'team comparison still requires three posts');
   });
   await test('next actions carry the number that produced them and stay silent without data', () => {
     const silent = rec({ recentPosts: [post(20, { postedAt: new Date(nowMs - 20 * day).toISOString() })] });
@@ -927,7 +962,10 @@ const soloRegistry = {
     assert.match(html, /standard feed video that Instagram did not label as a Reel/);
     assert.match(html, /class="timing-cell"/);
     assert.match(html, /author's own typical rate/);
-    assert.match(html, /Measured · building comparison sample/);
+    assert.ok(!html.includes('Measured · building comparison sample'));
+    assert.match(html, /Personal interaction rate/);
+    assert.match(html, /personal result only until 3/);
+    assert.match(html, /No posts in the verified window, so no rate can be calculated/);
   });
   await test('published replay and its historical evidence carry the same passed validation', () => {
     const latest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
@@ -952,16 +990,26 @@ const soloRegistry = {
   });
   await test('usage telemetry produces a soft warning without guessing unknown run costs', () => {
     const ledger = U.emptyLedger();
-    ledger.observations.push({ at: '2026-08-15T00:00:00.000Z', periodStart: '2026-08-12T00:00:00.000Z', periodEnd: '2026-09-11T23:59:59.999Z', platformUsageUsd: 4.1 });
+    assert.strictEqual(ledger.softLimitUsd, 23.2);
+    assert.strictEqual(ledger.planLimitUsd, 29);
+    ledger.observations.push({ at: '2026-08-15T00:00:00.000Z', periodStart: '2026-08-12T00:00:00.000Z', periodEnd: '2026-09-11T23:59:59.999Z', platformUsageUsd: 23.1 });
     const summary = U.currentSummary(ledger, '2026-08-16T00:00:00.000Z');
-    assert.strictEqual(summary.usageUsd, 4.1);
+    assert.strictEqual(summary.usageUsd, 23.1);
     assert.strictEqual(summary.softWarning, false);
     ledger.runs.push({ at: '2026-08-16T00:00:00.000Z', runId: 'known', costUsd: 0.2 });
     ledger.runs.push({ at: '2026-08-16T00:00:00.000Z', runId: 'unknown', costUsd: null });
     const updated = U.currentSummary(ledger, '2026-08-16T01:00:00.000Z');
-    assert.strictEqual(updated.usageUsd, 4.3);
+    assert.strictEqual(updated.usageUsd, 23.3);
     assert.strictEqual(updated.softWarning, true);
     assert.strictEqual(updated.unknownCostRuns, 1);
+  });
+  await test('a fresh console observation remains authoritative after a plan upgrade', () => {
+    const ledger = U.emptyLedger();
+    ledger.runs.push({ at: '2026-08-15T00:00:00.000Z', runId: 'old-plan', costUsd: 4.95 });
+    ledger.observations.push({ at: '2026-08-17T00:00:00.000Z', platformUsageUsd: 0.1 });
+    assert.strictEqual(U.currentSummary(ledger, '2026-08-17T01:00:00.000Z').usageUsd, 0.1);
+    ledger.runs.push({ at: '2026-08-17T00:30:00.000Z', runId: 'starter-plan', costUsd: 0.25 });
+    assert.strictEqual(U.currentSummary(ledger, '2026-08-17T01:00:00.000Z').usageUsd, 0.35);
   });
   await test('a replay is validated on everything except freshness', () => {
     const records = [rec()];
