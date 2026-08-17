@@ -3,11 +3,13 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 const WINDOW_DAYS = 30;
 const MIN_ENGAGEMENT_POSTS = 3;
+const MIN_MOMENTUM_POSTS = 5;
+const MOMENTUM_RELIABILITY_PRIOR = 10;
 const MIN_MEASURED = 3;
 /*
  * The product brief asks who improved fastest, so improvement has to be inside
  * the score rather than parked on a side board. Follower growth is included
- * whenever a valid 5–9 day baseline exists; when it does not, its weight is
+ * whenever a valid 5–11 day baseline exists; when it does not, its weight is
  * redistributed across the remaining inputs and the score declares which
  * components produced it. Followers stay deliberately small: audience is
  * accumulated history, not this month's effort.
@@ -477,6 +479,37 @@ function minMax(values) {
   const high = Math.max(...numbers);
   return value => (typeof value !== 'number' || !Number.isFinite(value) || high === low) ? 0 : (value - low) / (high - low);
 }
+
+/*
+ * Momentum is a relative team signal, not a raw totals race. Mid-rank
+ * percentiles are deliberately used instead of min/max scaling: one breakout
+ * reel or one very large account can no longer compress everybody else toward
+ * zero. Ties receive the same midpoint and a one-person pool stays neutral.
+ */
+function percentileNormalizer(values) {
+  const numbers = values.filter(value => typeof value === 'number' && Number.isFinite(value)).sort((a, b) => a - b);
+  if (!numbers.length) return () => 0;
+  if (numbers.length === 1) return value => (typeof value === 'number' && Number.isFinite(value)) ? 0.5 : 0;
+  return value => {
+    if (typeof value !== 'number' || !Number.isFinite(value)) return 0;
+    const first = numbers.findIndex(number => number === value);
+    if (first < 0) {
+      const below = numbers.filter(number => number < value).length;
+      return below / (numbers.length - 1);
+    }
+    let last = first;
+    while (last + 1 < numbers.length && numbers[last + 1] === value) last += 1;
+    return ((first + last) / 2) / (numbers.length - 1);
+  };
+}
+
+function momentumTransform(key, value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  if (key === 'followers' || key === 'postsPerWeek') return Math.log1p(Math.max(0, value));
+  if (key === 'engagementRate') return Math.log1p(Math.max(0, value) * 100);
+  if (key === 'followerGrowth') return Math.sign(value) * Math.log1p(Math.abs(value) * 100);
+  return value;
+}
 /*
  * Weights are declared for every possible component, but only the components
  * actually measurable in this snapshot participate. Dropping one and leaving
@@ -516,45 +549,88 @@ function compositeLeaderboard(records, weights = DEFAULT_WEIGHTS, now = asOf(rec
     .filter(row => row.platform === 'instagram' && typeof row.followerPct === 'number' && Number.isFinite(row.followerPct))
     .map(row => [`${row.name}::${row.handle}`, row]));
   const growthAvailable = growthByKey.size > 0;
-  const people = forPlatform(records, 'instagram').filter(isRankable).map(record => ({
-    name: record.name,
-    role: record.role,
-    // The handle is what every other board is keyed by; without it a consumer
-    // cannot join a composite row back to its engagement or cadence figures.
-    handle: record.handle,
-    platforms: ['instagram'],
-    followers: record.followers,
-    engagementRate: windowCoverage(record, now, days).complete ? engagementRate(record, now, days) : null,
-    postsPerWeek: postsPerWeek(record, now, days),
-    followerGrowth: growthAvailable
-      ? (growthByKey.get(`${record.name}::${record.handle}`)?.followerPct ?? null)
-      : null,
-  }));
+  const people = forPlatform(records, 'instagram').filter(isRankable).map(record => {
+    const coverage = windowCoverage(record, now, days);
+    const comparablePosts = comparableWindowPosts(record, now, days).length;
+    return {
+      name: record.name,
+      role: record.role,
+      // The handle is what every other board is keyed by; without it a consumer
+      // cannot join a composite row back to its engagement or cadence figures.
+      handle: record.handle,
+      platforms: ['instagram'],
+      followers: record.followers,
+      engagementRate: coverage.complete ? engagementRate(record, now, days) : null,
+      postsPerWeek: postsPerWeek(record, now, days),
+      followerGrowth: growthAvailable
+        ? (growthByKey.get(`${record.name}::${record.handle}`)?.followerPct ?? null)
+        : null,
+      comparablePosts,
+      windowComplete: coverage.complete,
+    };
+  });
   const applied = resolveWeights(weights, growthAvailable);
   const keys = Object.keys(applied);
-  const normalizers = Object.fromEntries(keys.map(key => [key, minMax(people.map(person => person[key]))]));
-  const rows = people.map(person => {
+  const engagementPool = people.filter(person => (
+    person.windowComplete && person.comparablePosts >= MIN_MOMENTUM_POSTS &&
+    typeof person.engagementRate === 'number' && Number.isFinite(person.engagementRate)
+  ));
+  const teamMedianEngagement = median(engagementPool.map(person => person.engagementRate));
+  const prepared = people.map(person => {
+    const engagementReliability = person.comparablePosts / (person.comparablePosts + MOMENTUM_RELIABILITY_PRIOR);
+    const adjustedEngagement = typeof person.engagementRate === 'number' && typeof teamMedianEngagement === 'number'
+      ? engagementReliability * person.engagementRate + (1 - engagementReliability) * teamMedianEngagement
+      : person.engagementRate;
+    const adjusted = Object.assign({}, person, { engagementRate: adjustedEngagement });
     const measured = keys.filter(key => typeof person[key] === 'number' && Number.isFinite(person[key]));
     const missing = keys.filter(key => !measured.includes(key));
-    const provisional = measured.length < keys.length;
-    const score = provisional ? null : measured.reduce((sum, key) => sum + applied[key] * normalizers[key](person[key]), 0);
+    const eligibilityReasons = [];
+    if (!person.windowComplete) eligibilityReasons.push('incomplete 30-day coverage');
+    if (person.comparablePosts < MIN_MOMENTUM_POSTS) {
+      eligibilityReasons.push(`${person.comparablePosts}/${MIN_MOMENTUM_POSTS} comparable posts`);
+    }
+    if (missing.length) eligibilityReasons.push(`${missing.join(', ')} unavailable`);
     return {
-      name: person.name,
-      role: person.role,
-      handle: person.handle,
-      platforms: person.platforms,
+      person,
+      adjusted,
+      measured,
+      missing,
+      eligibilityReasons,
+      engagementReliability,
+      eligible: eligibilityReasons.length === 0,
+      transformed: Object.fromEntries(keys.map(key => [key, momentumTransform(key, adjusted[key])])),
+    };
+  });
+  const eligible = prepared.filter(row => row.eligible);
+  const normalizers = Object.fromEntries(keys.map(key => [key, percentileNormalizer(eligible.map(row => row.transformed[key]))]));
+  const rows = prepared.map(row => {
+    const normalized = Object.fromEntries(keys.map(key => [key, normalizers[key](row.transformed[key])]));
+    const score = row.eligible ? keys.reduce((sum, key) => sum + applied[key] * normalized[key], 0) : null;
+    return {
+      name: row.person.name,
+      role: row.person.role,
+      handle: row.person.handle,
+      platforms: row.person.platforms,
       score,
-      components: Object.fromEntries(keys.map(key => [key, typeof person[key] === 'number' ? person[key] : null])),
-      measuredMetrics: measured,
-      missingMetrics: missing,
-      provisional,
+      components: Object.fromEntries(keys.map(key => [key, typeof row.person[key] === 'number' ? row.person[key] : null])),
+      adjustedComponents: Object.fromEntries(keys.map(key => [key, typeof row.adjusted[key] === 'number' ? row.adjusted[key] : null])),
+      normalizedComponents: normalized,
+      measuredMetrics: row.measured,
+      missingMetrics: row.missing,
+      provisional: !row.eligible,
+      eligibilityReasons: row.eligibilityReasons,
+      sample: {
+        comparablePosts: row.person.comparablePosts,
+        minimumComparablePosts: MIN_MOMENTUM_POSTS,
+        engagementReliability: Math.round(row.engagementReliability * 1000) / 1000,
+      },
     };
   });
   const ranked = rankRows(rows.filter(row => !row.provisional && row.score !== null), 'score');
   const held = rows.filter(row => row.provisional || row.score === null).map(row => Object.assign({ rank: null }, row, {
     note: row.missingMetrics.includes('followerGrowth') && row.missingMetrics.length === 1
-      ? 'Not ranked yet — no 5–9 day follower baseline exists for this profile.'
-      : `Not ranked yet — ${row.missingMetrics.join(', ') || 'required data'} unavailable or sample too small.`,
+      ? 'Awaiting a comparable momentum sample — no 5–11 day follower baseline exists for this profile.'
+      : `Awaiting a comparable momentum sample — ${row.eligibilityReasons.join('; ') || 'required data unavailable'}.`,
   }));
   return ranked.concat(held);
 }
@@ -662,12 +738,19 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
   out.combined = {
     note: `Instagram momentum score: ${Object.entries(applied)
       .map(([key, value]) => `${Math.round(value * 100)}% ${WEIGHT_LABELS[key] || key}`)
-      .join(', ')}. Profiles need complete ${days}-day coverage, at least ${MIN_ENGAGEMENT_POSTS} comparable posts${growthUsable ? ', and a 5–9 day follower baseline' : ''}.`,
+      .join(', ')}. Components use outlier-resistant mid-rank percentiles; follower base and cadence are log-scaled, and engagement is reliability-adjusted toward the team median. Profiles need complete ${days}-day coverage, at least ${MIN_MOMENTUM_POSTS} comparable posts${growthUsable ? ', and a 5–11 day follower baseline' : ''}.`,
     composite: compositeLeaderboard(records, weights, now, days, growthRows),
     weights: applied,
     declaredWeights: weights,
     growthIncluded: growthUsable,
     windowDays: days,
+    normalization: {
+      method: 'mid-rank percentile',
+      followerAndCadenceTransform: 'log1p',
+      engagementTransform: 'reliability-adjusted log1p',
+      engagementPriorPosts: MOMENTUM_RELIABILITY_PRIOR,
+      minimumComparablePosts: MIN_MOMENTUM_POSTS,
+    },
   };
 
   /*
@@ -718,5 +801,5 @@ module.exports = {
   mostLiked, mostCommented, mostShared, profileAnalytics, formatAnalytics,
   teamBenchmarks, withTeamComparisons, percentile,
   compositeLeaderboard, growth, buildLeaderboards, activeWeights, resolveWeights,
-  DEFAULT_WEIGHTS, BASE_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MEASURED,
+  DEFAULT_WEIGHTS, BASE_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MOMENTUM_POSTS, MIN_MEASURED,
 };

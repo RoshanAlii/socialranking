@@ -40,6 +40,8 @@ const TZ_LABEL = process.env.KIRPA_TZ_LABEL || 'Asia/Dubai (UTC+4)';
 const MIN_POSTS_PER_HASHTAG = 5;
 const MIN_PROFILES_PER_HASHTAG = 3;
 const MIN_POSTS_PER_BUCKET = 3;
+const MIN_POSTS_PER_TIMING_BUCKET = 8;
+const MIN_PROFILES_PER_TIMING_BUCKET = 3;
 // Bars for turning a team-wide pattern into personal advice. Publishing is
 // cheap and being wrong is not, so a team pattern has to be both well sampled
 // and clearly better than the team's own typical rate before it is recommended.
@@ -192,7 +194,8 @@ function hashtagPerformance(records, platform, now = asOf(records), days = WINDO
 }
 
 function timingPerformance(records, platform, now = asOf(records), days = WINDOW_DAYS, opts = {}) {
-  const minPosts = opts.minPosts || MIN_POSTS_PER_BUCKET;
+  const minPosts = opts.minPosts || MIN_POSTS_PER_TIMING_BUCKET;
+  const minProfiles = opts.minProfiles || MIN_PROFILES_PER_TIMING_BUCKET;
   const rows = measurablePosts(records, platform, now, days);
   const grid = new Map();
   for (const row of rows) {
@@ -221,16 +224,19 @@ function timingPerformance(records, platform, now = asOf(records), days = WINDOW
     });
     return Object.assign({ block: block.key, blockLabel: block.label }, summarize(blockRows));
   }).filter(row => row.posts > 0);
-  const eligible = cells.filter(cell => cell.posts >= minPosts && cell.medianRate !== null);
+  const eligible = cells.filter(cell => (
+    cell.posts >= minPosts && cell.profiles >= minProfiles && cell.authorLift !== null
+  ));
   return {
     timezone: TZ_LABEL,
     minPosts,
+    minProfiles,
     totalPosts: rows.length,
     cells: cells.sort((a, b) => a.day - b.day),
     byDay,
     byBlock,
-    best: eligible.slice().sort((a, b) => b.medianRate - a.medianRate)[0] || null,
-    worst: eligible.slice().sort((a, b) => a.medianRate - b.medianRate)[0] || null,
+    best: eligible.slice().sort((a, b) => b.authorLift - a.authorLift)[0] || null,
+    worst: eligible.slice().sort((a, b) => a.authorLift - b.authorLift)[0] || null,
   };
 }
 
@@ -515,9 +521,8 @@ function nextActions(record, context = {}) {
    * receives is not advice, it is a banner.
    */
   const timing = context.timing;
-  const teamRate = context.teamMedianRate;
-  if (timing?.best?.medianRate && typeof teamRate === 'number' && teamRate > 0) {
-    const lift = timing.best.medianRate / teamRate;
+  if (timing?.best?.authorLift) {
+    const lift = timing.best.authorLift;
     const posted = posts.filter(post => {
       const parts = localParts(post.postedAt);
       return parts && parts.day === timing.best.day && hourBlock(parts.hour)?.key === timing.best.block;
@@ -526,7 +531,7 @@ function nextActions(record, context = {}) {
       actions.push({
         priority: 5,
         action: `Try publishing ${timing.best.dayName} ${timing.best.blockLabel} ${TZ_LABEL}.`,
-        because: `That slot earns ${round(lift, 2)}× the team's typical interaction rate across ${timing.best.posts} measured posts, and none of your ${posts.length} posts land there.`,
+        because: `Posts in that slot earn a median ${round(lift, 2)}× each author's own typical interaction rate across ${timing.best.posts} posts from ${timing.best.profiles} profiles, and none of your ${posts.length} posts land there.`,
       });
     }
   }
@@ -567,6 +572,8 @@ function buildContentIntelligence(records, platform, opts = {}) {
       minPostsPerHashtag: MIN_POSTS_PER_HASHTAG,
       minProfilesPerHashtag: MIN_PROFILES_PER_HASHTAG,
       minPostsPerBucket: MIN_POSTS_PER_BUCKET,
+      minPostsPerTimingBucket: MIN_POSTS_PER_TIMING_BUCKET,
+      minProfilesPerTimingBucket: MIN_PROFILES_PER_TIMING_BUCKET,
     },
     teamMedianRate: summarize(rows).medianRate,
     hashtags: hashtagPerformance(records, platform, now, days, opts),
@@ -585,6 +592,7 @@ module.exports = {
   interactionRate, summarize,
   TZ_LABEL, TZ_OFFSET_HOURS, DAY_NAMES, HOUR_BLOCKS, CAPTION_BUCKETS,
   MIN_POSTS_PER_HASHTAG, MIN_PROFILES_PER_HASHTAG, MIN_POSTS_PER_BUCKET,
+  MIN_POSTS_PER_TIMING_BUCKET, MIN_PROFILES_PER_TIMING_BUCKET,
   MIN_POSTS_FOR_TEAM_ADVICE, MIN_PROFILES_FOR_TEAM_ADVICE, MIN_TIMING_LIFT,
   CONTENT_PILLARS,
 };

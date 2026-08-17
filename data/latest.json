@@ -24,7 +24,7 @@
       "validatorVersion": 2,
       "snapshotCapturedAt": "2026-08-15T09:47:52.000Z",
       "rosterVersion": "2026-07-30-kirpa-workbook-v1",
-      "validatedAt": "2026-08-15T10:01:27.256Z",
+      "validatedAt": "2026-08-17T06:28:00.247Z",
       "mode": "replay"
     },
     "note": "Recomputed from the stored provider captures of 2026-08-15T09:47:52.000Z. Every number is real public data from that pull; it is not a fresh capture.",
@@ -33,10 +33,10 @@
       "rawSource": "github-actions-artifact:instagram-candidate-31877900462",
       "reason": "Recomputed from the completed live capture artifact against the current roster."
     },
-    "trendAvailable": false,
-    "growthBaselineAt": null,
-    "growthBaselineDays": null,
-    "growthWindowRule": "Baseline must be 5–9 days old; nearest to 7 days is used.",
+    "trendAvailable": true,
+    "growthBaselineAt": "2026-08-05T03:58:42.067Z",
+    "growthBaselineDays": 10.242476076388888,
+    "growthWindowRule": "Baseline must be 5–11 days old and use the same confirmed roster; nearest to 7 days is used and normalized to a weekly rate.",
     "shortWindowDays": 7,
     "optedOut": 0,
     "targets": {
@@ -22392,73 +22392,133 @@
       }
     },
     "combined": {
-      "note": "Instagram momentum score: 15% follower base, 45% typical engagement, 40% posting cadence. Profiles need complete 30-day coverage, at least 3 comparable posts.",
+      "note": "Instagram momentum score: 10% follower base, 40% typical engagement, 30% posting cadence, 20% follower growth. Components use outlier-resistant mid-rank percentiles; follower base and cadence are log-scaled, and engagement is reliability-adjusted toward the team median. Profiles need complete 30-day coverage, at least 5 comparable posts, and a 5–11 day follower baseline.",
       "composite": [
         {
           "rank": 1,
-          "name": "Sarvnihal Singh",
-          "role": "Consultant – Offplan Sales",
-          "handle": "sarvnihal.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.4778824605069171,
-          "components": {
-            "followers": 1333,
-            "engagementRate": 0.8428357089272318,
-            "postsPerWeek": 1.6333333333333333
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 2,
-          "name": "Manpreet Kaur",
-          "role": "Founder / CEO",
-          "handle": "manpreet.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.4651373494809779,
-          "components": {
-            "followers": 734169,
-            "engagementRate": 0.005249472532890928,
-            "postsPerWeek": 18.433333333333334
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 3,
           "name": "Lovepreet Singh",
           "role": "Consultant – Offplan Sales",
           "handle": "lovepreet.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.41524767548940694,
+          "score": 0.8095238095238095,
           "components": {
             "followers": 22370,
             "engagementRate": 0.021189092534644613,
-            "postsPerWeek": 23.566666666666666
+            "postsPerWeek": 23.566666666666666,
+            "followerGrowth": 0.03178159921814827
+          },
+          "adjustedComponents": {
+            "followers": 22370,
+            "engagementRate": 0.02039666218010045,
+            "postsPerWeek": 23.566666666666666,
+            "followerGrowth": 0.03178159921814827
+          },
+          "normalizedComponents": {
+            "followers": 0.7142857142857143,
+            "engagementRate": 0.7619047619047619,
+            "postsPerWeek": 1,
+            "followerGrowth": 0.6666666666666666
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 101,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.91
+          }
+        },
+        {
+          "rank": 2,
+          "name": "Mona Shah",
+          "role": "Consultant – Offplan Sales",
+          "handle": "mona.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.780952380952381,
+          "components": {
+            "followers": 3359,
+            "engagementRate": 0.041976778803215244,
+            "postsPerWeek": 9.1,
+            "followerGrowth": 0.11912123038402722
+          },
+          "adjustedComponents": {
+            "followers": 3359,
+            "engagementRate": 0.035939296516682415,
+            "postsPerWeek": 9.1,
+            "followerGrowth": 0.11912123038402722
+          },
+          "normalizedComponents": {
+            "followers": 0.23809523809523808,
+            "engagementRate": 0.9523809523809523,
+            "postsPerWeek": 0.6190476190476191,
+            "followerGrowth": 0.9523809523809523
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 39,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.796
+          }
+        },
+        {
+          "rank": 3,
+          "name": "Kamalpreet Kaur",
+          "role": "Team Leader – Sales",
+          "handle": "kamalpreet.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.7357142857142858,
+          "components": {
+            "followers": 10957,
+            "engagementRate": 0.032673176964497584,
+            "postsPerWeek": 13.3,
+            "followerGrowth": 0.03338149709917482
+          },
+          "adjustedComponents": {
+            "followers": 10957,
+            "engagementRate": 0.02964630213385681,
+            "postsPerWeek": 13.3,
+            "followerGrowth": 0.03338149709917482
+          },
+          "normalizedComponents": {
+            "followers": 0.42857142857142855,
+            "engagementRate": 0.8571428571428571,
+            "postsPerWeek": 0.6904761904761905,
+            "followerGrowth": 0.7142857142857143
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 57,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.851
+          }
         },
         {
           "rank": 4,
@@ -22468,173 +22528,333 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.3311422322374699,
+          "score": 0.7285714285714285,
           "components": {
             "followers": 6332,
             "engagementRate": 0.018161718256475046,
-            "postsPerWeek": 18.9
+            "postsPerWeek": 18.9,
+            "followerGrowth": 0.07956118016571878
+          },
+          "adjustedComponents": {
+            "followers": 6332,
+            "engagementRate": 0.017527805876555193,
+            "postsPerWeek": 18.9,
+            "followerGrowth": 0.07956118016571878
+          },
+          "normalizedComponents": {
+            "followers": 0.3333333333333333,
+            "engagementRate": 0.6190476190476191,
+            "postsPerWeek": 0.9523809523809523,
+            "followerGrowth": 0.8095238095238095
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 81,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.89
+          }
         },
         {
           "rank": 5,
-          "name": "Kirti Anil Walke",
+          "name": "Jitendra Makhija",
           "role": "Consultant – Offplan Sales",
-          "handle": "kirti.kirpa",
+          "handle": "jeet.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.3038819252987795,
+          "score": 0.6952380952380953,
           "components": {
-            "followers": 13546,
-            "engagementRate": 0.008858703676362026,
-            "postsPerWeek": 17.5
+            "followers": 822,
+            "engagementRate": 0.046228710462287104,
+            "postsPerWeek": 6.3,
+            "followerGrowth": 0.0374026819560489
+          },
+          "adjustedComponents": {
+            "followers": 822,
+            "engagementRate": 0.03708395509388637,
+            "postsPerWeek": 6.3,
+            "followerGrowth": 0.0374026819560489
+          },
+          "normalizedComponents": {
+            "followers": 0,
+            "engagementRate": 1,
+            "postsPerWeek": 0.47619047619047616,
+            "followerGrowth": 0.7619047619047619
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 27,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.73
+          }
         },
         {
           "rank": 6,
-          "name": "Aasfa Wahab Shaikh",
+          "name": "Vaishali Arora",
           "role": "Consultant – Offplan Sales",
-          "handle": "aasfa.kirpa",
+          "handle": "vaishali.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.264304549476597,
+          "score": 0.6666666666666666,
           "components": {
-            "followers": 19821,
-            "engagementRate": 0.0065082488270016645,
-            "postsPerWeek": 15.166666666666666
+            "followers": 26036,
+            "engagementRate": 0.0385235827316024,
+            "postsPerWeek": 5.6,
+            "followerGrowth": 0.011905672709590531
+          },
+          "adjustedComponents": {
+            "followers": 26036,
+            "engagementRate": 0.030838151222073576,
+            "postsPerWeek": 5.6,
+            "followerGrowth": 0.011905672709590531
+          },
+          "normalizedComponents": {
+            "followers": 0.8095238095238095,
+            "engagementRate": 0.9047619047619048,
+            "postsPerWeek": 0.42857142857142855,
+            "followerGrowth": 0.47619047619047616
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 24,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.706
+          }
         },
         {
           "rank": 7,
-          "name": "Dr. Jai Chatha",
-          "role": "Founder / Managing Director",
-          "handle": "jai.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.2567882054086665,
-          "components": {
-            "followers": 47543,
-            "engagementRate": 0.004069999789664093,
-            "postsPerWeek": 14.466666666666667
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 8,
-          "name": "Geethika Sri Vyshnavi",
-          "role": "Consultant – Offplan Sales",
-          "handle": "geethika.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.2541510236342083,
-          "components": {
-            "followers": 123803,
-            "engagementRate": 0.00701113866384498,
-            "postsPerWeek": 13.3
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 9,
-          "name": "Kamalpreet Kaur",
-          "role": "Team Leader – Sales",
-          "handle": "kamalpreet.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.24479552284464262,
-          "components": {
-            "followers": 10957,
-            "engagementRate": 0.032673176964497584,
-            "postsPerWeek": 13.3
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 10,
-          "name": "Mona Shah",
-          "role": "Consultant – Offplan Sales",
-          "handle": "mona.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.1769281236699944,
-          "components": {
-            "followers": 3359,
-            "engagementRate": 0.041976778803215244,
-            "postsPerWeek": 9.1
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 11,
           "name": "Akshay Rajendra",
           "role": "Consultant – Offplan Sales",
           "handle": "akshay.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.1413394269216168,
+          "score": 0.6238095238095238,
           "components": {
             "followers": 1962,
             "engagementRate": 0.020387359836901122,
-            "postsPerWeek": 7.7
+            "postsPerWeek": 7.7,
+            "followerGrowth": 0.0980677487342414
+          },
+          "adjustedComponents": {
+            "followers": 1962,
+            "engagementRate": 0.018528233269994906,
+            "postsPerWeek": 7.7,
+            "followerGrowth": 0.0980677487342414
+          },
+          "normalizedComponents": {
+            "followers": 0.14285714285714285,
+            "engagementRate": 0.6666666666666666,
+            "postsPerWeek": 0.5714285714285714,
+            "followerGrowth": 0.8571428571428571
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 33,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.767
+          }
+        },
+        {
+          "rank": 8,
+          "name": "Barkha Kalia",
+          "role": "Consultant – Offplan Sales",
+          "handle": "barkha.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.5476190476190477,
+          "components": {
+            "followers": 3334,
+            "engagementRate": 0.02009598080383923,
+            "postsPerWeek": 3.966666666666667,
+            "followerGrowth": 0.3240604825559077
+          },
+          "adjustedComponents": {
+            "followers": 3334,
+            "engagementRate": 0.01724306776508559,
+            "postsPerWeek": 3.966666666666667,
+            "followerGrowth": 0.3240604825559077
+          },
+          "normalizedComponents": {
+            "followers": 0.19047619047619047,
+            "engagementRate": 0.5714285714285714,
+            "postsPerWeek": 0.3333333333333333,
+            "followerGrowth": 1
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 17,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.63
+          }
+        },
+        {
+          "rank": 9,
+          "name": "Kirti Anil Walke",
+          "role": "Consultant – Offplan Sales",
+          "handle": "kirti.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.5380952380952381,
+          "components": {
+            "followers": 13546,
+            "engagementRate": 0.008858703676362026,
+            "postsPerWeek": 17.5,
+            "followerGrowth": 0.014900004761934538
+          },
+          "adjustedComponents": {
+            "followers": 13546,
+            "engagementRate": 0.009868535654316989,
+            "postsPerWeek": 17.5,
+            "followerGrowth": 0.014900004761934538
+          },
+          "normalizedComponents": {
+            "followers": 0.5238095238095238,
+            "engagementRate": 0.2857142857142857,
+            "postsPerWeek": 0.8571428571428571,
+            "followerGrowth": 0.5714285714285714
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 25,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.714
+          }
+        },
+        {
+          "rank": 10,
+          "name": "Aasfa Wahab Shaikh",
+          "role": "Consultant – Offplan Sales",
+          "handle": "aasfa.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.4714285714285714,
+          "components": {
+            "followers": 19821,
+            "engagementRate": 0.0065082488270016645,
+            "postsPerWeek": 15.166666666666666,
+            "followerGrowth": 0.01865970844937692
+          },
+          "adjustedComponents": {
+            "followers": 19821,
+            "engagementRate": 0.007292897729962029,
+            "postsPerWeek": 15.166666666666666,
+            "followerGrowth": 0.01865970844937692
+          },
+          "normalizedComponents": {
+            "followers": 0.6666666666666666,
+            "engagementRate": 0.09523809523809523,
+            "postsPerWeek": 0.8095238095238095,
+            "followerGrowth": 0.6190476190476191
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 65,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.867
+          }
+        },
+        {
+          "rank": 11,
+          "name": "Priyanka Jayanna",
+          "role": "Team Leader – Sales",
+          "handle": "priyanka.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.4476190476190476,
+          "components": {
+            "followers": 16781,
+            "engagementRate": 0.012335379298015613,
+            "postsPerWeek": 5.366666666666666,
+            "followerGrowth": 0.01093798729312856
+          },
+          "adjustedComponents": {
+            "followers": 16781,
+            "engagementRate": 0.0123528751468607,
+            "postsPerWeek": 5.366666666666666,
+            "followerGrowth": 0.01093798729312856
+          },
+          "normalizedComponents": {
+            "followers": 0.5714285714285714,
+            "engagementRate": 0.47619047619047616,
+            "postsPerWeek": 0.38095238095238093,
+            "followerGrowth": 0.42857142857142855
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 23,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.697
+          }
         },
         {
           "rank": 12,
@@ -22644,283 +22864,459 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.13791082278320918,
+          "score": 0.4428571428571429,
           "components": {
             "followers": 32232,
             "engagementRate": 0.00980392156862745,
-            "postsPerWeek": 7.466666666666667
+            "postsPerWeek": 7.466666666666667,
+            "followerGrowth": 0.007014838162774817
+          },
+          "adjustedComponents": {
+            "followers": 32232,
+            "engagementRate": 0.010420396337812438,
+            "postsPerWeek": 7.466666666666667,
+            "followerGrowth": 0.007014838162774817
+          },
+          "normalizedComponents": {
+            "followers": 0.8571428571428571,
+            "engagementRate": 0.38095238095238093,
+            "postsPerWeek": 0.5238095238095238,
+            "followerGrowth": 0.23809523809523808
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 32,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.762
+          }
         },
         {
           "rank": 13,
-          "name": "Jitendra Makhija",
+          "name": "Geethika Sri Vyshnavi",
           "role": "Consultant – Offplan Sales",
-          "handle": "jeet.kirpa",
+          "handle": "geethika.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.13115752134373135,
+          "score": 0.4357142857142857,
           "components": {
-            "followers": 822,
-            "engagementRate": 0.046228710462287104,
-            "postsPerWeek": 6.3
+            "followers": 123803,
+            "engagementRate": 0.00701113866384498,
+            "postsPerWeek": 13.3,
+            "followerGrowth": 0.008072904868399178
+          },
+          "adjustedComponents": {
+            "followers": 123803,
+            "engagementRate": 0.007814418803450863,
+            "postsPerWeek": 13.3,
+            "followerGrowth": 0.008072904868399178
+          },
+          "normalizedComponents": {
+            "followers": 0.9523809523809523,
+            "engagementRate": 0.19047619047619047,
+            "postsPerWeek": 0.6904761904761905,
+            "followerGrowth": 0.2857142857142857
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 57,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.851
+          }
         },
         {
           "rank": 14,
-          "name": "Vaishali Arora",
-          "role": "Consultant – Offplan Sales",
-          "handle": "vaishali.kirpa",
+          "name": "Dr. Jai Chatha",
+          "role": "Founder / Managing Director",
+          "handle": "jai.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.120312951703095,
+          "score": 0.4238095238095238,
           "components": {
-            "followers": 26036,
-            "engagementRate": 0.0385235827316024,
-            "postsPerWeek": 5.6
+            "followers": 47543,
+            "engagementRate": 0.004069999789664093,
+            "postsPerWeek": 14.466666666666667,
+            "followerGrowth": 0.0128503634889936
+          },
+          "adjustedComponents": {
+            "followers": 47543,
+            "engagementRate": 0.005225988096544691,
+            "postsPerWeek": 14.466666666666667,
+            "followerGrowth": 0.0128503634889936
+          },
+          "normalizedComponents": {
+            "followers": 0.9047619047619048,
+            "engagementRate": 0,
+            "postsPerWeek": 0.7619047619047619,
+            "followerGrowth": 0.5238095238095238
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 62,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.861
+          }
         },
         {
           "rank": 15,
-          "name": "Priyanka Jayanna",
-          "role": "Team Leader – Sales",
-          "handle": "priyanka.kirpa",
+          "name": "Manpreet Kaur",
+          "role": "Founder / CEO",
+          "handle": "manpreet.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.10046124607201731,
+          "score": 0.41904761904761906,
           "components": {
-            "followers": 16781,
-            "engagementRate": 0.012335379298015613,
-            "postsPerWeek": 5.366666666666666
+            "followers": 734169,
+            "engagementRate": 0.005249472532890928,
+            "postsPerWeek": 18.433333333333334,
+            "followerGrowth": 0.004311376787608845
+          },
+          "adjustedComponents": {
+            "followers": 734169,
+            "engagementRate": 0.006052129057195812,
+            "postsPerWeek": 18.433333333333334,
+            "followerGrowth": 0.004311376787608845
+          },
+          "normalizedComponents": {
+            "followers": 1,
+            "engagementRate": 0.047619047619047616,
+            "postsPerWeek": 0.9047619047619048,
+            "followerGrowth": 0.14285714285714285
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 79,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.888
+          }
         },
         {
-          "rank": 16,
-          "name": "Barkha Kalia",
-          "role": "Consultant – Offplan Sales",
-          "handle": "barkha.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.07809786070564644,
-          "components": {
-            "followers": 3334,
-            "engagementRate": 0.02009598080383923,
-            "postsPerWeek": 3.966666666666667
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 17,
-          "name": "Sahil Mendiratta",
-          "role": "Consultant – Offplan Sales",
-          "handle": "sahil.kirpaa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.06572066956894737,
-          "components": {
-            "followers": 1526,
-            "engagementRate": 0.012450851900393184,
-            "postsPerWeek": 3.5
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 18,
-          "name": "Sukhpreet Kaur",
-          "role": "Consultant – Offplan Sales",
-          "handle": "sukhpreetbal.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.06226942741263955,
-          "components": {
-            "followers": 1373,
-            "engagementRate": 0.035688273852876914,
-            "postsPerWeek": 2.566666666666667
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 19,
-          "name": "Sahil Bedi",
-          "role": "Consultant – Offplan Sales",
-          "handle": "sahilbedi.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.037389348215605286,
-          "components": {
-            "followers": 4214,
-            "engagementRate": 0.03251067869008068,
-            "postsPerWeek": 1.1666666666666667
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 20,
-          "name": "Sara Banu",
-          "role": "Consultant – Offplan Sales",
-          "handle": "sarafaisal.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.036832244742268934,
-          "components": {
-            "followers": 25735,
-            "engagementRate": 0.0010102972605401204,
-            "postsPerWeek": 1.8666666666666667
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek"
-          ],
-          "missingMetrics": [],
-          "provisional": false
-        },
-        {
-          "rank": 21,
+          "rank": 15,
           "name": "Lipika Madan",
           "role": "Team Leader – Sales",
           "handle": "lipika.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.029916161944149477,
+          "score": 0.41904761904761906,
           "components": {
             "followers": 17759,
             "engagementRate": 0.005940649811363253,
-            "postsPerWeek": 1.4
+            "postsPerWeek": 1.4,
+            "followerGrowth": 0.10016010913535789
+          },
+          "adjustedComponents": {
+            "followers": 17759,
+            "engagementRate": 0.009973440928763969,
+            "postsPerWeek": 1.4,
+            "followerGrowth": 0.10016010913535789
+          },
+          "normalizedComponents": {
+            "followers": 0.6190476190476191,
+            "engagementRate": 0.3333333333333333,
+            "postsPerWeek": 0.14285714285714285,
+            "followerGrowth": 0.9047619047619048
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 6,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.375
+          }
         },
         {
-          "rank": 22,
+          "rank": 15,
+          "name": "Sukhpreet Kaur",
+          "role": "Consultant – Offplan Sales",
+          "handle": "sukhpreetbal.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.41904761904761906,
+          "components": {
+            "followers": 1373,
+            "engagementRate": 0.035688273852876914,
+            "postsPerWeek": 2.566666666666667,
+            "followerGrowth": 0.0014960405199788696
+          },
+          "adjustedComponents": {
+            "followers": 1373,
+            "engagementRate": 0.0245953413511281,
+            "postsPerWeek": 2.566666666666667,
+            "followerGrowth": 0.0014960405199788696
+          },
+          "normalizedComponents": {
+            "followers": 0.047619047619047616,
+            "engagementRate": 0.8095238095238095,
+            "postsPerWeek": 0.23809523809523808,
+            "followerGrowth": 0.09523809523809523
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 11,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.524
+          }
+        },
+        {
+          "rank": 18,
+          "name": "Sahil Bedi",
+          "role": "Consultant – Offplan Sales",
+          "handle": "sahilbedi.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.3952380952380953,
+          "components": {
+            "followers": 4214,
+            "engagementRate": 0.03251067869008068,
+            "postsPerWeek": 1.1666666666666667,
+            "followerGrowth": 0.008687596129178576
+          },
+          "adjustedComponents": {
+            "followers": 4214,
+            "engagementRate": 0.019098969962829827,
+            "postsPerWeek": 1.1666666666666667,
+            "followerGrowth": 0.008687596129178576
+          },
+          "normalizedComponents": {
+            "followers": 0.2857142857142857,
+            "engagementRate": 0.7142857142857143,
+            "postsPerWeek": 0.047619047619047616,
+            "followerGrowth": 0.3333333333333333
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 5,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.333
+          }
+        },
+        {
+          "rank": 19,
+          "name": "Sahil Mendiratta",
+          "role": "Consultant – Offplan Sales",
+          "handle": "sahil.kirpaa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.34285714285714286,
+          "components": {
+            "followers": 1526,
+            "engagementRate": 0.012450851900393184,
+            "postsPerWeek": 3.5,
+            "followerGrowth": 0.00495650229087663
+          },
+          "adjustedComponents": {
+            "followers": 1526,
+            "engagementRate": 0.01242775737991767,
+            "postsPerWeek": 3.5,
+            "followerGrowth": 0.00495650229087663
+          },
+          "normalizedComponents": {
+            "followers": 0.09523809523809523,
+            "engagementRate": 0.5238095238095238,
+            "postsPerWeek": 0.2857142857142857,
+            "followerGrowth": 0.19047619047619047
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 15,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.6
+          }
+        },
+        {
+          "rank": 20,
           "name": "Preety Vijayvargiya",
           "role": "Senior Consultant – Secondary (Commercial)",
           "handle": "preety.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.02562659138360883,
+          "score": 0.23333333333333334,
           "components": {
             "followers": 6988,
             "engagementRate": 0.009444762449914138,
-            "postsPerWeek": 1.1666666666666667
+            "postsPerWeek": 1.1666666666666667,
+            "followerGrowth": -0.00019555349065647487
+          },
+          "adjustedComponents": {
+            "followers": 6988,
+            "engagementRate": 0.011410331216107645,
+            "postsPerWeek": 1.1666666666666667,
+            "followerGrowth": -0.00019555349065647487
+          },
+          "normalizedComponents": {
+            "followers": 0.38095238095238093,
+            "engagementRate": 0.42857142857142855,
+            "postsPerWeek": 0.047619047619047616,
+            "followerGrowth": 0.047619047619047616
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 5,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.333
+          }
         },
         {
-          "rank": 23,
+          "rank": 20,
           "name": "Kirat Singh Sapra",
           "role": "Consultant – Offplan Sales",
           "handle": "kirat.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.023731365694401926,
+          "score": 0.23333333333333334,
           "components": {
             "followers": 11477,
             "engagementRate": 0.004182277598675612,
-            "postsPerWeek": 1.1666666666666667
+            "postsPerWeek": 1.1666666666666667,
+            "followerGrowth": 0.008727280495290257
+          },
+          "adjustedComponents": {
+            "followers": 11477,
+            "engagementRate": 0.009656169599028137,
+            "postsPerWeek": 1.1666666666666667,
+            "followerGrowth": 0.008727280495290257
+          },
+          "normalizedComponents": {
+            "followers": 0.47619047619047616,
+            "engagementRate": 0.23809523809523808,
+            "postsPerWeek": 0.047619047619047616,
+            "followerGrowth": 0.38095238095238093
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 5,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.333
+          }
         },
         {
-          "rank": 24,
-          "name": "Puja Maheshwari",
-          "role": "Senior Consultant – Secondary Sales",
-          "handle": "dxb.pooja.kirpa",
+          "rank": 22,
+          "name": "Sara Banu",
+          "role": "Consultant – Offplan Sales",
+          "handle": "sarafaisal.kirpa",
           "platforms": [
             "instagram"
           ],
-          "score": 0.01607593580864797,
+          "score": 0.19047619047619047,
           "components": {
-            "followers": 2888,
-            "engagementRate": 0.00796398891966759,
-            "postsPerWeek": 0.7
+            "followers": 25735,
+            "engagementRate": 0.0010102972605401204,
+            "postsPerWeek": 1.8666666666666667,
+            "followerGrowth": -0.0006103376775373759
+          },
+          "adjustedComponents": {
+            "followers": 25735,
+            "engagementRate": 0.007334085226464719,
+            "postsPerWeek": 1.8666666666666667,
+            "followerGrowth": -0.0006103376775373759
+          },
+          "normalizedComponents": {
+            "followers": 0.7619047619047619,
+            "engagementRate": 0.14285714285714285,
+            "postsPerWeek": 0.19047619047619047,
+            "followerGrowth": 0
           },
           "measuredMetrics": [
             "followers",
             "engagementRate",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [],
-          "provisional": false
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 8,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.444
+          }
         },
         {
           "rank": null,
@@ -22934,17 +23330,85 @@
           "components": {
             "followers": 1074,
             "engagementRate": null,
-            "postsPerWeek": 0
+            "postsPerWeek": 0,
+            "followerGrowth": 0.016889419407549733
+          },
+          "adjustedComponents": {
+            "followers": 1074,
+            "engagementRate": null,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.016889419407549733
+          },
+          "normalizedComponents": {
+            "followers": 0.047619047619047616,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.6190476190476191
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "0/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 0,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0
+          },
+          "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
+        },
+        {
+          "rank": null,
+          "name": "Puja Maheshwari",
+          "role": "Senior Consultant – Secondary Sales",
+          "handle": "dxb.pooja.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": null,
+          "components": {
+            "followers": 2888,
+            "engagementRate": 0.00796398891966759,
+            "postsPerWeek": 0.7,
+            "followerGrowth": 0.0026114603323166286
+          },
+          "adjustedComponents": {
+            "followers": 2888,
+            "engagementRate": 0.01137100944238821,
+            "postsPerWeek": 0.7,
+            "followerGrowth": 0.0026114603323166286
+          },
+          "normalizedComponents": {
+            "followers": 0.19047619047619047,
+            "engagementRate": 0.42857142857142855,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.14285714285714285
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": true,
+          "eligibilityReasons": [
+            "3/5 comparable posts"
+          ],
+          "sample": {
+            "comparablePosts": 3,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.231
+          },
+          "note": "Awaiting a comparable momentum sample — 3/5 comparable posts."
         },
         {
           "rank": null,
@@ -22958,17 +23422,85 @@
           "components": {
             "followers": 9939,
             "engagementRate": null,
-            "postsPerWeek": 0.23333333333333334
+            "postsPerWeek": 0.23333333333333334,
+            "followerGrowth": 0.004911667548645138
+          },
+          "adjustedComponents": {
+            "followers": 9939,
+            "engagementRate": null,
+            "postsPerWeek": 0.23333333333333334,
+            "followerGrowth": 0.004911667548645138
+          },
+          "normalizedComponents": {
+            "followers": 0.42857142857142855,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.19047619047619047
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "1/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 1,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.091
+          },
+          "note": "Awaiting a comparable momentum sample — 1/5 comparable posts; engagementRate unavailable."
+        },
+        {
+          "rank": null,
+          "name": "Sarvnihal Singh",
+          "role": "Consultant – Offplan Sales",
+          "handle": "sarvnihal.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": null,
+          "components": {
+            "followers": 1333,
+            "engagementRate": 0.8428357089272318,
+            "postsPerWeek": 1.6333333333333333,
+            "followerGrowth": 0.11414896048705803
+          },
+          "adjustedComponents": {
+            "followers": 1333,
+            "engagementRate": 0.2496624279786408,
+            "postsPerWeek": 1.6333333333333333,
+            "followerGrowth": 0.11414896048705803
+          },
+          "normalizedComponents": {
+            "followers": 0.047619047619047616,
+            "engagementRate": 1.0476190476190477,
+            "postsPerWeek": 0.19047619047619047,
+            "followerGrowth": 0.9523809523809523
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": true,
+          "eligibilityReasons": [
+            "4/5 comparable posts"
+          ],
+          "sample": {
+            "comparablePosts": 4,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.286
+          },
+          "note": "Awaiting a comparable momentum sample — 4/5 comparable posts."
         },
         {
           "rank": null,
@@ -22982,17 +23514,40 @@
           "components": {
             "followers": 552,
             "engagementRate": null,
-            "postsPerWeek": 0
+            "postsPerWeek": 0,
+            "followerGrowth": -0.004922368440289926
+          },
+          "adjustedComponents": {
+            "followers": 552,
+            "engagementRate": null,
+            "postsPerWeek": 0,
+            "followerGrowth": -0.004922368440289926
+          },
+          "normalizedComponents": {
+            "followers": 0,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "0/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 0,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0
+          },
+          "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
         },
         {
           "rank": null,
@@ -23006,17 +23561,40 @@
           "components": {
             "followers": 1081,
             "engagementRate": null,
-            "postsPerWeek": 0
+            "postsPerWeek": 0,
+            "followerGrowth": 0.0019010978069453621
+          },
+          "adjustedComponents": {
+            "followers": 1081,
+            "engagementRate": null,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.0019010978069453621
+          },
+          "normalizedComponents": {
+            "followers": 0.047619047619047616,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.14285714285714285
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "0/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 0,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0
+          },
+          "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
         },
         {
           "rank": null,
@@ -23030,17 +23608,40 @@
           "components": {
             "followers": 614,
             "engagementRate": null,
-            "postsPerWeek": 0
+            "postsPerWeek": 0,
+            "followerGrowth": 0.007867068840164748
+          },
+          "adjustedComponents": {
+            "followers": 614,
+            "engagementRate": null,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.007867068840164748
+          },
+          "normalizedComponents": {
+            "followers": 0,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.2857142857142857
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "0/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 0,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0
+          },
+          "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
         },
         {
           "rank": null,
@@ -23054,17 +23655,40 @@
           "components": {
             "followers": 625,
             "engagementRate": null,
-            "postsPerWeek": 0
+            "postsPerWeek": 0,
+            "followerGrowth": 0.059900433933567365
+          },
+          "adjustedComponents": {
+            "followers": 625,
+            "engagementRate": null,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.059900433933567365
+          },
+          "normalizedComponents": {
+            "followers": 0,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.8095238095238095
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "0/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 0,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0
+          },
+          "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
         },
         {
           "rank": null,
@@ -23078,23 +23702,47 @@
           "components": {
             "followers": 18780,
             "engagementRate": null,
-            "postsPerWeek": 0
+            "postsPerWeek": 0,
+            "followerGrowth": 0.03902279817488363
+          },
+          "adjustedComponents": {
+            "followers": 18780,
+            "engagementRate": null,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.03902279817488363
+          },
+          "normalizedComponents": {
+            "followers": 0.6666666666666666,
+            "engagementRate": 0,
+            "postsPerWeek": 0,
+            "followerGrowth": 0.8095238095238095
           },
           "measuredMetrics": [
             "followers",
-            "postsPerWeek"
+            "postsPerWeek",
+            "followerGrowth"
           ],
           "missingMetrics": [
             "engagementRate"
           ],
           "provisional": true,
-          "note": "Not ranked yet — engagementRate unavailable or sample too small."
+          "eligibilityReasons": [
+            "0/5 comparable posts",
+            "engagementRate unavailable"
+          ],
+          "sample": {
+            "comparablePosts": 0,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0
+          },
+          "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
         }
       ],
       "weights": {
-        "followers": 0.15,
-        "engagementRate": 0.45,
-        "postsPerWeek": 0.4
+        "followers": 0.1,
+        "engagementRate": 0.4,
+        "postsPerWeek": 0.3,
+        "followerGrowth": 0.2
       },
       "declaredWeights": {
         "followers": 0.1,
@@ -23102,8 +23750,15 @@
         "postsPerWeek": 0.3,
         "followerGrowth": 0.2
       },
-      "growthIncluded": false,
-      "windowDays": 30
+      "growthIncluded": true,
+      "windowDays": 30,
+      "normalization": {
+        "method": "mid-rank percentile",
+        "followerAndCadenceTransform": "log1p",
+        "engagementTransform": "reliability-adjusted log1p",
+        "engagementPriorPosts": 10,
+        "minimumComparablePosts": 5
+      }
     },
     "alternateWindows": {
       "7": {
@@ -23736,201 +24391,381 @@
         "composite": [
           {
             "rank": 1,
-            "name": "Jitendra Makhija",
-            "role": "Consultant – Offplan Sales",
-            "handle": "jeet.kirpa",
-            "platforms": [
-              "instagram"
-            ],
-            "score": 0.6024361582990267,
-            "components": {
-              "followers": 822,
-              "engagementRate": 0.04440389294403893,
-              "postsPerWeek": 8
-            },
-            "measuredMetrics": [
-              "followers",
-              "engagementRate",
-              "postsPerWeek"
-            ],
-            "missingMetrics": [],
-            "provisional": false
-          },
-          {
-            "rank": 2,
-            "name": "Mona Shah",
-            "role": "Consultant – Offplan Sales",
-            "handle": "mona.kirpa",
-            "platforms": [
-              "instagram"
-            ],
-            "score": 0.5431834015251332,
-            "components": {
-              "followers": 3359,
-              "engagementRate": 0.04048824054778208,
-              "postsPerWeek": 7
-            },
-            "measuredMetrics": [
-              "followers",
-              "engagementRate",
-              "postsPerWeek"
-            ],
-            "missingMetrics": [],
-            "provisional": false
-          },
-          {
-            "rank": 3,
             "name": "Spoorthi Hassan",
             "role": "Consultant – Offplan Sales",
             "handle": "spoorthi.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.5355510704180675,
+            "score": 0.7499999999999999,
             "components": {
               "followers": 6332,
               "engagementRate": 0.014055590650663297,
-              "postsPerWeek": 21
+              "postsPerWeek": 21,
+              "followerGrowth": 0.07956118016571878
+            },
+            "adjustedComponents": {
+              "followers": 6332,
+              "engagementRate": 0.012854221966244493,
+              "postsPerWeek": 21,
+              "followerGrowth": 0.07956118016571878
+            },
+            "normalizedComponents": {
+              "followers": 0.3,
+              "engagementRate": 0.7,
+              "postsPerWeek": 1,
+              "followerGrowth": 0.7
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 21,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.677
+            }
           },
           {
-            "rank": 4,
+            "rank": 2,
             "name": "Lovepreet Singh",
             "role": "Consultant – Offplan Sales",
             "handle": "lovepreet.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.49125385707850794,
+            "score": 0.7300000000000002,
             "components": {
               "followers": 22370,
               "engagementRate": 0.014975413500223514,
-              "postsPerWeek": 18
+              "postsPerWeek": 18,
+              "followerGrowth": 0.03178159921814827
+            },
+            "adjustedComponents": {
+              "followers": 22370,
+              "engagementRate": 0.013316818581916903,
+              "postsPerWeek": 18,
+              "followerGrowth": 0.03178159921814827
+            },
+            "normalizedComponents": {
+              "followers": 0.6,
+              "engagementRate": 0.8,
+              "postsPerWeek": 0.9,
+              "followerGrowth": 0.4
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 18,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.643
+            }
           },
           {
-            "rank": 5,
-            "name": "Manpreet Kaur",
-            "role": "Founder / CEO",
-            "handle": "manpreet.kirpa",
+            "rank": 3,
+            "name": "Mona Shah",
+            "role": "Consultant – Offplan Sales",
+            "handle": "mona.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.48165078212165746,
+            "score": 0.6700000000000002,
             "components": {
-              "followers": 734169,
-              "engagementRate": 0.0037212140528951783,
-              "postsPerWeek": 16
+              "followers": 3359,
+              "engagementRate": 0.04048824054778208,
+              "postsPerWeek": 7,
+              "followerGrowth": 0.11912123038402722
+            },
+            "adjustedComponents": {
+              "followers": 3359,
+              "engagementRate": 0.02274889183083086,
+              "postsPerWeek": 7,
+              "followerGrowth": 0.11912123038402722
+            },
+            "normalizedComponents": {
+              "followers": 0.2,
+              "engagementRate": 0.9,
+              "postsPerWeek": 0.3,
+              "followerGrowth": 1
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 7,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.412
+            }
           },
           {
-            "rank": 6,
+            "rank": 4,
+            "name": "Jitendra Makhija",
+            "role": "Consultant – Offplan Sales",
+            "handle": "jeet.kirpa",
+            "platforms": [
+              "instagram"
+            ],
+            "score": 0.64,
+            "components": {
+              "followers": 822,
+              "engagementRate": 0.04440389294403893,
+              "postsPerWeek": 8,
+              "followerGrowth": 0.0374026819560489
+            },
+            "adjustedComponents": {
+              "followers": 822,
+              "engagementRate": 0.02547470115788675,
+              "postsPerWeek": 8,
+              "followerGrowth": 0.0374026819560489
+            },
+            "normalizedComponents": {
+              "followers": 0,
+              "engagementRate": 1,
+              "postsPerWeek": 0.4,
+              "followerGrowth": 0.6
+            },
+            "measuredMetrics": [
+              "followers",
+              "engagementRate",
+              "postsPerWeek",
+              "followerGrowth"
+            ],
+            "missingMetrics": [],
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 8,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.444
+            }
+          },
+          {
+            "rank": 5,
             "name": "Saloni Bedi",
             "role": "Team Leader – Sales",
             "handle": "saloni.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.2925897823355561,
+            "score": 0.45500000000000007,
             "components": {
               "followers": 32232,
               "engagementRate": 0.010331347728965004,
-              "postsPerWeek": 10
+              "postsPerWeek": 10,
+              "followerGrowth": 0.007014838162774817
+            },
+            "adjustedComponents": {
+              "followers": 32232,
+              "engagementRate": 0.010331347728965004,
+              "postsPerWeek": 10,
+              "followerGrowth": 0.007014838162774817
+            },
+            "normalizedComponents": {
+              "followers": 0.7,
+              "engagementRate": 0.5,
+              "postsPerWeek": 0.55,
+              "followerGrowth": 0.1
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 10,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.5
+            }
           },
           {
-            "rank": 7,
+            "rank": 6,
             "name": "Kamalpreet Kaur",
             "role": "Team Leader – Sales",
             "handle": "kamalpreet.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.2688103094351074,
+            "score": 0.41000000000000003,
             "components": {
               "followers": 10957,
               "engagementRate": 0.015788993337592407,
-              "postsPerWeek": 6
+              "postsPerWeek": 6,
+              "followerGrowth": 0.03338149709917482
+            },
+            "adjustedComponents": {
+              "followers": 10957,
+              "engagementRate": 0.01237796483220028,
+              "postsPerWeek": 6,
+              "followerGrowth": 0.03338149709917482
+            },
+            "normalizedComponents": {
+              "followers": 0.4,
+              "engagementRate": 0.6,
+              "postsPerWeek": 0.1,
+              "followerGrowth": 0.5
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 6,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.375
+            }
           },
           {
-            "rank": 8,
+            "rank": 7,
+            "name": "Manpreet Kaur",
+            "role": "Founder / CEO",
+            "handle": "manpreet.kirpa",
+            "platforms": [
+              "instagram"
+            ],
+            "score": 0.38,
+            "components": {
+              "followers": 734169,
+              "engagementRate": 0.0037212140528951783,
+              "postsPerWeek": 16,
+              "followerGrowth": 0.004311376787608845
+            },
+            "adjustedComponents": {
+              "followers": 734169,
+              "engagementRate": 0.006263573159075881,
+              "postsPerWeek": 16,
+              "followerGrowth": 0.004311376787608845
+            },
+            "normalizedComponents": {
+              "followers": 1,
+              "engagementRate": 0.1,
+              "postsPerWeek": 0.8,
+              "followerGrowth": 0
+            },
+            "measuredMetrics": [
+              "followers",
+              "engagementRate",
+              "postsPerWeek",
+              "followerGrowth"
+            ],
+            "missingMetrics": [],
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 16,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.615
+            }
+          },
+          {
+            "rank": 7,
+            "name": "Lipika Madan",
+            "role": "Team Leader – Sales",
+            "handle": "lipika.kirpa",
+            "platforms": [
+              "instagram"
+            ],
+            "score": 0.38,
+            "components": {
+              "followers": 17759,
+              "engagementRate": 0.005940649811363253,
+              "postsPerWeek": 6,
+              "followerGrowth": 0.10016010913535789
+            },
+            "adjustedComponents": {
+              "followers": 17759,
+              "engagementRate": 0.008684836009864347,
+              "postsPerWeek": 6,
+              "followerGrowth": 0.10016010913535789
+            },
+            "normalizedComponents": {
+              "followers": 0.5,
+              "engagementRate": 0.3,
+              "postsPerWeek": 0.1,
+              "followerGrowth": 0.9
+            },
+            "measuredMetrics": [
+              "followers",
+              "engagementRate",
+              "postsPerWeek",
+              "followerGrowth"
+            ],
+            "missingMetrics": [],
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 6,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.375
+            }
+          },
+          {
+            "rank": 9,
             "name": "Geethika Sri Vyshnavi",
             "role": "Consultant – Offplan Sales",
             "handle": "geethika.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.2491436863323553,
+            "score": 0.3750000000000001,
             "components": {
               "followers": 123803,
               "engagementRate": 0.0043536909444843825,
-              "postsPerWeek": 10
+              "postsPerWeek": 10,
+              "followerGrowth": 0.008072904868399178
+            },
+            "adjustedComponents": {
+              "followers": 123803,
+              "engagementRate": 0.007342519336724694,
+              "postsPerWeek": 10,
+              "followerGrowth": 0.008072904868399178
+            },
+            "normalizedComponents": {
+              "followers": 0.9,
+              "engagementRate": 0.2,
+              "postsPerWeek": 0.55,
+              "followerGrowth": 0.2
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
-          },
-          {
-            "rank": 9,
-            "name": "Dr. Jai Chatha",
-            "role": "Founder / Managing Director",
-            "handle": "jai.kirpa",
-            "platforms": [
-              "instagram"
-            ],
-            "score": 0.23817950744637284,
-            "components": {
-              "followers": 47543,
-              "engagementRate": 0.0011358138947899796,
-              "postsPerWeek": 12
-            },
-            "measuredMetrics": [
-              "followers",
-              "engagementRate",
-              "postsPerWeek"
-            ],
-            "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 10,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.5
+            }
           },
           {
             "rank": 10,
@@ -23940,85 +24775,81 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.20612789866334205,
+            "score": 0.3600000000000001,
             "components": {
               "followers": 1962,
               "engagementRate": 0.009938837920489297,
-              "postsPerWeek": 6
+              "postsPerWeek": 6,
+              "followerGrowth": 0.0980677487342414
+            },
+            "adjustedComponents": {
+              "followers": 1962,
+              "engagementRate": 0.010184156550786614,
+              "postsPerWeek": 6,
+              "followerGrowth": 0.0980677487342414
+            },
+            "normalizedComponents": {
+              "followers": 0.1,
+              "engagementRate": 0.4,
+              "postsPerWeek": 0.1,
+              "followerGrowth": 0.8
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 6,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.375
+            }
           },
           {
             "rank": 11,
-            "name": "Lipika Madan",
-            "role": "Team Leader – Sales",
-            "handle": "lipika.kirpa",
+            "name": "Dr. Jai Chatha",
+            "role": "Founder / Managing Director",
+            "handle": "jai.kirpa",
             "platforms": [
               "instagram"
             ],
-            "score": 0.16777559065143785,
+            "score": 0.35000000000000003,
             "components": {
-              "followers": 17759,
-              "engagementRate": 0.005940649811363253,
-              "postsPerWeek": 6
+              "followers": 47543,
+              "engagementRate": 0.0011358138947899796,
+              "postsPerWeek": 12,
+              "followerGrowth": 0.0128503634889936
+            },
+            "adjustedComponents": {
+              "followers": 47543,
+              "engagementRate": 0.005315602001233172,
+              "postsPerWeek": 12,
+              "followerGrowth": 0.0128503634889936
+            },
+            "normalizedComponents": {
+              "followers": 0.8,
+              "engagementRate": 0,
+              "postsPerWeek": 0.7,
+              "followerGrowth": 0.3
             },
             "measuredMetrics": [
               "followers",
               "engagementRate",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [],
-            "provisional": false
-          },
-          {
-            "rank": 12,
-            "name": "Aasfa Wahab Shaikh",
-            "role": "Consultant – Offplan Sales",
-            "handle": "aasfa.kirpa",
-            "platforms": [
-              "instagram"
-            ],
-            "score": 0.13836634406984363,
-            "components": {
-              "followers": 19821,
-              "engagementRate": 0.0067352807628273045,
-              "postsPerWeek": 4
-            },
-            "measuredMetrics": [
-              "followers",
-              "engagementRate",
-              "postsPerWeek"
-            ],
-            "missingMetrics": [],
-            "provisional": false
-          },
-          {
-            "rank": 13,
-            "name": "Puja Maheshwari",
-            "role": "Senior Consultant – Secondary Sales",
-            "handle": "dxb.pooja.kirpa",
-            "platforms": [
-              "instagram"
-            ],
-            "score": 0.12863540106751156,
-            "components": {
-              "followers": 2888,
-              "engagementRate": 0.00796398891966759,
-              "postsPerWeek": 3
-            },
-            "measuredMetrics": [
-              "followers",
-              "engagementRate",
-              "postsPerWeek"
-            ],
-            "missingMetrics": [],
-            "provisional": false
+            "provisional": false,
+            "eligibilityReasons": [],
+            "sample": {
+              "comparablePosts": 12,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.545
+            }
           },
           {
             "rank": null,
@@ -24032,17 +24863,40 @@
             "components": {
               "followers": 16781,
               "engagementRate": null,
-              "postsPerWeek": 2
+              "postsPerWeek": 2,
+              "followerGrowth": 0.01093798729312856
+            },
+            "adjustedComponents": {
+              "followers": 16781,
+              "engagementRate": null,
+              "postsPerWeek": 2,
+              "followerGrowth": 0.01093798729312856
+            },
+            "normalizedComponents": {
+              "followers": 0.5,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.3
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "2/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 2,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.167
+            },
+            "note": "Awaiting a comparable momentum sample — 2/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24056,17 +24910,40 @@
             "components": {
               "followers": 1074,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": 0.016889419407549733
+            },
+            "adjustedComponents": {
+              "followers": 1074,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.016889419407549733
+            },
+            "normalizedComponents": {
+              "followers": 0.1,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.4
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24080,17 +24957,85 @@
             "components": {
               "followers": 6988,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": -0.00019555349065647487
+            },
+            "adjustedComponents": {
+              "followers": 6988,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": -0.00019555349065647487
+            },
+            "normalizedComponents": {
+              "followers": 0.4,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
+          },
+          {
+            "rank": null,
+            "name": "Puja Maheshwari",
+            "role": "Senior Consultant – Secondary Sales",
+            "handle": "dxb.pooja.kirpa",
+            "platforms": [
+              "instagram"
+            ],
+            "score": null,
+            "components": {
+              "followers": 2888,
+              "engagementRate": 0.00796398891966759,
+              "postsPerWeek": 3,
+              "followerGrowth": 0.0026114603323166286
+            },
+            "adjustedComponents": {
+              "followers": 2888,
+              "engagementRate": 0.009785034157588676,
+              "postsPerWeek": 3,
+              "followerGrowth": 0.0026114603323166286
+            },
+            "normalizedComponents": {
+              "followers": 0.2,
+              "engagementRate": 0.4,
+              "postsPerWeek": 0,
+              "followerGrowth": 0
+            },
+            "measuredMetrics": [
+              "followers",
+              "engagementRate",
+              "postsPerWeek",
+              "followerGrowth"
+            ],
+            "missingMetrics": [],
+            "provisional": true,
+            "eligibilityReasons": [
+              "3/5 comparable posts"
+            ],
+            "sample": {
+              "comparablePosts": 3,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.231
+            },
+            "note": "Awaiting a comparable momentum sample — 3/5 comparable posts."
           },
           {
             "rank": null,
@@ -24104,17 +25049,40 @@
             "components": {
               "followers": 26036,
               "engagementRate": null,
-              "postsPerWeek": 1
+              "postsPerWeek": 1,
+              "followerGrowth": 0.011905672709590531
+            },
+            "adjustedComponents": {
+              "followers": 26036,
+              "engagementRate": null,
+              "postsPerWeek": 1,
+              "followerGrowth": 0.011905672709590531
+            },
+            "normalizedComponents": {
+              "followers": 0.7,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.3
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "1/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 1,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.091
+            },
+            "note": "Awaiting a comparable momentum sample — 1/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24128,17 +25096,40 @@
             "components": {
               "followers": 1373,
               "engagementRate": null,
-              "postsPerWeek": 1
+              "postsPerWeek": 1,
+              "followerGrowth": 0.0014960405199788696
+            },
+            "adjustedComponents": {
+              "followers": 1373,
+              "engagementRate": null,
+              "postsPerWeek": 1,
+              "followerGrowth": 0.0014960405199788696
+            },
+            "normalizedComponents": {
+              "followers": 0.1,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "1/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 1,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.091
+            },
+            "note": "Awaiting a comparable momentum sample — 1/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24152,17 +25143,40 @@
             "components": {
               "followers": 3334,
               "engagementRate": null,
-              "postsPerWeek": 2
+              "postsPerWeek": 2,
+              "followerGrowth": 0.3240604825559077
+            },
+            "adjustedComponents": {
+              "followers": 3334,
+              "engagementRate": null,
+              "postsPerWeek": 2,
+              "followerGrowth": 0.3240604825559077
+            },
+            "normalizedComponents": {
+              "followers": 0.2,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 1.1
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "2/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 2,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.167
+            },
+            "note": "Awaiting a comparable momentum sample — 2/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24176,17 +25190,40 @@
             "components": {
               "followers": 13546,
               "engagementRate": null,
-              "postsPerWeek": 14
+              "postsPerWeek": 14,
+              "followerGrowth": 0.014900004761934538
+            },
+            "adjustedComponents": {
+              "followers": 13546,
+              "engagementRate": null,
+              "postsPerWeek": 14,
+              "followerGrowth": 0.014900004761934538
+            },
+            "normalizedComponents": {
+              "followers": 0.5,
+              "engagementRate": 0,
+              "postsPerWeek": 0.8,
+              "followerGrowth": 0.4
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24200,17 +25237,40 @@
             "components": {
               "followers": 4214,
               "engagementRate": null,
-              "postsPerWeek": 1
+              "postsPerWeek": 1,
+              "followerGrowth": 0.008687596129178576
+            },
+            "adjustedComponents": {
+              "followers": 4214,
+              "engagementRate": null,
+              "postsPerWeek": 1,
+              "followerGrowth": 0.008687596129178576
+            },
+            "normalizedComponents": {
+              "followers": 0.3,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.3
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "1/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 1,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.091
+            },
+            "note": "Awaiting a comparable momentum sample — 1/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24224,17 +25284,40 @@
             "components": {
               "followers": 9939,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": 0.004911667548645138
+            },
+            "adjustedComponents": {
+              "followers": 9939,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.004911667548645138
+            },
+            "normalizedComponents": {
+              "followers": 0.4,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.1
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24248,17 +25331,85 @@
             "components": {
               "followers": 1333,
               "engagementRate": null,
-              "postsPerWeek": 2
+              "postsPerWeek": 2,
+              "followerGrowth": 0.11414896048705803
+            },
+            "adjustedComponents": {
+              "followers": 1333,
+              "engagementRate": null,
+              "postsPerWeek": 2,
+              "followerGrowth": 0.11414896048705803
+            },
+            "normalizedComponents": {
+              "followers": 0.1,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 1
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "2/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 2,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.167
+            },
+            "note": "Awaiting a comparable momentum sample — 2/5 comparable posts; engagementRate unavailable."
+          },
+          {
+            "rank": null,
+            "name": "Aasfa Wahab Shaikh",
+            "role": "Consultant – Offplan Sales",
+            "handle": "aasfa.kirpa",
+            "platforms": [
+              "instagram"
+            ],
+            "score": null,
+            "components": {
+              "followers": 19821,
+              "engagementRate": 0.0067352807628273045,
+              "postsPerWeek": 4,
+              "followerGrowth": 0.01865970844937692
+            },
+            "adjustedComponents": {
+              "followers": 19821,
+              "engagementRate": 0.009303900024354233,
+              "postsPerWeek": 4,
+              "followerGrowth": 0.01865970844937692
+            },
+            "normalizedComponents": {
+              "followers": 0.6,
+              "engagementRate": 0.4,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.4
+            },
+            "measuredMetrics": [
+              "followers",
+              "engagementRate",
+              "postsPerWeek",
+              "followerGrowth"
+            ],
+            "missingMetrics": [],
+            "provisional": true,
+            "eligibilityReasons": [
+              "4/5 comparable posts"
+            ],
+            "sample": {
+              "comparablePosts": 4,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.286
+            },
+            "note": "Awaiting a comparable momentum sample — 4/5 comparable posts."
           },
           {
             "rank": null,
@@ -24272,17 +25423,40 @@
             "components": {
               "followers": 552,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": -0.004922368440289926
+            },
+            "adjustedComponents": {
+              "followers": 552,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": -0.004922368440289926
+            },
+            "normalizedComponents": {
+              "followers": 0,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24296,17 +25470,40 @@
             "components": {
               "followers": 11477,
               "engagementRate": null,
-              "postsPerWeek": 1
+              "postsPerWeek": 1,
+              "followerGrowth": 0.008727280495290257
+            },
+            "adjustedComponents": {
+              "followers": 11477,
+              "engagementRate": null,
+              "postsPerWeek": 1,
+              "followerGrowth": 0.008727280495290257
+            },
+            "normalizedComponents": {
+              "followers": 0.5,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.3
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "1/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 1,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.091
+            },
+            "note": "Awaiting a comparable momentum sample — 1/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24320,17 +25517,40 @@
             "components": {
               "followers": 25735,
               "engagementRate": null,
-              "postsPerWeek": 1
+              "postsPerWeek": 1,
+              "followerGrowth": -0.0006103376775373759
+            },
+            "adjustedComponents": {
+              "followers": 25735,
+              "engagementRate": null,
+              "postsPerWeek": 1,
+              "followerGrowth": -0.0006103376775373759
+            },
+            "normalizedComponents": {
+              "followers": 0.7,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "1/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 1,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.091
+            },
+            "note": "Awaiting a comparable momentum sample — 1/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24344,17 +25564,40 @@
             "components": {
               "followers": 1081,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": 0.0019010978069453621
+            },
+            "adjustedComponents": {
+              "followers": 1081,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.0019010978069453621
+            },
+            "normalizedComponents": {
+              "followers": 0.1,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24368,17 +25611,40 @@
             "components": {
               "followers": 1526,
               "engagementRate": null,
-              "postsPerWeek": 2
+              "postsPerWeek": 2,
+              "followerGrowth": 0.00495650229087663
+            },
+            "adjustedComponents": {
+              "followers": 1526,
+              "engagementRate": null,
+              "postsPerWeek": 2,
+              "followerGrowth": 0.00495650229087663
+            },
+            "normalizedComponents": {
+              "followers": 0.1,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.1
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "2/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 2,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0.167
+            },
+            "note": "Awaiting a comparable momentum sample — 2/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24392,17 +25658,40 @@
             "components": {
               "followers": 614,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": 0.007867068840164748
+            },
+            "adjustedComponents": {
+              "followers": 614,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.007867068840164748
+            },
+            "normalizedComponents": {
+              "followers": 0,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.2
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24416,17 +25705,40 @@
             "components": {
               "followers": 625,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": 0.059900433933567365
+            },
+            "adjustedComponents": {
+              "followers": 625,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.059900433933567365
+            },
+            "normalizedComponents": {
+              "followers": 0,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.7
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           },
           {
             "rank": null,
@@ -24440,17 +25752,40 @@
             "components": {
               "followers": 18780,
               "engagementRate": null,
-              "postsPerWeek": 0
+              "postsPerWeek": 0,
+              "followerGrowth": 0.03902279817488363
+            },
+            "adjustedComponents": {
+              "followers": 18780,
+              "engagementRate": null,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.03902279817488363
+            },
+            "normalizedComponents": {
+              "followers": 0.6,
+              "engagementRate": 0,
+              "postsPerWeek": 0,
+              "followerGrowth": 0.7
             },
             "measuredMetrics": [
               "followers",
-              "postsPerWeek"
+              "postsPerWeek",
+              "followerGrowth"
             ],
             "missingMetrics": [
               "engagementRate"
             ],
             "provisional": true,
-            "note": "Not ranked yet — engagementRate unavailable or sample too small."
+            "eligibilityReasons": [
+              "0/5 comparable posts",
+              "engagementRate unavailable"
+            ],
+            "sample": {
+              "comparablePosts": 0,
+              "minimumComparablePosts": 5,
+              "engagementReliability": 0
+            },
+            "note": "Awaiting a comparable momentum sample — 0/5 comparable posts; engagementRate unavailable."
           }
         ]
       }
@@ -24488,7 +25823,380 @@
     ],
     "optedOut": []
   },
-  "trend": [],
+  "trend": [
+    {
+      "rank": 1,
+      "name": "Barkha Kalia",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "barkha.kirpa",
+      "followerDelta": 767.4901987929752,
+      "followerPct": 0.3240604825559077,
+      "periodFollowerDelta": 1123,
+      "periodFollowerPct": 0.5079149706015378,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 2,
+      "name": "Mona Shah",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "mona.kirpa",
+      "followerDelta": 348.5485319540671,
+      "followerPct": 0.11912123038402722,
+      "periodFollowerDelta": 510,
+      "periodFollowerPct": 0.17901017901017902,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 3,
+      "name": "Sarvnihal Singh",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "sarvnihal.kirpa",
+      "followerDelta": 133.2685563353786,
+      "followerPct": 0.11414896048705803,
+      "periodFollowerDelta": 195,
+      "periodFollowerPct": 0.17135325131810195,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 4,
+      "name": "Lipika Madan",
+      "role": "Team Leader – Sales",
+      "platform": "instagram",
+      "handle": "lipika.kirpa",
+      "followerDelta": 1582.1369636738536,
+      "followerPct": 0.10016010913535789,
+      "periodFollowerDelta": 2315,
+      "periodFollowerPct": 0.14989639989639988,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 5,
+      "name": "Akshay Rajendra",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "akshay.kirpa",
+      "followerDelta": 171.5405520009232,
+      "followerPct": 0.0980677487342414,
+      "periodFollowerDelta": 251,
+      "periodFollowerPct": 0.146697837521917,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 6,
+      "name": "Spoorthi Hassan",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "spoorthi.kirpa",
+      "followerDelta": 458.5805194925079,
+      "followerPct": 0.07956118016571878,
+      "periodFollowerDelta": 671,
+      "periodFollowerPct": 0.11853029500088323,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 7,
+      "name": "Faiyaz Mohmedfaruk",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "faiyaz.kirpa",
+      "followerDelta": 34.85485319540671,
+      "followerPct": 0.059900433933567365,
+      "periodFollowerDelta": 51,
+      "periodFollowerPct": 0.08885017421602788,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 8,
+      "name": "Samaksh Malhotra",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "samaksh.kirpa",
+      "followerDelta": 699.147349390217,
+      "followerPct": 0.03902279817488363,
+      "periodFollowerDelta": 1023,
+      "periodFollowerPct": 0.05761108295320155,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 9,
+      "name": "Jitendra Makhija",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "jeet.kirpa",
+      "followerDelta": 29.38742524318605,
+      "followerPct": 0.0374026819560489,
+      "periodFollowerDelta": 43,
+      "periodFollowerPct": 0.055198973042362,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 10,
+      "name": "Kamalpreet Kaur",
+      "role": "Team Leader – Sales",
+      "platform": "instagram",
+      "handle": "kamalpreet.kirpa",
+      "followerDelta": 351.28224593017745,
+      "followerPct": 0.03338149709917482,
+      "periodFollowerDelta": 514,
+      "periodFollowerPct": 0.0492195729196591,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 11,
+      "name": "Lovepreet Singh",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "lovepreet.kirpa",
+      "followerDelta": 684.1119225216102,
+      "followerPct": 0.03178159921814827,
+      "periodFollowerDelta": 1001,
+      "periodFollowerPct": 0.04684355842575694,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 12,
+      "name": "Aasfa Wahab Shaikh",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "aasfa.kirpa",
+      "followerDelta": 361.5336733405912,
+      "followerPct": 0.01865970844937692,
+      "periodFollowerDelta": 529,
+      "periodFollowerPct": 0.02742069251503214,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 13,
+      "name": "Mohammad Mubeen",
+      "role": "Team Leader – Sales",
+      "platform": "instagram",
+      "handle": "mubeen.iqbal.kirpa",
+      "followerDelta": 17.769140844717146,
+      "followerPct": 0.016889419407549733,
+      "periodFollowerDelta": 26,
+      "periodFollowerPct": 0.02480916030534351,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 14,
+      "name": "Kirti Anil Walke",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "kirti.kirpa",
+      "followerDelta": 198.19426326799893,
+      "followerPct": 0.014900004761934538,
+      "periodFollowerDelta": 290,
+      "periodFollowerPct": 0.021876885938442968,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 15,
+      "name": "Dr. Jai Chatha",
+      "role": "Founder / Managing Director",
+      "platform": "instagram",
+      "handle": "jai.kirpa",
+      "followerDelta": 601.4170747442727,
+      "followerPct": 0.0128503634889936,
+      "periodFollowerDelta": 880,
+      "periodFollowerPct": 0.01885862460621906,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 16,
+      "name": "Vaishali Arora",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "vaishali.kirpa",
+      "followerDelta": 305.4925368303294,
+      "followerPct": 0.011905672709590531,
+      "periodFollowerDelta": 447,
+      "periodFollowerPct": 0.01746844347180429,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 17,
+      "name": "Priyanka Jayanna",
+      "role": "Team Leader – Sales",
+      "platform": "instagram",
+      "handle": "priyanka.kirpa",
+      "followerDelta": 181.10855091730937,
+      "followerPct": 0.01093798729312856,
+      "periodFollowerDelta": 265,
+      "periodFollowerPct": 0.01604504722693146,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 18,
+      "name": "Kirat Singh Sapra",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "kirat.kirpa",
+      "followerDelta": 99.09713163399947,
+      "followerPct": 0.008727280495290257,
+      "periodFollowerDelta": 145,
+      "periodFollowerPct": 0.01279562301447229,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 19,
+      "name": "Sahil Bedi",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "sahilbedi.kirpa",
+      "followerDelta": 36.22171018346187,
+      "followerPct": 0.008687596129178576,
+      "periodFollowerDelta": 53,
+      "periodFollowerPct": 0.012737322758952174,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 20,
+      "name": "Geethika Sri Vyshnavi",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "geethika.kirpa",
+      "followerDelta": 989.6044593519396,
+      "followerPct": 0.008072904868399178,
+      "periodFollowerDelta": 1448,
+      "periodFollowerPct": 0.011834416247803523,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 21,
+      "name": "Nikita Lal Tekwani",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "nikitaa.kirpa",
+      "followerDelta": 4.783999458193078,
+      "followerPct": 0.007867068840164748,
+      "periodFollowerDelta": 7,
+      "periodFollowerPct": 0.011532125205930808,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 22,
+      "name": "Saloni Bedi",
+      "role": "Team Leader – Sales",
+      "platform": "instagram",
+      "handle": "saloni.kirpa",
+      "followerDelta": 224.16454604104706,
+      "followerPct": 0.007014838162774817,
+      "periodFollowerDelta": 328,
+      "periodFollowerPct": 0.010280842527582748,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 23,
+      "name": "Sahil Mendiratta",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "sahil.kirpaa",
+      "followerDelta": 7.517713434303408,
+      "followerPct": 0.00495650229087663,
+      "periodFollowerDelta": 11,
+      "periodFollowerPct": 0.007260726072607261,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 24,
+      "name": "Kavita Choudhary",
+      "role": "Consultant – Secondary Sales",
+      "platform": "instagram",
+      "handle": "kavita.kirpa.dxb",
+      "followerDelta": 48.52342307595836,
+      "followerPct": 0.004911667548645138,
+      "periodFollowerDelta": 71,
+      "periodFollowerPct": 0.007194973652209161,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 25,
+      "name": "Manpreet Kaur",
+      "role": "Founder / CEO",
+      "platform": "instagram",
+      "handle": "manpreet.kirpa",
+      "followerDelta": 3148.5550719850726,
+      "followerPct": 0.004311376787608845,
+      "periodFollowerDelta": 4607,
+      "periodFollowerPct": 0.006314747752761246,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 26,
+      "name": "Puja Maheshwari",
+      "role": "Senior Consultant – Secondary Sales",
+      "platform": "instagram",
+      "handle": "dxb.pooja.kirpa",
+      "followerDelta": 7.517713434303408,
+      "followerPct": 0.0026114603323166286,
+      "periodFollowerDelta": 11,
+      "periodFollowerPct": 0.0038234271810914148,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 27,
+      "name": "Ritika Kodwani",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "ritika.kirpa",
+      "followerDelta": 2.0502854820827476,
+      "followerPct": 0.0019010978069453621,
+      "periodFollowerDelta": 3,
+      "periodFollowerPct": 0.0027829313543599257,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 28,
+      "name": "Sukhpreet Kaur",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "sukhpreetbal.kirpa",
+      "followerDelta": 2.0502854820827476,
+      "followerPct": 0.0014960405199788696,
+      "periodFollowerDelta": 3,
+      "periodFollowerPct": 0.0021897810218978104,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 29,
+      "name": "Preety Vijayvargiya",
+      "role": "Senior Consultant – Secondary (Commercial)",
+      "platform": "instagram",
+      "handle": "preety.kirpa",
+      "followerDelta": -1.366856988055165,
+      "followerPct": -0.00019555349065647487,
+      "periodFollowerDelta": -2,
+      "periodFollowerPct": -0.0002861230329041488,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 30,
+      "name": "Sara Banu",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "sarafaisal.kirpa",
+      "followerDelta": -15.718855362634399,
+      "followerPct": -0.0006103376775373759,
+      "periodFollowerDelta": -23,
+      "periodFollowerPct": -0.0008929264694463856,
+      "baselineDays": 10.242476076388888
+    },
+    {
+      "rank": 31,
+      "name": "Jagraaj Singh",
+      "role": "Consultant – Offplan Sales",
+      "platform": "instagram",
+      "handle": "jagraaj.kirpa",
+      "followerDelta": -2.73371397611033,
+      "followerPct": -0.004922368440289926,
+      "periodFollowerDelta": -4,
+      "periodFollowerPct": -0.007194244604316547,
+      "baselineDays": 10.242476076388888
+    }
+  ],
   "content": {
     "windowDays": 30,
     "timezone": "Asia/Dubai (UTC+4)",
@@ -24497,7 +26205,9 @@
     "thresholds": {
       "minPostsPerHashtag": 5,
       "minProfilesPerHashtag": 3,
-      "minPostsPerBucket": 3
+      "minPostsPerBucket": 3,
+      "minPostsPerTimingBucket": 8,
+      "minProfilesPerTimingBucket": 3
     },
     "teamMedianRate": 0.013174,
     "hashtags": [
@@ -25264,7 +26974,8 @@
     ],
     "timing": {
       "timezone": "Asia/Dubai (UTC+4)",
-      "minPosts": 3,
+      "minPosts": 8,
+      "minProfiles": 3,
       "totalPosts": 838,
       "cells": [
         {
@@ -25883,16 +27594,16 @@
         }
       ],
       "best": {
-        "day": 5,
-        "dayName": "Friday",
-        "block": "early",
-        "blockLabel": "00:00–06:00",
-        "posts": 3,
-        "profiles": 3,
-        "ratedPosts": 3,
-        "medianRate": 0.200089,
-        "medianInteractions": 1137,
-        "authorLift": 8.064
+        "day": 3,
+        "dayName": "Wednesday",
+        "block": "evening",
+        "blockLabel": "19:00–22:00",
+        "posts": 16,
+        "profiles": 12,
+        "ratedPosts": 14,
+        "medianRate": 0.013459,
+        "medianInteractions": 297,
+        "authorLift": 1.609
       },
       "worst": {
         "day": 1,
@@ -26123,12 +27834,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 2,
-        "value": 0.4651373494809779,
+        "rank": 15,
+        "value": 0.41904761904761906,
         "components": {
           "followers": 734169,
           "engagementRate": 0.005249472532890928,
-          "postsPerWeek": 18.433333333333334
+          "postsPerWeek": 18.433333333333334,
+          "followerGrowth": 0.004311376787608845
         },
         "held": false
       },
@@ -26315,14 +28027,14 @@
       ],
       "achievements": [
         {
-          "key": "top-momentum",
-          "label": "Top 10% momentum",
-          "evidence": "Rank 2 of 24"
-        },
-        {
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.43% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -26401,12 +28113,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 7,
-        "value": 0.2567882054086665,
+        "rank": 14,
+        "value": 0.4238095238095238,
         "components": {
           "followers": 47543,
           "engagementRate": 0.004069999789664093,
-          "postsPerWeek": 14.466666666666667
+          "postsPerWeek": 14.466666666666667,
+          "followerGrowth": 0.0128503634889936
         },
         "held": false
       },
@@ -26580,6 +28293,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "1.29% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -26592,6 +28310,11 @@
           "priority": 3,
           "action": "Open with a sharper hook and ask one direct question.",
           "because": "Typical engagement 0.41% against a team median of 1.24%."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 62 posts land there."
         }
       ]
     },
@@ -26653,12 +28376,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 9,
-        "value": 0.24479552284464262,
+        "rank": 3,
+        "value": 0.7357142857142858,
         "components": {
           "followers": 10957,
           "engagementRate": 0.032673176964497584,
-          "postsPerWeek": 13.3
+          "postsPerWeek": 13.3,
+          "followerGrowth": 0.03338149709917482
         },
         "held": false
       },
@@ -26854,9 +28578,19 @@
       ],
       "achievements": [
         {
+          "key": "top-momentum",
+          "label": "Top 10% momentum",
+          "evidence": "Rank 3 of 22"
+        },
+        {
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "3.34% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -26931,11 +28665,12 @@
       },
       "score": {
         "rank": 12,
-        "value": 0.13791082278320918,
+        "value": 0.4428571428571429,
         "components": {
           "followers": 32232,
           "engagementRate": 0.00980392156862745,
-          "postsPerWeek": 7.466666666666667
+          "postsPerWeek": 7.466666666666667,
+          "followerGrowth": 0.007014838162774817
         },
         "held": false
       },
@@ -27116,6 +28851,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.70% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -27194,12 +28934,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 21,
-        "value": 0.029916161944149477,
+        "rank": 15,
+        "value": 0.41904761904761906,
         "components": {
           "followers": 17759,
           "engagementRate": 0.005940649811363253,
-          "postsPerWeek": 1.4
+          "postsPerWeek": 1.4,
+          "followerGrowth": 0.10016010913535789
         },
         "held": false
       },
@@ -27313,7 +29054,13 @@
           "comparablePosts": 2
         }
       ],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "10.02% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 2,
@@ -27390,12 +29137,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 15,
-        "value": 0.10046124607201731,
+        "rank": 11,
+        "value": 0.4476190476190476,
         "components": {
           "followers": 16781,
           "engagementRate": 0.012335379298015613,
-          "postsPerWeek": 5.366666666666666
+          "postsPerWeek": 5.366666666666666,
+          "followerGrowth": 0.01093798729312856
         },
         "held": false
       },
@@ -27551,6 +29299,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "1.09% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -27563,6 +29316,11 @@
           "priority": 3,
           "action": "Open with a sharper hook and ask one direct question.",
           "because": "Typical engagement 1.23% against a team median of 1.24%."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 23 posts land there."
         }
       ]
     },
@@ -27629,7 +29387,8 @@
         "components": {
           "followers": 1074,
           "engagementRate": null,
-          "postsPerWeek": 0
+          "postsPerWeek": 0,
+          "followerGrowth": 0.016889419407549733
         },
         "held": true
       },
@@ -27661,7 +29420,13 @@
         "bestBlock": null
       },
       "contentPillars": [],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "1.69% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 1,
@@ -27728,12 +29493,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 22,
-        "value": 0.02562659138360883,
+        "rank": 20,
+        "value": 0.23333333333333334,
         "components": {
           "followers": 6988,
           "engagementRate": 0.009444762449914138,
-          "postsPerWeek": 1.1666666666666667
+          "postsPerWeek": 1.1666666666666667,
+          "followerGrowth": -0.00019555349065647487
         },
         "held": false
       },
@@ -27924,14 +29690,15 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 24,
-        "value": 0.01607593580864797,
+        "rank": null,
+        "value": null,
         "components": {
           "followers": 2888,
           "engagementRate": 0.00796398891966759,
-          "postsPerWeek": 0.7
+          "postsPerWeek": 0.7,
+          "followerGrowth": 0.0026114603323166286
         },
-        "held": false
+        "held": true
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -28016,7 +29783,13 @@
           "comparablePosts": 1
         }
       ],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.26% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 2,
@@ -28027,6 +29800,11 @@
           "priority": 3,
           "action": "Open with a sharper hook and ask one direct question.",
           "because": "Typical engagement 0.8% against a team median of 1.24%."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 3 posts land there."
         }
       ]
     },
@@ -28088,12 +29866,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 14,
-        "value": 0.120312951703095,
+        "rank": 6,
+        "value": 0.6666666666666666,
         "components": {
           "followers": 26036,
           "engagementRate": 0.0385235827316024,
-          "postsPerWeek": 5.6
+          "postsPerWeek": 5.6,
+          "followerGrowth": 0.011905672709590531
         },
         "held": false
       },
@@ -28299,6 +30078,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "1.19% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -28311,6 +30095,11 @@
           "priority": 3,
           "action": "Make 2 of the next 4 posts lifestyle & personal content.",
           "because": "Lifestyle & personal delivers 1.67× the typical rate of Other / unclear across 3 comparable posts."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 24 posts land there."
         }
       ]
     },
@@ -28372,12 +30161,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 18,
-        "value": 0.06226942741263955,
+        "rank": 15,
+        "value": 0.41904761904761906,
         "components": {
           "followers": 1373,
           "engagementRate": 0.035688273852876914,
-          "postsPerWeek": 2.566666666666667
+          "postsPerWeek": 2.566666666666667,
+          "followerGrowth": 0.0014960405199788696
         },
         "held": false
       },
@@ -28523,6 +30313,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.15% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -28530,6 +30325,11 @@
           "priority": 2,
           "action": "Add 2 posts over the next four weeks to reach 3/week.",
           "because": "Currently 2.57/week (11 posts in 30 days)."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 11 posts land there."
         }
       ]
     },
@@ -28591,12 +30391,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 16,
-        "value": 0.07809786070564644,
+        "rank": 8,
+        "value": 0.5476190476190477,
         "components": {
           "followers": 3334,
           "engagementRate": 0.02009598080383923,
-          "postsPerWeek": 3.966666666666667
+          "postsPerWeek": 3.966666666666667,
+          "followerGrowth": 0.3240604825559077
         },
         "held": false
       },
@@ -28752,6 +30553,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "32.41% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -28820,12 +30626,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 5,
-        "value": 0.3038819252987795,
+        "rank": 9,
+        "value": 0.5380952380952381,
         "components": {
           "followers": 13546,
           "engagementRate": 0.008858703676362026,
-          "postsPerWeek": 17.5
+          "postsPerWeek": 17.5,
+          "followerGrowth": 0.014900004761934538
         },
         "held": false
       },
@@ -29015,6 +30822,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "1.49% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -29088,12 +30900,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 19,
-        "value": 0.037389348215605286,
+        "rank": 18,
+        "value": 0.3952380952380953,
         "components": {
           "followers": 4214,
           "engagementRate": 0.03251067869008068,
-          "postsPerWeek": 1.1666666666666667
+          "postsPerWeek": 1.1666666666666667,
+          "followerGrowth": 0.008687596129178576
         },
         "held": false
       },
@@ -29202,7 +31015,13 @@
           "comparablePosts": 1
         }
       ],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.87% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 2,
@@ -29269,12 +31088,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 8,
-        "value": 0.2541510236342083,
+        "rank": 13,
+        "value": 0.4357142857142857,
         "components": {
           "followers": 123803,
           "engagementRate": 0.00701113866384498,
-          "postsPerWeek": 13.3
+          "postsPerWeek": 13.3,
+          "followerGrowth": 0.008072904868399178
         },
         "held": false
       },
@@ -29455,6 +31275,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.81% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -29533,7 +31358,8 @@
         "components": {
           "followers": 9939,
           "engagementRate": null,
-          "postsPerWeek": 0.23333333333333334
+          "postsPerWeek": 0.23333333333333334,
+          "followerGrowth": 0.004911667548645138
         },
         "held": true
       },
@@ -29591,7 +31417,13 @@
           "comparablePosts": 1
         }
       ],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.49% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 1,
@@ -29602,6 +31434,11 @@
           "priority": 2,
           "action": "Add 12 posts over the next four weeks to reach 3/week.",
           "because": "Currently 0.23/week (1 posts in 30 days)."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 1 posts land there."
         }
       ]
     },
@@ -29663,14 +31500,15 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 1,
-        "value": 0.4778824605069171,
+        "rank": null,
+        "value": null,
         "components": {
           "followers": 1333,
           "engagementRate": 0.8428357089272318,
-          "postsPerWeek": 1.6333333333333333
+          "postsPerWeek": 1.6333333333333333,
+          "followerGrowth": 0.11414896048705803
         },
-        "held": false
+        "held": true
       },
       "teamBenchmarks": {
         "followers": 6988,
@@ -29800,14 +31638,14 @@
       ],
       "achievements": [
         {
-          "key": "momentum-leader",
-          "label": "Momentum leader",
-          "evidence": "Rank 1 of 24"
-        },
-        {
           "key": "beyond-following",
           "label": "Beyond the following",
           "evidence": "Typical reported video views are 3.9× followers"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "11.41% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -29815,6 +31653,11 @@
           "priority": 2,
           "action": "Add 6 posts over the next four weeks to reach 3/week.",
           "because": "Currently 1.63/week (7 posts in 30 days)."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 7 posts land there."
         }
       ]
     },
@@ -29876,12 +31719,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 6,
-        "value": 0.264304549476597,
+        "rank": 10,
+        "value": 0.4714285714285714,
         "components": {
           "followers": 19821,
           "engagementRate": 0.0065082488270016645,
-          "postsPerWeek": 15.166666666666666
+          "postsPerWeek": 15.166666666666666,
+          "followerGrowth": 0.01865970844937692
         },
         "held": false
       },
@@ -30069,6 +31913,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "1.87% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -30147,7 +31996,8 @@
         "components": {
           "followers": 552,
           "engagementRate": null,
-          "postsPerWeek": 0
+          "postsPerWeek": 0,
+          "followerGrowth": -0.004922368440289926
         },
         "held": true
       },
@@ -30246,12 +32096,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 11,
-        "value": 0.1413394269216168,
+        "rank": 7,
+        "value": 0.6238095238095238,
         "components": {
           "followers": 1962,
           "engagementRate": 0.020387359836901122,
-          "postsPerWeek": 7.7
+          "postsPerWeek": 7.7,
+          "followerGrowth": 0.0980677487342414
         },
         "held": false
       },
@@ -30430,6 +32281,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "9.81% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -30442,6 +32298,11 @@
           "priority": 3,
           "action": "Make 2 of the next 4 posts property showcase content.",
           "because": "Property showcase delivers 1.94× the typical rate of Other / unclear across 2 comparable posts."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 33 posts land there."
         }
       ]
     },
@@ -30503,12 +32364,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 23,
-        "value": 0.023731365694401926,
+        "rank": 20,
+        "value": 0.23333333333333334,
         "components": {
           "followers": 11477,
           "engagementRate": 0.004182277598675612,
-          "postsPerWeek": 1.1666666666666667
+          "postsPerWeek": 1.1666666666666667,
+          "followerGrowth": 0.008727280495290257
         },
         "held": false
       },
@@ -30627,6 +32489,11 @@
           "key": "beyond-following",
           "label": "Beyond the following",
           "evidence": "Typical reported video views are 1.2× followers"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.87% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -30639,6 +32506,11 @@
           "priority": 3,
           "action": "Open with a sharper hook and ask one direct question.",
           "because": "Typical engagement 0.42% against a team median of 1.24%."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 5 posts land there."
         }
       ]
     },
@@ -30700,12 +32572,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 20,
-        "value": 0.036832244742268934,
+        "rank": 22,
+        "value": 0.19047619047619047,
         "components": {
           "followers": 25735,
           "engagementRate": 0.0010102972605401204,
-          "postsPerWeek": 1.8666666666666667
+          "postsPerWeek": 1.8666666666666667,
+          "followerGrowth": -0.0006103376775373759
         },
         "held": false
       },
@@ -30924,7 +32797,8 @@
         "components": {
           "followers": 1081,
           "engagementRate": null,
-          "postsPerWeek": 0
+          "postsPerWeek": 0,
+          "followerGrowth": 0.0019010978069453621
         },
         "held": true
       },
@@ -30956,7 +32830,13 @@
         "bestBlock": null
       },
       "contentPillars": [],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.19% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 1,
@@ -31023,12 +32903,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 13,
-        "value": 0.13115752134373135,
+        "rank": 5,
+        "value": 0.6952380952380953,
         "components": {
           "followers": 822,
           "engagementRate": 0.046228710462287104,
-          "postsPerWeek": 6.3
+          "postsPerWeek": 6.3,
+          "followerGrowth": 0.0374026819560489
         },
         "held": false
       },
@@ -31216,6 +33097,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "3.74% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -31223,6 +33109,11 @@
           "priority": 2,
           "action": "Shift more of the mix to images.",
           "because": "images earn 1.69× the typical rate of videos here, but are 7% of posts versus 93%."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 27 posts land there."
         }
       ]
     },
@@ -31284,12 +33175,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 17,
-        "value": 0.06572066956894737,
+        "rank": 19,
+        "value": 0.34285714285714286,
         "components": {
           "followers": 1526,
           "engagementRate": 0.012450851900393184,
-          "postsPerWeek": 3.5
+          "postsPerWeek": 3.5,
+          "followerGrowth": 0.00495650229087663
         },
         "held": false
       },
@@ -31456,6 +33348,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.50% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -31468,6 +33365,11 @@
           "priority": 3,
           "action": "Make 2 of the next 4 posts other / unclear content.",
           "because": "Other / unclear delivers 3.25× the typical rate of Property showcase across 2 comparable posts."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 15 posts land there."
         }
       ]
     },
@@ -31534,7 +33436,8 @@
         "components": {
           "followers": 614,
           "engagementRate": null,
-          "postsPerWeek": 0
+          "postsPerWeek": 0,
+          "followerGrowth": 0.007867068840164748
         },
         "held": true
       },
@@ -31566,7 +33469,13 @@
         "bestBlock": null
       },
       "contentPillars": [],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "0.79% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 1,
@@ -31633,12 +33542,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 3,
-        "value": 0.41524767548940694,
+        "rank": 1,
+        "value": 0.8095238095238095,
         "components": {
           "followers": 22370,
           "engagementRate": 0.021189092534644613,
-          "postsPerWeek": 23.566666666666666
+          "postsPerWeek": 23.566666666666666,
+          "followerGrowth": 0.03178159921814827
         },
         "held": false
       },
@@ -31832,9 +33742,9 @@
       ],
       "achievements": [
         {
-          "key": "top-momentum",
-          "label": "Top 10% momentum",
-          "evidence": "Rank 3 of 24"
+          "key": "momentum-leader",
+          "label": "Momentum leader",
+          "evidence": "Rank 1 of 22"
         },
         {
           "key": "cadence-leader",
@@ -31845,6 +33755,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "3.18% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -31913,12 +33828,13 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 10,
-        "value": 0.1769281236699944,
+        "rank": 2,
+        "value": 0.780952380952381,
         "components": {
           "followers": 3359,
           "engagementRate": 0.041976778803215244,
-          "postsPerWeek": 9.1
+          "postsPerWeek": 9.1,
+          "followerGrowth": 0.11912123038402722
         },
         "held": false
       },
@@ -32121,9 +34037,19 @@
       ],
       "achievements": [
         {
+          "key": "top-momentum",
+          "label": "Top 10% momentum",
+          "evidence": "Rank 2 of 22"
+        },
+        {
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "11.91% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -32193,11 +34119,12 @@
       },
       "score": {
         "rank": 4,
-        "value": 0.3311422322374699,
+        "value": 0.7285714285714285,
         "components": {
           "followers": 6332,
           "engagementRate": 0.018161718256475046,
-          "postsPerWeek": 18.9
+          "postsPerWeek": 18.9,
+          "followerGrowth": 0.07956118016571878
         },
         "held": false
       },
@@ -32396,6 +34323,11 @@
           "key": "consistent",
           "label": "4-week consistency",
           "evidence": "Published in every measured week"
+        },
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "7.96% weekly-equivalent growth"
         }
       ],
       "nextActions": [
@@ -32408,6 +34340,11 @@
           "priority": 3,
           "action": "Make 2 of the next 4 posts lifestyle & personal content.",
           "because": "Lifestyle & personal delivers 1.5× the typical rate of Other / unclear across 3 comparable posts."
+        },
+        {
+          "priority": 5,
+          "action": "Try publishing Wednesday 19:00–22:00 Asia/Dubai (UTC+4).",
+          "because": "Posts in that slot earn a median 1.61× each author's own typical interaction rate across 16 posts from 12 profiles, and none of your 81 posts land there."
         }
       ]
     },
@@ -32474,7 +34411,8 @@
         "components": {
           "followers": 625,
           "engagementRate": null,
-          "postsPerWeek": 0
+          "postsPerWeek": 0,
+          "followerGrowth": 0.059900433933567365
         },
         "held": true
       },
@@ -32506,7 +34444,13 @@
         "bestBlock": null
       },
       "contentPillars": [],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "5.99% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 1,
@@ -32578,7 +34522,8 @@
         "components": {
           "followers": 18780,
           "engagementRate": null,
-          "postsPerWeek": 0
+          "postsPerWeek": 0,
+          "followerGrowth": 0.03902279817488363
         },
         "held": true
       },
@@ -32610,7 +34555,13 @@
         "bestBlock": null
       },
       "contentPillars": [],
-      "achievements": [],
+      "achievements": [
+        {
+          "key": "growing",
+          "label": "Audience growing",
+          "evidence": "3.90% weekly-equivalent growth"
+        }
+      ],
       "nextActions": [
         {
           "priority": 1,
