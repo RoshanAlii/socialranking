@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-15T11:31:04Z",
+  "updatedAt": "2026-08-17T04:52:07.029Z",
   "softLimitUsd": 4.25,
   "planLimitUsd": 5,
   "observations": [
@@ -51,6 +51,32 @@
       "itemCount": 277,
       "durationMs": 71000,
       "costUsd": 0.748,
+      "error": null
+    },
+    {
+      "at": "2026-08-17T04:52:15.969Z",
+      "captureAt": "2026-08-17T04:52:07.029Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "7GaFCZ4du51rdYkXb",
+      "itemCount": 19,
+      "durationMs": 8887,
+      "costUsd": 0,
+      "error": null
+    },
+    {
+      "at": "2026-08-17T04:52:26.202Z",
+      "captureAt": "2026-08-17T04:52:07.029Z",
+      "actor": "apify~instagram-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "HOJwnsOXE6gSjvmGI",
+      "itemCount": 19,
+      "durationMs": 10233,
+      "costUsd": 0,
       "error": null
     }
   ]
