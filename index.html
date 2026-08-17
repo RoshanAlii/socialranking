@@ -1657,6 +1657,13 @@
     .tbl tbody tr { transition: background 180ms var(--ease); }
     .tbl tbody tr:hover { background: #fff8f4; }
     .tbl .num { text-align: right; white-space: nowrap; }
+    .tbl .num .cell-note {
+      display: block;
+      margin-top: 2px;
+      color: var(--dust);
+      font-size: 7px;
+      font-weight: 500;
+    }
     .agent-name { font-weight: 800; }
     .agent-role,
     .agent-handle { display: block; margin-top: 2px; color: var(--dust); font-size: 8px; }
@@ -2626,6 +2633,10 @@
       const interactions = comparable.map(postInteractions);
       const times = posts.map(post => Date.parse(post.postedAt || '')).filter(Number.isFinite).sort((a, b) => a - b);
       const gaps = times.slice(1).map((time, index) => (time - times[index]) / 3600000);
+      const supportedTotal = (values, eligibleItems) => {
+        if (values.length) return values.reduce((sum, value) => sum + value, 0);
+        return complete && eligibleItems === 0 ? 0 : null;
+      };
       const byType = ['image', 'carousel', 'video', 'reel'].map(type => {
         const typePosts = posts.filter(post => post.type === type);
         const typeInteractions = typePosts.map(postInteractions).filter(isNumber);
@@ -2659,10 +2670,10 @@
         commentsReporting: comments.length,
         sharesReporting: shares.length,
         viewsReporting: views.length,
-        totalLikes: likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
-        totalComments: comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
-        totalShares: shares.length ? shares.reduce((sum, value) => sum + value, 0) : null,
-        totalViews: views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+        totalLikes: supportedTotal(likes, posts.length),
+        totalComments: supportedTotal(comments, posts.length),
+        totalShares: supportedTotal(shares, posts.length),
+        totalViews: supportedTotal(views, videos.length),
         medianLikes: median(likes),
         medianComments: median(comments),
         medianViews: median(views),
@@ -2672,7 +2683,9 @@
         medianInteractions: median(interactions),
         averageInteractions: average(interactions),
         interactionRate: record?.followers > 0 && comparable.length >= 3 ? median(interactions) / record.followers : null,
+        observedInteractionRate: record?.followers > 0 && comparable.length ? median(interactions) / record.followers : null,
         commentRate: record?.followers > 0 && comments.length >= 3 ? median(comments) / record.followers : null,
+        observedCommentRate: record?.followers > 0 && comments.length ? median(comments) / record.followers : null,
         videoCount: videos.length,
         carouselCount: posts.filter(post => post.type === 'carousel').length,
         imageCount: posts.filter(post => post.type === 'image').length,
@@ -2904,9 +2917,6 @@
       if (isLegacy()) return { key: 'measured', className: 'context', label: 'Directional sample' };
       if (!isAudited() || !audit?.complete) {
         return { key: 'attention', className: 'incomplete', label: 'Incomplete 30-day coverage' };
-      }
-      if (!engagementRow) {
-        return { key: 'measured', className: 'limited', label: 'Measured · building comparison sample' };
       }
       return { key: 'measured', className: 'measured', label: 'Measured' };
     }
@@ -3978,7 +3988,7 @@
        */
       const computed = personBlock(person.handle)?.nextActions?.[0];
       if (computed) return computed.action;
-      if (state.className === 'limited') {
+      if (isAudited() && audit?.complete && !engagementRow) {
         return audit?.postsInWindow === 0
           ? 'Publish once this week to restart momentum.'
           : `Reach ${board().coverage?.minimumEngagementPosts || 3} comparable posts in 30 days.`;
@@ -4003,7 +4013,7 @@
 
     const GOAL_LABELS = {
       postsPerWeek: { label: 'Posts per week', format: value => value.toFixed(1) },
-      engagementRate: { label: 'Typical engagement', format: value => pct(value) }
+      engagementRate: { label: 'Personal interaction rate', format: value => pct(value) }
     };
 
     /*
@@ -4036,10 +4046,13 @@
 
       if (block?.score || block?.teamBenchmarks) {
         const benchmarks = block.teamBenchmarks || {};
+        const scoreNote = block.score?.held
+          ? (block.score?.eligibilityReasons?.join(' · ') || 'Required comparison inputs are incomplete')
+          : 'Current measured team rank';
         sections.push(`
           <h3 class="analytics-subhead">Team comparison</h3>
           <div class="person-kpis">
-            ${analyticsKpi('Momentum rank', block.score?.rank ? `#${block.score.rank}` : 'Held', block.score?.held ? 'Required inputs are incomplete' : 'Current measured team rank')}
+            ${analyticsKpi('Momentum rank', block.score?.rank ? `#${block.score.rank}` : 'Held', scoreNote)}
             ${analyticsKpi('Momentum score', isNumber(block.score?.value) ? `${Math.round(block.score.value * 100)}/100` : '—', 'Deterministic published formula')}
             ${analyticsKpi('Cadence percentile', isNumber(block.teamPercentiles?.postsPerWeek) ? `${block.teamPercentiles.postsPerWeek}th` : '—', isNumber(benchmarks.postsPerWeek) ? `Team median ${benchmarks.postsPerWeek.toFixed(1)}/wk` : 'Team benchmark unavailable')}
             ${analyticsKpi('Engagement percentile', isNumber(block.teamPercentiles?.interactionRate) ? `${block.teamPercentiles.interactionRate}th` : '—', isNumber(benchmarks.interactionRate) ? `Team median ${pct(benchmarks.interactionRate)}` : 'Team benchmark unavailable')}
@@ -4108,13 +4121,17 @@
           <div>${goals.map(goal => {
             const meta = GOAL_LABELS[goal.metric] || { label: goal.metric, format: value => String(value) };
             const width = isNumber(goal.progress) ? Math.min(100, Math.max(2, goal.progress * 100)) : 0;
+            const smallSample = goal.metric === 'engagementRate' && isNumber(goal.value) && goal.sampleSize < 3;
+            const resultNote = goal.met === null
+              ? analytics?.windowComplete && analytics?.postsInWindow === 0
+                ? 'No posts in the verified window, so no rate can be calculated.'
+                : 'Not measurable in this snapshot — the window could not be proved.'
+              : goal.met ? 'Target met.' : `${Math.round((goal.progress || 0) * 100)}% of target.`;
             return `<div class="goal-row">
               <b>${esc(meta.label)}</b>
               <span>${isNumber(goal.value) ? esc(meta.format(goal.value)) : '—'} of ${esc(meta.format(goal.target))}</span>
               <div class="goal-track"><i class="goal-fill ${goal.met ? 'met' : ''}" style="width:${width}%"></i></div>
-              <small>${goal.met === null
-                ? 'Not measurable in this snapshot — the window could not be proved.'
-                : goal.met ? 'Target met.' : `${Math.round((goal.progress || 0) * 100)}% of target.`}</small>
+              <small>${smallSample ? `Personal ${goal.sampleSize}-post result; team comparison begins at 3. ` : ''}${resultNote}</small>
             </div>`;
           }).join('')}</div>`);
       }
@@ -4183,9 +4200,25 @@
           : state.label;
       const complete = isAudited() && analytics?.windowComplete;
       const note = complete
-        ? 'All performance metrics below were recomputed from a complete, owner-verified 30-day public-post window.'
+        ? 'All performance metrics below were recomputed from a complete, owner-verified 30-day public-post window. Personal results remain visible for small samples; team comparisons require at least three supported posts.'
         : analytics?.coverageReason || 'Performance analytics are unavailable until this profile has a complete verified pull.';
       const formats = analytics?.formatPerformance || [];
+      const personalInteractionRate = analytics?.interactionRate ?? analytics?.observedInteractionRate;
+      const personalCommentRate = analytics?.commentRate ?? analytics?.observedCommentRate;
+      const interactionRateNote = isNumber(analytics?.interactionRate)
+        ? `${fmt(analytics?.comparablePosts)} supported posts · eligible for team comparison`
+        : isNumber(analytics?.observedInteractionRate)
+          ? `${fmt(analytics?.comparablePosts)} supported post${analytics?.comparablePosts === 1 ? '' : 's'} · personal result only until 3`
+          : complete && analytics?.postsInWindow === 0
+            ? 'No posts in the verified window, so no rate can be calculated'
+            : 'Likes + comments ÷ followers when supported';
+      const commentRateNote = isNumber(analytics?.commentRate)
+        ? `${fmt(analytics?.commentsReporting)} reporting posts · eligible for team comparison`
+        : isNumber(analytics?.observedCommentRate)
+          ? `${fmt(analytics?.commentsReporting)} reporting post${analytics?.commentsReporting === 1 ? '' : 's'} · personal result only until 3`
+          : complete && analytics?.postsInWindow === 0
+            ? 'No posts in the verified window, so no rate can be calculated'
+            : 'Comments ÷ followers when supported';
       container.innerHTML = `
         <div class="analytics-hero">
           <span class="analytics-status">${esc(sourceLabel)}</span>
@@ -4202,8 +4235,8 @@
             ${analyticsKpi(complete ? '30-day posts' : 'Posts observed', fmt(analytics?.postsInWindow), complete ? 'Complete window' : 'Incomplete provider sample')}
             ${analyticsKpi('Publishing cadence', isNumber(analytics?.postsPerWeek) ? `${analytics.postsPerWeek.toFixed(1)}/wk` : '—', complete ? 'Posts × 7 ÷ 30' : 'Withheld')}
             ${analyticsKpi('Active days', fmt(analytics?.activeDays), complete ? 'Distinct UTC publishing dates' : 'Inside observed sample')}
-            ${analyticsKpi('Median interaction rate', pct(analytics?.interactionRate), 'Median likes + comments ÷ followers')}
-            ${analyticsKpi('Median comment rate', pct(analytics?.commentRate), 'Median comments ÷ followers')}
+            ${analyticsKpi('Personal interaction rate', pct(personalInteractionRate), interactionRateNote)}
+            ${analyticsKpi('Personal comment rate', pct(personalCommentRate), commentRateNote)}
             ${analyticsKpi('Median likes', fmt(analytics?.medianLikes), `${fmt(analytics?.likesReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
             ${analyticsKpi('Median comments', fmt(analytics?.medianComments), `${fmt(analytics?.commentsReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
             ${analyticsKpi('Median video views', fmt(analytics?.medianViews), `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
@@ -4360,8 +4393,12 @@
             : sortMode === 'posts' ? 'postsInWindow'
               : sortMode === 'latest' ? 'latestPostAt'
                 : 'followers';
-        const rawA = a.analytics?.[key];
-        const rawB = b.analytics?.[key];
+        const rawA = key === 'interactionRate'
+          ? (a.analytics?.interactionRate ?? a.analytics?.observedInteractionRate)
+          : a.analytics?.[key];
+        const rawB = key === 'interactionRate'
+          ? (b.analytics?.interactionRate ?? b.analytics?.observedInteractionRate)
+          : b.analytics?.[key];
         const valueA = key === 'latestPostAt' ? Date.parse(rawA || '') : rawA;
         const valueB = key === 'latestPostAt' ? Date.parse(rawB || '') : rawB;
         const safeA = isNumber(valueA) ? valueA : -1;
@@ -4390,6 +4427,13 @@
           !person.recordMismatch &&
           (isAudited() || isLegacy())
         );
+        const personalRate = analytics?.interactionRate ?? analytics?.observedInteractionRate;
+        const smallSample = isAudited() && !engagementRow && isNumber(analytics?.observedInteractionRate);
+        const rateMarkup = smallSample
+          ? `${pct(personalRate)}<small class="cell-note">${fmt(analytics?.comparablePosts)}-post personal result</small>`
+          : isAudited() && analytics?.windowComplete && analytics?.postsInWindow === 0
+            ? `—<small class="cell-note">No posts in window</small>`
+            : pct(isLegacy() ? analytics?.interactionRate : engagementRow?.engagementRate);
         return `
           <tr>
             <td data-label="Team member">
@@ -4406,7 +4450,7 @@
               : '—'}</td>
             <td class="num" data-label="${isAudited() ? '30-day posts' : 'Observed posts'}">${mayShowMetrics ? (isLegacy() ? fmt(analytics?.postsInWindow) : (audit?.complete ? fmt(audit.postsInWindow) : '—')) : '—'}</td>
             <td class="num" data-label="${isAudited() ? 'Cadence' : 'Latest post'}">${mayShowMetrics ? (isLegacy() ? relativeAge(analytics?.latestPostAt) : (audit?.complete && isNumber(audit.postsPerWeek) ? `${audit.postsPerWeek.toFixed(1)}/wk` : '—')) : '—'}</td>
-            <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? (isLegacy() ? pct(analytics?.interactionRate) : pct(engagementRow?.engagementRate)) : '—'}</td>
+            <td class="num" data-label="${isAudited() ? 'Typical ER' : 'Sample ER'}">${mayShowMetrics ? rateMarkup : '—'}</td>
             <td data-label="Next move">
               <span class="next-move">${esc(action)}</span>
               ${mayShowMetrics && person.record ? `<button class="analytics-button" type="button" data-analytics-handle="${esc(person.handle)}">View analytics</button>` : ''}
