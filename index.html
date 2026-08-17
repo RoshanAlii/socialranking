@@ -4678,6 +4678,7 @@
       medianEngagementRate: {
         label: 'Median engagement',
         format: value => pct(value),
+        deltaFormat: value => `${(value * 100).toFixed(2)} pp`,
         note: 'Median of individual typical interaction rates among eligible profiles.'
       },
       medianPostsPerWeek: {
@@ -4740,7 +4741,7 @@
         </div>
         <div class="trend-explorer-body">
           <div class="trend-chart-panel">
-            <div class="trend-current"><b>${latest ? esc(metric.format(latest[TREND_METRIC])) : '—'}</b>${deltaMarkup(change, metric.format)}</div>
+            <div class="trend-current"><b>${latest ? esc(metric.format(latest[TREND_METRIC])) : '—'}</b>${deltaMarkup(change, metric.deltaFormat || metric.format)}</div>
             <p class="trend-basis">${esc(baselineText + weeklyText)}</p>
             ${lineChart(team, TREND_METRIC, metric.format, { large: true }) || '<p>The current value is measured; the trend line begins after the next validated capture.</p>'}
             <p class="trend-basis">${esc(metric.note)}</p>
