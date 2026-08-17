@@ -711,6 +711,8 @@ const soloRegistry = {
       const after = expanded.composite.find(row => row.name === name);
       assert.strictEqual(after.score, before.score, 'an ineligible outlier cannot distort an eligible score');
       assert.ok(Object.values(after.normalizedComponents).every(value => value >= 0 && value <= 1));
+      const contributionTotal = Object.values(after.pointContributions).reduce((sum, value) => sum + value, 0);
+      assert.ok(Math.abs(contributionTotal - after.score * 100) < 1e-10, 'published point contributions reconcile exactly to the score');
     }
     const held = expanded.composite.find(row => row.name === 'Viral but thin');
     assert.strictEqual(held.provisional, true);
@@ -966,6 +968,14 @@ const soloRegistry = {
     assert.match(html, /Personal interaction rate/);
     assert.match(html, /personal result only until 3/);
     assert.match(html, /No posts in the verified window, so no rate can be calculated/);
+    assert.ok(!html.includes('no comparable baseline'), 'the direction panel must not reject the published scoring baseline');
+    assert.match(html, /Actual points breakdown/);
+    assert.match(html, /pointContributions/);
+    assert.match(html, /data-trend-metric/);
+    assert.match(html, /data-trend-compare="baseline"/);
+    for (const metric of ['followers', 'postsInWindow', 'activeProfiles', 'eligibleEngagementProfiles', 'medianEngagementRate', 'medianPostsPerWeek']) {
+      assert.match(html, new RegExp(`${metric}: \\{`), `interactive direction includes ${metric}`);
+    }
   });
   await test('published replay and its historical evidence carry the same passed validation', () => {
     const latest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'latest.json'), 'utf8'));

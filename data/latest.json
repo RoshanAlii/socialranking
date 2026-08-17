@@ -24,7 +24,7 @@
       "validatorVersion": 2,
       "snapshotCapturedAt": "2026-08-15T09:47:52.000Z",
       "rosterVersion": "2026-07-30-kirpa-workbook-v1",
-      "validatedAt": "2026-08-17T06:50:38.983Z",
+      "validatedAt": "2026-08-17T07:09:51.961Z",
       "mode": "replay"
     },
     "note": "Recomputed from the stored provider captures of 2026-08-15T09:47:52.000Z. Every number is real public data from that pull; it is not a fresh capture.",
@@ -22497,6 +22497,12 @@
             "postsPerWeek": 1,
             "followerGrowth": 0.6666666666666666
           },
+          "pointContributions": {
+            "followers": 7.142857142857144,
+            "engagementRate": 30.476190476190478,
+            "postsPerWeek": 30,
+            "followerGrowth": 13.333333333333334
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -22520,7 +22526,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.780952380952381,
+          "score": 0.7809523809523811,
           "components": {
             "followers": 3359,
             "engagementRate": 0.041976778803215244,
@@ -22538,6 +22544,12 @@
             "engagementRate": 0.9523809523809523,
             "postsPerWeek": 0.6190476190476191,
             "followerGrowth": 0.9523809523809523
+          },
+          "pointContributions": {
+            "followers": 2.380952380952381,
+            "engagementRate": 38.095238095238095,
+            "postsPerWeek": 18.571428571428573,
+            "followerGrowth": 19.047619047619047
           },
           "measuredMetrics": [
             "followers",
@@ -22562,7 +22574,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.7357142857142858,
+          "score": 0.7357142857142857,
           "components": {
             "followers": 10957,
             "engagementRate": 0.032673176964497584,
@@ -22580,6 +22592,12 @@
             "engagementRate": 0.8571428571428571,
             "postsPerWeek": 0.6904761904761905,
             "followerGrowth": 0.7142857142857143
+          },
+          "pointContributions": {
+            "followers": 4.285714285714286,
+            "engagementRate": 34.285714285714285,
+            "postsPerWeek": 20.71428571428571,
+            "followerGrowth": 14.285714285714288
           },
           "measuredMetrics": [
             "followers",
@@ -22604,7 +22622,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.7285714285714285,
+          "score": 0.7285714285714286,
           "components": {
             "followers": 6332,
             "engagementRate": 0.018161718256475046,
@@ -22622,6 +22640,12 @@
             "engagementRate": 0.6190476190476191,
             "postsPerWeek": 0.9523809523809523,
             "followerGrowth": 0.8095238095238095
+          },
+          "pointContributions": {
+            "followers": 3.3333333333333335,
+            "engagementRate": 24.761904761904763,
+            "postsPerWeek": 28.57142857142857,
+            "followerGrowth": 16.19047619047619
           },
           "measuredMetrics": [
             "followers",
@@ -22646,7 +22670,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.6952380952380953,
+          "score": 0.6952380952380952,
           "components": {
             "followers": 822,
             "engagementRate": 0.046228710462287104,
@@ -22664,6 +22688,12 @@
             "engagementRate": 1,
             "postsPerWeek": 0.47619047619047616,
             "followerGrowth": 0.7619047619047619
+          },
+          "pointContributions": {
+            "followers": 0,
+            "engagementRate": 40,
+            "postsPerWeek": 14.285714285714285,
+            "followerGrowth": 15.238095238095239
           },
           "measuredMetrics": [
             "followers",
@@ -22688,7 +22718,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.6666666666666666,
+          "score": 0.6666666666666667,
           "components": {
             "followers": 26036,
             "engagementRate": 0.0385235827316024,
@@ -22706,6 +22736,12 @@
             "engagementRate": 0.9047619047619048,
             "postsPerWeek": 0.42857142857142855,
             "followerGrowth": 0.47619047619047616
+          },
+          "pointContributions": {
+            "followers": 8.095238095238095,
+            "engagementRate": 36.1904761904762,
+            "postsPerWeek": 12.857142857142856,
+            "followerGrowth": 9.523809523809524
           },
           "measuredMetrics": [
             "followers",
@@ -22749,6 +22785,12 @@
             "postsPerWeek": 0.5714285714285714,
             "followerGrowth": 0.8571428571428571
           },
+          "pointContributions": {
+            "followers": 1.4285714285714286,
+            "engagementRate": 26.666666666666668,
+            "postsPerWeek": 17.14285714285714,
+            "followerGrowth": 17.142857142857142
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -22772,7 +22814,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.5476190476190477,
+          "score": 0.5476190476190476,
           "components": {
             "followers": 3334,
             "engagementRate": 0.02009598080383923,
@@ -22790,6 +22832,12 @@
             "engagementRate": 0.5714285714285714,
             "postsPerWeek": 0.3333333333333333,
             "followerGrowth": 1
+          },
+          "pointContributions": {
+            "followers": 1.9047619047619049,
+            "engagementRate": 22.857142857142858,
+            "postsPerWeek": 10,
+            "followerGrowth": 20
           },
           "measuredMetrics": [
             "followers",
@@ -22833,6 +22881,12 @@
             "postsPerWeek": 0.8571428571428571,
             "followerGrowth": 0.5714285714285714
           },
+          "pointContributions": {
+            "followers": 5.238095238095239,
+            "engagementRate": 11.428571428571429,
+            "postsPerWeek": 25.71428571428571,
+            "followerGrowth": 11.428571428571429
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -22856,7 +22910,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.4714285714285714,
+          "score": 0.47142857142857136,
           "components": {
             "followers": 19821,
             "engagementRate": 0.0065082488270016645,
@@ -22874,6 +22928,12 @@
             "engagementRate": 0.09523809523809523,
             "postsPerWeek": 0.8095238095238095,
             "followerGrowth": 0.6190476190476191
+          },
+          "pointContributions": {
+            "followers": 6.666666666666667,
+            "engagementRate": 3.8095238095238098,
+            "postsPerWeek": 24.285714285714285,
+            "followerGrowth": 12.380952380952381
           },
           "measuredMetrics": [
             "followers",
@@ -22917,6 +22977,12 @@
             "postsPerWeek": 0.38095238095238093,
             "followerGrowth": 0.42857142857142855
           },
+          "pointContributions": {
+            "followers": 5.714285714285714,
+            "engagementRate": 19.047619047619047,
+            "postsPerWeek": 11.428571428571427,
+            "followerGrowth": 8.571428571428571
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -22940,7 +23006,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.4428571428571429,
+          "score": 0.44285714285714284,
           "components": {
             "followers": 32232,
             "engagementRate": 0.00980392156862745,
@@ -22958,6 +23024,12 @@
             "engagementRate": 0.38095238095238093,
             "postsPerWeek": 0.5238095238095238,
             "followerGrowth": 0.23809523809523808
+          },
+          "pointContributions": {
+            "followers": 8.571428571428571,
+            "engagementRate": 15.238095238095239,
+            "postsPerWeek": 15.714285714285714,
+            "followerGrowth": 4.761904761904762
           },
           "measuredMetrics": [
             "followers",
@@ -23001,6 +23073,12 @@
             "postsPerWeek": 0.6904761904761905,
             "followerGrowth": 0.2857142857142857
           },
+          "pointContributions": {
+            "followers": 9.523809523809524,
+            "engagementRate": 7.6190476190476195,
+            "postsPerWeek": 20.71428571428571,
+            "followerGrowth": 5.714285714285714
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23043,6 +23121,12 @@
             "postsPerWeek": 0.7619047619047619,
             "followerGrowth": 0.5238095238095238
           },
+          "pointContributions": {
+            "followers": 9.04761904761905,
+            "engagementRate": 0,
+            "postsPerWeek": 22.857142857142854,
+            "followerGrowth": 10.476190476190478
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23060,6 +23144,54 @@
         },
         {
           "rank": 15,
+          "name": "Lipika Madan",
+          "role": "Team Leader – Sales",
+          "handle": "lipika.kirpa",
+          "platforms": [
+            "instagram"
+          ],
+          "score": 0.4190476190476191,
+          "components": {
+            "followers": 17759,
+            "engagementRate": 0.005940649811363253,
+            "postsPerWeek": 1.4,
+            "followerGrowth": 0.10016010913535789
+          },
+          "adjustedComponents": {
+            "followers": 17759,
+            "engagementRate": 0.009973440928763969,
+            "postsPerWeek": 1.4,
+            "followerGrowth": 0.10016010913535789
+          },
+          "normalizedComponents": {
+            "followers": 0.6190476190476191,
+            "engagementRate": 0.3333333333333333,
+            "postsPerWeek": 0.14285714285714285,
+            "followerGrowth": 0.9047619047619048
+          },
+          "pointContributions": {
+            "followers": 6.190476190476191,
+            "engagementRate": 13.333333333333334,
+            "postsPerWeek": 4.285714285714285,
+            "followerGrowth": 18.0952380952381
+          },
+          "measuredMetrics": [
+            "followers",
+            "engagementRate",
+            "postsPerWeek",
+            "followerGrowth"
+          ],
+          "missingMetrics": [],
+          "provisional": false,
+          "eligibilityReasons": [],
+          "sample": {
+            "comparablePosts": 6,
+            "minimumComparablePosts": 5,
+            "engagementReliability": 0.375
+          }
+        },
+        {
+          "rank": 16,
           "name": "Manpreet Kaur",
           "role": "Founder / CEO",
           "handle": "manpreet.kirpa",
@@ -23085,6 +23217,12 @@
             "postsPerWeek": 0.9047619047619048,
             "followerGrowth": 0.14285714285714285
           },
+          "pointContributions": {
+            "followers": 10,
+            "engagementRate": 1.9047619047619049,
+            "postsPerWeek": 27.142857142857142,
+            "followerGrowth": 2.857142857142857
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23101,49 +23239,7 @@
           }
         },
         {
-          "rank": 15,
-          "name": "Lipika Madan",
-          "role": "Team Leader – Sales",
-          "handle": "lipika.kirpa",
-          "platforms": [
-            "instagram"
-          ],
-          "score": 0.41904761904761906,
-          "components": {
-            "followers": 17759,
-            "engagementRate": 0.005940649811363253,
-            "postsPerWeek": 1.4,
-            "followerGrowth": 0.10016010913535789
-          },
-          "adjustedComponents": {
-            "followers": 17759,
-            "engagementRate": 0.009973440928763969,
-            "postsPerWeek": 1.4,
-            "followerGrowth": 0.10016010913535789
-          },
-          "normalizedComponents": {
-            "followers": 0.6190476190476191,
-            "engagementRate": 0.3333333333333333,
-            "postsPerWeek": 0.14285714285714285,
-            "followerGrowth": 0.9047619047619048
-          },
-          "measuredMetrics": [
-            "followers",
-            "engagementRate",
-            "postsPerWeek",
-            "followerGrowth"
-          ],
-          "missingMetrics": [],
-          "provisional": false,
-          "eligibilityReasons": [],
-          "sample": {
-            "comparablePosts": 6,
-            "minimumComparablePosts": 5,
-            "engagementReliability": 0.375
-          }
-        },
-        {
-          "rank": 15,
+          "rank": 16,
           "name": "Sukhpreet Kaur",
           "role": "Consultant – Offplan Sales",
           "handle": "sukhpreetbal.kirpa",
@@ -23168,6 +23264,12 @@
             "engagementRate": 0.8095238095238095,
             "postsPerWeek": 0.23809523809523808,
             "followerGrowth": 0.09523809523809523
+          },
+          "pointContributions": {
+            "followers": 0.4761904761904762,
+            "engagementRate": 32.38095238095238,
+            "postsPerWeek": 7.142857142857142,
+            "followerGrowth": 1.9047619047619049
           },
           "measuredMetrics": [
             "followers",
@@ -23211,6 +23313,12 @@
             "postsPerWeek": 0.047619047619047616,
             "followerGrowth": 0.3333333333333333
           },
+          "pointContributions": {
+            "followers": 2.857142857142857,
+            "engagementRate": 28.571428571428577,
+            "postsPerWeek": 1.4285714285714284,
+            "followerGrowth": 6.666666666666667
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23253,6 +23361,12 @@
             "postsPerWeek": 0.2857142857142857,
             "followerGrowth": 0.19047619047619047
           },
+          "pointContributions": {
+            "followers": 0.9523809523809524,
+            "engagementRate": 20.952380952380956,
+            "postsPerWeek": 8.57142857142857,
+            "followerGrowth": 3.8095238095238098
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23276,7 +23390,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.23333333333333334,
+          "score": 0.2333333333333333,
           "components": {
             "followers": 6988,
             "engagementRate": 0.009444762449914138,
@@ -23294,6 +23408,12 @@
             "engagementRate": 0.42857142857142855,
             "postsPerWeek": 0.047619047619047616,
             "followerGrowth": 0.047619047619047616
+          },
+          "pointContributions": {
+            "followers": 3.8095238095238098,
+            "engagementRate": 17.142857142857142,
+            "postsPerWeek": 1.4285714285714284,
+            "followerGrowth": 0.9523809523809524
           },
           "measuredMetrics": [
             "followers",
@@ -23318,7 +23438,7 @@
           "platforms": [
             "instagram"
           ],
-          "score": 0.23333333333333334,
+          "score": 0.2333333333333333,
           "components": {
             "followers": 11477,
             "engagementRate": 0.004182277598675612,
@@ -23336,6 +23456,12 @@
             "engagementRate": 0.23809523809523808,
             "postsPerWeek": 0.047619047619047616,
             "followerGrowth": 0.38095238095238093
+          },
+          "pointContributions": {
+            "followers": 4.761904761904762,
+            "engagementRate": 9.523809523809524,
+            "postsPerWeek": 1.4285714285714284,
+            "followerGrowth": 7.6190476190476195
           },
           "measuredMetrics": [
             "followers",
@@ -23379,6 +23505,12 @@
             "postsPerWeek": 0.19047619047619047,
             "followerGrowth": 0
           },
+          "pointContributions": {
+            "followers": 7.6190476190476195,
+            "engagementRate": 5.714285714285714,
+            "postsPerWeek": 5.7142857142857135,
+            "followerGrowth": 0
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23420,6 +23552,12 @@
             "engagementRate": 0,
             "postsPerWeek": 0,
             "followerGrowth": 0.6190476190476191
+          },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
           },
           "measuredMetrics": [
             "followers",
@@ -23468,6 +23606,12 @@
             "postsPerWeek": 0,
             "followerGrowth": 0.14285714285714285
           },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23512,6 +23656,12 @@
             "engagementRate": 0,
             "postsPerWeek": 0,
             "followerGrowth": 0.19047619047619047
+          },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
           },
           "measuredMetrics": [
             "followers",
@@ -23560,6 +23710,12 @@
             "postsPerWeek": 0.19047619047619047,
             "followerGrowth": 0.9523809523809523
           },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
+          },
           "measuredMetrics": [
             "followers",
             "engagementRate",
@@ -23604,6 +23760,12 @@
             "engagementRate": 0,
             "postsPerWeek": 0,
             "followerGrowth": 0
+          },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
           },
           "measuredMetrics": [
             "followers",
@@ -23652,6 +23814,12 @@
             "postsPerWeek": 0,
             "followerGrowth": 0.14285714285714285
           },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
+          },
           "measuredMetrics": [
             "followers",
             "postsPerWeek",
@@ -23698,6 +23866,12 @@
             "engagementRate": 0,
             "postsPerWeek": 0,
             "followerGrowth": 0.2857142857142857
+          },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
           },
           "measuredMetrics": [
             "followers",
@@ -23746,6 +23920,12 @@
             "postsPerWeek": 0,
             "followerGrowth": 0.8095238095238095
           },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
+          },
           "measuredMetrics": [
             "followers",
             "postsPerWeek",
@@ -23792,6 +23972,12 @@
             "engagementRate": 0,
             "postsPerWeek": 0,
             "followerGrowth": 0.8095238095238095
+          },
+          "pointContributions": {
+            "followers": null,
+            "engagementRate": null,
+            "postsPerWeek": null,
+            "followerGrowth": null
           },
           "measuredMetrics": [
             "followers",
@@ -24473,7 +24659,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.7499999999999999,
+            "score": 0.75,
             "components": {
               "followers": 6332,
               "engagementRate": 0.014055590650663297,
@@ -24491,6 +24677,12 @@
               "engagementRate": 0.7,
               "postsPerWeek": 1,
               "followerGrowth": 0.7
+            },
+            "pointContributions": {
+              "followers": 3,
+              "engagementRate": 27.999999999999996,
+              "postsPerWeek": 30,
+              "followerGrowth": 13.999999999999998
             },
             "measuredMetrics": [
               "followers",
@@ -24515,7 +24707,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.7300000000000002,
+            "score": 0.73,
             "components": {
               "followers": 22370,
               "engagementRate": 0.014975413500223514,
@@ -24533,6 +24725,12 @@
               "engagementRate": 0.8,
               "postsPerWeek": 0.9,
               "followerGrowth": 0.4
+            },
+            "pointContributions": {
+              "followers": 6,
+              "engagementRate": 32.00000000000001,
+              "postsPerWeek": 27,
+              "followerGrowth": 8.000000000000002
             },
             "measuredMetrics": [
               "followers",
@@ -24557,7 +24755,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.6700000000000002,
+            "score": 0.67,
             "components": {
               "followers": 3359,
               "engagementRate": 0.04048824054778208,
@@ -24575,6 +24773,12 @@
               "engagementRate": 0.9,
               "postsPerWeek": 0.3,
               "followerGrowth": 1
+            },
+            "pointContributions": {
+              "followers": 2.0000000000000004,
+              "engagementRate": 36.00000000000001,
+              "postsPerWeek": 9,
+              "followerGrowth": 20
             },
             "measuredMetrics": [
               "followers",
@@ -24618,6 +24822,12 @@
               "postsPerWeek": 0.4,
               "followerGrowth": 0.6
             },
+            "pointContributions": {
+              "followers": 0,
+              "engagementRate": 40,
+              "postsPerWeek": 12,
+              "followerGrowth": 12
+            },
             "measuredMetrics": [
               "followers",
               "engagementRate",
@@ -24641,7 +24851,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.45500000000000007,
+            "score": 0.455,
             "components": {
               "followers": 32232,
               "engagementRate": 0.010331347728965004,
@@ -24659,6 +24869,12 @@
               "engagementRate": 0.5,
               "postsPerWeek": 0.55,
               "followerGrowth": 0.1
+            },
+            "pointContributions": {
+              "followers": 6.999999999999999,
+              "engagementRate": 20,
+              "postsPerWeek": 16.5,
+              "followerGrowth": 2.0000000000000004
             },
             "measuredMetrics": [
               "followers",
@@ -24683,7 +24899,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.41000000000000003,
+            "score": 0.41,
             "components": {
               "followers": 10957,
               "engagementRate": 0.015788993337592407,
@@ -24701,6 +24917,12 @@
               "engagementRate": 0.6,
               "postsPerWeek": 0.1,
               "followerGrowth": 0.5
+            },
+            "pointContributions": {
+              "followers": 4.000000000000001,
+              "engagementRate": 24,
+              "postsPerWeek": 3,
+              "followerGrowth": 10
             },
             "measuredMetrics": [
               "followers",
@@ -24742,6 +24964,12 @@
               "followers": 1,
               "engagementRate": 0.1,
               "postsPerWeek": 0.8,
+              "followerGrowth": 0
+            },
+            "pointContributions": {
+              "followers": 10,
+              "engagementRate": 4.000000000000001,
+              "postsPerWeek": 24,
               "followerGrowth": 0
             },
             "measuredMetrics": [
@@ -24786,6 +25014,12 @@
               "postsPerWeek": 0.1,
               "followerGrowth": 0.9
             },
+            "pointContributions": {
+              "followers": 5,
+              "engagementRate": 12,
+              "postsPerWeek": 3,
+              "followerGrowth": 18.000000000000004
+            },
             "measuredMetrics": [
               "followers",
               "engagementRate",
@@ -24809,7 +25043,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.3750000000000001,
+            "score": 0.375,
             "components": {
               "followers": 123803,
               "engagementRate": 0.0043536909444843825,
@@ -24827,6 +25061,12 @@
               "engagementRate": 0.2,
               "postsPerWeek": 0.55,
               "followerGrowth": 0.2
+            },
+            "pointContributions": {
+              "followers": 9.000000000000002,
+              "engagementRate": 8.000000000000002,
+              "postsPerWeek": 16.5,
+              "followerGrowth": 4.000000000000001
             },
             "measuredMetrics": [
               "followers",
@@ -24870,6 +25110,12 @@
               "postsPerWeek": 0.1,
               "followerGrowth": 0.8
             },
+            "pointContributions": {
+              "followers": 1.0000000000000002,
+              "engagementRate": 16.000000000000004,
+              "postsPerWeek": 3,
+              "followerGrowth": 16.000000000000004
+            },
             "measuredMetrics": [
               "followers",
               "engagementRate",
@@ -24893,7 +25139,7 @@
             "platforms": [
               "instagram"
             ],
-            "score": 0.35000000000000003,
+            "score": 0.35,
             "components": {
               "followers": 47543,
               "engagementRate": 0.0011358138947899796,
@@ -24911,6 +25157,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0.7,
               "followerGrowth": 0.3
+            },
+            "pointContributions": {
+              "followers": 8.000000000000002,
+              "engagementRate": 0,
+              "postsPerWeek": 21,
+              "followerGrowth": 6
             },
             "measuredMetrics": [
               "followers",
@@ -24953,6 +25205,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0.3
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25001,6 +25259,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0.4
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25047,6 +25311,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25095,6 +25365,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "engagementRate",
@@ -25139,6 +25415,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0.3
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25187,6 +25469,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25233,6 +25521,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 1.1
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25281,6 +25575,12 @@
               "postsPerWeek": 0.8,
               "followerGrowth": 0.4
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25327,6 +25627,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0.3
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25375,6 +25681,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0.1
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25421,6 +25733,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 1
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25469,6 +25787,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0.4
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "engagementRate",
@@ -25513,6 +25837,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25561,6 +25891,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0.3
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25607,6 +25943,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25655,6 +25997,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25701,6 +26049,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0.1
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -25749,6 +26103,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0.2
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25796,6 +26156,12 @@
               "postsPerWeek": 0,
               "followerGrowth": 0.7
             },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
+            },
             "measuredMetrics": [
               "followers",
               "postsPerWeek",
@@ -25842,6 +26208,12 @@
               "engagementRate": 0,
               "postsPerWeek": 0,
               "followerGrowth": 0.7
+            },
+            "pointContributions": {
+              "followers": null,
+              "engagementRate": null,
+              "postsPerWeek": null,
+              "followerGrowth": null
             },
             "measuredMetrics": [
               "followers",
@@ -27912,7 +28284,7 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 15,
+        "rank": 16,
         "value": 0.41904761904761906,
         "components": {
           "followers": 734169,
@@ -28471,7 +28843,7 @@
       },
       "score": {
         "rank": 3,
-        "value": 0.7357142857142858,
+        "value": 0.7357142857142857,
         "components": {
           "followers": 10957,
           "engagementRate": 0.032673176964497584,
@@ -28767,7 +29139,7 @@
       },
       "score": {
         "rank": 12,
-        "value": 0.4428571428571429,
+        "value": 0.44285714285714284,
         "components": {
           "followers": 32232,
           "engagementRate": 0.00980392156862745,
@@ -29045,7 +29417,7 @@
       },
       "score": {
         "rank": 15,
-        "value": 0.41904761904761906,
+        "value": 0.4190476190476191,
         "components": {
           "followers": 17759,
           "engagementRate": 0.005940649811363253,
@@ -29631,7 +30003,7 @@
       },
       "score": {
         "rank": 20,
-        "value": 0.23333333333333334,
+        "value": 0.2333333333333333,
         "components": {
           "followers": 6988,
           "engagementRate": 0.009444762449914138,
@@ -30022,7 +30394,7 @@
       },
       "score": {
         "rank": 6,
-        "value": 0.6666666666666666,
+        "value": 0.6666666666666667,
         "components": {
           "followers": 26036,
           "engagementRate": 0.0385235827316024,
@@ -30324,7 +30696,7 @@
         "measurableCount": 2
       },
       "score": {
-        "rank": 15,
+        "rank": 16,
         "value": 0.41904761904761906,
         "components": {
           "followers": 1373,
@@ -30563,7 +30935,7 @@
       },
       "score": {
         "rank": 8,
-        "value": 0.5476190476190477,
+        "value": 0.5476190476190476,
         "components": {
           "followers": 3334,
           "engagementRate": 0.02009598080383923,
@@ -31944,7 +32316,7 @@
       },
       "score": {
         "rank": 10,
-        "value": 0.4714285714285714,
+        "value": 0.47142857142857136,
         "components": {
           "followers": 19821,
           "engagementRate": 0.0065082488270016645,
@@ -32616,7 +32988,7 @@
       },
       "score": {
         "rank": 20,
-        "value": 0.23333333333333334,
+        "value": 0.2333333333333333,
         "components": {
           "followers": 11477,
           "engagementRate": 0.004182277598675612,
@@ -33182,7 +33554,7 @@
       },
       "score": {
         "rank": 5,
-        "value": 0.6952380952380953,
+        "value": 0.6952380952380952,
         "components": {
           "followers": 822,
           "engagementRate": 0.046228710462287104,
@@ -34142,7 +34514,7 @@
       },
       "score": {
         "rank": 2,
-        "value": 0.780952380952381,
+        "value": 0.7809523809523811,
         "components": {
           "followers": 3359,
           "engagementRate": 0.041976778803215244,
@@ -34440,7 +34812,7 @@
       },
       "score": {
         "rank": 4,
-        "value": 0.7285714285714285,
+        "value": 0.7285714285714286,
         "components": {
           "followers": 6332,
           "engagementRate": 0.018161718256475046,

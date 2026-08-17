@@ -24,7 +24,7 @@
       "validatorVersion": 2,
       "snapshotCapturedAt": "2026-08-15T09:47:52.000Z",
       "rosterVersion": "2026-07-30-kirpa-workbook-v1",
-      "validatedAt": "2026-08-17T06:50:38.983Z",
+      "validatedAt": "2026-08-17T07:09:51.961Z",
       "mode": "replay"
     },
     "note": "Recomputed from the stored provider captures of 2026-08-15T09:47:52.000Z. Every number is real public data from that pull; it is not a fresh capture.",

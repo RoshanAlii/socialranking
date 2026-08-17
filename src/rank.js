@@ -618,7 +618,13 @@ function compositeLeaderboard(records, weights = DEFAULT_WEIGHTS, now = asOf(rec
   const normalizers = Object.fromEntries(keys.map(key => [key, percentileNormalizer(eligible.map(row => row.transformed[key]))]));
   const rows = prepared.map(row => {
     const normalized = Object.fromEntries(keys.map(key => [key, normalizers[key](row.transformed[key])]));
-    const score = row.eligible ? keys.reduce((sum, key) => sum + applied[key] * normalized[key], 0) : null;
+    const pointContributions = Object.fromEntries(keys.map(key => [
+      key,
+      row.eligible ? applied[key] * normalized[key] * 100 : null,
+    ]));
+    const score = row.eligible
+      ? Object.values(pointContributions).reduce((sum, points) => sum + points, 0) / 100
+      : null;
     return {
       name: row.person.name,
       role: row.person.role,
@@ -628,6 +634,7 @@ function compositeLeaderboard(records, weights = DEFAULT_WEIGHTS, now = asOf(rec
       components: Object.fromEntries(keys.map(key => [key, typeof row.person[key] === 'number' ? row.person[key] : null])),
       adjustedComponents: Object.fromEntries(keys.map(key => [key, typeof row.adjusted[key] === 'number' ? row.adjusted[key] : null])),
       normalizedComponents: normalized,
+      pointContributions,
       measuredMetrics: row.measured,
       missingMetrics: row.missing,
       provisional: !row.eligible,
