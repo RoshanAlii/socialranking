@@ -422,7 +422,7 @@ async function main() {
 
   /*
    * The trend file is the only history the dashboard reads. It carries numbers
-   * and no post bodies, so a year of twice-weekly captures stays very small.
+   * and no post bodies, so a year of four-day captures stays very small.
    */
   const seriesPath = path.join(outDir, 'series.json');
   const existingSeries = fs.existsSync(seriesPath)

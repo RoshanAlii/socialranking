@@ -2258,7 +2258,7 @@
     <aside class="truth-strip reveal" aria-label="Measurement guardrails" style="--delay:70ms">
       <div class="truth-item"><span class="truth-index">01</span><b>Roster-locked</b><span>A snapshot cannot rank after the employee registry changes.</span></div>
       <div class="truth-item"><span class="truth-index">02</span><b>Unknown stays unknown</b><span>Missing values are shown as —, never invented as zero.</span></div>
-      <div class="truth-item"><span class="truth-index">03</span><b>Freshness gate</b><span>Twice-weekly rankings stay current for 108 hours; failed pulls preserve the last validated snapshot.</span></div>
+      <div class="truth-item"><span class="truth-index">03</span><b>Freshness gate</b><span>Four-day rankings stay current for 108 hours; failed pulls preserve the last validated snapshot.</span></div>
     </aside>
 
     <section class="section reveal" aria-labelledby="arena-title" style="--delay:100ms">
@@ -2464,7 +2464,7 @@
       <div class="method-grid">
         <div class="method-item">
           <b>Roster and freshness lock</b>
-          <p>Every published snapshot must match the current Kirpa roster version. Present-tense rankings are withheld when that lock fails or the twice-weekly capture is more than 108 hours old.</p>
+          <p>Every published snapshot must match the current Kirpa roster version. Present-tense rankings are withheld when that lock fails or the four-day capture is more than 108 hours old.</p>
         </div>
         <div class="method-item">
           <b>One comparable window</b>
@@ -3151,7 +3151,7 @@
         detail = 'Rankings and individual metrics are withheld because the published employee registry is incomplete or internally inconsistent.';
       } else if (!snapshotMatchesRoster()) {
         title = 'Employee roster updated — performance data paused';
-        detail = `Roster ${REGISTRY.rosterVersion} does not match this saved Instagram capture. The next successful twice-weekly pull will restore rankings; no old handle data is being reused.`;
+        detail = `Roster ${REGISTRY.rosterVersion} does not match this saved Instagram capture. The next successful four-day pull will restore rankings; no old handle data is being reused.`;
       } else if (REFRESH_STATUS?.outcome === 'preserved') {
         title = 'Latest refresh did not replace validated data';
         detail = `${REFRESH_STATUS.reason || 'The provider refresh did not clear its data-quality gates.'} The board remains on the last validated snapshot from ${asOfLabel()}; missing data was not converted to zero.`;

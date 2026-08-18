@@ -18,7 +18,7 @@ const path = require('path');
 const https = require('https');
 const { teamHistory, changeOver } = require('./series');
 
-// Monday/Thursday captures can be 96 hours apart. Keep a small allowance for
+// Four-day captures can be 96 hours apart. Keep a small allowance for
 // Actor and workflow delays while still forcing every message to name stale
 // data rather than presenting it as current.
 const MAX_PUBLIC_AGE_HOURS = 108;
