@@ -2,7 +2,7 @@
 
 A four-day leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, output, follower growth, fair engagement and cadence rankings, view efficiency, content records, posting-time and content-pillar patterns, developer coverage, trends, personal bests, achievements, and quantitative next actions.
 
-It runs on a schedule with **no Instagram logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; a daily no-cost due check starts the paid GitHub Action path only on the fourth day after the last validated capture.
+It runs on a schedule with **no Instagram logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; twice-daily no-cost due checks start the paid GitHub Action path only after four complete days since the last validated capture.
 
 ---
 
@@ -123,7 +123,7 @@ src/roster.js         ▼
 - **`src/backfill-series.js`** — rebuilds `data/series.json` from every stored snapshot, without laundering an unvalidated capture into a validated one.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards, content intelligence and per-person coaching → write `data/latest.json`, a dated history snapshot, and the appended trend series.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
-- **`.github/workflows/weekly.yml`** — daily 04:00 UTC due check plus a manual trigger. The paid path runs only when the validated snapshot is at least 95 hours old: tests → roster integrity → Instagram collection → quality gate → independent validator stamp → explicit data commit. It prefers `APIFY_TOKEN_MENTION_COUNT` while retaining `APIFY_TOKEN` as a rotation fallback.
+- **`.github/workflows/weekly.yml`** — no-cost due checks at 04:00 and 16:00 UTC plus a manual trigger. The paid path runs only when the validated snapshot is at least 96 hours old: tests → roster integrity → Instagram collection → quality gate → independent validator stamp → explicit data commit. It prefers `APIFY_TOKEN_MENTION_COUNT` while retaining `APIFY_TOKEN` as a rotation fallback.
 - **`.github/workflows/reel-mention-count.yml`** — a cheap daily due check with paid collection/transcription only every 14 days (or manually). It publishes roster-wide developer metrics and Reel evidence to `data/developer-intelligence.json`; failures remain unknown and make coverage partial rather than zero.
 
 ---
@@ -133,7 +133,7 @@ src/roster.js         ▼
 1. **Add handles.** Fill `handles.json`: add the Instagram handle and set `confirmed: true` only after Kirpa-owned evidence or direct human confirmation. Leave back-office `dashboardRelevant: false`.
 2. **Add the provider key.** Create an [Apify](https://apify.com) account, copy your API token, and add it as a repo secret named `APIFY_TOKEN` (Settings → Secrets → Actions).
 3. **Enable Pages.** Settings → Pages → deploy from `main`. The dashboard is `index.html`.
-4. **Run it.** Actions → *Four-day social snapshot* → *Run workflow*. It writes a validated `data/latest.json` and the page goes live. After that, a daily 08:00 Asia/Dubai due check starts the paid refresh only on the fourth day.
+4. **Run it.** Actions → *Four-day social snapshot* → *Run workflow*. It writes a validated `data/latest.json` and the page goes live. After that, no-cost checks at 08:00 and 20:00 Asia/Dubai start the paid refresh only after four complete days.
 
 ### Automatic developer intelligence
 
