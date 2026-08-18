@@ -292,6 +292,28 @@ const soloRegistry = {
     assert.strictEqual(raw._profileFallbackPostCount, 1);
     assert.strictEqual(raw._postsQuerySucceeded, true);
   });
+  await test('brand refresh reuses owner-verified profile posts without a wasteful post Actor run', async () => {
+    const calls = [];
+    const previousSnapshot = {
+      brand: [{ platform: 'instagram', handle: 'kirpa.properties', resolved: true, isPrivate: false,
+        recentPosts: [{ id: 'old', ownerUsername: 'kirpa.properties', timestamp: '2026-07-25T00:00:00Z' }] }],
+    };
+    const provider = new P.ApifyProvider('token', {
+      capturedAt: '2026-08-18T00:00:00Z', previousSnapshot,
+      runSync: async (actor) => {
+        calls.push(actor);
+        return [{ username: 'kirpa.properties', followersCount: 100, postsCount: 50,
+          latestPosts: [
+            { id: 'new', ownerUsername: 'kirpa.properties', timestamp: '2026-08-17T00:00:00Z' },
+            { id: 'foreign', ownerUsername: 'someone.else', timestamp: '2026-08-17T00:00:00Z' },
+          ] }];
+      },
+    });
+    const brand = await provider.fetchBrandProfile('instagram', 'kirpa.properties');
+    assert.deepStrictEqual(calls, [P.PROFILE_ACTOR]);
+    assert.deepStrictEqual(brand.recentPosts.map(post => post.id), ['new', 'old']);
+    assert.strictEqual(brand._postsOwnershipComplete, true);
+  });
   await test('validated history restores omitted owned posts without replacing current profile counts', () => {
     const current = rec({ followers: 12345, recentPosts: [], fetchMeta: Object.assign({}, rec().fetchMeta, { authoredPostCount: 0 }) });
     const prior = {

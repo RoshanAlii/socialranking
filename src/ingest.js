@@ -128,9 +128,11 @@ async function runBrandAccounts(registry, provider, capturedAt, opts = {}) {
     let raw = null;
     let error = null;
     try {
-      raw = typeof provider.fetchProfile === 'function'
-        ? await provider.fetchProfile(account.platform, account.handle)
-        : (await provider.fetchProfiles(account.platform, [account.handle])).get(account.handle);
+      raw = typeof provider.fetchBrandProfile === 'function'
+        ? await provider.fetchBrandProfile(account.platform, account.handle)
+        : typeof provider.fetchProfile === 'function'
+          ? await provider.fetchProfile(account.platform, account.handle)
+          : (await provider.fetchProfiles(account.platform, [account.handle])).get(account.handle);
     } catch (caught) {
       error = String(caught.message || caught);
       raw = { notFound: true };

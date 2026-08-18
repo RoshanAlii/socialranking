@@ -352,6 +352,13 @@ class ApifyProvider {
     )) || null;
   }
 
+  previousBrand(handle) {
+    return (this.previousSnapshot?.brand || []).find(record => (
+      record.platform === 'instagram' && canonicalHandle(record.handle) === canonicalHandle(handle) &&
+      record.resolved === true && record.isPrivate === false
+    )) || null;
+  }
+
   incrementalLookbackDays(handles) {
     const now = new Date(this.capturedAt).getTime();
     if (!Number.isFinite(now)) return INSTAGRAM_POST_LOOKBACK_DAYS;
@@ -467,6 +474,48 @@ class ApifyProvider {
     }
 
     return out;
+  }
+
+  /*
+   * The company account's profile payload already includes its newest owned
+   * posts. The general post Actor also returns hundreds of tagged/collaborator
+   * rows for this account, most of which are rejected by ownership filtering;
+   * that wastes almost a full capped run and can outlive the GitHub job.
+   * Merge the owner-verified profile rows into the last valid brand window
+   * instead. With the four-day cadence, the profile payload comfortably spans
+   * the incremental gap while immutable post ids keep the history deduplicated.
+   */
+  async fetchBrandProfile(platform, handle) {
+    if (platform !== 'instagram') return this.fetchProfile(platform, handle);
+    const items = await this.call(PROFILE_ACTOR, instagramProfileInput([handle]));
+    const details = groupProfileItems([handle], items).get(handle);
+    if (!details) return { notFound: true };
+
+    const freshPosts = groupPostItems(handle, details.latestPosts || []);
+    const priorPosts = this.previousBrand(handle)?.recentPosts || [];
+    const cutoff = new Date(this.capturedAt).getTime() - POST_CACHE_RETENTION_DAYS * dayMs();
+    const posts = dedupeRawPosts([...freshPosts, ...priorPosts]).filter(item => {
+      const at = new Date(item?.postedAt || item?.timestamp || item?.takenAtIso || 0).getTime();
+      return !Number.isFinite(at) || at >= cutoff;
+    });
+    return Object.assign({}, details, {
+      recentPosts: posts,
+      _profileSource: PROFILE_ACTOR,
+      _postSource: `${PROFILE_ACTOR}:latestPosts`,
+      _postsQuerySucceeded: true,
+      _postsQueryError: null,
+      _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
+      _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
+      _postsTruncated: false,
+      _postsOwnershipComplete: true,
+      _missingOwnerCount: 0,
+      _rawPostCount: posts.length,
+      _incremental: true,
+      _incrementalLookbackDays: this.incrementalLookbackDays([handle]),
+      _freshPostCount: freshPosts.length,
+      _reusedPostCount: Math.max(0, posts.length - freshPosts.length),
+      _profileFallbackPostCount: freshPosts.length,
+    });
   }
 
   /*
