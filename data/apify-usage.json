@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-17T06:45:28Z",
+  "updatedAt": "2026-08-18T09:01:09.000Z",
   "softLimitUsd": 23.2,
   "planLimitUsd": 29,
   "observations": [
@@ -29,6 +29,11 @@
       "at": "2026-08-17T06:45:28Z",
       "platformUsageUsd": 0.1,
       "source": "Apify console Starter current-period read after upgrade"
+    },
+    {
+      "at": "2026-08-18T09:00:59.000Z",
+      "platformUsageUsd": 0.88,
+      "source": "Apify console read after profile and staff-post runs; company run completed seconds later"
     }
   ],
   "runs": [
@@ -82,6 +87,45 @@
       "itemCount": 19,
       "durationMs": 10233,
       "costUsd": 0,
+      "error": null
+    },
+    {
+      "at": "2026-08-18T08:45:02.000Z",
+      "captureAt": "2026-08-18T08:44:15.000Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "LbrzdGjdown4BoLav",
+      "itemCount": 31,
+      "durationMs": 47000,
+      "costUsd": 0.0713,
+      "error": null
+    },
+    {
+      "at": "2026-08-18T08:52:38.000Z",
+      "captureAt": "2026-08-18T08:44:15.000Z",
+      "actor": "apify~instagram-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "F0ROoXgOOpytMWLi9",
+      "itemCount": 308,
+      "durationMs": 455000,
+      "costUsd": 0.7084,
+      "error": null
+    },
+    {
+      "at": "2026-08-18T09:01:09.000Z",
+      "captureAt": "2026-08-18T08:44:15.000Z",
+      "actor": "apify~instagram-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "RPDX3q1DHrImp7nAt",
+      "itemCount": 307,
+      "durationMs": 544000,
+      "costUsd": 0.7061,
       "error": null
     }
   ]
