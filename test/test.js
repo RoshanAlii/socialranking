@@ -15,6 +15,7 @@ const { buildDigest } = require('../src/digest');
 const { validateSnapshot } = require('../src/validate-snapshot');
 const { rebuildDerived } = require('../src/rebuild-derived');
 const U = require('../src/usage');
+const POST_CACHE = require('../src/post-cache');
 
 let passed = 0;
 let failed = 0;
@@ -277,6 +278,31 @@ const soloRegistry = {
     assert.strictEqual(raw._missingOwnerCount, 0);
     assert.strictEqual(raw.recentPosts.length, 0);
   });
+  await test('profile latest posts fill a zero-result post response without importing collaborators', async () => {
+    const runSync = async actor => actor === P.PROFILE_ACTOR
+      ? [{
+          username: 'a', followersCount: 1000, postsCount: 50,
+          latestPosts: [rawPost(1), rawPost(2, { id: 'foreign', ownerUsername: 'other' })],
+        }]
+      : [];
+    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
+    const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
+    assert.deepStrictEqual(raw.recentPosts.map(row => row.id), ['p1']);
+    assert.strictEqual(raw._profileFallbackPostCount, 1);
+    assert.strictEqual(raw._postsQuerySucceeded, true);
+  });
+  await test('validated history restores omitted owned posts without replacing current profile counts', () => {
+    const current = rec({ followers: 12345, recentPosts: [], fetchMeta: Object.assign({}, rec().fetchMeta, { authoredPostCount: 0 }) });
+    const prior = {
+      meta: { capturedAt: new Date(nowMs - 2 * day).toISOString(), rosterVersion: 'r1' },
+      records: [rec({ capturedAt: new Date(nowMs - 2 * day).toISOString(), recentPosts: [post(3, { id: 'retained' })] })],
+    };
+    const recovered = POST_CACHE.recoverRecords([current], [prior], now)[0];
+    assert.strictEqual(recovered.followers, 12345);
+    assert.deepStrictEqual(recovered.recentPosts.map(row => row.id), ['retained']);
+    assert.strictEqual(recovered.fetchMeta.historyRecoveredPostCount, 1);
+    assert.strictEqual(recovered.recentPosts[0].metricsObservedAt, prior.meta.capturedAt);
+  });
 
   console.log('\nLEADERBOARD CROSS-CHECK');
   await test('postingFrequency stores the explicit formula inputs', () => {
@@ -327,6 +353,25 @@ const soloRegistry = {
     assert.deepStrictEqual(analytics.metricCoverage, {
       posts: 4, likes: 4, comments: 4, shares: 0, videos: 2, videoViews: 2,
     });
+    assert.ok(analytics.calendar?.month && analytics.calendar?.week);
+  });
+  await test('calendar reporting uses Dubai month boundaries and Monday-start weeks', () => {
+    const capturedAt = Date.parse('2026-08-15T09:47:52.000Z');
+    const r = rec({ capturedAt: new Date(capturedAt).toISOString(), recentPosts: [
+      post(0, { id: 'month-start', type: 'reel', postedAt: '2026-07-31T20:00:00.000Z', views: 100 }),
+      post(0, { id: 'before-week', type: 'reel', postedAt: '2026-08-09T19:59:59.000Z', views: 200 }),
+      post(0, { id: 'week-start', type: 'reel', postedAt: '2026-08-09T20:00:00.000Z', views: 300 }),
+      post(0, { id: 'missing-views', type: 'reel', postedAt: '2026-08-12T08:00:00.000Z', views: null }),
+      post(0, { id: 'before-month', postedAt: '2026-07-31T19:59:59.000Z' }),
+    ] });
+    const calendar = R.calendarPerformance(r, capturedAt);
+    assert.strictEqual(calendar.monthStart, '2026-07-31T20:00:00.000Z');
+    assert.strictEqual(calendar.weekStart, '2026-08-09T20:00:00.000Z');
+    assert.strictEqual(calendar.month.posts, 4);
+    assert.strictEqual(calendar.week.posts, 2);
+    assert.strictEqual(calendar.month.views, 600);
+    assert.strictEqual(calendar.week.views, 300);
+    assert.strictEqual(calendar.week.viewsComplete, false);
   });
   await test('complete individual analytics show small samples without admitting them to team comparison', () => {
     const r = rec({ followers: 1000, recentPosts: [
@@ -957,6 +1002,7 @@ const soloRegistry = {
       assert.ok(!html.includes(prohibited), `${prohibited} must not return to the page`);
     }
     assert.match(html, /aria-label="Kirpa Properties"/);
+    assert.match(html, /href="\.\/favicon\.svg"/);
     assert.match(html, /Developer mention breakdown/);
     assert.match(html, /row\.totalMentions/);
     assert.match(html, /slice\(0, 3\)/, 'record cards retain the first three results');
@@ -973,6 +1019,11 @@ const soloRegistry = {
     assert.match(html, /pointContributions/);
     assert.match(html, /data-trend-metric/);
     assert.match(html, /data-trend-compare="baseline"/);
+    assert.match(html, /Top 3 supported interactions · 30 days/);
+    assert.match(html, /Calendar month = 1st through month-end/);
+    assert.match(html, /Posts this month/);
+    assert.match(html, /Video views this week/);
+    assert.match(html, /Activity needed/);
     for (const metric of ['followers', 'postsInWindow', 'activeProfiles', 'eligibleEngagementProfiles', 'medianEngagementRate', 'medianPostsPerWeek']) {
       assert.match(html, new RegExp(`${metric}: \\{`), `interactive direction includes ${metric}`);
     }

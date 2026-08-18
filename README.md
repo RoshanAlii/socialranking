@@ -46,8 +46,8 @@ The published `data/latest.json` is a validator-passed **captured replay from 15
 |---|---|
 | Profiles resolved | 31 of 31 confirmed handles |
 | Complete 30-day windows | 31 |
-| Posts measured in the window | 838 |
-| Ranked on momentum | 22 |
+| Posts measured in the window | 901 |
+| Ranked on momentum | 24 |
 | No confirmed handle in the workbook | 7 |
 
 The twice-weekly workflow now prefers the active `APIFY_TOKEN_MENTION_COUNT`
@@ -111,13 +111,14 @@ src/roster.js         ▼
 - **`handles.json`** — the authoritative 44-person roster imported from `kirpa_team_instagram_handles.xlsx`, with a source hash and roster version. Names + roles + per-platform handles + a `confirmed` flag. Back-office roles remain visible in the full roster but are `dashboardRelevant: false`.
 - **`src/rank.js`** — pure ranking and analytics engine. Single source of truth for leaderboards, per-person metrics, format analysis, content records, and coverage. Used by both ingest and the tests. No I/O.
 - **`src/normalize.js`** — maps any provider's payload into one record shape. Missing fields become `null`, never invented.
-- **`src/provider.js`** — the adapter. `MockProvider` (offline/tests/sample) and `ApifyProvider` (live). The live provider makes one batched profile run and one incremental, date-bounded post run for the whole confirmed roster, then merges and deduplicates against the last valid snapshot.
+- **`src/provider.js`** — the adapter. `MockProvider` (offline/tests/sample) and `ApifyProvider` (live). The live provider makes one batched profile run and one incremental, date-bounded post run for the whole confirmed roster, merges and deduplicates against the last valid snapshot, and uses owner-verified latest posts already returned by the profile Actor when the dedicated post feed intermittently returns zero rows.
+- **`src/post-cache.js`** — restores owned post rows from the newest same-roster history when a later provider response omits them. Current profile counts are never rolled back, retained interaction counters carry their real observation date, and foreign collaborator posts are excluded.
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
 - **`src/content.js`** — content intelligence: hashtags, posting time, caption length, deterministic content pillars, streaks, goal progress and quantitative next actions. Same coverage gate as `rank.js`; every threshold is exported so the page can state it.
 - **`src/developer_intelligence.py`** — every 14 days, collects Reels for every active confirmed `.kirpa` creator in one Actor run, transcribes each unseen Reel once, and matches the reusable word stream against `developer-dictionary.json`. Full transcripts and media are not published.
 - **`src/usage.js`** — persists exact Actor run IDs, known run charges, failures, retries, current-period console observations, and the configurable monthly soft-spend warning.
 - **`src/series.js`** — the compact trend history, plus the validator's `stampValidated` marker. Points are derived with the same gated functions as the live board.
-- **`src/roster.js`** — roster maintenance as a command: `status`, `pending`, `set-handle`, `confirm --evidence`, `unconfirm`, `opt-out`, `opt-in`, `target`, `verify`. Refuses duplicate handles, clears confirmation whenever a handle changes, and bumps the roster version so no snapshot measured against the old roster keeps ranking.
+- **`src/roster.js`** — roster maintenance as a command: `status`, `pending`, `set-handle`, `confirm --evidence`, `unconfirm`, `opt-out`, `opt-in`, `target`, `verify`. Refuses duplicate handles, clears confirmation whenever a handle changes, and bumps the roster version so stale snapshots cannot rank a changed roster.
 - **`src/digest.js`** — the weekly Slack digest. Refuses to summarise a snapshot the validator has not passed, and posts nothing unless `SLACK_WEBHOOK_URL` is configured.
 - **`src/backfill-series.js`** — rebuilds `data/series.json` from every stored snapshot, without laundering an unvalidated capture into a validated one.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards, content intelligence and per-person coaching → write `data/latest.json`, a dated history snapshot, and the appended trend series.
@@ -155,6 +156,10 @@ This build shows real public data or nothing. There is no placeholder mode in th
 - Sample generation still exists for layout work only, behind an explicit `--allow-sample` flag, and anything it produces is badged `sample`.
 
 All four rules are enforced by the test suite.
+
+### Calendar reporting
+
+Hero summaries use Dubai calendar boundaries. A month runs from the 1st through month-end; an in-progress month is labelled through the snapshot date. A week runs Monday through Sunday. Posts count unique owned feed posts, while views sum only Reels and videos that publicly report views. Partial view coverage is shown as a lower bound with `≥` rather than treated as zero.
 
 ## Local preview
 

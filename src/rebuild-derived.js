@@ -7,8 +7,9 @@ const N = require('./normalize');
 const C = require('./content');
 const { buildPeople, loadWeeklyBaseline, SHORT_WINDOW_DAYS } = require('./ingest');
 const { safeRawName } = require('./validate-snapshot');
+const POST_CACHE = require('./post-cache');
 
-function rebuildDerived(snapshot, baselineRecords = null, rawLoader = null, registry = null) {
+function rebuildDerived(snapshot, baselineRecords = null, rawLoader = null, registry = null, historySnapshots = []) {
   if (!['live', 'captured'].includes(snapshot?.meta?.source)) {
     throw new Error('Only a live candidate or captured replay snapshot can be rebuilt.');
   }
@@ -32,6 +33,12 @@ function rebuildDerived(snapshot, baselineRecords = null, rawLoader = null, regi
       }, raw, snapshot.meta.capturedAt);
     });
   }
+
+  snapshot.records = POST_CACHE.recoverRecords(
+    snapshot.records,
+    historySnapshots,
+    snapshot.meta.capturedAt,
+  );
 
   const baselineDays = snapshot.meta.growthBaselineDays;
   if (snapshot.meta.growthBaselineAt) {
@@ -77,13 +84,36 @@ function main() {
   snapshot.meta.growthBaselineDays = baseline?.ageDays || null;
   snapshot.meta.growthWindowRule = 'Baseline must be 5–11 days old and use the same confirmed roster; nearest to 7 days is used and normalized to a weekly rate.';
   const baselineRecords = baseline?.payload?.records || null;
+  const historical = POST_CACHE.loadHistorySnapshots(path.join(root, 'data', 'history'), {
+    before: snapshot.meta.capturedAt,
+    rosterVersion: registry.rosterVersion,
+  });
   const rawLoader = snapshot.meta.source === 'live'
     ? record => {
         const rawPath = path.join(root, 'data', 'raw', safeRawName(record));
         return fs.existsSync(rawPath) ? JSON.parse(fs.readFileSync(rawPath, 'utf8')) : null;
       }
     : null;
-  rebuildDerived(snapshot, baselineRecords, rawLoader, registry);
+  rebuildDerived(snapshot, baselineRecords, rawLoader, registry, historical);
+
+  const brandAccount = (registry.brandAccounts || []).find(account => (
+    account.platform === 'instagram' && account.confirmed === true && account.handle
+  ));
+  if (brandAccount) {
+    const safe = `brand_instagram_${brandAccount.handle}`.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const brandRawPath = path.join(root, 'data', 'raw', `${safe}.json`);
+    if (fs.existsSync(brandRawPath)) {
+      const brandRaw = JSON.parse(fs.readFileSync(brandRawPath, 'utf8'));
+      const brandRecord = N.normalizeRecord({
+        name: brandAccount.name,
+        role: 'Company account',
+        platform: 'instagram',
+        handle: brandAccount.handle,
+      }, brandRaw, snapshot.meta.capturedAt);
+      snapshot.brand = [Object.assign(brandRecord, { isBrand: true, error: null })];
+      snapshot.meta.brandAccounts = 1;
+    }
+  }
 
   const pendingPath = path.join(root, 'data', '.latest.rebuilt.json');
   fs.writeFileSync(pendingPath, JSON.stringify(snapshot, null, 2));
