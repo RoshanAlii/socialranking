@@ -1061,6 +1061,12 @@ const soloRegistry = {
     assert.match(html, /Total attention · likes \+ comments/);
     assert.match(html, /Every captured post/);
     assert.match(html, /summary\.interactionsReporting === posts\.length/);
+    assert.match(html, /Share of Kirpa team visibility/);
+    assert.match(html, /id="performance-rank-metric"/);
+    assert.match(html, /Who is where\?/);
+    assert.match(html, /performanceRankValue/);
+    assert.match(html, /class="section reveal performance-stage"/);
+    assert.match(html, /prefers-reduced-motion: reduce/);
     assert.match(html, /Activity needed/);
     for (const metric of ['followers', 'postsInWindow', 'activeProfiles', 'eligibleEngagementProfiles', 'medianEngagementRate', 'medianPostsPerWeek']) {
       assert.match(html, new RegExp(`${metric}: \\{`), `interactive direction includes ${metric}`);
