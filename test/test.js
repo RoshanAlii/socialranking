@@ -1054,6 +1054,13 @@ const soloRegistry = {
     assert.match(html, /Calendar month = 1st through month-end/);
     assert.match(html, /Posts this month/);
     assert.match(html, /Video views this week/);
+    assert.match(html, /id="performance-person"/);
+    assert.match(html, /data-performance-period="month"/);
+    assert.match(html, /data-performance-period="week"/);
+    assert.match(html, /data-performance-period="30"/);
+    assert.match(html, /Total attention · likes \+ comments/);
+    assert.match(html, /Every captured post/);
+    assert.match(html, /summary\.interactionsReporting === posts\.length/);
     assert.match(html, /Activity needed/);
     for (const metric of ['followers', 'postsInWindow', 'activeProfiles', 'eligibleEngagementProfiles', 'medianEngagementRate', 'medianPostsPerWeek']) {
       assert.match(html, new RegExp(`${metric}: \\{`), `interactive direction includes ${metric}`);
