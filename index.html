@@ -735,6 +735,29 @@
     .calendar-metric { min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 11px; background: var(--paper-warm); }
     .calendar-metric b { display: block; font-size: 16px; line-height: 1.1; }
     .calendar-metric span { display: block; margin-top: 4px; color: var(--dust); font-size: 7px; line-height: 1.35; text-transform: uppercase; letter-spacing: .045em; }
+    .performance-explorer { margin: -1px 0 16px; padding: 20px; border-top-left-radius: 0; border-top-right-radius: 0; }
+    .performance-explorer-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+    .performance-explorer-head h3 { margin: 2px 0 3px; font: 400 24px/1.1 "DM Serif Display", Georgia, serif; }
+    .performance-explorer-head p { margin: 0; color: var(--dust); font-size: 9px; }
+    .performance-controls { display: flex; align-items: center; gap: 8px; }
+    .performance-controls label { color: var(--dust); font-size: 8px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .performance-controls select { min-width: 205px; padding: 9px 30px 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--paper-warm); color: var(--ink); font: inherit; font-size: 9px; }
+    .performance-period { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-warm); }
+    .performance-period button { padding: 6px 8px; border: 0; border-radius: 7px; background: transparent; color: var(--dust); font: inherit; font-size: 8px; cursor: pointer; }
+    .performance-period button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .performance-summary { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 7px; margin-top: 15px; }
+    .performance-summary > div { min-width: 0; padding: 11px; border: 1px solid var(--line); border-radius: 11px; background: var(--paper-warm); }
+    .performance-summary b { display: block; font-size: 18px; }
+    .performance-summary span { display: block; margin-top: 4px; color: var(--dust); font-size: 7px; line-height: 1.35; text-transform: uppercase; letter-spacing: .04em; }
+    .performance-posts-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 17px 0 8px; }
+    .performance-posts-head b { font-size: 11px; }
+    .performance-posts-head span { color: var(--dust); font-size: 8px; }
+    .performance-posts { display: grid; gap: 6px; max-height: 370px; overflow: auto; }
+    .performance-post { display: grid; grid-template-columns: 90px minmax(160px, 1fr) repeat(4, minmax(70px, auto)) 74px; gap: 9px; align-items: center; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; font-size: 8px; }
+    .performance-post time, .performance-post small { color: var(--dust); }
+    .performance-post p { margin: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .performance-post strong { text-align: right; }
+    .performance-post a { color: var(--orange-deep); font-weight: 800; text-align: right; text-decoration: none; }
     .champ {
       position: relative;
       isolation: isolate;
@@ -1887,6 +1910,9 @@
       .hero-grid,
       .boards { grid-template-columns: 1fr; }
       .calendar-pulse { grid-template-columns: 1fr; }
+      .performance-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .performance-post { grid-template-columns: 84px minmax(150px, 1fr) repeat(3, minmax(64px, auto)) 68px; }
+      .performance-post .post-comments { display: none; }
       .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .person-posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .hero-grid { gap: 14px; }
@@ -1931,6 +1957,16 @@
       .section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .section-heading h2 { font-size: 22px; }
       .section-note { text-align: left; }
+      .performance-explorer { padding: 15px 13px; }
+      .performance-explorer-head, .performance-controls { align-items: stretch; flex-direction: column; }
+      .performance-controls select { width: 100%; }
+      .performance-period button { flex: 1; }
+      .performance-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .performance-posts { max-height: 520px; }
+      .performance-post { display: grid; grid-template-columns: 1fr 1fr; }
+      .performance-post p { grid-column: 1 / -1; white-space: normal; }
+      .performance-post strong, .performance-post a { text-align: left; }
+      .performance-post .post-comments { display: block; }
       .champ { min-height: 375px; padding: 22px; }
       .stage-name { font-size: 39px; }
       .stage-metrics { grid-template-columns: 1fr; margin-top: 22px; }
@@ -2273,6 +2309,13 @@
       <article class="panel calendar-pulse" id="calendar-pulse" aria-label="Calendar month and week performance" aria-live="polite">
         <div class="calendar-group"><b>Loading calendar performance…</b></div>
       </article>
+      <article class="panel performance-explorer" id="performance-explorer" aria-label="Individual performance explorer" aria-live="polite">
+        <div class="performance-explorer-head">
+          <div><div class="section-label">Individual explorer</div><h3>Choose a person</h3><p>Output, public attention and every captured post in one place.</p></div>
+          <div class="performance-controls"><label for="performance-person">Instagram profile</label><select id="performance-person"><option>Loading profiles…</option></select><div class="performance-period" id="performance-period" role="group" aria-label="Individual performance period"><button type="button" data-performance-period="month" aria-pressed="true">This month</button><button type="button" data-performance-period="week" aria-pressed="false">This week</button><button type="button" data-performance-period="30" aria-pressed="false">30 days</button></div></div>
+        </div>
+        <div id="performance-person-body"></div>
+      </article>
       <div class="hero-grid">
         <article class="panel champ" id="champ" aria-live="polite">
           <div class="stage-eyebrow"><span>●</span> Preparing fair momentum leader</div>
@@ -2552,6 +2595,7 @@
     let MENTION_SORT = 'newest';
     let ROSTER_EXPANDED = false;
     let ACTIVE_WINDOW = 30;
+    let PERFORMANCE_PERIOD = 'month';
     let TREND_METRIC = 'followers';
     let TREND_COMPARE = 'baseline';
     let EXPLORER_SORT = { key: 'interactions', direction: 'desc' };
@@ -3256,12 +3300,26 @@
         const periodPosts = posts.filter(post => Date.parse(post.postedAt) >= from);
         const videos = periodPosts.filter(post => post.type === 'video' || post.type === 'reel');
         const views = videos.map(post => post.views).filter(isNumber);
+        const likes = periodPosts.map(post => post.likes).filter(isNumber);
+        const comments = periodPosts.map(post => post.comments).filter(isNumber);
+        const interactions = periodPosts.filter(post => isNumber(post.likes) && isNumber(post.comments)).map(post => post.likes + post.comments);
         return {
           posts: periodPosts.length,
+          reels: periodPosts.filter(post => post.type === 'reel').length,
+          standaloneVideos: periodPosts.filter(post => post.type === 'video').length,
+          images: periodPosts.filter(post => post.type === 'image').length,
+          carousels: periodPosts.filter(post => post.type === 'carousel').length,
           videoPosts: videos.length,
           views: videos.length === 0 ? 0 : views.length ? views.reduce((sum, value) => sum + value, 0) : null,
           viewsReporting: views.length,
           viewsComplete: videos.length === views.length,
+          likes: periodPosts.length === 0 ? 0 : likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
+          likesReporting: likes.length,
+          comments: periodPosts.length === 0 ? 0 : comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
+          commentsReporting: comments.length,
+          interactions: periodPosts.length === 0 ? 0 : interactions.length ? interactions.reduce((sum, value) => sum + value, 0) : null,
+          interactionsReporting: interactions.length,
+          interactionsComplete: periodPosts.length === interactions.length,
         };
       };
       return {
@@ -3276,15 +3334,27 @@
       const valid = rows.filter(Boolean);
       const combine = key => {
         const periods = valid.map(row => row[key]);
+        const posts = periods.reduce((sum, row) => sum + (row?.posts || 0), 0);
         const videoPosts = periods.reduce((sum, row) => sum + (row?.videoPosts || 0), 0);
         const viewsReporting = periods.reduce((sum, row) => sum + (row?.viewsReporting || 0), 0);
         const reported = periods.map(row => row?.views).filter(isNumber);
         return {
-          posts: periods.reduce((sum, row) => sum + (row?.posts || 0), 0),
+          posts,
+          reels: periods.reduce((sum, row) => sum + (row?.reels || 0), 0),
+          standaloneVideos: periods.reduce((sum, row) => sum + (row?.standaloneVideos || 0), 0),
+          images: periods.reduce((sum, row) => sum + (row?.images || 0), 0),
+          carousels: periods.reduce((sum, row) => sum + (row?.carousels || 0), 0),
           videoPosts,
           views: videoPosts === 0 ? 0 : reported.length ? reported.reduce((sum, value) => sum + value, 0) : null,
           viewsReporting,
           viewsComplete: videoPosts === viewsReporting,
+          likes: periods.reduce((sum, row) => sum + (row?.likes || 0), 0),
+          likesReporting: periods.reduce((sum, row) => sum + (row?.likesReporting || 0), 0),
+          comments: periods.reduce((sum, row) => sum + (row?.comments || 0), 0),
+          commentsReporting: periods.reduce((sum, row) => sum + (row?.commentsReporting || 0), 0),
+          interactions: posts === 0 ? 0 : periods.some(row => isNumber(row?.interactions)) ? periods.reduce((sum, row) => sum + (row?.interactions || 0), 0) : null,
+          interactionsReporting: periods.reduce((sum, row) => sum + (row?.interactionsReporting || 0), 0),
+          interactionsComplete: periods.every(row => row?.interactionsComplete),
         };
       };
       return {
@@ -3316,10 +3386,68 @@
         <div class="calendar-metrics">
           <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.posts)}</b><span>Posts this month<br>${esc(calendarDateLabel(range.monthStart))}</span></div>
           <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.week.posts)}</b><span>Posts this week<br>${esc(calendarDateLabel(range.weekStart))}</span></div>
+          <div class="calendar-metric"><b>${fmt(calendar.month.reels || 0)}</b><span>Reels this month<br>${fmt(calendar.week.reels || 0)} this week</span></div>
+          <div class="calendar-metric"><b>${isNumber(calendar.month.interactions) ? `${calendar.month.interactionsComplete ? '' : '≥'}${fmt(calendar.month.interactions)}` : '—'}</b><span>Attention this month<br>${isNumber(calendar.week.interactions) ? `${calendar.week.interactionsComplete ? '' : '≥'}${fmt(calendar.week.interactions)}` : '—'} this week</span></div>
           <div class="calendar-metric"><b>${esc(calendarViews(calendar.month, calendar.complete))}</b><span>Video views this month<br>${fmt(calendar.month.viewsReporting)}/${fmt(calendar.month.videoPosts)} reporting</span></div>
           <div class="calendar-metric"><b>${esc(calendarViews(calendar.week, calendar.complete))}</b><span>Video views this week<br>${fmt(calendar.week.viewsReporting)}/${fmt(calendar.week.videoPosts)} reporting</span></div>
         </div>
       </div>`;
+    }
+
+    function performancePosts(record, period) {
+      const range = calendarRange();
+      if (!range || !record) return [];
+      const from = period === 'week' ? range.weekStart : period === '30' ? range.now - 30 * 86400000 : range.monthStart;
+      const seen = new Set();
+      return (record.recentPosts || []).filter(post => {
+        const key = post.id || post.url || `${post.postedAt}|${post.caption}`;
+        const at = Date.parse(post.postedAt || '');
+        if (seen.has(key) || !Number.isFinite(at) || at < from || at > range.now) return false;
+        seen.add(key);
+        return true;
+      }).sort((a, b) => Date.parse(b.postedAt) - Date.parse(a.postedAt));
+    }
+
+    function summarizePerformancePosts(posts) {
+      const videos = posts.filter(post => post.type === 'reel' || post.type === 'video');
+      const views = videos.map(post => post.views).filter(isNumber);
+      const likes = posts.map(post => post.likes).filter(isNumber);
+      const comments = posts.map(post => post.comments).filter(isNumber);
+      const interactions = posts.filter(post => isNumber(post.likes) && isNumber(post.comments));
+      return {
+        likes: posts.length === 0 ? 0 : likes.length ? likes.reduce((sum, value) => sum + value, 0) : null,
+        comments: posts.length === 0 ? 0 : comments.length ? comments.reduce((sum, value) => sum + value, 0) : null,
+        interactions: posts.length === 0 ? 0 : interactions.length ? interactions.reduce((sum, post) => sum + post.likes + post.comments, 0) : null,
+        interactionsReporting: interactions.length,
+        views: videos.length === 0 ? 0 : views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+        viewsReporting: views.length,
+        videoPosts: videos.length,
+      };
+    }
+
+    function renderPerformancePerson() {
+      const select = byId('performance-person');
+      const record = igRecords().find(row => row.handle === select.value);
+      const body = byId('performance-person-body');
+      if (!record) { body.innerHTML = '<div class="record-empty">Choose a measured Instagram profile.</div>'; return; }
+      const posts = performancePosts(record, PERFORMANCE_PERIOD);
+      const summary = summarizePerformancePosts(posts);
+      const periodLabel = PERFORMANCE_PERIOD === 'week' ? 'this week' : PERFORMANCE_PERIOD === '30' ? 'in the rolling 30 days' : 'this month';
+      body.innerHTML = `
+        <div class="performance-summary">
+          <div><b>${fmt(posts.length)}</b><span>Posts ${periodLabel}</span></div>
+          <div><b>${fmt(posts.filter(post => post.type === 'reel').length)}</b><span>Reels · Instagram Reel format</span></div>
+          <div><b>${fmt(posts.filter(post => post.type === 'video').length)}</b><span>Videos · source-labelled video posts</span></div>
+          <div><b>${isNumber(summary.interactions) ? `${summary.interactionsReporting === posts.length ? '' : '≥'}${fmt(summary.interactions)}` : '—'}</b><span>Total attention · likes + comments<br>${fmt(summary.interactionsReporting)}/${fmt(posts.length)} reporting</span></div>
+          <div><b>${fmt(summary.likes)} + ${fmt(summary.comments)}</b><span>Likes + comments</span></div>
+          <div><b>${isNumber(summary.views) ? `${summary.viewsReporting === summary.videoPosts ? '' : '≥'}${fmt(summary.views)}` : '—'}</b><span>Video views<br>${fmt(summary.viewsReporting)}/${fmt(summary.videoPosts)} reporting</span></div>
+        </div>
+        <div class="performance-posts-head"><b>Every captured post ${esc(periodLabel)}</b><span>${fmt(posts.length)} post${posts.length === 1 ? '' : 's'} · newest first</span></div>
+        <div class="performance-posts">${posts.length ? posts.map(post => {
+          const url = safeUrl(post.url);
+          const attention = isNumber(post.likes) && isNumber(post.comments) ? post.likes + post.comments : null;
+          return `<article class="performance-post"><time>${esc(new Date(post.postedAt).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' }))}<br><small>${esc(post.type || 'post')}</small></time><p title="${esc(post.caption || 'Instagram post')}">${esc(post.caption || 'Instagram post')}</p><strong>${fmt(post.likes)} likes</strong><strong class="post-comments">${fmt(post.comments)} comments</strong><strong>${fmt(attention)} attention</strong><strong>${fmt(post.views)} views</strong>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">Open ↗</a>` : '<small>Link unavailable</small>'}</article>`;
+        }).join('') : '<div class="record-empty">No posts were published in this selected period.</div>'}</div>`;
     }
 
     function renderCalendarPulse() {
@@ -3328,7 +3456,13 @@
       )).map(person => person.name));
       const people = igRecords().filter(record => confirmed.has(record.name) && record.resolved && !record.isPrivate);
       const teamCalendar = combineCalendar(people.map(record => (
-        (board().analytics || []).find(row => row.handle === record.handle)?.calendar || calendarForRecord(record)
+        (() => {
+          const stored = (board().analytics || []).find(row => row.handle === record.handle)?.calendar;
+          // The validator owns the stored calendar totals. The additional
+          // presentation-only format and attention totals come from the same
+          // already validated, owner-verified post rows.
+          return isNumber(stored?.month?.reels) ? stored : calendarForRecord(record);
+        })()
       )));
       const brand = (DATA?.brand || []).find(record => canonicalHandle(record.handle) === 'kirpa.properties') || DATA?.brand?.[0];
       const brandCalendar = calendarForRecord(brand);
@@ -3336,6 +3470,11 @@
         calendarGroupMarkup('Kirpa team', `${people.length} measured Instagram profiles · owned posts only`, teamCalendar, 'Team total'),
         calendarGroupMarkup('@kirpa.properties', 'Main Kirpa Properties Instagram account', brandCalendar, 'Company account'),
       ].join('');
+      const select = byId('performance-person');
+      const previous = select.value;
+      select.innerHTML = people.slice().sort((a, b) => a.name.localeCompare(b.name)).map(record => `<option value="${esc(record.handle)}">${esc(record.name)} · @${esc(record.handle)}</option>`).join('');
+      if (people.some(record => record.handle === previous)) select.value = previous;
+      renderPerformancePerson();
     }
 
     function validMentionReport(report = MENTIONS) {
@@ -5318,6 +5457,14 @@
     }
 
     byId('search').addEventListener('input', () => DATA && renderRoster());
+    byId('performance-person').addEventListener('change', () => DATA && renderPerformancePerson());
+    byId('performance-period').addEventListener('click', event => {
+      const button = event.target.closest('button[data-performance-period]');
+      if (!button || !DATA) return;
+      PERFORMANCE_PERIOD = button.dataset.performancePeriod;
+      byId('performance-period').querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      renderPerformancePerson();
+    });
     byId('status-filter').addEventListener('change', () => DATA && renderRoster());
     byId('role-filter').addEventListener('change', () => DATA && renderRoster());
     byId('sort-by').addEventListener('change', () => DATA && renderRoster());
