@@ -1050,6 +1050,11 @@ const soloRegistry = {
     assert.match(html, /pointContributions/);
     assert.match(html, /data-trend-metric/);
     assert.match(html, /data-trend-compare="baseline"/);
+    assert.match(html, /Vertical axis starts at zero/);
+    assert.match(html, /Horizontal spacing reflects the actual time/);
+    assert.match(html, /class="capture-ledger"/);
+    assert.match(html, /Exact plotted values/);
+    assert.match(html, /const x = time =>/);
     assert.match(html, /Top 3 supported interactions · 30 days/);
     assert.match(html, /Calendar month = 1st through month-end/);
     assert.match(html, /Posts this month/);
