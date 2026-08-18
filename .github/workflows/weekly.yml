@@ -2,9 +2,9 @@ name: Four-day social snapshot
 
 on:
   schedule:
-    # Check daily at 08:00 Asia/Dubai. The paid path runs only when the last
-    # validated capture is at least 95 hours old (the fourth calendar day).
-    - cron: "0 4 * * *"
+    # Check at 08:00 and 20:00 Asia/Dubai. These checks do not call Apify; the
+    # paid path runs only when the last validated capture is 96 hours old.
+    - cron: "0 4,16 * * *"
   workflow_dispatch:
 
 permissions:

@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const FOUR_DAY_DUE_HOURS = Number(process.env.SOCIAL_REFRESH_DUE_HOURS || 95);
+const FOUR_DAY_DUE_HOURS = Number(process.env.SOCIAL_REFRESH_DUE_HOURS || 96);
 
 function refreshDue(snapshot, now = new Date(), dueHours = FOUR_DAY_DUE_HOURS) {
   const capturedMs = new Date(snapshot?.meta?.capturedAt || 0).getTime();

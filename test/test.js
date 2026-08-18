@@ -996,13 +996,13 @@ const soloRegistry = {
   });
 
   console.log('\nRELEASE GUARDS');
-  await test('four-day workflow uses a free daily due check and stamps the full validator', () => {
+  await test('four-day workflow uses free twice-daily due checks and stamps the full validator', () => {
     const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'weekly.yml'), 'utf8');
     assert.match(workflow, /node src\/validate-snapshot\.js --stamp/);
-    assert.match(workflow, /cron: "0 4 \* \* \*"/);
+    assert.match(workflow, /cron: "0 4,16 \* \* \*"/);
     assert.match(workflow, /node src\/refresh-due\.js/);
     assert.match(workflow, /steps\.due\.outputs\.due == 'true'/);
-    assert.ok(!/cron: "0 16/.test(workflow), 'the old twice-daily spend path is removed');
+    assert.match(workflow, /paid path runs only when/, 'twice-daily checks must remain behind the paid due gate');
     assert.match(workflow, /APIFY_TOKEN_MENTION_COUNT \|\| secrets\.APIFY_TOKEN/);
     assert.match(workflow, /if: failure\(\)/, 'a silent failure looks exactly like a stalled board');
     assert.match(workflow, /node src\/roster\.js verify/);
@@ -1014,9 +1014,9 @@ const soloRegistry = {
   });
   await test('four-day due check waits until the fourth day', () => {
     const snapshot = { meta: { capturedAt: '2026-08-01T08:10:00.000Z' } };
-    assert.strictEqual(REFRESH_DUE.refreshDue(snapshot, '2026-08-05T06:09:59.000Z').due, false);
-    assert.strictEqual(REFRESH_DUE.refreshDue(snapshot, '2026-08-05T07:10:00.000Z').due, true);
-    assert.strictEqual(REFRESH_DUE.refreshDue(null, '2026-08-05T07:10:00.000Z').due, true);
+    assert.strictEqual(REFRESH_DUE.refreshDue(snapshot, '2026-08-05T08:09:59.000Z').due, false);
+    assert.strictEqual(REFRESH_DUE.refreshDue(snapshot, '2026-08-05T08:10:00.000Z').due, true);
+    assert.strictEqual(REFRESH_DUE.refreshDue(null, '2026-08-05T08:10:00.000Z').due, true);
   });
   await test('dashboard requires roster lock, validator v2, and a 108-hour freshness gate', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
