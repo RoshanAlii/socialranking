@@ -11,6 +11,7 @@ const {
 const { appendSnapshot, emptySeries } = require('./series');
 const { MockProvider, ApifyProvider, CapturedProvider, PROFILE_ACTOR, POSTS_ACTOR, INSTAGRAM_POST_LOOKBACK_DAYS, INSTAGRAM_POST_RESULTS_LIMIT } = require('./provider');
 const U = require('./usage');
+const POST_CACHE = require('./post-cache');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const GROWTH_TARGET_DAYS = 7;
@@ -279,6 +280,17 @@ async function main() {
   const latestPath = path.join(outDir, 'latest.json');
   let previousSnapshot = null;
   try { previousSnapshot = JSON.parse(fs.readFileSync(latestPath, 'utf8')); } catch (_) { /* first live run */ }
+  if (previousSnapshot?.meta?.capturedAt && Array.isArray(previousSnapshot.records)) {
+    const historical = POST_CACHE.loadHistorySnapshots(path.join(outDir, 'history'), {
+      before: previousSnapshot.meta.capturedAt,
+      rosterVersion: registry.rosterVersion,
+    });
+    previousSnapshot.records = POST_CACHE.recoverRecords(
+      previousSnapshot.records,
+      historical,
+      previousSnapshot.meta.capturedAt,
+    );
+  }
   const provider = useCaptured
     ? new CapturedProvider(path.join(outDir, 'raw'))
     : useLive ? new ApifyProvider(undefined, { previousSnapshot, capturedAt }) : new MockProvider();

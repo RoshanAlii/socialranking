@@ -126,6 +126,23 @@ function groupPostItems(handle, items) {
   });
 }
 
+function rawPostKey(item) {
+  return item?.id ? `id:${item.id}`
+    : item?.shortCode ? `shortcode:${item.shortCode}`
+      : item?.url ? `url:${item.url}`
+        : `fallback:${item?.timestamp || item?.takenAtIso || item?.postedAt || ''}|${item?.caption || ''}`;
+}
+
+function dedupeRawPosts(items) {
+  const seen = new Set();
+  return (items || []).filter(item => {
+    const key = rawPostKey(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function apifyRequest(method, requestPath, token, body = null, timeoutMs = RUN_TIMEOUT_MS) {
   const payload = body === null ? null : JSON.stringify(body);
   const separator = requestPath.includes('?') ? '&' : '?';
@@ -394,7 +411,15 @@ class ApifyProvider {
 
       if (!batchError) {
         const freshPosts = groupPostItems(handle, rows);
-        const posts = this.mergePosts(handle, freshPosts);
+        // The profile Actor already includes the newest public posts. Treat
+        // those owned rows as a zero-cost safety net when the dedicated posts
+        // Actor intermittently returns an empty feed for an active account.
+        // Ownership filtering is identical to the main post path; collaborator
+        // posts owned by somebody else never leak into this profile.
+        const profilePosts = groupPostItems(handle, details.latestPosts || []);
+        const freshKeys = new Set(freshPosts.map(rawPostKey));
+        const profileFallback = profilePosts.filter(item => !freshKeys.has(rawPostKey(item)));
+        const posts = this.mergePosts(handle, dedupeRawPosts([...freshPosts, ...profileFallback]));
         const handleProblems = problematicOwnerlessRows.filter(item => {
           const inputHandle = postInputHandle(item);
           return !inputHandle || inputHandle === canonicalHandle(handle);
@@ -421,7 +446,8 @@ class ApifyProvider {
           _incremental: lookbackDays < INSTAGRAM_POST_LOOKBACK_DAYS,
           _incrementalLookbackDays: lookbackDays,
           _freshPostCount: freshPosts.length,
-          _reusedPostCount: Math.max(0, posts.length - freshPosts.length),
+          _reusedPostCount: Math.max(0, posts.length - freshPosts.length - profileFallback.length),
+          _profileFallbackPostCount: profileFallback.length,
         }));
       } else {
         out.set(handle, Object.assign({}, details, {
@@ -589,6 +615,8 @@ module.exports = {
   instagramPostsBatchInput,
   groupProfileItems,
   groupPostItems,
+  rawPostKey,
+  dedupeRawPosts,
   postInputHandle,
   isNoItemsControlRow,
   canonicalHandle,

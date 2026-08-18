@@ -6,6 +6,7 @@ const MIN_ENGAGEMENT_POSTS = 3;
 const MIN_MOMENTUM_POSTS = 5;
 const MOMENTUM_RELIABILITY_PRIOR = 10;
 const MIN_MEASURED = 3;
+const DUBAI_UTC_OFFSET_HOURS = 4;
 /*
  * The product brief asks who improved fastest, so improvement has to be inside
  * the score rather than parked on a side board. Follower growth is included
@@ -109,6 +110,53 @@ function windowPosts(record, now, days = WINDOW_DAYS) {
 }
 function comparableWindowPosts(record, now, days = WINDOW_DAYS) {
   return windowPosts(record, now, days).filter(post => postEngagement(post) !== null);
+}
+
+function calendarRanges(now, offsetHours = DUBAI_UTC_OFFSET_HOURS) {
+  if (!Number.isFinite(now)) return null;
+  const offsetMs = offsetHours * 3600000;
+  const local = new Date(now + offsetMs);
+  const year = local.getUTCFullYear();
+  const month = local.getUTCMonth();
+  const date = local.getUTCDate();
+  const mondayOffset = (local.getUTCDay() + 6) % 7;
+  return {
+    timezone: 'Asia/Dubai (UTC+4)',
+    asOf: new Date(now).toISOString(),
+    monthStart: new Date(Date.UTC(year, month, 1) - offsetMs).toISOString(),
+    monthEnd: new Date(Date.UTC(year, month + 1, 1) - offsetMs).toISOString(),
+    weekStart: new Date(Date.UTC(year, month, date - mondayOffset) - offsetMs).toISOString(),
+    weekEnd: new Date(Date.UTC(year, month, date - mondayOffset + 7) - offsetMs).toISOString(),
+  };
+}
+
+function periodPerformance(record, fromAt, now) {
+  const from = Date.parse(fromAt || '');
+  const posts = uniquePosts(record).filter(post => {
+    const time = ts(post);
+    return Number.isFinite(time) && time >= from && time <= now;
+  });
+  const videos = posts.filter(post => post.type === 'video' || post.type === 'reel');
+  const views = supported(videos, 'views');
+  return {
+    posts: posts.length,
+    videoPosts: videos.length,
+    views: videos.length === 0 ? 0 : views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+    viewsReporting: views.length,
+    viewsComplete: videos.length === views.length,
+  };
+}
+
+function calendarPerformance(record, now = asOf([record]), offsetHours = DUBAI_UTC_OFFSET_HOURS) {
+  const ranges = calendarRanges(now, offsetHours);
+  if (!ranges || !isUsable(record)) return null;
+  const coverage = windowCoverage(record, now, WINDOW_DAYS);
+  return Object.assign({}, ranges, {
+    complete: coverage.complete,
+    coverageReason: coverage.reason,
+    month: periodPerformance(record, ranges.monthStart, now),
+    week: periodPerformance(record, ranges.weekStart, now),
+  });
 }
 
 /*
@@ -357,6 +405,10 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       // but the provider omitted the metric, it must remain unknown.
       return eligibleItems === 0 ? 0 : null;
     };
+    const observedTotal = (values, eligibleItems) => {
+      if (values.length) return values.reduce((sum, value) => sum + value, 0);
+      return eligibleItems === 0 ? 0 : null;
+    };
     return {
       name: record.name,
       role: record.role,
@@ -368,8 +420,11 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       lifetimePosts: typeof record.postCount === 'number' ? record.postCount : null,
       windowComplete: complete,
       coverageReason: coverage.reason,
+      calendar: calendarPerformance(record, now),
       postsInWindow: complete ? posts.length : null,
+      observedPostsInWindow: posts.length,
       comparablePosts: complete ? comparable.length : null,
+      observedComparablePosts: comparable.length,
       postsPerWeek: complete ? posts.length * 7 / days : null,
       activeDays: complete ? new Set(posts.map(post => post.postedAt?.slice(0, 10)).filter(Boolean)).size : null,
       medianGapHours: complete ? medianGapHours(posts) : null,
@@ -382,6 +437,10 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       totalComments: supportedTotal(comments, posts.length),
       totalShares: supportedTotal(shares, posts.length),
       totalViews: supportedTotal(views, videos.length),
+      observedTotalLikes: observedTotal(likes, posts.length),
+      observedTotalComments: observedTotal(comments, posts.length),
+      observedTotalShares: observedTotal(shares, posts.length),
+      observedTotalViews: observedTotal(views, videos.length),
       medianLikes: complete ? median(likes) : null,
       medianComments: complete ? median(comments) : null,
       medianViews: complete ? median(views) : null,
@@ -399,13 +458,13 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
       interactionRate: complete && record.followers > 0 && comparable.length >= MIN_ENGAGEMENT_POSTS
         ? median(interactions) / record.followers
         : null,
-      observedInteractionRate: complete && record.followers > 0 && comparable.length
+      observedInteractionRate: record.followers > 0 && comparable.length
         ? median(interactions) / record.followers
         : null,
       commentRate: complete && record.followers > 0 && comments.length >= MIN_ENGAGEMENT_POSTS
         ? median(comments) / record.followers
         : null,
-      observedCommentRate: complete && record.followers > 0 && comments.length
+      observedCommentRate: record.followers > 0 && comments.length
         ? median(comments) / record.followers
         : null,
       commentToLikeRatio: complete && likes.length && comments.length && median(likes) > 0
@@ -429,6 +488,14 @@ function profileAnalytics(records, platform, now = asOf(records), days = WINDOW_
         videos: videos.length,
         videoViews: views.length,
       } : null,
+      observedMetricCoverage: {
+        posts: posts.length,
+        likes: likes.length,
+        comments: comments.length,
+        shares: shares.length,
+        videos: videos.length,
+        videoViews: views.length,
+      },
     };
   });
 }
@@ -816,10 +883,12 @@ function buildLeaderboards(records, platforms = ['instagram'], opts = {}) {
 module.exports = {
   isRankable, isUsable, postEngagement, engagementRate, avgEngagementPerPost,
   postsPerWeek, typicalEngagement, beyondFollowingCount, windowPosts, comparableWindowPosts,
+  calendarRanges, periodPerformance, calendarPerformance,
   windowCoverage, uniquePosts, median, asOf, mostFollowers,
   engagementLeaderboard, postingFrequency, topPost, topVideo, mostViewed,
   mostLiked, mostCommented, mostShared, profileAnalytics, formatAnalytics,
   teamBenchmarks, withTeamComparisons, percentile,
   compositeLeaderboard, growth, buildLeaderboards, activeWeights, resolveWeights,
   DEFAULT_WEIGHTS, BASE_WEIGHTS, WINDOW_DAYS, MIN_ENGAGEMENT_POSTS, MIN_MOMENTUM_POSTS, MIN_MEASURED,
+  DUBAI_UTC_OFFSET_HOURS,
 };

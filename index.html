@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f15a29">
   <meta name="description" content="Kirpa Properties public Instagram performance dashboard.">
   <title>Kirpa Properties · Social Performance</title>
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -718,6 +718,23 @@
       grid-template-columns: minmax(0, 1.16fr) minmax(340px, .84fr);
       gap: 16px;
     }
+    .calendar-pulse {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      background: var(--line);
+    }
+    .calendar-group { min-width: 0; padding: 18px 20px; background: var(--paper); }
+    .calendar-group-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 13px; }
+    .calendar-group-head b { display: block; font-size: 13px; }
+    .calendar-group-head span { display: block; margin-top: 2px; color: var(--dust); font-size: 8px; }
+    .calendar-badge { flex: 0 0 auto; padding: 5px 7px; border-radius: 999px; background: var(--paper-warm); color: var(--orange-deep) !important; font-size: 7px !important; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .calendar-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+    .calendar-metric { min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 11px; background: var(--paper-warm); }
+    .calendar-metric b { display: block; font-size: 16px; line-height: 1.1; }
+    .calendar-metric span { display: block; margin-top: 4px; color: var(--dust); font-size: 7px; line-height: 1.35; text-transform: uppercase; letter-spacing: .045em; }
     .champ {
       position: relative;
       isolation: isolate;
@@ -997,6 +1014,26 @@
       font-weight: 800;
       text-decoration: none;
     }
+    .spot-ranking { display: grid; gap: 7px; margin-top: 12px; }
+    .spot-rank-item {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      gap: 9px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: inherit;
+      background: var(--paper-warm);
+      text-decoration: none;
+    }
+    .spot-rank-item:hover { border-color: #dbb39f; background: #fff5ef; }
+    .spot-rank-item em { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 8px; font-style: normal; font-weight: 800; }
+    .spot-rank-item span { min-width: 0; }
+    .spot-rank-item span b, .spot-rank-item span small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .spot-rank-item span b { font-size: 9px; }
+    .spot-rank-item span small { color: var(--dust); font-size: 7.5px; }
+    .spot-rank-item > b { color: var(--orange-deep); font-size: 11px; }
     .readiness-spot {
       min-height: 342px;
       display: flex;
@@ -1444,6 +1481,19 @@
       color: rgba(255,255,255,.62);
       font-size: 10px;
     }
+    .analytics-calendar {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+      max-width: 700px;
+      margin-top: 18px;
+    }
+    .analytics-calendar div { min-width: 0; padding: 10px; border: 1px solid rgba(255,255,255,.11); border-radius: 11px; background: rgba(255,255,255,.05); }
+    .analytics-calendar b { display: block; font-size: 16px; }
+    .analytics-calendar span { display: block; margin-top: 3px; color: rgba(255,255,255,.56); font-size: 7px; line-height: 1.35; text-transform: uppercase; letter-spacing: .045em; }
+    .analytics-calendar-note { position: relative; z-index: 1; display: block; margin-top: 8px; color: rgba(255,255,255,.46); font-size: 7px; }
     .analytics-body { padding: 20px 22px 24px; }
     .analytics-note {
       margin-bottom: 14px;
@@ -1813,6 +1863,7 @@
       .insight-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .trend-metric-picker { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .momentum-breakdown-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .calendar-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 820px) {
       .command-inner,
@@ -1835,6 +1886,7 @@
       .kpi:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
       .hero-grid,
       .boards { grid-template-columns: 1fr; }
+      .calendar-pulse { grid-template-columns: 1fr; }
       .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .person-posts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .hero-grid { gap: 14px; }
@@ -1901,6 +1953,7 @@
       .analytics-dialog { width: calc(100% - 16px); max-height: 92vh; border-radius: 17px; }
       .analytics-hero { padding: 23px 20px 21px; }
       .analytics-hero h2 { font-size: 30px; }
+      .analytics-calendar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .analytics-body { padding: 15px 13px 20px; }
       .person-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .audit-grid { grid-template-columns: 1fr; }
@@ -2217,6 +2270,9 @@
         </div>
         <div class="section-note" id="arena-note">Latest captured public data</div>
       </div>
+      <article class="panel calendar-pulse" id="calendar-pulse" aria-label="Calendar month and week performance" aria-live="polite">
+        <div class="calendar-group"><b>Loading calendar performance…</b></div>
+      </article>
       <div class="hero-grid">
         <article class="panel champ" id="champ" aria-live="polite">
           <div class="stage-eyebrow"><span>●</span> Preparing fair momentum leader</div>
@@ -3169,6 +3225,119 @@
       `;
     }
 
+    function calendarRange() {
+      const now = Date.parse(DATA?.meta?.capturedAt || '');
+      if (!Number.isFinite(now)) return null;
+      const offset = 4 * 3600000;
+      const local = new Date(now + offset);
+      const year = local.getUTCFullYear();
+      const month = local.getUTCMonth();
+      const date = local.getUTCDate();
+      const mondayOffset = (local.getUTCDay() + 6) % 7;
+      return {
+        now,
+        monthStart: Date.UTC(year, month, 1) - offset,
+        weekStart: Date.UTC(year, month, date - mondayOffset) - offset,
+      };
+    }
+
+    function calendarForRecord(record) {
+      const range = calendarRange();
+      if (!range || !record?.resolved || record.isPrivate) return null;
+      const seen = new Set();
+      const posts = (record.recentPosts || []).filter(post => {
+        const key = post.id ? `id:${post.id}` : post.url ? `url:${post.url}` : `${post.postedAt}|${post.caption}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        const at = Date.parse(post.postedAt || '');
+        return Number.isFinite(at) && at <= range.now;
+      });
+      const summarize = from => {
+        const periodPosts = posts.filter(post => Date.parse(post.postedAt) >= from);
+        const videos = periodPosts.filter(post => post.type === 'video' || post.type === 'reel');
+        const views = videos.map(post => post.views).filter(isNumber);
+        return {
+          posts: periodPosts.length,
+          videoPosts: videos.length,
+          views: videos.length === 0 ? 0 : views.length ? views.reduce((sum, value) => sum + value, 0) : null,
+          viewsReporting: views.length,
+          viewsComplete: videos.length === views.length,
+        };
+      };
+      return {
+        complete: record.fetchMeta?.postsQuerySucceeded === true &&
+          record.fetchMeta?.postsOwnershipComplete !== false && record.fetchMeta?.postsLookbackDays >= 30,
+        month: summarize(range.monthStart),
+        week: summarize(range.weekStart),
+      };
+    }
+
+    function combineCalendar(rows) {
+      const valid = rows.filter(Boolean);
+      const combine = key => {
+        const periods = valid.map(row => row[key]);
+        const videoPosts = periods.reduce((sum, row) => sum + (row?.videoPosts || 0), 0);
+        const viewsReporting = periods.reduce((sum, row) => sum + (row?.viewsReporting || 0), 0);
+        const reported = periods.map(row => row?.views).filter(isNumber);
+        return {
+          posts: periods.reduce((sum, row) => sum + (row?.posts || 0), 0),
+          videoPosts,
+          views: videoPosts === 0 ? 0 : reported.length ? reported.reduce((sum, value) => sum + value, 0) : null,
+          viewsReporting,
+          viewsComplete: videoPosts === viewsReporting,
+        };
+      };
+      return {
+        complete: valid.length > 0 && valid.every(row => row.complete),
+        month: combine('month'),
+        week: combine('week'),
+      };
+    }
+
+    function calendarDateLabel(from) {
+      const range = calendarRange();
+      if (!range) return 'Date unavailable';
+      const start = new Date(from).toLocaleDateString([], { day: 'numeric', month: 'short', timeZone: 'Asia/Dubai' });
+      const end = new Date(range.now).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Dubai' });
+      return `${start}–${end}`;
+    }
+
+    function calendarViews(period, coverageComplete = true) {
+      if (!period || period.views === null) return 'Not reported';
+      return `${coverageComplete && period.viewsComplete ? '' : '≥'}${fmt(period.views)}`;
+    }
+
+    function calendarGroupMarkup(title, subtitle, calendar, badge) {
+      const range = calendarRange();
+      if (!range || !calendar) return `<div class="calendar-group"><div class="calendar-group-head"><div><b>${esc(title)}</b><span>${esc(subtitle)}</span></div></div><div class="record-empty">Calendar metrics are not available for this account.</div></div>`;
+      const postPrefix = calendar.complete ? '' : '≥';
+      return `<div class="calendar-group">
+        <div class="calendar-group-head"><div><b>${esc(title)}</b><span>${esc(subtitle)}</span></div><span class="calendar-badge">${esc(badge)}</span></div>
+        <div class="calendar-metrics">
+          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.posts)}</b><span>Posts this month<br>${esc(calendarDateLabel(range.monthStart))}</span></div>
+          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.week.posts)}</b><span>Posts this week<br>${esc(calendarDateLabel(range.weekStart))}</span></div>
+          <div class="calendar-metric"><b>${esc(calendarViews(calendar.month, calendar.complete))}</b><span>Video views this month<br>${fmt(calendar.month.viewsReporting)}/${fmt(calendar.month.videoPosts)} reporting</span></div>
+          <div class="calendar-metric"><b>${esc(calendarViews(calendar.week, calendar.complete))}</b><span>Video views this week<br>${fmt(calendar.week.viewsReporting)}/${fmt(calendar.week.videoPosts)} reporting</span></div>
+        </div>
+      </div>`;
+    }
+
+    function renderCalendarPulse() {
+      const confirmed = new Set(relevantEmployees().filter(person => (
+        person.confirmed && person.needsHumanConfirmation !== true
+      )).map(person => person.name));
+      const people = igRecords().filter(record => confirmed.has(record.name) && record.resolved && !record.isPrivate);
+      const teamCalendar = combineCalendar(people.map(record => (
+        (board().analytics || []).find(row => row.handle === record.handle)?.calendar || calendarForRecord(record)
+      )));
+      const brand = (DATA?.brand || []).find(record => canonicalHandle(record.handle) === 'kirpa.properties') || DATA?.brand?.[0];
+      const brandCalendar = calendarForRecord(brand);
+      byId('calendar-pulse').innerHTML = [
+        calendarGroupMarkup('Kirpa team', `${people.length} measured Instagram profiles · owned posts only`, teamCalendar, 'Team total'),
+        calendarGroupMarkup('@kirpa.properties', 'Main Kirpa Properties Instagram account', brandCalendar, 'Company account'),
+      ].join('');
+    }
+
     function validMentionReport(report = MENTIONS) {
       return Boolean(
         report &&
@@ -3541,6 +3710,16 @@
       return String(name || 'K').split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
     }
 
+    function spotlightRanking(items) {
+      return `<div class="spot-ranking">${items.map((item, index) => {
+        const url = safeUrl(item.post?.url);
+        const content = `<em>#${index + 1}</em><span><b>${esc(item.name)}</b><small>${esc(item.post?.caption || 'Public Instagram post')}</small></span><b>${fmt(item.interactions)}</b>`;
+        return url
+          ? `<a class="spot-rank-item" href="${esc(url)}" target="_blank" rel="noopener" aria-label="Open number ${index + 1}: ${esc(item.name)}">${content}</a>`
+          : `<div class="spot-rank-item">${content}</div>`;
+      }).join('')}</div>`;
+    }
+
     function renderSpotlight() {
       const top = isAudited() ? board().topPost : null;
       if (!top?.post && isLegacy()) {
@@ -3550,9 +3729,9 @@
           post,
           interactions: isNumber(post.likes) && isNumber(post.comments) ? post.likes + post.comments : null
         }))).filter(item => isNumber(item.interactions));
-        const sampleTop = candidates.sort((a, b) => b.interactions - a.interactions)[0];
+        const sampleLeaders = candidates.sort((a, b) => b.interactions - a.interactions).slice(0, 3);
+        const sampleTop = sampleLeaders[0];
         if (sampleTop) {
-          const postUrl = safeUrl(sampleTop.post.url);
           const thumb = safeUrl(sampleTop.post.thumb);
           byId('spot').innerHTML = `
             <div class="spot-media">
@@ -3562,15 +3741,10 @@
               </div>
             </div>
             <div class="spot-body">
-              <div class="spot-kicker">Equal-sample highlight · latest 3 per profile</div>
-              <h3 class="spot-title">${esc(sampleTop.name)}</h3>
-              <p class="spot-copy">${esc(sampleTop.post.caption || 'Public Instagram post')}</p>
-              <div class="spot-stats">
-                <span><b>${fmt(sampleTop.interactions)}</b> likes + comments</span>
-                <span><b>${fmt(sampleTop.post.likes)}</b> likes</span>
-                <span><b>${fmt(sampleTop.post.comments)}</b> comments</span>
-              </div>
-              ${postUrl ? `<a class="spot-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open public post ↗</a>` : ''}
+              <div class="spot-kicker">Top 3 supported interactions · observed sample</div>
+              <h3 class="spot-title">Three strongest measured posts</h3>
+              <p class="spot-copy">Each row opens the original public post. Totals are likes + comments only.</p>
+              ${spotlightRanking(sampleLeaders)}
             </div>
           `;
           document.querySelectorAll('.post-image').forEach(image => {
@@ -3602,32 +3776,27 @@
         `;
         return;
       }
-      const postUrl = safeUrl(top.post.url);
-      const thumb = safeUrl(top.post.thumb);
-      const interactions = isNumber(top.engagement)
-        ? top.engagement
-        : [top.post.likes, top.post.comments, top.post.shares].filter(isNumber).reduce((sum, value) => sum + value, 0);
+      const leaders = contentRows().filter(row => isNumber(row.interactions))
+        .sort((a, b) => b.interactions - a.interactions).slice(0, 3);
+      if (!leaders.length) return;
+      const first = leaders[0];
+      const thumb = safeUrl(first.post.thumb);
       byId('spot').innerHTML = `
         <div class="spot-media">
-          ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${top.name} top post preview`)}">` : ''}
+          ${thumb ? `<img class="post-image" src="${esc(thumb)}" alt="${esc(`${first.name} top post preview`)}">` : ''}
           <div class="media-fallback" ${thumb ? 'hidden' : ''}>
             <div>
-              <span class="fallback-mark">${esc(initials(top.name))}</span>
+              <span class="fallback-mark">${esc(initials(first.name))}</span>
               <b>Instagram highlight</b>
               <span>Open the public post for the original media.</span>
             </div>
           </div>
         </div>
         <div class="spot-body">
-          <div class="spot-kicker">Top supported interactions · 30 days</div>
-          <h3 class="spot-title">${esc(top.name)}</h3>
-          <p class="spot-copy">${esc(top.post.caption || 'Public Instagram post')}</p>
-          <div class="spot-stats">
-            <span><b>${fmt(interactions)}</b> interactions</span>
-            <span><b>${fmt(top.post.comments)}</b> comments</span>
-            <span><b>${fmt(top.post.shares)}</b> shares</span>
-          </div>
-          ${postUrl ? `<a class="spot-link" href="${esc(postUrl)}" target="_blank" rel="noopener">Open public post ↗</a>` : ''}
+          <div class="spot-kicker">Top 3 supported interactions · 30 days</div>
+          <h3 class="spot-title">Three strongest measured posts</h3>
+          <p class="spot-copy">Supported interactions are public likes + comments. Each row opens its source post.</p>
+          ${spotlightRanking(leaders)}
         </div>
       `;
       document.querySelectorAll('.post-image').forEach(image => {
@@ -4367,10 +4536,19 @@
           ? 'Directional legacy analytics'
           : state.label;
       const complete = isAudited() && analytics?.windowComplete;
-      const note = complete
+      const recoveredPosts = record?.fetchMeta?.historyRecoveredPostCount || 0;
+      const recoveredAt = record?.fetchMeta?.historyOldestMetricsObservedAt;
+      const recoveryNote = recoveredPosts
+        ? ` ${recoveredPosts} omitted post${recoveredPosts === 1 ? '' : 's'} were restored from validated history; retained interaction counters were last observed ${recoveredAt ? new Date(recoveredAt).toLocaleDateString([], { dateStyle: 'medium' }) : 'in the earlier validated capture'}.`
+        : '';
+      const note = (complete
         ? 'All performance metrics below were recomputed from a complete, owner-verified 30-day public-post window. Personal results remain visible for small samples; team comparisons require at least three supported posts.'
-        : analytics?.coverageReason || 'Performance analytics are unavailable until this profile has a complete verified pull.';
+        : analytics?.coverageReason || 'Performance analytics are unavailable until this profile has a complete verified pull.') + recoveryNote;
       const formats = analytics?.formatPerformance || [];
+      const personCalendar = analytics?.calendar || calendarForRecord(record);
+      const range = calendarRange();
+      const noPosts = complete && analytics?.postsInWindow === 0;
+      const noVideos = noPosts || analytics?.videoCount === 0;
       const personalInteractionRate = analytics?.interactionRate ?? analytics?.observedInteractionRate;
       const personalCommentRate = analytics?.commentRate ?? analytics?.observedCommentRate;
       const interactionRateNote = isNumber(analytics?.interactionRate)
@@ -4392,29 +4570,36 @@
           <span class="analytics-status">${esc(sourceLabel)}</span>
           <h2 id="analytics-title">${esc(person.name)}</h2>
           <p>${esc(person.role || 'Kirpa team member')} · ${person.handle ? `@${esc(person.handle)}` : 'Instagram handle required'}</p>
+          <div class="analytics-calendar" aria-label="Calendar month and week performance">
+            <div><b>${personCalendar ? `${personCalendar.complete ? '' : '≥'}${fmt(personCalendar.month.posts)}` : 'No data'}</b><span>Posts this month<br>${range ? esc(calendarDateLabel(range.monthStart)) : ''}</span></div>
+            <div><b>${personCalendar ? `${personCalendar.complete ? '' : '≥'}${fmt(personCalendar.week.posts)}` : 'No data'}</b><span>Posts this week<br>${range ? esc(calendarDateLabel(range.weekStart)) : ''}</span></div>
+            <div><b>${personCalendar ? esc(calendarViews(personCalendar.month, personCalendar.complete)) : 'No data'}</b><span>Video views this month<br>${personCalendar ? `${fmt(personCalendar.month.viewsReporting)}/${fmt(personCalendar.month.videoPosts)} videos reporting` : ''}</span></div>
+            <div><b>${personCalendar ? esc(calendarViews(personCalendar.week, personCalendar.complete)) : 'No data'}</b><span>Video views this week<br>${personCalendar ? `${fmt(personCalendar.week.viewsReporting)}/${fmt(personCalendar.week.videoPosts)} videos reporting` : ''}</span></div>
+          </div>
+          <small class="analytics-calendar-note">Calendar month = 1st through month-end; current totals stop at the snapshot. Week = Monday through Sunday, Dubai time.</small>
         </div>
         <div class="analytics-body">
           <div class="analytics-note">${esc(note)} ${isLegacy() ? 'Use it to inspect this account, not to declare a team winner.' : ''}</div>
           <div class="person-kpis">
-            ${analyticsKpi('Momentum score', isNumber(personBlock(person.handle)?.score?.value) ? `${Math.round(personBlock(person.handle).score.value * 100)}/100` : '—', personBlock(person.handle)?.score?.rank ? `Team rank #${personBlock(person.handle).score.rank}` : 'Held until all score inputs are available')}
+            ${analyticsKpi('Momentum score', isNumber(personBlock(person.handle)?.score?.value) ? `${Math.round(personBlock(person.handle).score.value * 100)}/100` : noPosts ? 'Activity needed' : 'Building sample', personBlock(person.handle)?.score?.rank ? `Team rank #${personBlock(person.handle).score.rank}` : personBlock(person.handle)?.score?.eligibilityReasons?.join(' · ') || 'Comparable inputs are still being collected')}
             ${analyticsKpi('Followers', fmt(analytics?.followers), 'Point-in-time public count')}
             ${analyticsKpi('Following', fmt(analytics?.following), 'Public profile count')}
             ${analyticsKpi('Lifetime posts', fmt(analytics?.lifetimePosts), 'Public profile count')}
             ${analyticsKpi(complete ? '30-day posts' : 'Posts observed', fmt(analytics?.postsInWindow), complete ? 'Complete window' : 'Incomplete provider sample')}
             ${analyticsKpi('Publishing cadence', isNumber(analytics?.postsPerWeek) ? `${analytics.postsPerWeek.toFixed(1)}/wk` : '—', complete ? 'Posts × 7 ÷ 30' : 'Withheld')}
             ${analyticsKpi('Active days', fmt(analytics?.activeDays), complete ? 'Distinct UTC publishing dates' : 'Inside observed sample')}
-            ${analyticsKpi('Personal interaction rate', pct(personalInteractionRate), interactionRateNote)}
-            ${analyticsKpi('Personal comment rate', pct(personalCommentRate), commentRateNote)}
-            ${analyticsKpi('Median likes', fmt(analytics?.medianLikes), `${fmt(analytics?.likesReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
-            ${analyticsKpi('Median comments', fmt(analytics?.medianComments), `${fmt(analytics?.commentsReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
-            ${analyticsKpi('Median video views', fmt(analytics?.medianViews), `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
-            ${analyticsKpi('View efficiency', isNumber(analytics?.viewEfficiency) ? `${analytics.viewEfficiency.toFixed(2)}×` : '—', 'Median reported video views ÷ followers')}
-            ${analyticsKpi('Comment-to-like ratio', pct(analytics?.commentToLikeRatio), 'Median comments ÷ median likes')}
-            ${analyticsKpi('Median post gap', formatDuration(analytics?.medianGapHours), 'Time between observed posts')}
+            ${analyticsKpi('Personal interaction rate', isNumber(personalInteractionRate) ? pct(personalInteractionRate) : noPosts ? 'No posts' : 'Not reported', interactionRateNote)}
+            ${analyticsKpi('Personal comment rate', isNumber(personalCommentRate) ? pct(personalCommentRate) : noPosts ? 'No posts' : 'Not reported', commentRateNote)}
+            ${analyticsKpi('Median likes', isNumber(analytics?.medianLikes) ? fmt(analytics.medianLikes) : noPosts ? 'No posts' : 'Not reported', `${fmt(analytics?.likesReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
+            ${analyticsKpi('Median comments', isNumber(analytics?.medianComments) ? fmt(analytics.medianComments) : noPosts ? 'No posts' : 'Not reported', `${fmt(analytics?.commentsReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
+            ${analyticsKpi('Median video views', isNumber(analytics?.medianViews) ? fmt(analytics.medianViews) : noVideos ? 'No video posts' : 'Not reported', `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
+            ${analyticsKpi('View efficiency', isNumber(analytics?.viewEfficiency) ? `${analytics.viewEfficiency.toFixed(2)}×` : noVideos ? 'No video posts' : 'Not reported', 'Median reported video views ÷ followers')}
+            ${analyticsKpi('Comment-to-like ratio', isNumber(analytics?.commentToLikeRatio) ? pct(analytics.commentToLikeRatio) : noPosts ? 'No posts' : 'Not measurable', 'Median comments ÷ median likes')}
+            ${analyticsKpi('Median post gap', isNumber(analytics?.medianGapHours) ? formatDuration(analytics.medianGapHours) : noPosts ? 'No posts' : 'One post only', 'Time between observed posts')}
             ${analyticsKpi('Total likes', fmt(analytics?.totalLikes), 'Supported values only')}
             ${analyticsKpi('Total comments', fmt(analytics?.totalComments), 'Supported values only')}
             ${analyticsKpi('Total video views', fmt(analytics?.totalViews), 'Reporting videos only')}
-            ${analyticsKpi('Latest post', analytics?.latestPostAt ? `${relativeAge(analytics.latestPostAt)} before capture` : '—', 'Relative to snapshot time')}
+            ${analyticsKpi('Latest post', analytics?.latestPostAt ? `${relativeAge(analytics.latestPostAt)} before capture` : noPosts ? 'No post in window' : 'Not reported', 'Relative to snapshot time')}
           </div>
           ${personProgressMarkup(person, analytics)}
           <h3 class="analytics-subhead">Content mix</h3>
@@ -4464,7 +4649,8 @@
       const engagement = new Map((board().engagement || []).map(row => [row.handle, row]));
       const headings = [
         'Name', 'Role', 'Instagram handle', 'Status', 'Confidence', 'Followers', 'Following',
-        'Lifetime posts', 'Posts in view', 'Posts per week', 'Active days', 'Median post gap hours',
+        'Lifetime posts', 'Calendar month posts', 'Calendar week posts', 'Calendar month video views',
+        'Calendar week video views', 'Posts in view', 'Posts per week', 'Active days', 'Median post gap hours',
         'Median interaction rate', 'Median comment rate', 'Median likes', 'Median comments',
         'Median video views', 'Total likes', 'Total comments', 'Total video views',
         'Latest post at', 'Likes coverage', 'Comments coverage', 'View coverage', 'Coverage note'
@@ -4481,6 +4667,10 @@
           analytics?.followers,
           analytics?.following,
           analytics?.lifetimePosts,
+          analytics?.calendar?.month?.posts,
+          analytics?.calendar?.week?.posts,
+          analytics?.calendar?.month?.views,
+          analytics?.calendar?.week?.views,
           analytics?.postsInWindow,
           analytics?.postsPerWeek,
           analytics?.activeDays,
@@ -5030,6 +5220,7 @@
       renderTense();
       renderDataAlert();
       renderKpis();
+      renderCalendarPulse();
       renderMentions();
       renderChampion();
       renderSpotlight();

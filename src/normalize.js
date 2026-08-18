@@ -36,7 +36,7 @@ function normalizePost(raw, platform) {
   else if (/carousel|sidecar|album/.test(rawType)) type = 'carousel';
   else if (platform === 'tiktok') type = 'video';
 
-  return {
+  const post = {
     id: s(raw.id || raw.pk || raw.shortcode || raw.shortCode || raw.videoId),
     type,
     isPinned: raw.isPinned === true,
@@ -50,6 +50,9 @@ function normalizePost(raw, platform) {
     views: n(raw.views ?? raw.playCount ?? raw.videoViewCount ?? raw.viewCount),
     postedAt: toIso(raw),
   };
+  const metricsObservedAt = s(raw.metricsObservedAt || raw.scrapedAt);
+  if (metricsObservedAt) post.metricsObservedAt = metricsObservedAt;
+  return post;
 }
 function postKey(post) {
   if (post.id) return `id:${post.id}`;
@@ -98,6 +101,9 @@ function normalizeRecord(entry, raw, capturedAt) {
       incrementalLookbackDays: null,
       freshPostCount: 0,
       reusedPostCount: 0,
+      profileFallbackPostCount: 0,
+      historyRecoveredPostCount: 0,
+      historyOldestMetricsObservedAt: null,
     },
     warnings: [],
   };
@@ -122,6 +128,9 @@ function normalizeRecord(entry, raw, capturedAt) {
     incrementalLookbackDays: n(raw._incrementalLookbackDays),
     freshPostCount: n(raw._freshPostCount) ?? 0,
     reusedPostCount: n(raw._reusedPostCount) ?? 0,
+    profileFallbackPostCount: n(raw._profileFallbackPostCount) ?? 0,
+    historyRecoveredPostCount: n(raw._historyRecoveredPostCount) ?? 0,
+    historyOldestMetricsObservedAt: s(raw._historyOldestMetricsObservedAt),
   });
   if (base.isPrivate) return base;
 
