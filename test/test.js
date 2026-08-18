@@ -16,6 +16,7 @@ const { validateSnapshot } = require('../src/validate-snapshot');
 const { rebuildDerived } = require('../src/rebuild-derived');
 const U = require('../src/usage');
 const POST_CACHE = require('../src/post-cache');
+const REFRESH_DUE = require('../src/refresh-due');
 
 let passed = 0;
 let failed = 0;
@@ -531,7 +532,7 @@ const soloRegistry = {
     assert.ok(Math.abs(baseline.ageDays - 5.5) < 0.001, 'the nearest matching roster wins');
     fs.unlinkSync(path.join(dir, 'history', '5.5.json'));
     const wider = loadWeeklyBaseline(dir, now, 'r1');
-    assert.ok(Math.abs(wider.ageDays - 10.5) < 0.001, 'a twice-weekly miss can still use the careful 11-day guardrail');
+    assert.ok(Math.abs(wider.ageDays - 10.5) < 0.001, 'a missed four-day capture can still use the careful 11-day guardrail');
   });
   await test('growth is normalized to a seven-day equivalent and ranked by percentage', () => {
     const previous = [
@@ -973,10 +974,12 @@ const soloRegistry = {
   });
 
   console.log('\nRELEASE GUARDS');
-  await test('twice-weekly workflow runs and stamps the full validator', () => {
+  await test('four-day workflow uses a free daily due check and stamps the full validator', () => {
     const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'weekly.yml'), 'utf8');
     assert.match(workflow, /node src\/validate-snapshot\.js --stamp/);
-    assert.match(workflow, /cron: "0 4 \* \* 1,4"/);
+    assert.match(workflow, /cron: "0 4 \* \* \*"/);
+    assert.match(workflow, /node src\/refresh-due\.js/);
+    assert.match(workflow, /steps\.due\.outputs\.due == 'true'/);
     assert.ok(!/cron: "0 16/.test(workflow), 'the old twice-daily spend path is removed');
     assert.match(workflow, /APIFY_TOKEN_MENTION_COUNT \|\| secrets\.APIFY_TOKEN/);
     assert.match(workflow, /if: failure\(\)/, 'a silent failure looks exactly like a stalled board');
@@ -986,6 +989,12 @@ const soloRegistry = {
     assert.match(workflow, /data\/apify-usage\.json data\/refresh-status\.json/);
     const ignore = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
     assert.match(ignore, /data\/raw\//);
+  });
+  await test('four-day due check waits until the fourth day', () => {
+    const snapshot = { meta: { capturedAt: '2026-08-01T08:10:00.000Z' } };
+    assert.strictEqual(REFRESH_DUE.refreshDue(snapshot, '2026-08-05T06:09:59.000Z').due, false);
+    assert.strictEqual(REFRESH_DUE.refreshDue(snapshot, '2026-08-05T07:10:00.000Z').due, true);
+    assert.strictEqual(REFRESH_DUE.refreshDue(null, '2026-08-05T07:10:00.000Z').due, true);
   });
   await test('dashboard requires roster lock, validator v2, and a 108-hour freshness gate', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');

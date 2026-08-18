@@ -1,8 +1,8 @@
 # Kirpa Social Leaderboard
 
-A twice-weekly leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, output, follower growth, fair engagement and cadence rankings, view efficiency, content records, posting-time and content-pillar patterns, developer coverage, trends, personal bests, achievements, and quantitative next actions.
+A four-day leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, output, follower growth, fair engagement and cadence rankings, view efficiency, content records, posting-time and content-pillar patterns, developer coverage, trends, personal bests, achievements, and quantitative next actions.
 
-It runs on a schedule with **no Instagram logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; the Monday/Thursday pull is a GitHub Action.
+It runs on a schedule with **no Instagram logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; a daily no-cost due check starts the paid GitHub Action path only on the fourth day after the last validated capture.
 
 ---
 
@@ -13,7 +13,7 @@ It runs on a schedule with **no Instagram logins and no passwords**. It reads on
 - **No fabricated handles.** Name-to-handle matching is where a tool like this quietly pulls a stranger's stats. So handles are **confirm-gated**: every handle sits `confirmed: false` until a human verifies it. Nothing is pulled until then.
 - **Roster-locked, and dated rather than blanked.** A validator stamp is valid only for the exact roster version it measured. Two failures used to share one response, and they have now been separated:
   - **Wrong data is still withheld outright.** A snapshot measured against a roster that has since changed, or one that never passed the validator, shows no rankings and no individual metrics. Publishing it would mislead.
-  - **Old data is shown under its own date.** A snapshot that passed every check but is more than 108 hours old is published as a dated *as of* board: the headline, alert and freshness tile name the date and shift to the past tense. This matches the longest Monday/Thursday gap plus workflow allowance.
+  - **Old data is shown under its own date.** A snapshot that passed every check but is more than 108 hours old is published as a dated *as of* board: the headline, alert and freshness tile name the date and shift to the past tense. This covers the four-day cadence plus workflow allowance.
 - **Refresh failure preserves evidence.** Provider, coverage, or completeness failures update `data/refresh-status.json` but never overwrite `data/latest.json`, history, or trend points. Missing data is not converted to zero.
 - **Collection is incremental and deduplicated.** One profile Actor run and one batched post Actor run cover all confirmed staff; the same pair covers the company account. New rows are merged with the last validated 45-day cache and deduplicated by immutable post identity.
 - **Stored captures can be replayed.** `node src/ingest.js --captured --as-of <iso>` recomputes a full snapshot from the raw provider payloads in `data/raw`, and `node src/validate-snapshot.js --replay --stamp` validates it. A replay waives exactly two things — the `live` source label and the age gate — and nothing else: the raw payloads are re-normalized, every leaderboard, content figure, coaching line and trend point is recomputed, and the roster still has to match. It wears the timestamp of the capture it replays, because stamping stored captures with today's date would slide the 30-day window over days nobody measured and turn "we have no data for last week" into "nobody posted last week".
@@ -50,7 +50,7 @@ The published `data/latest.json` is a validator-passed **captured replay from 15
 | Ranked on momentum | 24 |
 | No confirmed handle in the workbook | 7 |
 
-The twice-weekly workflow now prefers the active `APIFY_TOKEN_MENTION_COUNT`
+The four-day workflow now prefers the active `APIFY_TOKEN_MENTION_COUNT`
 secret and retains the legacy `APIFY_TOKEN` only as a rotation fallback. The
 next successful validated pull replaces this dated snapshot automatically.
 
@@ -123,7 +123,7 @@ src/roster.js         ▼
 - **`src/backfill-series.js`** — rebuilds `data/series.json` from every stored snapshot, without laundering an unvalidated capture into a validated one.
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards, content intelligence and per-person coaching → write `data/latest.json`, a dated history snapshot, and the appended trend series.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
-- **`.github/workflows/weekly.yml`** — Monday and Thursday at 04:00 UTC plus a manual trigger. Tests → roster integrity → four-run Instagram collection → quality gate → independent validator stamp → explicit data commit. It prefers `APIFY_TOKEN_MENTION_COUNT` while retaining `APIFY_TOKEN` as a rotation fallback.
+- **`.github/workflows/weekly.yml`** — daily 04:00 UTC due check plus a manual trigger. The paid path runs only when the validated snapshot is at least 95 hours old: tests → roster integrity → Instagram collection → quality gate → independent validator stamp → explicit data commit. It prefers `APIFY_TOKEN_MENTION_COUNT` while retaining `APIFY_TOKEN` as a rotation fallback.
 - **`.github/workflows/reel-mention-count.yml`** — a cheap daily due check with paid collection/transcription only every 14 days (or manually). It publishes roster-wide developer metrics and Reel evidence to `data/developer-intelligence.json`; failures remain unknown and make coverage partial rather than zero.
 
 ---
@@ -133,7 +133,7 @@ src/roster.js         ▼
 1. **Add handles.** Fill `handles.json`: add the Instagram handle and set `confirmed: true` only after Kirpa-owned evidence or direct human confirmation. Leave back-office `dashboardRelevant: false`.
 2. **Add the provider key.** Create an [Apify](https://apify.com) account, copy your API token, and add it as a repo secret named `APIFY_TOKEN` (Settings → Secrets → Actions).
 3. **Enable Pages.** Settings → Pages → deploy from `main`. The dashboard is `index.html`.
-4. **Run it.** Actions → *Twice-weekly social snapshot* → *Run workflow*. It writes a validated `data/latest.json` and the page goes live. After that it runs Monday and Thursday at 08:00 Asia/Dubai.
+4. **Run it.** Actions → *Four-day social snapshot* → *Run workflow*. It writes a validated `data/latest.json` and the page goes live. After that, a daily 08:00 Asia/Dubai due check starts the paid refresh only on the fourth day.
 
 ### Automatic developer intelligence
 
