@@ -1,0 +1,9 @@
+{
+  "name": "Visibility OS",
+  "short_name": "Visibility",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f4f0",
+  "theme_color": "#f36f21",
+  "icons": []
+}
