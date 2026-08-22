@@ -6,6 +6,9 @@ on:
     # paid path runs only when the last validated capture is 96 hours old.
     - cron: "0 4,16 * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/refresh-now]
 
 permissions:
   contents: write
@@ -32,16 +35,16 @@ jobs:
         run: node src/refresh-due.js
 
       - name: Verify formulas and release guards
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         run: node test/test.js
 
       - name: Verify roster integrity
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         run: node src/roster.js verify
 
       - name: Pull public Instagram profiles and complete post windows
         id: ingest
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         env:
           # The mention token is the active Kirpa Apify account; keep the legacy
           # token as a fallback while repositories rotate secrets.
@@ -53,7 +56,7 @@ jobs:
         run: node src/ingest.js
 
       - name: Quarantine candidate snapshot and raw captures
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: instagram-candidate-${{ github.run_id }}
@@ -63,15 +66,15 @@ jobs:
           retention-days: 7
 
       - name: Validate and stamp every published answer
-        if: (github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true') && steps.ingest.outputs.published == 'true'
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true') && steps.ingest.outputs.published == 'true'
         run: node src/validate-snapshot.js --stamp
 
       - name: Re-run tests against the release candidate
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         run: node test/test.js
 
       - name: Commit validated snapshot, history, cache telemetry, and refresh state
-        if: github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true'
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         run: |
           git config user.name "kirpa-social-bot"
           git config user.email "kirpa-social-bot@users.noreply.github.com"
@@ -89,5 +92,5 @@ jobs:
           fi
 
       - name: Announce failed refresh
-        if: failure() && (github.event_name == 'workflow_dispatch' || steps.due.outputs.due == 'true')
+        if: failure() && (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true')
         run: echo "::error title=Social snapshot refresh failed::Open this workflow run and inspect the first failed step."
