@@ -3,6 +3,7 @@ name: Install employee personal portals
 on:
   push:
     branches:
+      - main
       - feature/employee-personal-links
     paths:
       - .github/workflows/employee-portals.yml
