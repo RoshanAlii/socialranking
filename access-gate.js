@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const EXPECTED_HASH = '9b337406eb7738d4002d8abefc03770df59dd931f5ef670c870796e919fd417f';
+  const EXPECTED_HASH = '1d8e04f4091afdc613f852472e8a10d69f8f7829e6456111ef45c2b785aa80e2';
   const SESSION_KEY = 'kirpa-social-auth-v1';
 
   const style = document.createElement('style');
