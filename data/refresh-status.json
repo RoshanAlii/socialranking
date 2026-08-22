@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "outcome": "success",
-  "attemptedAt": "2026-08-18T08:44:15.000Z",
-  "lastValidSnapshotAt": "2026-08-18T08:44:15.000Z",
+  "attemptedAt": "2026-08-22T08:19:24.726Z",
+  "lastValidSnapshotAt": "2026-08-22T08:19:24.726Z",
   "reason": null,
   "dataPreserved": false,
   "resolvedProfiles": 31,
@@ -10,17 +10,19 @@
   "completeProfiles": 31,
   "usage": {
     "month": "2026-08",
-    "usageUsd": 1.5861,
-    "knownRunCostUsd": 2.3148,
+    "usageUsd": 2.3704,
+    "knownRunCostUsd": 3.0991,
     "softLimitUsd": 23.2,
     "planLimitUsd": 29,
-    "remainingToSoftLimitUsd": 21.6139,
+    "remainingToSoftLimitUsd": 20.8296,
     "softWarning": false,
-    "runs": 7,
-    "successfulRuns": 7,
+    "runs": 10,
+    "successfulRuns": 10,
     "failedRuns": 0,
-    "costKnownRuns": 7,
+    "costKnownRuns": 10,
     "unknownCostRuns": 0,
-    "observedAt": "2026-08-18T09:00:59.000Z"
+    "observedAt": "2026-08-18T09:00:59.000Z",
+    "periodStart": null,
+    "periodEnd": null
   }
 }
