@@ -1,0 +1,78 @@
+name: Full account snapshot
+
+on:
+  push:
+    branches:
+      - main
+      - feature/full-account-snapshot
+  pull_request:
+    branches:
+      - main
+    paths:
+      - account-coach-snapshot-ui.js
+      - index.html
+      - .github/workflows/full-account-snapshot.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-account-snapshot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  enforce:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Ensure the snapshot enhancer is loaded
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          tag = '  <script src="./account-coach-snapshot-ui.js"></script>'
+          if tag not in text:
+              coach_tag = '  <script src="./account-coach-ui.js"></script>'
+              if coach_tag in text:
+                  text = text.replace(coach_tag, coach_tag + '\n' + tag, 1)
+              elif '</body>' in text:
+                  text = text.replace('</body>', tag + '\n</body>', 1)
+              else:
+                  raise SystemExit('index.html closing body tag not found')
+              path.write_text(text, encoding='utf-8')
+              print('Added complete personal snapshot enhancer.')
+          else:
+              print('Snapshot enhancer already present.')
+
+      - name: Commit integration if required
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No integration change required."
+            exit 0
+          fi
+          git config user.name "kirpa-social-bot"
+          git config user.email "kirpa-social-bot@users.noreply.github.com"
+          git add index.html
+          git commit -m "chore: keep full account snapshot enabled"
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+      - name: Check snapshot enhancer syntax
+        run: node --check account-coach-snapshot-ui.js
