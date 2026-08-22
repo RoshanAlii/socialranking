@@ -1,0 +1,76 @@
+name: Personal account coach
+
+on:
+  pull_request:
+    paths:
+      - personal-coach.js
+      - test/personal-coach.test.js
+      - ACCOUNT_COACH.md
+      - index.html
+      - .github/workflows/personal-account-coach.yml
+  push:
+    branches: [main]
+    paths:
+      - personal-coach.js
+      - test/personal-coach.test.js
+      - ACCOUNT_COACH.md
+      - index.html
+      - .github/workflows/personal-account-coach.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: personal-account-coach-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Validate deterministic coaching logic
+        run: |
+          node --check personal-coach.js
+          node test/personal-coach.test.js
+
+      - name: Ensure the dashboard loads the personal coach
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          marker = '<script src="./personal-coach.js"></script>'
+          if marker not in text:
+              closing = text.lower().rfind('</body>')
+              if closing < 0:
+                  raise SystemExit('index.html has no closing body tag')
+              text = text[:closing] + f'  {marker}\n' + text[closing:]
+              path.write_text(text, encoding='utf-8')
+          PY
+          grep -F '<script src="./personal-coach.js"></script>' index.html
+
+      - name: Publish dashboard loader
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "kirpa-social-bot"
+          git config user.email "kirpa-social-bot@users.noreply.github.com"
+          git add -- index.html
+          if git diff --cached --quiet; then
+            echo "Personal coach loader is already present."
+          else
+            git commit -m "feat: load personal account coach"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
