@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Opening Kirpa employee portal</title>
+  <style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f6f3ee;color:#171717;font:14px/1.5 system-ui,sans-serif}main{max-width:520px;padding:28px;text-align:center}a{color:#b93614;font-weight:700}</style>
+</head>
+<body>
+  <main>Opening your Kirpa personal performance portal…<noscript><p>JavaScript is required. <a href="../">Open the employee directory</a>.</p></noscript></main>
+  <script>
+    (() => {
+      const parts = location.pathname.split('/').filter(Boolean);
+      const accountIndex = parts.indexOf('accounts');
+      const slug = accountIndex >= 0 ? (parts[accountIndex + 1] || '') : '';
+      const target = new URL('../', location.href);
+      if (slug) target.searchParams.set('person', slug);
+      target.hash = location.hash;
+      location.replace(target.href);
+    })();
+  </script>
+</body>
+</html>
