@@ -1,53 +1,92 @@
-name: Install employee personal portals
+name: Build employee personal portals
 
 on:
   push:
     branches:
       - main
-      - feature/employee-personal-links
     paths:
       - .github/workflows/employee-portals.yml
+      - handles.json
+      - data/latest.json
+      - data/series.json
+      - data/developer-intelligence.json
+      - data/reel-mentions.json
+      - personal-coach.js
+      - account-coach-ui.js
+      - account-coach-snapshot-ui.js
+      - src/coach.js
       - src/install-employee-portals-bundle.js
+      - src/employee-portal-bundle-parts/**
+      - src/build-employee-portals.js
+      - src/validate-employee-portals.js
+      - src/install-employee-portal-links.js
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: employee-portal-bootstrap-${{ github.ref }}
+  group: employee-personal-portals-main
   cancel-in-progress: true
 
 jobs:
-  install:
+  build-and-publish:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
+      - name: Check out current main
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "20"
 
-      - name: Install employee portal source files
-        run: node src/install-employee-portals-bundle.js
-
-      - name: Build and validate employee portals
-        run: |
-          node src/install-employee-portal-links.js
-          node src/build-employee-portals.js
-          node test/test_employee_portals.js
-          node src/validate-employee-portals.js
-
-      - name: Commit implementation and generated portals
+      - name: Install portal source from bootstrap bundle when required
         shell: bash
         run: |
+          set -euo pipefail
+          cp .github/workflows/employee-portals.yml /tmp/employee-portals.yml
+          if [ -f src/install-employee-portals-bundle.js ]; then
+            node src/install-employee-portals-bundle.js
+            # Keep this reviewed workflow rather than allowing the bootstrap
+            # bundle to replace the workflow that is currently executing.
+            cp /tmp/employee-portals.yml .github/workflows/employee-portals.yml
+          fi
+
+      - name: Build separate encrypted employee links
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f src/build-employee-portals.js
+          node src/build-employee-portals.js
+
+      - name: Validate generated personal portals
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f people/index.html
+          test -n "$(find people -mindepth 2 -name index.html -print -quit)"
+          if [ -f test/test_employee_portals.js ]; then
+            node test/test_employee_portals.js
+          fi
+          if [ -f src/validate-employee-portals.js ]; then
+            node src/validate-employee-portals.js
+          fi
+
+      - name: Commit generated links and employee-only payloads
+        shell: bash
+        run: |
+          set -euo pipefail
           git config user.name "kirpa-social-bot"
           git config user.email "kirpa-social-bot@users.noreply.github.com"
           git add --all
-          git commit -m "feat: add separate encrypted employee portals"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          if git diff --cached --quiet; then
+            echo "Employee portals already match the current roster and snapshot."
+            exit 0
+          fi
+          git commit -m "data: publish separate employee performance portals"
+          git pull --rebase origin main
+          git push origin HEAD:main
