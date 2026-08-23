@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Kirpa employee portal</title>
+  <style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f6f3ee;color:#171717;font:14px/1.5 system-ui,sans-serif}main{max-width:520px;padding:28px;text-align:center}a{color:#b93614;font-weight:700}</style>
+</head>
+<body>
+  <main id="message">Opening Kirpa employee portal…</main>
+  <script>
+    (() => {
+      const parts = location.pathname.split('/').filter(Boolean);
+      const section = parts.findIndex(part => part === 'accounts' || part === 'people');
+      const projectBase = parts[0] === 'socialranking' ? '/socialranking' : '';
+      if (section >= 0) {
+        const slug = parts[section + 1] || '';
+        const target = slug
+          ? `${projectBase}/accounts/?person=${encodeURIComponent(slug)}${location.hash || ''}`
+          : `${projectBase}/accounts/${location.hash || ''}`;
+        location.replace(target);
+        return;
+      }
+      document.getElementById('message').innerHTML = '<h1>Page not found</h1><p>The requested page does not exist.</p><a href="' + projectBase + '/">Return to Social Ranking</a>';
+    })();
+  </script>
+</body>
+</html>
