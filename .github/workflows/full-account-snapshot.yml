@@ -33,6 +33,9 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Apply deterministic visibility migration in the workspace
+        run: python scripts/employee_portal_quality.py --fix
+
       - name: Check personal coach syntax
         run: node --check personal-coach.js
 
