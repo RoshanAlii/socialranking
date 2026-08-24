@@ -1,0 +1,81 @@
+name: Employee portal quality and accuracy
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - personal-coach.js
+      - index.html
+      - accounts/**
+      - handles.json
+      - data/latest.json
+      - data/series.json
+      - data/developer-intelligence.json
+      - data/refresh-status.json
+      - scripts/employee_portal_quality.py
+      - .github/workflows/employee-portal-quality.yml
+      - .github/workflows/full-account-snapshot.yml
+  push:
+    branches: [main]
+    paths:
+      - personal-coach.js
+      - index.html
+      - accounts/**
+      - handles.json
+      - data/latest.json
+      - data/series.json
+      - data/developer-intelligence.json
+      - data/refresh-status.json
+      - scripts/employee_portal_quality.py
+      - .github/workflows/employee-portal-quality.yml
+      - .github/workflows/full-account-snapshot.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: employee-portal-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Apply visibility fixes and build accuracy report
+        run: python scripts/employee_portal_quality.py --fix
+
+      - name: Validate JavaScript and mandatory accuracy gates
+        run: |
+          node --check personal-coach.js
+          python scripts/employee_portal_quality.py --check
+
+      - name: Run focused personal-coach tests
+        if: hashFiles('test/personal-coach.test.js') != ''
+        run: node test/personal-coach.test.js
+
+      - name: Commit fixes and report to main
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          git config user.name "kirpa-social-bot"
+          git config user.email "kirpa-social-bot@users.noreply.github.com"
+          git add -- personal-coach.js index.html EMPLOYEE_ACCURACY_REPORT.md data/employee-accuracy-report.json
+          if git diff --cached --quiet; then
+            echo "Employee portal contrast and accuracy report already match current data."
+            exit 0
+          fi
+          git commit -m "fix: keep employee portals visible and publish accuracy audit"
+          git pull --rebase origin main
+          git push origin HEAD:main
