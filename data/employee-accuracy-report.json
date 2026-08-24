@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-24T07:00:37.827063Z",
+  "generatedAt": "2026-08-24T07:04:41.498200Z",
   "scope": {
     "company": "Kirpa Properties L.L.C",
     "rosterVersion": "2026-07-30-kirpa-workbook-v1",
@@ -42,7 +42,7 @@
   },
   "snapshot": {
     "capturedAt": "2026-08-22T08:19:24.726Z",
-    "ageHoursAtAudit": 46.7,
+    "ageHoursAtAudit": 46.8,
     "freshness": "current",
     "presentTenseMaximumAgeHours": 108,
     "source": "live",
