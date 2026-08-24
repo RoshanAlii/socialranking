@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-22T08:19:24.726Z",
+  "updatedAt": "2026-08-24T07:04:53.791Z",
   "softLimitUsd": 23.2,
   "planLimitUsd": 29,
   "observations": [
@@ -164,6 +164,45 @@
       "runId": "hlSQbgtues4XdeB0N",
       "itemCount": 1,
       "durationMs": 3929,
+      "costUsd": 0,
+      "error": null
+    },
+    {
+      "at": "2026-08-24T07:05:18.996Z",
+      "captureAt": "2026-08-24T07:04:53.791Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "j2FmvHjoKGX6kg10p",
+      "itemCount": 31,
+      "durationMs": 25078,
+      "costUsd": 0.0621,
+      "error": null
+    },
+    {
+      "at": "2026-08-24T07:10:13.414Z",
+      "captureAt": "2026-08-24T07:04:53.791Z",
+      "actor": "apify~instagram-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "5MLBvA2Zh15dzwku3",
+      "itemCount": 326,
+      "durationMs": 294418,
+      "costUsd": 0.7245,
+      "error": null
+    },
+    {
+      "at": "2026-08-24T07:10:27.174Z",
+      "captureAt": "2026-08-24T07:04:53.791Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "ok": true,
+      "runId": "asJ8jbUs74ZM6i10e",
+      "itemCount": 1,
+      "durationMs": 13446,
       "costUsd": 0,
       "error": null
     }
