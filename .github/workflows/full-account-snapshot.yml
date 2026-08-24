@@ -54,8 +54,8 @@ jobs:
               raise SystemExit('index.html does not load personal-coach.js')
           if obsolete in index:
               raise SystemExit('obsolete snapshot enhancer is still loaded and can override coach styles')
-          if 'Complete personal snapshot' not in coach:
-              raise SystemExit('personal-coach.js does not contain the complete personal snapshot')
+          if '#kirpa-coach-hero' not in coach or '#kirpa-coach-journey' not in coach:
+              raise SystemExit('personal-coach.js does not render the personal snapshot and five-question journey')
           if 'KIRPA_EMPLOYEE_CONTRAST_GUARD_V1' not in coach:
               raise SystemExit('employee portal contrast guard is missing')
 
