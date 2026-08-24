@@ -1043,6 +1043,9 @@ const soloRegistry = {
       assert.ok(!html.includes(prohibited), `${prohibited} must not return to the page`);
     }
     assert.match(html, /aria-label="Kirpa Properties"/);
+    assert.ok(!html.includes('id="mention-pulse"'), 'the developer summary banner stays removed');
+    assert.ok(!html.includes('aria-label="Measurement guardrails"'), 'the guardrail strip stays removed');
+    assert.match(html, /if \(!element\) \{\s*renderMentionEvidence\(\)/, 'detailed developer evidence still renders without the removed summary');
     assert.match(html, /href="\.\/favicon\.svg"/);
     assert.match(html, /Developer mention breakdown/);
     assert.match(html, /row\.totalMentions/);
