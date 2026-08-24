@@ -2,7 +2,8 @@
   'use strict';
 
   const EXPECTED_HASH = '1d8e04f4091afdc613f852472e8a10d69f8f7829e6456111ef45c2b785aa80e2';
-  const SESSION_KEY = 'kirpa-social-auth-v1';
+  const SESSION_KEY = 'kirpa-social-auth-v2';
+  const EMPLOYEE_EMBED_KEY = 'kirpa-employee-embed-v1';
 
   const style = document.createElement('style');
   style.id = 'kirpa-auth-style';
@@ -119,7 +120,11 @@
   `;
   document.head.appendChild(style);
 
-  if (sessionStorage.getItem(SESSION_KEY) === EXPECTED_HASH) {
+  const employeeHandle = new URLSearchParams(location.search).get('employeePortal');
+  const isAuthorisedEmployeeEmbed = window.self !== window.top && employeeHandle &&
+    sessionStorage.getItem(EMPLOYEE_EMBED_KEY)?.toLowerCase() === employeeHandle.trim().toLowerCase();
+
+  if (sessionStorage.getItem(SESSION_KEY) === EXPECTED_HASH || isAuthorisedEmployeeEmbed) {
     document.documentElement.classList.remove('kirpa-auth-pending');
     return;
   }
