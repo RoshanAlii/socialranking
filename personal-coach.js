@@ -906,6 +906,53 @@
 
   const STYLE = `
     #kirpa-coach-hero *,#kirpa-coach-journey *{box-sizing:border-box}.coach-hero{margin-top:22px;padding:20px;border:1px solid var(--line,#e8ddd2);border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 12px 30px rgba(52,35,25,.08)}.coach-hero-top{display:flex;justify-content:space-between;gap:20px}.coach-eyebrow{color:var(--orange-deep,#b93614);font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.coach-hero h3{margin:6px 0 0;font:700 clamp(19px,2.4vw,28px)/1.16 Manrope,system-ui,sans-serif;letter-spacing:-.03em}.coach-hero-top p{margin:8px 0 0;color:var(--dust,#796f68);font-size:12px}.coach-data-badge{min-width:190px;padding:11px 13px;border-radius:12px;background:#f4efe9}.coach-data-badge b,.coach-data-badge span{display:block}.coach-data-badge span{margin-top:3px;color:var(--dust,#796f68);font-size:9px}.coach-data-badge.healthy{background:rgba(45,128,98,.12)}.coach-data-badge.watch{background:rgba(168,107,20,.12)}.coach-data-badge.attention{background:rgba(169,69,69,.12)}.coach-full-snapshot{margin-top:16px}.coach-full-snapshot>summary{cursor:pointer;font-size:11px;font-weight:800}.coach-snapshot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.coach-metric{min-height:91px;padding:11px;border:1px solid var(--line,#e8ddd2);border-radius:11px;background:#fff}.coach-metric span,.coach-metric b,.coach-metric small{display:block}.coach-metric span{color:var(--dust,#796f68);font-size:8px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}.coach-metric b{margin-top:7px;font-size:15px;line-height:1.2}.coach-metric small{margin-top:5px;color:var(--dust,#796f68);font-size:8px;line-height:1.35}.coach-strategy-card{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;overflow:hidden;margin-top:10px;border:1px solid var(--line,#e8ddd2);border-radius:12px;background:var(--line,#e8ddd2)}.coach-strategy-card>div{min-height:72px;padding:11px;background:var(--paper-warm,#fbf7f2)}.coach-strategy-card span,.coach-strategy-card b{display:block}.coach-strategy-card span{color:var(--dust,#796f68);font-size:8px;font-weight:800;text-transform:uppercase}.coach-strategy-card b{margin-top:5px;font-size:10px;line-height:1.4}.coach-confirmation{margin:10px 0 0!important;padding:9px 11px;border-left:3px solid var(--amber,#a86b14);background:rgba(168,107,20,.08);font-size:10px!important}.coach-journey{margin:20px 0 30px}.coach-journey-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:12px}.coach-journey-head span{color:var(--orange-deep,#b93614);font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.coach-journey-head h3{margin:4px 0 0;font:400 23px/1.1 'DM Serif Display',Georgia,serif}.coach-journey-head p{max-width:390px;margin:0;color:var(--dust,#796f68);font-size:9px;text-align:right}.coach-question-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:10px}.coach-question-nav a{display:flex;align-items:center;gap:6px;min-height:48px;padding:8px;border:1px solid var(--line,#e8ddd2);border-radius:9px;background:#fff;color:var(--ink,#171717);font-size:8px;font-weight:700;line-height:1.25;text-decoration:none}.coach-question-nav a span{display:grid;place-items:center;width:21px;height:21px;flex:0 0 auto;border-radius:50%;background:var(--orange,#f15a29);color:#fff}.coach-questions{display:grid;gap:9px}.coach-question{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:16px;border:1px solid var(--line,#e8ddd2);border-radius:14px;background:#fff;scroll-margin-top:20px}.coach-question-number{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--ink,#171717);color:#fff;font-weight:800}.coach-question h3{margin:0 0 8px;font-size:16px}.coach-question p{margin:0 0 9px;color:var(--dust,#796f68);font-size:10px}.coach-answer-line{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.coach-answer-line b{padding:5px 8px;border-radius:999px;background:rgba(45,128,98,.12);font-size:9px}.coach-answer-line b.attention{background:rgba(169,69,69,.12);color:var(--crimson,#a94545)}.coach-answer-line b.watch{background:rgba(168,107,20,.12);color:var(--amber,#a86b14)}.coach-answer-line span{color:var(--dust,#796f68);font-size:9px}.coach-facts{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.coach-facts span{padding:5px 7px;border-radius:999px;background:var(--paper-warm,#fbf7f2);color:var(--dust,#796f68);font-size:8px}.coach-question summary{cursor:pointer;font-size:9px;font-weight:800}.coach-question li{margin:4px 0;color:var(--dust,#796f68);font-size:9px}.coach-positive{margin:9px 0 0!important;font-size:9px!important}.coach-diagnosis{padding:10px 12px;border-left:3px solid var(--orange,#f15a29);background:var(--paper-warm,#fbf7f2);color:var(--ink,#171717)!important;font-size:11px!important}.coach-columns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.coach-columns>div{padding:10px;border-radius:9px;background:var(--paper-warm,#fbf7f2)}.coach-columns b,.coach-columns strong,.coach-columns span{display:block}.coach-columns strong{margin-top:6px;font-size:13px}.coach-columns span{margin-top:6px;color:var(--dust,#796f68);font-size:9px}.coach-columns ul{margin:6px 0 0;padding-left:16px}.coach-drivers{display:grid;gap:5px;margin:9px 0 0;padding:0;list-style:none}.coach-drivers li{display:flex;justify-content:space-between;gap:10px;margin:0;padding:8px 9px;border-radius:8px;background:var(--paper-warm,#fbf7f2)}.coach-drivers li.up{border-left:3px solid var(--emerald,#2d8062)}.coach-drivers li.down{border-left:3px solid var(--crimson,#a94545)}.coach-actions{display:grid;gap:8px;margin-top:11px}.coach-action{padding:13px;border:1px solid var(--line,#e8ddd2);border-radius:12px;background:var(--paper-warm,#fbf7f2)}.coach-action-head{display:flex;gap:5px;flex-wrap:wrap}.coach-action-head span{padding:4px 6px;border-radius:999px;background:#fff;color:var(--dust,#796f68);font-size:7px;font-weight:800;text-transform:uppercase}.coach-action-head .coach-priority{background:var(--orange,#f15a29);color:#fff}.coach-action h4{margin:9px 0 5px;font-size:13px}.coach-action-detail{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.coach-action-detail>div{padding:8px;border-radius:8px;background:#fff}.coach-action-detail ul,.coach-action-detail ol{margin:5px 0 0;padding-left:16px}.coach-success{display:grid;gap:3px;margin-top:9px;padding:8px 9px;border-radius:8px;background:#fff}.coach-success b{font-size:8px;text-transform:uppercase}.coach-success span{font-size:9px}.coach-success small{color:var(--dust,#796f68);font-size:7px}.coach-action-controls{display:flex;gap:6px;margin-top:8px}.coach-action-controls button{padding:7px 8px;border:1px solid var(--line,#e8ddd2);border-radius:8px;background:#fff;font-size:8px;font-weight:800;cursor:pointer}.coach-action-controls button[aria-pressed=true]{border-color:var(--orange,#f15a29);background:rgba(241,90,41,.1)}.coach-storage-note{font-size:8px!important}.coach-empty-review{display:grid;gap:4px;padding:11px;border-radius:9px;background:var(--paper-warm,#fbf7f2)}.coach-empty-review span{color:var(--dust,#796f68);font-size:9px}.coach-review-list{display:grid;gap:6px}.coach-review{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:9px;border-radius:9px;background:var(--paper-warm,#fbf7f2);border-left:3px solid var(--dust,#796f68)}.coach-review.healthy{border-color:var(--emerald,#2d8062)}.coach-review.watch{border-color:var(--amber,#a86b14)}.coach-review.attention{border-color:var(--crimson,#a94545)}.coach-review span,.coach-review b{display:block}.coach-review span{color:var(--dust,#796f68);font-size:7px;text-transform:uppercase}.coach-review b,.coach-review strong{font-size:9px}.coach-review p{grid-column:1/-1;margin:0;font-size:8px}.coach-storage-note{font-size:8px!important}@media(max-width:900px){.coach-snapshot-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.coach-question-nav{grid-template-columns:1fr}.coach-hero-top,.coach-journey-head{flex-direction:column;align-items:stretch}.coach-data-badge{min-width:0}.coach-journey-head p{text-align:left}}@media(max-width:620px){.coach-hero{padding:14px}.coach-snapshot-grid,.coach-strategy-card,.coach-columns,.coach-action-detail{grid-template-columns:1fr}.coach-question{grid-template-columns:1fr}.coach-review{grid-template-columns:1fr}.coach-review p{grid-column:auto}}
+
+    /* KIRPA_EMPLOYEE_CONTRAST_GUARD_V1
+     * The coach hero is injected inside the dark analytics header. Every light
+     * surface therefore needs its own foreground colour rather than inheriting
+     * white text from .analytics-hero.
+     */
+    #kirpa-coach-hero,
+    #kirpa-coach-hero .coach-hero,
+    #kirpa-coach-hero .coach-metric,
+    #kirpa-coach-hero .coach-strategy-card > div,
+    #kirpa-coach-hero .coach-data-badge,
+    #kirpa-coach-hero .coach-confirmation,
+    #kirpa-coach-journey,
+    #kirpa-coach-journey .coach-question,
+    #kirpa-coach-journey .coach-action,
+    #kirpa-coach-journey .coach-action-detail > div,
+    #kirpa-coach-journey .coach-success,
+    #kirpa-coach-journey .coach-columns > div,
+    #kirpa-coach-journey .coach-drivers li,
+    #kirpa-coach-journey .coach-review,
+    #kirpa-coach-journey .coach-empty-review {
+      color: var(--ink, #171717);
+    }
+    #kirpa-coach-hero h3,
+    #kirpa-coach-hero h4,
+    #kirpa-coach-hero b,
+    #kirpa-coach-hero strong,
+    #kirpa-coach-hero summary,
+    #kirpa-coach-hero p,
+    #kirpa-coach-journey h3,
+    #kirpa-coach-journey h4,
+    #kirpa-coach-journey b,
+    #kirpa-coach-journey strong,
+    #kirpa-coach-journey summary {
+      color: var(--ink, #171717);
+    }
+    #kirpa-coach-hero .coach-data-badge span,
+    #kirpa-coach-hero .coach-metric span,
+    #kirpa-coach-hero .coach-metric small,
+    #kirpa-coach-hero .coach-strategy-card span {
+      color: var(--dust, #796f68);
+    }
+    #kirpa-coach-journey .coach-question-number,
+    #kirpa-coach-journey .coach-action-head .coach-priority {
+      color: #fff;
+    }
+
   `;
 
   let activeHandle = null;
