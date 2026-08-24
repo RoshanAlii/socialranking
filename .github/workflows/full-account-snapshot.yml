@@ -33,30 +33,8 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Apply deterministic visibility migration in the workspace
-        run: python scripts/employee_portal_quality.py --fix
-
       - name: Check personal coach syntax
         run: node --check personal-coach.js
 
-      - name: Verify one authoritative snapshot implementation
-        shell: python
-        run: |
-          from pathlib import Path
-
-          index = Path('index.html').read_text(encoding='utf-8')
-          coach = Path('personal-coach.js').read_text(encoding='utf-8')
-
-          required = '<script src="./personal-coach.js"></script>'
-          obsolete = '<script src="./account-coach-snapshot-ui.js"></script>'
-
-          if required not in index:
-              raise SystemExit('index.html does not load personal-coach.js')
-          if obsolete in index:
-              raise SystemExit('obsolete snapshot enhancer is still loaded and can override coach styles')
-          if '#kirpa-coach-hero' not in coach or '#kirpa-coach-journey' not in coach:
-              raise SystemExit('personal-coach.js does not render the personal snapshot and five-question journey')
-          if 'KIRPA_EMPLOYEE_CONTRAST_GUARD_V1' not in coach:
-              raise SystemExit('employee portal contrast guard is missing')
-
-          print('Personal snapshot and contrast checks passed.')
+      - name: Validate committed portal structure and snapshot accuracy
+        run: python scripts/employee_portal_quality.py --check --no-report

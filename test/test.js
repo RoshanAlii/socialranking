@@ -1027,6 +1027,16 @@ const soloRegistry = {
     assert.match(html, /const usageCandidates = \[/, 'fresh console observations must be considered alongside refresh telemetry');
     assert.match(html, /Date\.parse\(b\.observedAt/, 'the spend card must select the freshest telemetry source');
   });
+  await test('full account snapshot CI validates committed structure without self-repair or copy matching', () => {
+    const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'full-account-snapshot.yml'), 'utf8');
+    const quality = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'employee_portal_quality.py'), 'utf8');
+    assert.match(workflow, /employee_portal_quality\.py --check --no-report/);
+    assert.ok(!workflow.includes('--fix'), 'validation must not repair a broken commit inside the runner');
+    assert.ok(!workflow.includes('Complete personal snapshot'), 'display copy must not be a CI contract');
+    assert.match(quality, /personalSnapshotHeroPresent/);
+    assert.match(quality, /fiveQuestionJourneyPresent/);
+    assert.match(quality, /--no-report/);
+  });
   await test('dashboard feedback safeguards stay visible and prohibited placeholders stay absent', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
     for (const prohibited of ['Preview unavailable', 'Apify monthly soft spend warning', 'Not ranked yet', 'Unranked — insufficient comparable data', 'No valid weekly baseline is attached']) {
