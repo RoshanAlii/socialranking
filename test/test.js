@@ -1039,6 +1039,8 @@ const soloRegistry = {
   });
   await test('dashboard feedback safeguards stay visible and prohibited placeholders stay absent', () => {
     const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+    const accessGate = fs.readFileSync(path.join(__dirname, '..', 'access-gate.js'), 'utf8');
+    const accounts = fs.readFileSync(path.join(__dirname, '..', 'accounts', 'index.html'), 'utf8');
     for (const prohibited of ['Preview unavailable', 'Apify monthly soft spend warning', 'Not ranked yet', 'Unranked — insufficient comparable data', 'No valid weekly baseline is attached']) {
       assert.ok(!html.includes(prohibited), `${prohibited} must not return to the page`);
     }
@@ -1050,6 +1052,11 @@ const soloRegistry = {
     assert.match(html, /aria-label="Dashboard access"/);
     assert.match(html, /href="\.\/visibility\/">Visibility board<\/a>/);
     assert.match(html, /href="\.\/accounts\/">Individual accounts<\/a>/);
+    assert.match(accessGate, /EXPECTED_HASH = '1d8e04f4091afdc613f852472e8a10d69f8f7829e6456111ef45c2b785aa80e2'/, 'the main gate accepts Kirpa');
+    assert.match(accessGate, /SESSION_KEY = 'kirpa-social-auth-v2'/, 'prior dashboard sessions are invalidated');
+    assert.match(accessGate, /window\.self !== window\.top/, 'employee bypass is restricted to the embedded personal view');
+    assert.match(accounts, /sessionStorage\.setItem\(EMPLOYEE_EMBED_KEY,p\.handle\)/, 'personal portals authorize only their matching embed');
+    assert.ok(!accounts.includes("sessionStorage.setItem('kirpa-social-auth-v2'"), 'personal portal passwords must not unlock the main board');
     assert.match(html, /Developer mention breakdown/);
     assert.match(html, /row\.totalMentions/);
     assert.match(html, /slice\(0, 3\)/, 'record cards retain the first three results');
