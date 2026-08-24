@@ -47,6 +47,11 @@ def read_json(path: Path, default: Any) -> Any:
         return default
 
 
+def has_element_id(text: str, element_id: str) -> bool:
+    """Match a rendered element id without coupling CI to quote style or UI copy."""
+    return bool(re.search(rf"\bid\s*=\s*(['\"])({re.escape(element_id)})\1", text))
+
+
 def canonical_handle(value: Any) -> str:
     return str(value or "").strip().lstrip("@").lower()
 
@@ -498,6 +503,8 @@ def build_report() -> dict[str, Any]:
             "contrastGuardInstalled": CONTRAST_MARKER in coach_text,
             "personalCoachLoaded": PERSONAL_COACH_TAG in index_text,
             "obsoleteSnapshotEnhancerLoaded": OBSOLETE_SNAPSHOT_TAG in index_text,
+            "personalSnapshotHeroPresent": has_element_id(coach_text, "kirpa-coach-hero"),
+            "fiveQuestionJourneyPresent": has_element_id(coach_text, "kirpa-coach-journey"),
             "isolationModel": "same-origin iframe plus visual DOM isolation",
         },
         "snapshot": {
@@ -645,6 +652,10 @@ def validate(report: dict[str, Any]) -> list[str]:
         errors.append("obsolete account-coach-snapshot-ui.js loader is still present")
     if not portal["personalCoachLoaded"]:
         errors.append("personal-coach.js is not loaded by index.html")
+    if not portal["personalSnapshotHeroPresent"]:
+        errors.append("personal-coach.js does not render the personal snapshot hero")
+    if not portal["fiveQuestionJourneyPresent"]:
+        errors.append("personal-coach.js does not render the five-question journey")
     if accuracy["portalIdentityAccuracyPct"] != 100.0:
         errors.append(f"portal identity accuracy is {accuracy['portalIdentityAccuracyPct']}%, expected 100%")
     if accuracy["physicalRouteCoveragePct"] != 100.0:
@@ -660,12 +671,14 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fix", action="store_true", help="Apply contrast and loader fixes before auditing")
     parser.add_argument("--check", action="store_true", help="Fail when mandatory quality gates are not met")
+    parser.add_argument("--no-report", action="store_true", help="Validate without rewriting generated audit reports")
     args = parser.parse_args()
 
     changes = apply_visibility_fix() if args.fix else []
     report = build_report()
-    write_text(ROOT / "data" / "employee-accuracy-report.json", json.dumps(report, indent=2, ensure_ascii=False) + "\n")
-    write_text(ROOT / "EMPLOYEE_ACCURACY_REPORT.md", markdown_report(report))
+    if not args.no_report:
+        write_text(ROOT / "data" / "employee-accuracy-report.json", json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+        write_text(ROOT / "EMPLOYEE_ACCURACY_REPORT.md", markdown_report(report))
 
     for change in changes:
         print(f"[employee-quality] fixed: {change}")
