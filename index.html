@@ -114,6 +114,46 @@
       justify-content: space-between;
       gap: 24px;
     }
+    .command-meta {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      min-width: 0;
+    }
+    .command-access {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .access-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 14px;
+      border: 1px solid rgba(23, 23, 23, .32);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, .3);
+      box-shadow: 0 5px 16px rgba(23, 23, 23, .08);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .035em;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .access-link:first-child {
+      border-color: var(--ink);
+      color: #fff;
+      background: var(--ink);
+    }
+    .access-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(23, 23, 23, .16);
+    }
+    .access-link:active { transform: translateY(0); }
     .brand {
       display: flex;
       align-items: center;
@@ -1924,6 +1964,7 @@
       .main,
       .footer-inner { width: min(100% - 28px, 1240px); }
       .command-top { align-items: flex-start; }
+      .command-meta { align-items: flex-end; flex-direction: column; }
       .command-row { align-items: flex-start; flex-direction: column; margin-top: 23px; }
       .platforms { justify-content: flex-start; }
       .kpis { grid-template-columns: repeat(2, 1fr); }
@@ -1965,11 +2006,14 @@
     @media (max-width: 620px) {
       .command { min-height: 238px; }
       .command-inner { padding-top: 17px; }
-      .command-top { gap: 12px; }
+      .command-top { align-items: stretch; flex-direction: column; gap: 14px; }
+      .command-meta { align-items: stretch; flex-direction: column; gap: 9px; }
+      .command-access { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+      .access-link { min-height: 42px; padding-inline: 10px; font-size: 9px; }
       .brand-mark { width: 112px; height: 37px; }
       .brand-name { font-size: 14px; }
       .brand-sub { font-size: 8px; }
-      .stamp { min-width: 0; max-width: 145px; font-size: 9px; }
+      .stamp { min-width: 0; max-width: none; text-align: left; font-size: 9px; }
       .source-status { font-size: 7px; }
       .command-title { font-size: 31px; }
       .platform { padding-inline: 10px; }
@@ -2295,8 +2339,14 @@
             <div class="brand-sub">Properties · Social performance</div>
           </div>
         </div>
-        <div class="stamp" id="stamp" aria-live="polite">
-          <span class="source-status warning"><span class="status-dot"></span>Loading snapshot</span>
+        <div class="command-meta">
+          <nav class="command-access" aria-label="Dashboard access">
+            <a class="access-link" href="./visibility/">Visibility board</a>
+            <a class="access-link" href="./accounts/">Individual accounts</a>
+          </nav>
+          <div class="stamp" id="stamp" aria-live="polite">
+            <span class="source-status warning"><span class="status-dot"></span>Loading snapshot</span>
+          </div>
         </div>
       </div>
 
