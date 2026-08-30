@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "outcome": "partial",
-  "attemptedAt": "2026-08-15T09:47:46Z",
-  "lastSuccessfulAt": "2026-08-15T09:47:46Z",
+  "attemptedAt": "2026-08-30T08:19:56Z",
+  "lastSuccessfulAt": "2026-08-30T08:19:56Z",
   "reason": null,
-  "processingCoverage": 0.9016,
-  "failedReels": 24
+  "processingCoverage": 0.8971,
+  "failedReels": 50
 }
