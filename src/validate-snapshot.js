@@ -18,7 +18,21 @@ function closeEnough(a, b, epsilon = 1e-12) {
     typeof b === 'number' && Number.isFinite(b) &&
     Math.abs(a - b) <= epsilon;
 }
-function sameJson(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
+function sameJson(a, b) {
+  if (Object.is(a, b) || closeEnough(a, b)) return true;
+  if (Array.isArray(a) || Array.isArray(b)) {
+    return Array.isArray(a) && Array.isArray(b) && a.length === b.length &&
+      a.every((value, index) => sameJson(value, b[index]));
+  }
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const aKeys = Object.keys(a).sort();
+    const bKeys = Object.keys(b).sort();
+    return aKeys.length === bKeys.length && aKeys.every((key, index) => (
+      key === bKeys[index] && sameJson(a[key], b[key])
+    ));
+  }
+  return false;
+}
 function recordKey(record) { return `${record.name}::${record.platform}::${record.handle || ''}`; }
 
 function validateSnapshot(snapshot, registry, opts = {}) {
@@ -306,6 +320,16 @@ function main() {
   const seriesPath = path.join(root, 'data', 'series.json');
   const series = fs.existsSync(seriesPath) ? JSON.parse(fs.readFileSync(seriesPath, 'utf8')) : null;
   const replay = process.argv.includes('--replay');
+  const rawDirIndex = process.argv.indexOf('--raw-dir');
+  const suppliedRawDir = rawDirIndex >= 0 ? process.argv[rawDirIndex + 1] : null;
+  if (rawDirIndex >= 0 && !suppliedRawDir) throw new Error('--raw-dir requires a directory path');
+  const rawDir = suppliedRawDir ? path.resolve(suppliedRawDir) : path.join(root, 'data', 'raw');
+  // A live candidate is checked against the just-captured data/raw directory
+  // before stamping. A published snapshot has no committed raw payloads, so a
+  // normal audit validates every derivation without accidentally reading an
+  // unrelated local capture. Pass --raw-dir with the quarantined artifact to
+  // repeat the full source-to-record audit after publication.
+  const validateRaw = !replay && (process.argv.includes('--stamp') || Boolean(suppliedRawDir));
   const summary = validateSnapshot(snapshot, registry, {
     baselineRecords,
     series,
@@ -315,8 +339,8 @@ function main() {
     // derivation, roster join and series point without assuming that a local
     // raw directory belongs to the same capture. Live candidates still require
     // and re-normalize their exact raw evidence before publication.
-    rawExists: replay ? () => true : (_record, filename) => fs.existsSync(path.join(root, 'data', 'raw', filename)),
-    rawLoader: replay ? null : (_record, filename) => JSON.parse(fs.readFileSync(path.join(root, 'data', 'raw', filename), 'utf8')),
+    rawExists: validateRaw ? (_record, filename) => fs.existsSync(path.join(rawDir, filename)) : () => true,
+    rawLoader: validateRaw ? (_record, filename) => JSON.parse(fs.readFileSync(path.join(rawDir, filename), 'utf8')) : null,
   });
 
   if (process.argv.includes('--stamp')) {
