@@ -12,7 +12,7 @@ const SERIES = require('../src/series');
 const { run, buildPeople, runBrandAccounts, loadWeeklyBaseline, SHORT_WINDOW_DAYS } = require('../src/ingest');
 const ROSTER = require('../src/roster');
 const { buildDigest } = require('../src/digest');
-const { validateSnapshot } = require('../src/validate-snapshot');
+const { validateSnapshot, sameJson } = require('../src/validate-snapshot');
 const { rebuildDerived } = require('../src/rebuild-derived');
 const U = require('../src/usage');
 const POST_CACHE = require('../src/post-cache');
@@ -463,6 +463,10 @@ const soloRegistry = {
     const snapshot = snapshotFor([rec()], soloRegistry);
     const summary = validateSnapshot(snapshot, soloRegistry, { now, maxAgeHours: null, rawExists: () => true });
     assert.strictEqual(summary.cadenceRowsCrosschecked, 1);
+  });
+  await test('snapshot comparisons tolerate machine-level float noise but reject material changes', () => {
+    assert.strictEqual(sameJson({ growth: 0.049370593980275546 }, { growth: 0.04937059398027577 }), true);
+    assert.strictEqual(sameJson({ growth: 0.049370593980275546 }, { growth: 0.049371593980275546 }), false);
   });
   await test('validator catches a tampered cadence value', () => {
     const snapshot = snapshotFor([rec()], soloRegistry);
