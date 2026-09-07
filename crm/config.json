@@ -1,0 +1,8 @@
+{
+  "portal": "kirpa.bitrix24.com",
+  "appPath": null,
+  "originators": {"instagram-ai-guy-kirpa": "ai_guy.kirpa"},
+  "sources": {},
+  "qualifiedStages": [],
+  "notes": "Only evidence-backed source mappings belong here. Assigned agent is not creator attribution. Stage IDs must be reviewed against the live portal."
+}

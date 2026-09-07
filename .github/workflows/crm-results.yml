@@ -1,0 +1,20 @@
+name: CRM social results checks
+on:
+  pull_request:
+    paths: ['crm/**', 'test/crm.test.js', 'scripts/package-crm.js', '.github/workflows/crm-results.yml']
+  push:
+    branches: [main]
+    paths: ['crm/**', 'test/crm.test.js', 'scripts/package-crm.js', '.github/workflows/crm-results.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: node --check crm/client.js
+      - run: node test/crm.test.js
+      - run: node scripts/package-crm.js
