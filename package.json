@@ -1,0 +1,6 @@
+{
+  "name": "kirpa-socialranking",
+  "private": true,
+  "scripts": {"build": "vite build", "test:crm": "node test/crm.test.js && node --test test/crm-api.test.mjs", "db:generate": "drizzle-kit generate"},
+  "devDependencies": {"vite": "8.0.13", "@openai/sites-vite-plugin": "0.2.0", "drizzle-kit": "0.31.4", "drizzle-orm": "0.44.5"}
+}

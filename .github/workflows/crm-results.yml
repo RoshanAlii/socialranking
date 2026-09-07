@@ -1,10 +1,10 @@
 name: CRM social results checks
 on:
   pull_request:
-    paths: ['crm/**', 'test/crm.test.js', 'scripts/package-crm.js', '.github/workflows/crm-results.yml']
+    paths: ['crm/**', 'server/**', 'db/**', 'drizzle/**', 'test/crm*', 'package*.json', 'vite.config.mjs', 'index.html', 'access-gate.js', '.github/workflows/crm-results.yml']
   push:
     branches: [main]
-    paths: ['crm/**', 'test/crm.test.js', 'scripts/package-crm.js', '.github/workflows/crm-results.yml']
+    paths: ['crm/**', 'server/**', 'db/**', 'drizzle/**', 'test/crm*', 'package*.json', 'vite.config.mjs', 'index.html', 'access-gate.js', '.github/workflows/crm-results.yml']
 permissions:
   contents: read
 jobs:
@@ -15,6 +15,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '24'
-      - run: node --check crm/client.js
-      - run: node test/crm.test.js
-      - run: node scripts/package-crm.js
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:crm
+      - run: node --check crm/dashboard.js && node --check crm/secure.js

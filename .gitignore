@@ -2,3 +2,9 @@ data/raw/
 .DS_Store
 __pycache__/
 *.py[cod]
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+.wrangler/
