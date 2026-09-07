@@ -56,7 +56,7 @@ test('opted-out or unconfirmed roster accounts excluded',()=>assert.equal(M.rost
 test('invalid CRM IDs fail closed',()=>assert.throws(()=>prepare([{ID:'javascript:alert(1)'}])));
 const fs=require('node:fs');
 test('private client has no mutation calls or persistent CRM storage',()=>{
- const src=fs.readFileSync(require.resolve('../crm/client.js'),'utf8');
+ const src=fs.readFileSync(require.resolve('../crm/dashboard.js'),'utf8');
  assert.doesNotMatch(src,/(?:localStorage|sessionStorage|indexedDB|sendBeacon|\.update['"]|\.add['"]|\.delete['"])/);
  assert.doesNotMatch(src,/['"](?:PHONE|EMAIL|NAME|LAST_NAME|OPPORTUNITY)['"]/);
 });
