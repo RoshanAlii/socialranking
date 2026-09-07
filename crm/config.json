@@ -2,7 +2,7 @@
   "portal": "kirpa.bitrix24.com",
   "appPath": null,
   "originators": {"instagram-ai-guy-kirpa": "ai_guy.kirpa"},
-  "sources": {},
+  "sources": {"18": "jai.kirpa"},
   "qualifiedStages": [],
-  "notes": "Only evidence-backed source mappings belong here. Assigned agent is not creator attribution. Stage IDs must be reviewed against the live portal."
+  "notes": "Source 18 verified in the live portal on 2026-09-07 as Insta DM - Dr Jai, matched to the confirmed jai.kirpa roster handle. Generic forms, email, company social DMs and non-roster accounts are not assigned to Instagram creators. Assigned agent is not creator attribution."
 }

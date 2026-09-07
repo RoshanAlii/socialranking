@@ -22,6 +22,8 @@ test('mention in social prose needs review',()=>assert.equal(M.attribute({COMMEN
 test('substring matches are rejected',()=>assert.equal(M.attribute({COMMENTS:'Instagram @nota.kirpa'},people).candidates.length,0));
 test('structured conflicts need review',()=>assert.equal(M.attribute(lead(1,{SOURCE_ID:'sourceB'}),people,{},config).status,'needs_review'));
 test('generic Instagram source stays unattributed',()=>assert.equal(M.attribute({SOURCE_ID:'IG'},people,{IG:'Instagram'}).status,'unattributed'));
+test('Insta DM source without confirmed roster mapping stays unattributed',()=>assert.equal(M.attribute({SOURCE_ID:'IG'},people,{IG:'Insta DM - unknown.kirpa'}).status,'unattributed'));
+test('live Dr Jai source maps only to his confirmed roster handle',()=>{const config=require('../crm/config.json'),people=M.roster(require('../handles.json'));assert.equal(M.attribute({SOURCE_ID:'18'},people,{},config).creator,'jai.kirpa');assert.equal(M.attribute({SOURCE_ID:'16'},people,{'16':'Insta DM - ai_guy.kirpa'},config).status,'unattributed');});
 test('unknown originator cannot confirm attribution',()=>assert.equal(M.attribute({ORIGINATOR_ID:'invented'},people,{},config).status,'unknown'));
 test('same lead ID is counted once',()=>assert.equal(summary(prepare([lead(1),lead(1)])).leads,1));
 test('known repeat capture origin merged and deal aliases retained',()=>{

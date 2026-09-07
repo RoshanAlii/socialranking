@@ -7,7 +7,7 @@
   const text = value => String(value ?? '').trim();
   const norm = value => text(value).toLowerCase();
   const handle = value => norm(value).replace(/^@/, '');
-  const social = value => /\b(instagram|personal social|social media|instagram lead summary)\b/i.test(text(value));
+  const social = value => /\b(instagram|insta\s+dm|personal social|social media|instagram lead summary)\b/i.test(text(value));
   const escape = value => text(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function roster(registry) {
     return [

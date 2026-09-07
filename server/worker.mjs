@@ -2,7 +2,7 @@ import M from '../crm/metrics.js';
 import registry from '../handles.json';
 import config from '../crm/config.json';
 
-const people=M.roster(registry), DAY=86400000, HOUR=3600000;
+const people=M.roster(registry), DAY=86400000, HOUR=3600000, DEFINITIONS_VERSION=2;
 const leadFields=['ID','DATE_CREATE','DATE_MODIFY','SOURCE_ID','SOURCE_DESCRIPTION','COMMENTS','ORIGINATOR_ID','ORIGIN_ID','ASSIGNED_BY_ID','STATUS_ID','UF_CRM_1755148569691','UF_CRM_1755515975693'];
 const dealFields=['ID','LEAD_ID','DATE_CREATE','DATE_MODIFY','CLOSEDATE','STAGE_ID','STAGE_SEMANTIC_ID','ASSIGNED_BY_ID'];
 const methods=new Set(['crm.lead.list','crm.deal.list','crm.status.list','crm.timeline.comment.list']);
@@ -62,7 +62,7 @@ export async function bitrix(env,method,params={}){
   throw new Error('CRM result exceeds the safe limit; no partial totals published');
 }
 async function chunks(env,ids,method,field,select){const result=[];for(let i=0;i<ids.length;i+=50)result.push(...await bitrix(env,method,{filter:{[`@${field}`]:ids.slice(i,i+50)},select,order:{ID:'ASC'}}));return result;}
-export function sanitize(prepared){return {duplicateImports:prepared.duplicateImports,leads:prepared.leads.map(l=>({ID:l.ID,DATE_CREATE:l.DATE_CREATE,STATUS_ID:l.STATUS_ID,ASSIGNED_BY_ID:l.ASSIGNED_BY_ID,attribution:l.attribution})),deals:prepared.deals.map(d=>({ID:d.ID,LEAD_ID:d.LEAD_ID,canonicalLeadId:d.canonicalLeadId,CLOSEDATE:d.CLOSEDATE,STAGE_SEMANTIC_ID:d.STAGE_SEMANTIC_ID,ASSIGNED_BY_ID:d.ASSIGNED_BY_ID}))};}
+export function sanitize(prepared){return {duplicateImports:prepared.duplicateImports,leads:prepared.leads.map(l=>({ID:l.ID,DATE_CREATE:l.DATE_CREATE,SOURCE_ID:l.SOURCE_ID,STATUS_ID:l.STATUS_ID,ASSIGNED_BY_ID:l.ASSIGNED_BY_ID,attribution:l.attribution})),deals:prepared.deals.map(d=>({ID:d.ID,LEAD_ID:d.LEAD_ID,canonicalLeadId:d.canonicalLeadId,CLOSEDATE:d.CLOSEDATE,STAGE_SEMANTIC_ID:d.STAGE_SEMANTIC_ID,ASSIGNED_BY_ID:d.ASSIGNED_BY_ID}))};}
 async function capture(env,month){
   try{
     const window=M.monthWindow(month),asOf=Date.now();
@@ -75,7 +75,7 @@ async function capture(env,month){
     const missing=[...new Set(closed.map(d=>String(d.LEAD_ID)).filter(id=>/^\d+$/.test(id)&&id!=='0'&&!known.has(id)))];
     leads.push(...await chunks(env,missing,'crm.lead.list','ID',leadFields));
     const prepared=M.prepare({leads,deals:[...cohortDeals,...closed],people,sources,config});
-    const payload={prepared:sanitize(prepared),people,window,asOf,completed:new Date().toISOString(),config:{qualifiedStages:config.qualifiedStages},definitionsVersion:1};
+    const payload={prepared:sanitize(prepared),people,window,asOf,completed:new Date().toISOString(),config:{qualifiedStages:config.qualifiedStages},definitionsVersion:DEFINITIONS_VERSION};
     await db(env).batch([
       db(env).prepare('INSERT INTO reports(month,payload,captured) VALUES (?,?,?) ON CONFLICT(month) DO UPDATE SET payload=excluded.payload,captured=excluded.captured').bind(month,JSON.stringify(payload),Date.now()),
       db(env).prepare('UPDATE refresh_locks SET status=?,expires=?,error=NULL WHERE month=?').bind('complete',Date.now()+15*60000,month)
@@ -117,9 +117,10 @@ export async function handle(request,env,ctx){
     if(Date.parse(window.start)>Date.now()||Date.parse(window.start)<Date.now()-2*365*DAY)return reply({error:'Choose a month within the last two years'},400);
     const saved=await db(env).prepare('SELECT payload,captured FROM reports WHERE month=?').bind(month).first();
     let job=await db(env).prepare('SELECT status,expires,error FROM refresh_locks WHERE month=?').bind(month).first();
-    const shouldRefresh=request.method==='POST'||!saved||Date.now()-saved.captured>6*HOUR;
-    if(shouldRefresh&&(!job||job.expires<Date.now())){
-      const lock=await db(env).prepare('INSERT INTO refresh_locks(month,expires,status,error) VALUES (?,?,?,NULL) ON CONFLICT(month) DO UPDATE SET expires=excluded.expires,status=excluded.status,error=NULL WHERE refresh_locks.expires<? RETURNING month').bind(month,Date.now()+10*60000,'running',Date.now()).first();
+    const changed=saved&&JSON.parse(saved.payload).definitionsVersion!==DEFINITIONS_VERSION;
+    const shouldRefresh=request.method==='POST'||!saved||changed||Date.now()-saved.captured>6*HOUR;
+    if(shouldRefresh&&(!job||job.expires<Date.now()||(changed&&job.status==='complete'))){
+      const lock=await db(env).prepare("INSERT INTO refresh_locks(month,expires,status,error) VALUES (?,?,?,NULL) ON CONFLICT(month) DO UPDATE SET expires=excluded.expires,status=excluded.status,error=NULL WHERE refresh_locks.expires<? OR (refresh_locks.status='complete' AND ?=1) RETURNING month").bind(month,Date.now()+10*60000,'running',Date.now(),changed?1:0).first();
       if(lock){
         // Keep the request alive while fetching. Worker waitUntil is only a
         // short post-response grace period, not a durable job runner.
