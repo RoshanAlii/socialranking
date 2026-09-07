@@ -48,7 +48,7 @@ export async function bitrix(env,method,params={}){
       const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...params,start}),redirect:'error',signal:AbortSignal.timeout(25000)});
       data=await r.json();
       if(r.status===429||data.error==='QUERY_LIMIT_EXCEEDED'){await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1)));continue;}
-      if(!r.ok||data.error||!Array.isArray(data.result))throw new Error('CRM read failed; check connection permissions');
+      if(!r.ok||data.error||!Array.isArray(data.result))throw Object.assign(new Error('CRM read failed; check connection permissions'),{safeCode:/^[a-zA-Z0-9_]{1,64}$/.test(data.error||'')?data.error:`CRM_HTTP_${r.status}`});
       break;
     }
     if(!Array.isArray(data?.result))throw new Error('CRM rate limit; retry later');
@@ -138,4 +138,8 @@ export async function handle(request,env,ctx){
   }
   return reply({error:'Not found'},404);
 }
-export default {async fetch(request,env,ctx){try{return await handle(request,env,ctx);}catch{return response({error:'CRM service temporarily unavailable. Saved data has not been replaced.'},503,request.headers.get('Origin')===env.ALLOWED_ORIGIN?env.ALLOWED_ORIGIN:'');}}};
+export default {async fetch(request,env,ctx){try{return await handle(request,env,ctx);}catch(error){
+  // Only static error codes/names: never payloads, authorization, URLs or keys.
+  console.error('CRM_OPERATION_FAILED',error.safeCode||error.name||'UnknownError');
+  return response({error:'CRM service temporarily unavailable. Saved data has not been replaced.',code:error.safeCode||'CRM_OPERATION_FAILED'},503,request.headers.get('Origin')===env.ALLOWED_ORIGIN?env.ALLOWED_ORIGIN:'');
+}}};
