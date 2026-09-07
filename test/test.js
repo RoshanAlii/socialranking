@@ -215,7 +215,7 @@ const soloRegistry = {
       ];
       return [rawPost(1), rawPost(2, { id: 'b-2', ownerUsername: 'b' })];
     };
-    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
+    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1, capturedAt: now });
     const result = await provider.fetchProfiles('instagram', ['a', 'b']);
     const raw = result.get('a');
     assert.strictEqual(raw.followersCount, 1000);
@@ -286,7 +286,7 @@ const soloRegistry = {
           latestPosts: [rawPost(1), rawPost(2, { id: 'foreign', ownerUsername: 'other' })],
         }]
       : [];
-    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
+    const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1, capturedAt: now });
     const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
     assert.deepStrictEqual(raw.recentPosts.map(row => row.id), ['p1']);
     assert.strictEqual(raw._profileFallbackPostCount, 1);

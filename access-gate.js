@@ -180,16 +180,19 @@
       button.disabled = true;
       button.textContent = 'Checking…';
       try {
-        const candidate = await sha256(input.value);
-        if (candidate === EXPECTED_HASH) {
+        const verified = window.KirpaSecure
+          ? await window.KirpaSecure.login(input.value)
+          : (await sha256(input.value)) === EXPECTED_HASH;
+        if (verified) {
+          input.value = '';
           unlock();
           return;
         }
         input.value = '';
         error.textContent = 'Incorrect password. Please try again.';
         input.focus();
-      } catch (_) {
-        error.textContent = 'Unable to verify the password in this browser.';
+      } catch (failure) {
+        error.textContent = failure.message || 'Unable to verify the password. Please try again.';
       } finally {
         button.disabled = false;
         button.textContent = 'Access';
