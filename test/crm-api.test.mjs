@@ -25,6 +25,17 @@ test('brute-force login is limited across requests',async()=>{const env=await en
 test('unexpected origins cannot call the service',async()=>{const r=await handle(req('/session',{method:'POST',headers:{Origin:'https://attacker.example'},body:'{}'}),await environment(),ctx);assert.equal(r.status,403);assert.equal(r.headers.get('Access-Control-Allow-Origin'),null);});
 test('setup requires owner identity and same-origin submission',async()=>{const env=await environment();assert.equal((await handle(req('/setup'),env,ctx)).status,302);assert.equal((await handle(req('/setup',{headers:{'oai-authenticated-user-email':'other@example.com'}}),env,ctx)).status,403);assert.equal((await handle(req('/setup',{method:'POST',headers:{'oai-authenticated-user-email':'owner@example.com',Origin:'https://attacker.example'}}),env,ctx)).status,403);});
 test('connection key is encrypted with separate environment key',async()=>{const key='a1'.repeat(32),value='private-value';const sealed=await seal(value,key);assert.ok(!sealed.includes(value));assert.equal(await unseal(sealed,key),value);await assert.rejects(unseal(sealed,'b2'.repeat(32)));});
+test('owner setup accepts an expiring CSRF token and stores only encrypted credentials',async()=>{
+  const env=await environment(),headers={'oai-authenticated-user-email':'owner@example.com',Origin:'null'},originalFetch=globalThis.fetch;
+  const page=await (await handle(req('/setup',{headers}),env,ctx)).text();
+  const csrf=page.match(/name="csrf" value="([^"]+)"/)[1];
+  const value='https://kirpa.bitrix24.com/rest/1/testonly/';
+  globalThis.fetch=async()=>new Response(JSON.stringify({result:[]}));
+  try{const result=await handle(req('/setup',{method:'POST',headers,body:new URLSearchParams({csrf,webhook:value})}),env,ctx);
+    assert.equal(result.status,200);assert.match(await result.text(),/verified and saved/);
+    const saved=env.DB.sql.prepare('SELECT cipher FROM connection_secrets').get();assert.ok(!saved.cipher.includes(value));assert.equal(await unseal(saved.cipher,env.CRM_SECRET_KEY),value);
+  }finally{globalThis.fetch=originalFetch;}
+});
 test('output minimization excludes customer and source note fields',()=>{const p=sanitize({duplicateImports:0,leads:[{ID:'1',PHONE:'private',COMMENTS:'private',NAME:'private',SOURCE_DESCRIPTION:'private',attribution:{status:'unknown'}}],deals:[{ID:'2',OPPORTUNITY:'private'}]});assert.ok(!JSON.stringify(p).includes('private'));});
 test('Bitrix method allowlist and destination fail closed',async()=>{await assert.rejects(bitrix({BITRIX_WEBHOOK_BASE:'https://attacker.example/rest/1/x/'},'crm.lead.list'));await assert.rejects(bitrix({BITRIX_WEBHOOK_BASE:'https://kirpa.bitrix24.com/rest/1/x/'},'crm.lead.update'));});
 test('failed refresh keeps previous complete report',async()=>{const env=await environment(),token='c'.repeat(64),month=new Date().toISOString().slice(0,7);await env.DB.prepare('INSERT INTO sessions(hash,expires) VALUES (?,?)').bind(await hash(token),Date.now()+60000).run();await env.DB.prepare('INSERT INTO reports(month,payload,captured) VALUES (?,?,?)').bind(month,'{"marker":"previous"}',1).run();const r=await handle(req('/report?month='+month,{method:'POST',headers:{Authorization:'Bearer '+token}}),env,ctx);const b=await r.json();assert.equal(b.report.marker,'previous');assert.equal(b.refresh,'failed');assert.equal(b.stale,true);});

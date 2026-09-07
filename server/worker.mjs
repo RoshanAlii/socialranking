@@ -24,7 +24,7 @@ async function setup(request,env){
   if(request.method==='POST'){
     if(![url.origin,'null'].includes(request.headers.get('Origin')))return response({error:'Invalid setup origin'},403);
     if(Number(request.headers.get('Content-Length')||0)>4096)return response({error:'Invalid setup request'},400);
-    const form=await request.formData(),base=String(form.get('webhook')||'').trim();
+    const form=await request.formData().catch(()=>{throw Object.assign(new Error(),{safeCode:'SETUP_FORM_PARSE'});}),base=String(form.get('webhook')||'').trim();
     try{const token=JSON.parse(await unseal(String(form.get('csrf')||''),env.CRM_SECRET_KEY));if(token.email!==email||token.expires<Date.now())throw new Error();}catch{return response({error:'Setup form expired. Reload before submitting.'},403);}
     if(!/^https:\/\/kirpa\.bitrix24\.com\/rest\/\d+\/[a-zA-Z0-9]+\/?$/.test(base))return response({error:'Enter a Kirpa Bitrix24 webhook URL'},400);
     await bitrix({...env,BITRIX_WEBHOOK_BASE:base},'crm.status.list',{filter:{ENTITY_ID:'SOURCE'}});
@@ -45,7 +45,7 @@ export async function bitrix(env,method,params={}){
   for(let page=0;page<400;page++){
     let data;
     for(let attempt=0;attempt<3;attempt++){
-      const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...params,start}),redirect:'error',signal:AbortSignal.timeout(25000)});
+      const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...params,start}),redirect:'error',signal:AbortSignal.timeout(25000)}).catch(()=>{throw Object.assign(new Error(),{safeCode:'CRM_TRANSPORT_FAILED'});});
       data=await r.json();
       if(r.status===429||data.error==='QUERY_LIMIT_EXCEEDED'){await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1)));continue;}
       if(!r.ok||data.error||!Array.isArray(data.result))throw Object.assign(new Error('CRM read failed; check connection permissions'),{safeCode:/^[a-zA-Z0-9_]{1,64}$/.test(data.error||'')?data.error:`CRM_HTTP_${r.status}`});
@@ -140,6 +140,6 @@ export async function handle(request,env,ctx){
 }
 export default {async fetch(request,env,ctx){try{return await handle(request,env,ctx);}catch(error){
   // Only static error codes/names: never payloads, authorization, URLs or keys.
-  console.error('CRM_OPERATION_FAILED',error.safeCode||error.name||'UnknownError');
+  console.error('CRM_OPERATION_FAILED',error.safeCode||error.name||'UnknownError',String(error.stack||'').split('\n').slice(1,4).map(line=>(line.match(/:(\d+):(\d+)\)?$/)||[]).slice(1).join(':')).join(','));
   return response({error:'CRM service temporarily unavailable. Saved data has not been replaced.',code:error.safeCode||'CRM_OPERATION_FAILED'},503,request.headers.get('Origin')===env.ALLOWED_ORIGIN?env.ALLOWED_ORIGIN:'');
 }}};
