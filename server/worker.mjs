@@ -45,7 +45,9 @@ export async function bitrix(env,method,params={}){
   for(let page=0;page<400;page++){
     let data;
     for(let attempt=0;attempt<3;attempt++){
-      const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...params,start}),redirect:'error',signal:AbortSignal.timeout(25000)}).catch(()=>{throw Object.assign(new Error(),{safeCode:'CRM_TRANSPORT_FAILED'});});
+      // Workers support manual redirects. Never forward a credential-bearing URL.
+      const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...params,start}),redirect:'manual',signal:AbortSignal.timeout(25000)}).catch(error=>{throw Object.assign(new Error(),{safeCode:'CRM_TRANSPORT_FAILED_'+(['redirect','network','connect','tls','ssl','dns','timeout','fetch'].filter(word=>String(error.message).toLowerCase().includes(word)).join('_')||'OTHER')});});
+      if(r.status>=300&&r.status<400)throw Object.assign(new Error(),{safeCode:'CRM_REDIRECT_REJECTED'});
       data=await r.json();
       if(r.status===429||data.error==='QUERY_LIMIT_EXCEEDED'){await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1)));continue;}
       if(!r.ok||data.error||!Array.isArray(data.result))throw Object.assign(new Error('CRM read failed; check connection permissions'),{safeCode:/^[a-zA-Z0-9_]{1,64}$/.test(data.error||'')?data.error:`CRM_HTTP_${r.status}`});

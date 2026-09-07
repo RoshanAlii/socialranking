@@ -30,7 +30,7 @@ test('owner setup accepts an expiring CSRF token and stores only encrypted crede
   const page=await (await handle(req('/setup',{headers}),env,ctx)).text();
   const csrf=page.match(/name="csrf" value="([^"]+)"/)[1];
   const value='https://kirpa.bitrix24.com/rest/1/testonly/';
-  globalThis.fetch=async()=>new Response(JSON.stringify({result:[]}));
+  globalThis.fetch=async(_url,options)=>{assert.equal(options.redirect,'manual');return new Response(JSON.stringify({result:[]}));};
   try{const result=await handle(req('/setup',{method:'POST',headers,body:new URLSearchParams({csrf,webhook:value})}),env,ctx);
     assert.equal(result.status,200);assert.match(await result.text(),/verified and saved/);
     const saved=env.DB.sql.prepare('SELECT cipher FROM connection_secrets').get();assert.ok(!saved.cipher.includes(value));assert.equal(await unseal(saved.cipher,env.CRM_SECRET_KEY),value);
