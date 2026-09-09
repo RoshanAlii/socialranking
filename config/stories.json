@@ -1,0 +1,10 @@
+{
+  "actor": "intropix~instagram-stories-scraper",
+  "enabled": false,
+  "intervalHours": 12,
+  "maxRunChargeUsd": 0.50,
+  "monthlyBudgetUsd": 8,
+  "maxResults": 150,
+  "storeName": "kirpa-social-story-observations-v1",
+  "pilotHandles": ["kirpa.properties", "jai.kirpa", "manpreet.kirpa"]
+}
