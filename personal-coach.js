@@ -320,7 +320,7 @@
     const follower = percentiles.followers;
     const dimensions = [
       { key: 'engagement', label: 'interaction efficiency', value: engagement },
-      { key: 'reach', label: 'view efficiency', value: reach },
+      { key: 'reach', label: 'playback efficiency', value: reach },
       { key: 'cadence', label: 'publishing cadence', value: cadence },
       { key: 'followers', label: 'audience base', value: follower }
     ].filter(row => isNumber(row.value));
@@ -584,11 +584,11 @@
       rule: 'view-gap', category: 'Distribution',
       action: `Package the next two ${strategy.positioning.toLowerCase()} posts for discovery, not only existing followers.`,
       why: isNumber(teamView) && isNumber(viewEfficiency)
-        ? `View efficiency is ${round(viewEfficiency, 2)}× followers versus a ${round(teamView, 2)}× team median.`
-        : `The account sits in the ${performance.percentiles.reach}th percentile for view efficiency.`,
-      evidence: [isNumber(viewEfficiency) ? `${round(viewEfficiency, 2)}× view efficiency` : null, isNumber(teamView) ? `${round(teamView, 2)}× team median` : null, `${analytics.viewsReporting || 0} videos reporting views`].filter(Boolean),
+        ? `Playback efficiency is ${round(viewEfficiency, 2)}× followers versus a ${round(teamView, 2)}× team median.`
+        : `The account sits in the ${performance.percentiles.reach}th percentile for playback efficiency.`,
+      evidence: [isNumber(viewEfficiency) ? `${round(viewEfficiency, 2)}× playback efficiency` : null, isNumber(teamView) ? `${round(teamView, 2)}× team median` : null, `${analytics.viewsReporting || 0} videos reporting views`].filter(Boolean),
       steps: [strategyHook(strategy), 'Use a specific price, location, developer or buyer decision in the cover text.', 'Make the first visual understandable without sound.'],
-      successMetric: `Increase median view efficiency by 15%${isNumber(teamView) ? ` or reach ${round(teamView, 2)}×` : ''}.`,
+      successMetric: `Increase median playback efficiency by 15%${isNumber(teamView) ? ` or reach ${round(teamView, 2)}×` : ''}.`,
       primaryMetric: 'viewEfficiency', targetValue: isNumber(teamView) ? teamView : isNumber(viewEfficiency) ? viewEfficiency * 1.15 : null,
       evidenceCount: analytics.viewsReporting || 0, impact: 82, strategyFit: 88, feasibility: 82, reviewAfterDays: 14
     });
@@ -815,12 +815,12 @@
       metric('Median interactions', formatNumber(a.medianInteractions), 'Median likes + comments'),
       metric('Median likes', formatNumber(a.medianLikes), `${formatNumber(a.likesReporting)}/${formatNumber(a.metricCoverage?.posts)} reporting`),
       metric('Median comments', formatNumber(a.medianComments), `${formatNumber(a.commentsReporting)}/${formatNumber(a.metricCoverage?.posts)} reporting`),
-      metric('Median video views', formatNumber(a.medianViews), `${formatNumber(a.viewsReporting)}/${formatNumber(a.metricCoverage?.videos)} videos reporting`),
-      metric('View efficiency', isNumber(a.viewEfficiency) ? `${round(a.viewEfficiency, 2)}×` : '—', 'Median views ÷ followers'),
+      metric('Median video plays', formatNumber(a.medianViews), `${formatNumber(a.viewsReporting)}/${formatNumber(a.metricCoverage?.videos)} videos reporting`),
+      metric('Playback efficiency', isNumber(a.viewEfficiency) ? `${round(a.viewEfficiency, 2)}×` : '—', 'Median views ÷ followers'),
       metric('Comment-to-like ratio', formatPct(a.commentToLikeRatio), 'Median comments ÷ median likes'),
       metric('Total likes', formatNumber(a.totalLikes), 'Supported values only'),
       metric('Total comments', formatNumber(a.totalComments), 'Supported values only'),
-      metric('Total video views', formatNumber(a.totalViews), 'Reporting videos only'),
+      metric('Total video plays', formatNumber(a.totalViews), 'Reporting videos only'),
       metric('Latest post', a.latestPostAt ? formatDate(a.latestPostAt) : 'No recent post', 'Relative activity evidence'),
       metric('Strongest pillar', coach.strategy.strongestPillar?.label || 'Building pattern', coach.strategy.strongestPillar ? `${coach.strategy.strongestPillar.comparablePosts} comparable posts` : 'Insufficient repeated evidence'),
       metric('Strongest format', coach.strategy.strongestFormat?.type ? titleCase(coach.strategy.strongestFormat.type) : 'Building pattern', coach.strategy.strongestFormat ? `${formatNumber(coach.strategy.strongestFormat.medianInteractions)} median interactions` : 'Insufficient repeated evidence'),

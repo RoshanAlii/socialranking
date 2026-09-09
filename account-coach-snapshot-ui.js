@@ -213,8 +213,8 @@
       ${metric('Posts measured', fmt(analytics?.postsInWindow ?? analytics?.observedPostsInWindow), 'Complete 30-day window where available')}
       ${metric('Posting cadence', isNumber(analytics?.postsPerWeek) ? `${analytics.postsPerWeek.toFixed(2)}/wk` : '—', cadenceChange ? `${signed(cadenceChange.delta, value => value.toFixed(2))}/wk since prior capture` : '')}
       ${metric('Personal interaction', pct(analytics?.interactionRate ?? analytics?.observedInteractionRate), engagementChange ? `${signed(engagementChange.delta, value => `${(value * 100).toFixed(2)} pts`)}` : '')}
-      ${metric('Median video views', fmt(analytics?.medianViews), `${analytics?.viewCoverage || 0} videos with public views`)}
-      ${metric('View efficiency', isNumber(analytics?.viewEfficiency) ? `${analytics.viewEfficiency.toFixed(2)}×` : '—', 'Median views ÷ followers')}
+      ${metric('Median video plays', fmt(analytics?.medianViews), `${analytics?.viewCoverage || 0} videos with public views`)}
+      ${metric('Playback efficiency', isNumber(analytics?.viewEfficiency) ? `${analytics.viewEfficiency.toFixed(2)}×` : '—', 'Median views ÷ followers')}
       ${metric('Momentum score', isNumber(score.value) ? `${Math.round(score.value * 100)}/100` : 'Held', score.rank ? `Rank #${score.rank}` : 'Eligibility incomplete')}
       ${metric('Current rank', score.rank ? `#${score.rank}` : 'Held', score.rank ? 'Among eligible measured accounts' : 'Not enough comparable evidence')}
     `;

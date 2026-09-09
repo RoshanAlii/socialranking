@@ -15,4 +15,5 @@ jobs:
         with:
           node-version: '24'
       - run: node --test test/company-page.test.js
+      - run: node --test test/view-metrics.test.js
       - run: node test/test.js

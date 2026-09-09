@@ -403,6 +403,8 @@
       text-transform: uppercase;
     }
     .kpi.attention b { color: var(--amber); }
+    .calendar-metric-definition { grid-column: 1 / -1; padding: 16px 24px; margin: 0; font-size: 14px; line-height: 1.6; border-bottom: 1px solid var(--line); }
+    .performance-post strong small { display: block; font-size: 12px; font-weight: 400; line-height: 1.5; }
     .kpi.healthy b { color: var(--emerald); }
 
     .mention-pulse {
@@ -2390,14 +2392,14 @@
       </article>
       <article class="panel performance-explorer" id="performance-explorer" aria-label="Individual performance explorer" aria-live="polite">
         <div class="performance-explorer-head">
-          <div><div class="section-label">Individual explorer</div><h3>Choose a person</h3><p>Output, public attention and every captured post in one place.</p></div>
+          <div><div class="section-label">Individual explorer</div><h3>Choose a person</h3><p>Published posts, likes, comments and video plays. Counters are accumulated as of each capture, not activity earned within the selected period.</p></div>
           <div class="performance-controls"><label for="performance-person">Instagram profile</label><select id="performance-person"><option>Loading profiles…</option></select><div class="performance-period" id="performance-period" role="group" aria-label="Individual performance period"><button type="button" data-performance-period="month" aria-pressed="true">This month</button><button type="button" data-performance-period="week" aria-pressed="false">This week</button><button type="button" data-performance-period="30" aria-pressed="false">30 days</button></div></div>
         </div>
         <div id="performance-person-body"></div>
         <div class="rank-explorer">
           <div class="rank-explorer-head">
             <div><div class="section-label">Placement finder</div><h4>Who is where?</h4><p>Choose a comparable metric to see every measured person’s position for the selected period.</p></div>
-            <label><span class="sr-only">Ranking metric</span><select id="performance-rank-metric"><option value="views">Visibility · reported video views</option><option value="attention">Public attention · likes + comments</option><option value="posts">Content output · posts</option><option value="reels">Reel output</option><option value="attentionPerPost">Attention per post</option><option value="viewEfficiency">View efficiency · views ÷ followers</option></select></label>
+            <label><span class="sr-only">Ranking metric</span><select id="performance-rank-metric"><option value="views">Visibility · reported video plays</option><option value="attention">Public attention · likes + comments</option><option value="posts">Content output · posts</option><option value="reels">Reel output</option><option value="attentionPerPost">Attention per post</option><option value="viewEfficiency">Playback efficiency · views ÷ followers</option></select></label>
           </div>
           <div class="rank-list" id="performance-rank-list"></div>
         </div>
@@ -3507,9 +3509,9 @@
           <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.posts)}</b><span>Posts this month<br>${esc(calendarDateLabel(range.monthStart))}${calendar.companyPage ? `<br>${calendar.month.owned} company-owned + ${calendar.month.shared} shared / collaborative` : ''}</span></div>
           <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.week.posts)}</b><span>Posts this week<br>${esc(calendarDateLabel(range.weekStart))}${calendar.companyPage ? `<br>${calendar.week.owned} company-owned + ${calendar.week.shared} shared / collaborative` : ''}</span></div>
           <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.reels || 0)}</b><span>Reels this month<br>${postPrefix}${fmt(calendar.week.reels || 0)} this week</span></div>
-          <div class="calendar-metric"><b>${isNumber(calendar.month.interactions) ? `${calendar.complete && calendar.month.interactionsComplete ? '' : '≥'}${fmt(calendar.month.interactions)}` : '—'}</b><span>Attention this month<br>${isNumber(calendar.week.interactions) ? `${calendar.complete && calendar.week.interactionsComplete ? '' : '≥'}${fmt(calendar.week.interactions)}` : '—'} this week</span></div>
-          <div class="calendar-metric"><b>${esc(calendarViews(calendar.month, calendar.complete))}</b><span>Video views this month<br>${fmt(calendar.month.viewsReporting)}/${fmt(calendar.month.videoPosts)} reporting</span></div>
-          <div class="calendar-metric"><b>${esc(calendarViews(calendar.week, calendar.complete))}</b><span>Video views this week<br>${fmt(calendar.week.viewsReporting)}/${fmt(calendar.week.videoPosts)} reporting</span></div>
+          <div class="calendar-metric"><b>${isNumber(calendar.month.interactions) ? `${calendar.complete && calendar.month.interactionsComplete ? '' : '≥'}${fmt(calendar.month.interactions)}` : '—'}</b><span>Likes + comments · this month’s posts<br>${isNumber(calendar.week.interactions) ? `${calendar.complete && calendar.week.interactionsComplete ? '' : '≥'}${fmt(calendar.week.interactions)}` : '—'} this week</span></div>
+          <div class="calendar-metric"><b>${esc(calendarViews(calendar.month, calendar.complete))}</b><span>Video plays · this month’s posts<br>${fmt(calendar.month.viewsReporting)}/${fmt(calendar.month.videoPosts)} reporting</span></div>
+          <div class="calendar-metric"><b>${esc(calendarViews(calendar.week, calendar.complete))}</b><span>Video plays · this week’s posts<br>${fmt(calendar.week.viewsReporting)}/${fmt(calendar.week.videoPosts)} reporting</span></div>
         </div>
       </div>`;
     }
@@ -3553,6 +3555,9 @@
     function performanceRankValue(record, metric) {
       const posts = performancePosts(record, PERFORMANCE_PERIOD);
       const summary = summarizePerformancePosts(posts);
+      // Incomplete counters can be shown as a minimum, not ranked as exact.
+      if (['views', 'viewEfficiency'].includes(metric) && summary.viewsReporting !== summary.videoPosts) return { value: null };
+      if (['attention', 'attentionPerPost'].includes(metric) && summary.interactionsReporting !== posts.length) return { value: null };
       if (metric === 'posts') return { value: posts.length, display: fmt(posts.length), note: 'posts' };
       if (metric === 'reels') {
         const value = posts.filter(post => post.type === 'reel').length;
@@ -3572,8 +3577,8 @@
 
     function renderPerformanceRanks(selectedHandle) {
       const labels = {
-        views: 'reported video views', attention: 'public attention', posts: 'posts', reels: 'Reels',
-        attentionPerPost: 'attention per post', viewEfficiency: 'view efficiency'
+        views: 'reported video plays', attention: 'public attention', posts: 'posts', reels: 'Reels',
+        attentionPerPost: 'attention per post', viewEfficiency: 'playback efficiency'
       };
       const rows = measuredPerformancePeople().map(record => ({ record, ...performanceRankValue(record, PERFORMANCE_RANK_METRIC) }))
         .filter(row => isNumber(row.value))
@@ -3611,16 +3616,16 @@
           <div><b>${fmt(posts.length)}</b><span>Posts ${periodLabel}</span></div>
           <div><b>${fmt(posts.filter(post => post.type === 'reel').length)}</b><span>Reels · Instagram Reel format</span></div>
           <div><b>${fmt(posts.filter(post => post.type === 'video').length)}</b><span>Videos · source-labelled video posts</span></div>
-          <div><b>${isNumber(summary.interactions) ? `${summary.interactionsReporting === posts.length ? '' : '≥'}${fmt(summary.interactions)}` : '—'}</b><span>Total attention · likes + comments<br>${fmt(summary.interactionsReporting)}/${fmt(posts.length)} reporting</span></div>
+          <div><b>${isNumber(summary.interactions) ? `${summary.interactionsReporting === posts.length ? '' : '≥'}${fmt(summary.interactions)}` : '—'}</b><span>Likes + comments · selected posts<br>${fmt(summary.interactionsReporting)}/${fmt(posts.length)} reporting</span></div>
           <div><b>${fmt(summary.likes)} + ${fmt(summary.comments)}</b><span>Likes + comments</span></div>
-          <div><b>${isNumber(summary.views) ? `${summary.viewsReporting === summary.videoPosts ? '' : '≥'}${fmt(summary.views)}` : '—'}</b><span>Video views<br>${fmt(summary.viewsReporting)}/${fmt(summary.videoPosts)} reporting</span></div>
-          <div class="visibility-share"><b>${isNumber(visibilityShare) ? pct(visibilityShare) : '—'}</b><span>Share of Kirpa team visibility<br>Reported views · team ${fmt(teamViewsReporting)}/${fmt(teamVideoPosts)} videos</span></div>
+          <div><b>${isNumber(summary.views) ? `${summary.viewsReporting === summary.videoPosts ? '' : '≥'}${fmt(summary.views)}` : '—'}</b><span>Video plays<br>${fmt(summary.viewsReporting)}/${fmt(summary.videoPosts)} reporting</span></div>
+          <div class="visibility-share"><b>${isNumber(visibilityShare) ? pct(visibilityShare) : '—'}</b><span>Share of observed team video plays<br>Playback coverage · team ${fmt(teamViewsReporting)}/${fmt(teamVideoPosts)} videos</span></div>
         </div>
         <div class="performance-posts-head"><b>Every captured post ${esc(periodLabel)}</b><span>${fmt(posts.length)} post${posts.length === 1 ? '' : 's'} · newest first</span></div>
         <div class="performance-posts">${posts.length ? posts.map(post => {
           const url = safeUrl(post.url);
           const attention = isNumber(post.likes) && isNumber(post.comments) ? post.likes + post.comments : null;
-          return `<article class="performance-post"><time>${esc(new Date(post.postedAt).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' }))}<br><small>${esc(post.type || 'post')}</small></time><p title="${esc(post.caption || 'Instagram post')}">${esc(post.caption || 'Instagram post')}</p><strong>${fmt(post.likes)} likes</strong><strong class="post-comments">${fmt(post.comments)} comments</strong><strong>${fmt(attention)} attention</strong><strong>${fmt(post.views)} views</strong>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">Open ↗</a>` : '<small>Link unavailable</small>'}</article>`;
+          return `<article class="performance-post"><time>${esc(new Date(post.postedAt).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' }))}<br><small>${esc(post.type || 'post')}</small></time><p title="${esc(post.caption || 'Instagram post')}">${esc(post.caption || 'Instagram post')}</p><strong>${fmt(post.likes)} likes</strong><strong class="post-comments">${fmt(post.comments)} comments</strong><strong>${fmt(attention)} attention</strong><strong>${isNumber(post.views) ? post.views.toLocaleString('en-GB') : 'Not reported'} plays<small>Legacy views: ${isNumber(post.legacyVideoViewCount) ? post.legacyVideoViewCount.toLocaleString('en-GB') : 'not reported'} · Captured ${esc(new Date(post.metricsObservedAt || record.capturedAt).toLocaleString('en-GB', {timeZone:'Asia/Dubai'}))} Dubai</small></strong>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener">Open ↗</a>` : '<small>Link unavailable</small>'}</article>`;
         }).join('') : '<div class="record-empty">No posts were published in this selected period.</div>'}</div>`;
       renderPerformanceRanks(record.handle);
     }
@@ -3638,7 +3643,7 @@
       )));
       const brand = (DATA?.brand || []).find(record => canonicalHandle(record.handle) === 'kirpa.properties') || DATA?.brand?.[0];
       const brandCalendar = calendarForRecord(brand);
-      byId('calendar-pulse').innerHTML = [
+      byId('calendar-pulse').innerHTML = `<p class="calendar-metric-definition">Posts are grouped by publication date in Dubai (UTC+4). Plays, likes and comments are accumulated counters on those posts, not monthly account Insights. Saves, shares, Stories and views on older posts are not included. Missing playback counters remain unknown; ≥ means a known minimum. Snapshot: ${esc(new Date(DATA.meta.capturedAt).toLocaleString('en-GB', {timeZone:'Asia/Dubai'}))} Dubai.</p>` + [
         calendarGroupMarkup('Kirpa team', `${people.length} measured Instagram profiles · owned posts only`, teamCalendar, 'Team total'),
         calendarGroupMarkup('@kirpa.properties', 'Page posts: company-owned plus evidenced shared / collaborative posts', brandCalendar, 'Company account') + companyPostAudit(brand),
       ].join('');
@@ -3662,8 +3667,8 @@
       }
       return `<div class="calendar-group" style="grid-column:1/-1"><details><summary>Company post audit · ${complete ? '' : 'at least '}${posts.length} posts this month · Dubai dates</summary>
         <p>${complete ? 'Full date-bounded public feed reconciled with the latest profile preview.' : esc(record.companyPage?.reason || 'Historical preview-only data: full coverage is not yet verified.')} ${record.companyPage?.observedAt ? `Observed ${esc(new Date(record.companyPage.observedAt).toLocaleString('en-GB',{timeZone:'Asia/Dubai'}))} Dubai.` : ''}</p>
-        <p>One carousel counts as one post. Pinned posts use their original publication date. Stories are not included. Shared posts can also appear in the team total—do not add the two totals together. Views and interactions are observed lifetime totals on posts published in this period, not views gained during the period.</p>
-        ${Array.from(days, ([day, rows]) => `<details><summary>${day} · ${rows.length} posts</summary>${rows.map(p => `<p><a href="${esc(safeUrl(p.url)||'#')}" target="_blank" rel="noopener">${esc(new Date(p.postedAt).toLocaleTimeString('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'}))} · ${esc(p.type)} · ${esc(p.pageRelation === 'owned' ? 'Company-owned' : 'Shared / collaborative')} · @${esc(p.ownerUsername)}</a> — ${fmt(p.likes)} likes · ${fmt(p.comments)} comments · ${fmt(p.views)} views</p>`).join('')}</details>`).join('')}</details></div>`;
+        <p>One carousel counts as one post. Pinned posts use their original publication date. Stories are not included. Shared posts can also appear in the team total—do not add the two totals together. Plays, likes and comments are observed lifetime totals on posts published in this period, not activity gained during the period.</p>
+        ${Array.from(days, ([day, rows]) => `<details><summary>${day} · ${rows.length} posts</summary>${rows.map(p => `<p><a href="${esc(safeUrl(p.url)||'#')}" target="_blank" rel="noopener">${esc(new Date(p.postedAt).toLocaleTimeString('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'}))} · ${esc(p.type)} · ${esc(p.pageRelation === 'owned' ? 'Company-owned' : 'Shared / collaborative')} · @${esc(p.ownerUsername)}</a> — ${fmt(p.likes)} likes · ${fmt(p.comments)} comments · ${isNumber(p.views) ? p.views.toLocaleString('en-GB') : 'Not reported'} plays · legacy views ${isNumber(p.legacyVideoViewCount) ? p.legacyVideoViewCount.toLocaleString('en-GB') : 'not reported'}</p>`).join('')}</details>`).join('')}</details></div>`;
     }
 
     function validMentionReport(report = MENTIONS) {
@@ -4907,8 +4912,8 @@
           <div class="analytics-calendar" aria-label="Calendar month and week performance">
             <div><b>${personCalendar ? `${personCalendar.complete ? '' : '≥'}${fmt(personCalendar.month.posts)}` : 'No data'}</b><span>Posts this month<br>${range ? esc(calendarDateLabel(range.monthStart)) : ''}</span></div>
             <div><b>${personCalendar ? `${personCalendar.complete ? '' : '≥'}${fmt(personCalendar.week.posts)}` : 'No data'}</b><span>Posts this week<br>${range ? esc(calendarDateLabel(range.weekStart)) : ''}</span></div>
-            <div><b>${personCalendar ? esc(calendarViews(personCalendar.month, personCalendar.complete)) : 'No data'}</b><span>Video views this month<br>${personCalendar ? `${fmt(personCalendar.month.viewsReporting)}/${fmt(personCalendar.month.videoPosts)} videos reporting` : ''}</span></div>
-            <div><b>${personCalendar ? esc(calendarViews(personCalendar.week, personCalendar.complete)) : 'No data'}</b><span>Video views this week<br>${personCalendar ? `${fmt(personCalendar.week.viewsReporting)}/${fmt(personCalendar.week.videoPosts)} videos reporting` : ''}</span></div>
+            <div><b>${personCalendar ? esc(calendarViews(personCalendar.month, personCalendar.complete)) : 'No data'}</b><span>Video plays this month<br>${personCalendar ? `${fmt(personCalendar.month.viewsReporting)}/${fmt(personCalendar.month.videoPosts)} videos reporting` : ''}</span></div>
+            <div><b>${personCalendar ? esc(calendarViews(personCalendar.week, personCalendar.complete)) : 'No data'}</b><span>Video plays this week<br>${personCalendar ? `${fmt(personCalendar.week.viewsReporting)}/${fmt(personCalendar.week.videoPosts)} videos reporting` : ''}</span></div>
           </div>
           <small class="analytics-calendar-note">Calendar month = 1st through month-end; current totals stop at the snapshot. Week = Monday through Sunday, Dubai time.</small>
         </div>
@@ -4926,13 +4931,13 @@
             ${analyticsKpi('Personal comment rate', isNumber(personalCommentRate) ? pct(personalCommentRate) : noPosts ? 'No posts' : 'Not reported', commentRateNote)}
             ${analyticsKpi('Median likes', isNumber(analytics?.medianLikes) ? fmt(analytics.medianLikes) : noPosts ? 'No posts' : 'Not reported', `${fmt(analytics?.likesReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
             ${analyticsKpi('Median comments', isNumber(analytics?.medianComments) ? fmt(analytics.medianComments) : noPosts ? 'No posts' : 'Not reported', `${fmt(analytics?.commentsReporting)}/${fmt(analytics?.metricCoverage?.posts)} posts reporting`)}
-            ${analyticsKpi('Median video views', isNumber(analytics?.medianViews) ? fmt(analytics.medianViews) : noVideos ? 'No video posts' : 'Not reported', `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
-            ${analyticsKpi('View efficiency', isNumber(analytics?.viewEfficiency) ? `${analytics.viewEfficiency.toFixed(2)}×` : noVideos ? 'No video posts' : 'Not reported', 'Median reported video views ÷ followers')}
+            ${analyticsKpi('Median video plays', isNumber(analytics?.medianViews) ? fmt(analytics.medianViews) : noVideos ? 'No video posts' : 'Not reported', `${fmt(analytics?.viewsReporting)}/${fmt(analytics?.metricCoverage?.videos)} videos reporting`)}
+            ${analyticsKpi('Playback efficiency', isNumber(analytics?.viewEfficiency) ? `${analytics.viewEfficiency.toFixed(2)}×` : noVideos ? 'No video posts' : 'Not reported', 'Median reported video plays ÷ followers')}
             ${analyticsKpi('Comment-to-like ratio', isNumber(analytics?.commentToLikeRatio) ? pct(analytics.commentToLikeRatio) : noPosts ? 'No posts' : 'Not measurable', 'Median comments ÷ median likes')}
             ${analyticsKpi('Median post gap', isNumber(analytics?.medianGapHours) ? formatDuration(analytics.medianGapHours) : noPosts ? 'No posts' : 'One post only', 'Time between observed posts')}
             ${analyticsKpi('Total likes', fmt(analytics?.totalLikes), 'Supported values only')}
             ${analyticsKpi('Total comments', fmt(analytics?.totalComments), 'Supported values only')}
-            ${analyticsKpi('Total video views', fmt(analytics?.totalViews), 'Reporting videos only')}
+            ${analyticsKpi('Total video plays', fmt(analytics?.totalViews), 'Reporting videos only')}
             ${analyticsKpi('Latest post', analytics?.latestPostAt ? `${relativeAge(analytics.latestPostAt)} before capture` : noPosts ? 'No post in window' : 'Not reported', 'Relative to snapshot time')}
           </div>
           ${personProgressMarkup(person, analytics)}
@@ -4983,10 +4988,10 @@
       const engagement = new Map((board().engagement || []).map(row => [row.handle, row]));
       const headings = [
         'Name', 'Role', 'Instagram handle', 'Status', 'Confidence', 'Followers', 'Following',
-        'Lifetime posts', 'Calendar month posts', 'Calendar week posts', 'Calendar month video views',
-        'Calendar week video views', 'Posts in view', 'Posts per week', 'Active days', 'Median post gap hours',
+        'Lifetime posts', 'Calendar month posts', 'Calendar week posts', 'Calendar month video plays',
+        'Calendar week video plays', 'Posts in view', 'Posts per week', 'Active days', 'Median post gap hours',
         'Median interaction rate', 'Median comment rate', 'Median likes', 'Median comments',
-        'Median video views', 'Total likes', 'Total comments', 'Total video views',
+        'Median video plays', 'Total likes', 'Total comments', 'Total video plays',
         'Latest post at', 'Likes coverage', 'Comments coverage', 'View coverage', 'Coverage note'
       ];
       const rows = rosterPeople().map(person => {

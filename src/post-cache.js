@@ -59,7 +59,7 @@ function recoverRecord(record, snapshots, capturedAt, retentionDays = DEFAULT_RE
       seen.add(key);
       const historical = source.record !== record;
       const observation = item.metricsObservedAt || new Date(source.at).toISOString();
-      const copy = Object.assign({}, item);
+      const copy = item.viewMetricVersion === 2 ? Object.assign({}, item) : N.normalizePost(item, record.platform);
       if (historical) copy.metricsObservedAt = observation;
       else if (copy.metricsObservedAt === new Date(current).toISOString()) delete copy.metricsObservedAt;
       posts.push(copy);

@@ -47,6 +47,18 @@ function validateSnapshot(snapshot, registry, opts = {}) {
   const rawExists = opts.rawExists || (() => true);
   const rawLoader = opts.rawLoader || null;
   const rosterVersion = registry?.rosterVersion || null;
+  if (meta.viewMetricVersion === 2) {
+    for (const record of [...records, ...(snapshot.brand || [])]) {
+      for (const post of [...(record.recentPosts || []), ...(record.companyPage?.posts || [])]) {
+        if (record.platform !== 'instagram') continue;
+        if (post.viewMetricVersion !== 2 || post.viewMetric !== 'video_plays' ||
+            post.views !== post.videoPlayCount ||
+            (post.views !== null && (!Number.isFinite(post.views) || post.views < 0 || !post.viewSource))) {
+          errors.push(`${record.handle}: post ${post.id} has invalid or mixed playback provenance`);
+        }
+      }
+    }
+  }
 
   /*
    * A replay is a recomputation of stored provider captures. It relaxes exactly
@@ -243,6 +255,14 @@ function validateSnapshot(snapshot, registry, opts = {}) {
    * ranking, so the check is structural rather than statistical.
    */
   for (const account of Array.isArray(snapshot.brand) ? snapshot.brand : []) {
+    if (rawLoader && account.resolved && meta.viewMetricVersion === 2) {
+      try {
+        const filename = `brand_${account.platform}_${account.handle}`.replace(/[^a-zA-Z0-9._-]/g, '_') + '.json';
+        const normalized = N.normalizeRecord(account, rawLoader(account, filename), meta.capturedAt);
+        const expected = Object.assign(normalized, {isBrand:true, error:account.error || null});
+        if (!sameJson(expected, account)) errors.push(`brand account ${account.handle}: normalized counters do not match raw capture`);
+      } catch (error) { errors.push(`brand account ${account.handle}: cannot verify raw capture (${error.message})`); }
+    }
     if (account.isBrand !== true) errors.push(`brand account ${account.handle || 'unknown'} is not flagged as a brand record`);
     if (records.some(record => record.handle === account.handle)) {
       errors.push(`brand account ${account.handle} also appears in the ranked record set`);
@@ -367,7 +387,7 @@ function main() {
     // published snapshot. Otherwise a successfully validated replay would
     // leave its audit copy saying "pending" even though every derived claim
     // has just passed the same validator.
-    const historyStamp = snapshot.meta.capturedAt.replace(/[:.]/g, '-');
+    const historyStamp = snapshot.meta.capturedAt.replace(/[:.]/g, '-') + (snapshot.meta.historyRevision === 'plays-v2' ? '-plays-v2' : '');
     const historyPath = path.join(root, 'data', 'history', `${historyStamp}.json`);
     if (fs.existsSync(historyPath)) {
       const history = JSON.parse(fs.readFileSync(historyPath, 'utf8'));

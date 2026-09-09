@@ -1097,15 +1097,15 @@ const soloRegistry = {
     assert.match(html, /Top 3 supported interactions · 30 days/);
     assert.match(html, /Calendar month = 1st through month-end/);
     assert.match(html, /Posts this month/);
-    assert.match(html, /Video views this week/);
+    assert.match(html, /Video plays · this week’s posts/);
     assert.match(html, /id="performance-person"/);
     assert.match(html, /data-performance-period="month"/);
     assert.match(html, /data-performance-period="week"/);
     assert.match(html, /data-performance-period="30"/);
-    assert.match(html, /Total attention · likes \+ comments/);
+    assert.match(html, /Likes \+ comments · selected posts/);
     assert.match(html, /Every captured post/);
     assert.match(html, /summary\.interactionsReporting === posts\.length/);
-    assert.match(html, /Share of Kirpa team visibility/);
+    assert.match(html, /Share of observed team video plays/);
     assert.match(html, /id="performance-rank-metric"/);
     assert.match(html, /Who is where\?/);
     assert.match(html, /performanceRankValue/);
@@ -1118,7 +1118,7 @@ const soloRegistry = {
   });
   await test('published replay and its historical evidence carry the same passed validation', () => {
     const latest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'latest.json'), 'utf8'));
-    const stamp = latest.meta.capturedAt.replace(/[:.]/g, '-');
+    const stamp = latest.meta.capturedAt.replace(/[:.]/g, '-') + (latest.meta.historyRevision === 'plays-v2' ? '-plays-v2' : '');
     const history = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'history', `${stamp}.json`), 'utf8'));
     assert.strictEqual(latest.meta.validation.status, 'passed');
     assert.deepStrictEqual(history.meta.validation, latest.meta.validation);

@@ -34,7 +34,7 @@ function rebuildDerived(snapshot, baselineRecords = null, rawLoader = null, regi
     });
   }
 
-  snapshot.records = POST_CACHE.recoverRecords(
+  if (historySnapshots.length) snapshot.records = POST_CACHE.recoverRecords(
     snapshot.records,
     historySnapshots,
     snapshot.meta.capturedAt,
@@ -76,6 +76,9 @@ function rebuildDerived(snapshot, baselineRecords = null, rawLoader = null, regi
 
 function main() {
   const root = path.join(__dirname, '..');
+  const rawArg = process.argv.indexOf('--raw-dir');
+  if (rawArg >= 0 && !process.argv[rawArg + 1]) throw new Error('--raw-dir requires a path');
+  const rawDir = rawArg >= 0 ? path.resolve(process.argv[rawArg + 1]) : path.join(root, 'data', 'raw');
   const latestPath = path.join(root, 'data', 'latest.json');
   const snapshot = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
   const registry = JSON.parse(fs.readFileSync(path.join(root, 'handles.json'), 'utf8'));
@@ -90,18 +93,18 @@ function main() {
   });
   const rawLoader = snapshot.meta.source === 'live'
     ? record => {
-        const rawPath = path.join(root, 'data', 'raw', safeRawName(record));
+        const rawPath = path.join(rawDir, safeRawName(record));
         return fs.existsSync(rawPath) ? JSON.parse(fs.readFileSync(rawPath, 'utf8')) : null;
       }
     : null;
-  rebuildDerived(snapshot, baselineRecords, rawLoader, registry, historical);
+  rebuildDerived(snapshot, baselineRecords, rawLoader, registry, rawArg >= 0 ? [] : historical);
 
   const brandAccount = (registry.brandAccounts || []).find(account => (
     account.platform === 'instagram' && account.confirmed === true && account.handle
   ));
   if (brandAccount) {
     const safe = `brand_instagram_${brandAccount.handle}`.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const brandRawPath = path.join(root, 'data', 'raw', `${safe}.json`);
+    const brandRawPath = path.join(rawDir, `${safe}.json`);
     if (fs.existsSync(brandRawPath)) {
       const brandRaw = JSON.parse(fs.readFileSync(brandRawPath, 'utf8'));
       const brandRecord = N.normalizeRecord({
@@ -115,6 +118,15 @@ function main() {
     }
   }
 
+  // This is a calculation correction, never a new capture. Append a revision
+  // instead of overwriting the historical evidence used by the old release.
+  snapshot.meta.viewMetricVersion = 2;
+  snapshot.meta.playbackBackfillNeeded = true;
+  snapshot.meta.historyRevision = 'plays-v2';
+  snapshot.meta.metricCorrection = {
+    version: 2, correctedAt: new Date().toISOString(),
+    reason: 'Use explicit video playback counters; retain legacy views separately. Capture time is unchanged.',
+  };
   const pendingPath = path.join(root, 'data', '.latest.rebuilt.json');
   fs.writeFileSync(pendingPath, JSON.stringify(snapshot, null, 2));
   fs.renameSync(pendingPath, latestPath);
@@ -122,7 +134,7 @@ function main() {
   fs.mkdirSync(historyDir, { recursive: true });
   const stamp = snapshot.meta.capturedAt.replace(/[:.]/g, '-');
   fs.writeFileSync(
-    path.join(historyDir, `${stamp}.json`),
+    path.join(historyDir, `${stamp}-plays-v2.json`),
     JSON.stringify({ meta: snapshot.meta, records: snapshot.records }, null, 2) + '\n',
   );
   console.log('[rebuild] derived analytics rebuilt from normalized records and the nearest same-roster weekly baseline; validation remains pending');

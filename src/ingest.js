@@ -395,6 +395,12 @@ async function main() {
       growthBaselineDays: baselineDays,
       growthWindowRule: 'Baseline must be 5–11 days old and use the same confirmed roster; nearest to 7 days is used and normalized to a weekly rate.',
       shortWindowDays: SHORT_WINDOW_DAYS,
+      viewMetricVersion: 2,
+      metricDefinitions: {
+        views: 'Provider-reported video plays, not legacy videoViewCount; missing plays stay unknown.',
+        period: 'Accumulated counters on posts published in the selected Dubai calendar period, not activity earned during that period.',
+        interactions: 'Public likes plus comments only; excludes saves, shares and other Insights interactions.',
+      },
       optedOut: states.optedOut.length,
       targets: registry.targets || DEFAULT_TARGETS,
       timezone: content.timezone,
