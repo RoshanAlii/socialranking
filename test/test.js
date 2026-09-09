@@ -205,7 +205,7 @@ const soloRegistry = {
     assert.strictEqual(input.onlyPostsNewerThan, '31 days');
     assert.ok(input.resultsLimit >= 200);
   });
-  await test('provider batches all profiles and posts into two actor runs', async () => {
+  await test('provider batches profiles but isolates each detailed post feed', async () => {
     const calls = [];
     const runSync = async (actor, input) => {
       calls.push({ actor, input });
@@ -213,7 +213,7 @@ const soloRegistry = {
         { username: 'a', followersCount: 1000, postsCount: 50 },
         { username: 'b', followersCount: 2000, postsCount: 80 },
       ];
-      return [rawPost(1), rawPost(2, { id: 'b-2', ownerUsername: 'b' })];
+      return input.username[0] === 'a' ? [rawPost(1)] : [rawPost(2, { id: 'b-2', ownerUsername: 'b' })];
     };
     const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1, capturedAt: now });
     const result = await provider.fetchProfiles('instagram', ['a', 'b']);
@@ -223,13 +223,13 @@ const soloRegistry = {
     assert.strictEqual(result.get('b').recentPosts.length, 1);
     assert.strictEqual(raw._postsQuerySucceeded, true);
     assert.strictEqual(calls.filter(c => c.actor === P.PROFILE_ACTOR).length, 1);
-    assert.strictEqual(calls.filter(c => c.actor === P.POSTS_ACTOR).length, 1);
+    assert.strictEqual(calls.filter(c => c.actor === 'apify~instagram-post-scraper').length, 2);
     assert.deepStrictEqual(
-      calls.find(c => c.actor === P.POSTS_ACTOR).input.directUrls,
-      ['https://www.instagram.com/a/', 'https://www.instagram.com/b/'],
+      calls.filter(c => c.actor === 'apify~instagram-post-scraper').map(c => c.input.username),
+      [['a'], ['b']],
     );
   });
-  await test('incremental post collection reuses history and deduplicates by Reel id', async () => {
+  await test('current-window counters refresh without counting omitted historical posts as current', async () => {
     const priorCapturedAt = new Date(nowMs - 4 * day).toISOString();
     const previousSnapshot = {
       records: [rec({ capturedAt: priorCapturedAt, recentPosts: [
@@ -245,11 +245,12 @@ const soloRegistry = {
     };
     const provider = new P.ApifyProvider('token', { runSync, previousSnapshot, capturedAt: now });
     const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
-    assert.strictEqual(postInput.onlyPostsNewerThan, '8 days');
-    assert.deepStrictEqual(raw.recentPosts.map(row => row.id), ['shared', 'fresh', 'history-only']);
-    assert.strictEqual(raw._incremental, true);
+    assert.strictEqual(postInput.onlyPostsNewerThan, new Date(nowMs - 31 * day).toISOString());
+    assert.strictEqual(postInput.dataDetailLevel, 'detailedData');
+    assert.deepStrictEqual(raw.recentPosts.map(row => row.id), ['shared', 'fresh']);
+    assert.strictEqual(raw._incremental, false);
     assert.strictEqual(raw._freshPostCount, 2);
-    assert.strictEqual(raw._reusedPostCount, 1);
+    assert.strictEqual(raw._reusedPostCount, 0);
   });
   await test('provider rejects post rows with unverifiable owners', async () => {
     const runSync = async actor => actor === P.PROFILE_ACTOR
@@ -261,7 +262,7 @@ const soloRegistry = {
     assert.strictEqual(raw._postsOwnershipComplete, false);
     assert.strictEqual(raw.recentPosts.length, 0);
   });
-  await test('provider accepts an attributable no-items control row without counting it as a post', async () => {
+  await test('no-items control rows do not prove an active profile has zero posts', async () => {
     const runSync = async actor => actor === P.PROFILE_ACTOR
       ? [{ username: 'a', followersCount: 1000, postsCount: 50 }]
       : [{
@@ -273,13 +274,13 @@ const soloRegistry = {
       }];
     const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1 });
     const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
-    assert.strictEqual(raw._postsQuerySucceeded, true);
+    assert.strictEqual(raw._postsQuerySucceeded, false);
     assert.strictEqual(raw._postsOwnershipComplete, true);
     assert.strictEqual(raw._postsNoItems, true);
     assert.strictEqual(raw._missingOwnerCount, 0);
     assert.strictEqual(raw.recentPosts.length, 0);
   });
-  await test('profile latest posts fill a zero-result post response without importing collaborators', async () => {
+  await test('a preview never turns an empty detailed feed into a complete window', async () => {
     const runSync = async actor => actor === P.PROFILE_ACTOR
       ? [{
           username: 'a', followersCount: 1000, postsCount: 50,
@@ -288,9 +289,9 @@ const soloRegistry = {
       : [];
     const provider = new P.ApifyProvider('token', { runSync, postConcurrency: 1, capturedAt: now });
     const raw = (await provider.fetchProfiles('instagram', ['a'])).get('a');
-    assert.deepStrictEqual(raw.recentPosts.map(row => row.id), ['p1']);
-    assert.strictEqual(raw._profileFallbackPostCount, 1);
-    assert.strictEqual(raw._postsQuerySucceeded, true);
+    assert.deepStrictEqual(raw.recentPosts.map(row => row.id), []);
+    assert.strictEqual(raw._profileFallbackPostCount, 0);
+    assert.strictEqual(raw._postsQuerySucceeded, false);
   });
   await test('brand refresh reconciles the full feed instead of treating a profile preview as complete', async () => {
     const calls = [];
@@ -916,7 +917,7 @@ const soloRegistry = {
     await provider.fetchProfiles('instagram', ['a']);
     assert.strictEqual(provider.telemetry.runs, 2);
     assert.strictEqual(provider.telemetry.failedRuns, 0);
-    assert.ok(provider.telemetry.byActor[P.POSTS_ACTOR].runs === 1);
+    assert.ok(provider.telemetry.byActor['apify~instagram-post-scraper'].runs === 1);
   });
   await test('TikTok returns the same record shape through one date-bounded query', async () => {
     const provider = new P.ApifyProvider('token', {

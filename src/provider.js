@@ -315,6 +315,9 @@ class ApifyProvider {
     this.postConcurrency = opts.postConcurrency || POST_FETCH_CONCURRENCY;
     this.previousSnapshot = opts.previousSnapshot || null;
     this.capturedAt = opts.capturedAt || new Date().toISOString();
+    this.refreshBudgetUsd = opts.refreshBudgetUsd ?? Number(process.env.APIFY_REFRESH_BUDGET_USD || 5);
+    this.reservedChargeUsd = 0;
+    this.conservativeSpentUsd = 0;
     /*
      * Actor runs are the unit Apify bills. Recording them means an unexplained
      * bill can be traced to a run count in the snapshot that produced it,
@@ -342,8 +345,23 @@ class ApifyProvider {
     this.telemetry.events.push(Object.assign({ at: new Date().toISOString() }, event));
   }
 
-  call(actor, input) {
-    return this.runSync(actor, input, this.token, { onAttempt: event => this.record(event) });
+  async call(actor, input) {
+    if (this.conservativeSpentUsd + this.reservedChargeUsd + APIFY_MAX_RUN_CHARGE_USD > this.refreshBudgetUsd) {
+      throw new Error('Refresh spending safety limit reached; retain prior validated data');
+    }
+    this.reservedChargeUsd += APIFY_MAX_RUN_CHARGE_USD;
+    let charge = null;
+    try {
+      // One attempt per request: automatic paid retries could defeat the
+      // refresh-wide reservation. Failures preserve the previous evidence.
+      return await this.runSync(actor, input, this.token, { retries:1, onAttempt:event => {
+        this.record(event);
+        if (typeof event.costUsd === 'number') charge = event.costUsd;
+      }});
+    } finally {
+      this.reservedChargeUsd -= APIFY_MAX_RUN_CHARGE_USD;
+      this.conservativeSpentUsd += charge ?? APIFY_MAX_RUN_CHARGE_USD;
+    }
   }
 
   previousRecord(handle) {
@@ -402,101 +420,30 @@ class ApifyProvider {
     const wanted = [...new Set((handles || []).filter(Boolean))];
     if (platform === 'tiktok') return this.fetchTikTokProfiles(wanted);
     if (platform !== 'instagram' || !wanted.length) return new Map();
-
-    const profileItems = await this.call(PROFILE_ACTOR, instagramProfileInput(wanted));
-    const profiles = groupProfileItems(wanted, profileItems);
-    const out = new Map();
-
-    const lookbackDays = this.incrementalLookbackDays(wanted);
-    let rows = [];
-    let batchError = null;
-    try {
-      rows = await this.call(POSTS_ACTOR, instagramPostsBatchInput(wanted, lookbackDays));
-    } catch (error) {
-      batchError = error;
-    }
-    const rawRows = Array.isArray(rows) ? rows : [];
-    const ownerlessRows = rawRows.filter(item => !postOwner(item));
-    const noItemsHandles = new Set(ownerlessRows.filter(isNoItemsControlRow).map(postInputHandle));
-    const problematicOwnerlessRows = ownerlessRows.filter(item => !isNoItemsControlRow(item));
-
-    for (const handle of wanted) {
+    const profiles = groupProfileItems(wanted, await this.call(PROFILE_ACTOR, instagramProfileInput(wanted)));
+    const rows = await mapLimit(wanted, this.postConcurrency, async handle => {
       const details = profiles.get(handle);
-      if (!details) {
-        out.set(handle, { notFound: true });
-        continue;
-      }
-
-      if (!batchError) {
-        const freshPosts = groupPostItems(handle, rows);
-        // The profile Actor already includes the newest public posts. Treat
-        // those owned rows as a zero-cost safety net when the dedicated posts
-        // Actor intermittently returns an empty feed for an active account.
-        // Ownership filtering is identical to the main post path; collaborator
-        // posts owned by somebody else never leak into this profile.
-        const profilePosts = groupPostItems(handle, details.latestPosts || []);
-        const freshKeys = new Set(freshPosts.map(rawPostKey));
-        const profileFallback = profilePosts.filter(item => !freshKeys.has(rawPostKey(item)));
-        const posts = this.mergePosts(handle, dedupeRawPosts([...freshPosts, ...profileFallback]));
-        const handleProblems = problematicOwnerlessRows.filter(item => {
-          const inputHandle = postInputHandle(item);
-          return !inputHandle || inputHandle === canonicalHandle(handle);
-        });
-        const missingOwnerCount = handleProblems.length;
-        const postsOwnershipComplete = missingOwnerCount === 0;
-        out.set(handle, Object.assign({}, details, {
-          recentPosts: posts,
-          _profileSource: PROFILE_ACTOR,
-          _postSource: POSTS_ACTOR,
-          _postsQuerySucceeded: postsOwnershipComplete,
-          _postsQueryError: postsOwnershipComplete
-            ? null
-            : `${missingOwnerCount} post row(s) had no verifiable owner`,
-          _postsLookbackDays: this.previousRecord(handle) && lookbackDays < INSTAGRAM_POST_LOOKBACK_DAYS
-            ? INSTAGRAM_POST_LOOKBACK_DAYS
-            : lookbackDays,
-          _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
-          _postsTruncated: freshPosts.length >= INSTAGRAM_POST_RESULTS_LIMIT,
-          _postsOwnershipComplete: postsOwnershipComplete,
-          _missingOwnerCount: missingOwnerCount,
-          _postsNoItems: noItemsHandles.has(canonicalHandle(handle)),
-          _rawPostCount: posts.length,
-          _incremental: lookbackDays < INSTAGRAM_POST_LOOKBACK_DAYS,
-          _incrementalLookbackDays: lookbackDays,
-          _freshPostCount: freshPosts.length,
-          _reusedPostCount: Math.max(0, posts.length - freshPosts.length - profileFallback.length),
-          _profileFallbackPostCount: profileFallback.length,
-        }));
-      } else {
-        out.set(handle, Object.assign({}, details, {
-          recentPosts: [],
-          _profileSource: PROFILE_ACTOR,
-          _postSource: POSTS_ACTOR,
-          _postsQuerySucceeded: false,
-          _postsQueryError: String(batchError.message || batchError),
-          _postsLookbackDays: lookbackDays,
-          _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
-          _postsTruncated: false,
-          _postsOwnershipComplete: false,
-          _missingOwnerCount: 0,
-          _rawPostCount: 0,
-        }));
-      }
-    }
-
-    return out;
+      if (!details) return [handle, {notFound:true}];
+      if (details.private === true || details.isPrivate === true) return [handle, details];
+      // Separate capped requests prevent one busy account exhausting a shared
+      // run before other accounts are visited. Detailed rows expose plays.
+      const raw = await this.fetchBrandProfile('instagram', handle, {details, employee:true});
+      raw._pageCapture = raw._companyPage;
+      delete raw._companyPage;
+      return [handle, raw];
+    });
+    return new Map(rows);
   }
 
   // Full bounded feed reconciliation: previews/history cannot prove completeness.
-  async fetchBrandProfile(platform, handle) {
+  async fetchBrandProfile(platform, handle, opts = {}) {
     if (platform !== 'instagram') return this.fetchProfile(platform, handle);
-    const items = await this.call(PROFILE_ACTOR, instagramProfileInput([handle]));
-    const details = groupProfileItems([handle], items).get(handle);
+    const details = opts.details || groupProfileItems([handle], await this.call(PROFILE_ACTOR, instagramProfileInput([handle]))).get(handle);
     if (!details) return { notFound: true };
 
     const now = Date.parse(this.capturedAt);
     const cutoff = now - INSTAGRAM_POST_LOOKBACK_DAYS * dayMs();
-    const prior = this.previousBrand(handle);
+    const prior = opts.employee ? this.previousRecord(handle) : this.previousBrand(handle);
     let feed = [], queryError = null;
     try {
       feed = await this.call(BRAND_POSTS_ACTOR, {
@@ -517,6 +464,7 @@ class ApifyProvider {
       const input = postInputHandle(post);
       const onPage = owner === normalizedHandle || coauthors.includes(normalizedHandle) ||
         input === normalizedHandle || previewKeys.has(rawPostKey(post));
+      if (isNoItemsControlRow(post)) continue;
       if (!(post.id || post.shortCode) || !owner || !Number.isFinite(at) || !onPage ||
           (input && input !== normalizedHandle)) { rejected.push(post); continue; }
       if (at >= cutoff && at <= now) valid.push(Object.assign({}, post, {
@@ -533,12 +481,18 @@ class ApifyProvider {
     const capped = feed.length >= INSTAGRAM_POST_RESULTS_LIMIT ||
       feed._apifyRun?.usageTotalUsd >= APIFY_MAX_RUN_CHARGE_USD ||
       /max.*(charge|cost)|charge.*limit/i.test(feed._apifyRun?.statusMessage || '');
-    const complete = !queryError && !capped && rejected.length === 0 && omittedPreview.length === 0 && valid.length > 0;
-    const reason = queryError || (capped ? 'Company feed reached its safety limit' : rejected.length ? 'Company feed contains unverifiable rows' : omittedPreview.length ? 'Company feed omitted posts present in the profile preview' : !valid.length ? 'An empty company feed cannot prove a complete window' : null);
+    const olderPreview = preview.length > 0 && preview.every(post => {
+      const at = Date.parse(post.timestamp || post.postedAt || '');
+      return Number.isFinite(at) && at < cutoff;
+    });
+    const verifiedEmpty = opts.employee === true && valid.length === 0 && (details.postsCount === 0 || olderPreview);
+    const complete = !queryError && !capped && rejected.length === 0 && omittedPreview.length === 0 && (valid.length > 0 || verifiedEmpty);
+    const reason = queryError || (capped ? 'Account feed reached its safety limit' : rejected.length ? 'Account feed contains unverifiable rows' : omittedPreview.length ? 'Account feed omitted posts present in the profile preview' : !valid.length && !verifiedEmpty ? 'An empty feed cannot prove a complete window' : null);
     const freshPosts = groupPostItems(handle, valid);
     // Never silently count a deleted/omitted historical post as freshly observed.
     const older = (prior?.recentPosts || []).filter(p => Date.parse(p.postedAt) < cutoff && Date.parse(p.postedAt) >= now - POST_CACHE_RETENTION_DAYS * dayMs());
-    const posts = queryError ? (prior?.recentPosts || []) : dedupeRawPosts([...freshPosts, ...older]);
+    const fallback = complete ? [] : (prior?.recentPosts || []).map(p => ({...p, metricsObservedAt:p.metricsObservedAt || prior.capturedAt}));
+    const posts = dedupeRawPosts([...freshPosts, ...fallback, ...older]);
     const pagePosts = queryError ? (prior?.companyPage?.posts || []).filter(p => Date.parse(p.postedAt) >= cutoff && Date.parse(p.postedAt) <= now) : valid;
     return Object.assign({}, details, {
       recentPosts: posts,
@@ -549,8 +503,9 @@ class ApifyProvider {
       _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
       _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
       _postsTruncated: capped,
-      _postsOwnershipComplete: true,
-      _missingOwnerCount: 0,
+      _postsOwnershipComplete: rejected.length === 0,
+      _missingOwnerCount: rejected.filter(post => !postOwner(post)).length,
+      _postsNoItems: feed.some(isNoItemsControlRow),
       _rawPostCount: posts.length,
       _incremental: false,
       _incrementalLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
