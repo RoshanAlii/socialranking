@@ -385,8 +385,8 @@
     if (posts < 3) return result('measurement-base', 'The sample is too small to optimise confidently', 'Build a structured baseline before making a major strategic change.', [`${posts} measured post${posts === 1 ? '' : 's'}.`], 'high');
     if (number(gap) && gap >= 10) return result('recency-gap', 'A long publishing gap is interrupting momentum', 'Restart the account using its strongest current content lane.', [`Last post was ${gap} days before the snapshot.`], 'high');
     if (number(analytics?.postsPerWeek) && analytics.postsPerWeek < strategy.capacityPerWeek * .75) return result('cadence', 'Consistency is the primary constraint', 'Measured output is below the account’s declared or assigned capacity.', [`${analytics.postsPerWeek.toFixed(2)}/week now.`, `${strategy.capacityPerWeek}/week strategy capacity.`], 'high');
-    if (number(views) && number(benchmarks.viewEfficiency) && views < benchmarks.viewEfficiency * .8 && number(rate) && number(benchmarks.interactionRate) && rate >= benchmarks.interactionRate) return result('reach', 'Content quality is stronger than content discovery', 'People who see the content respond, but the typical video is not travelling far enough.', [`${views.toFixed(2)}× view efficiency versus ${benchmarks.viewEfficiency.toFixed(2)}× team median.`, `${percent(rate)} interaction rate.`]);
-    if (number(rate) && number(benchmarks.interactionRate) && rate < benchmarks.interactionRate * .8 && number(views) && number(benchmarks.viewEfficiency) && views >= benchmarks.viewEfficiency) return result('interaction', 'Reach is not converting into enough public response', 'The opening, point of view or call to action needs to create a stronger audience decision.', [`${views.toFixed(2)}× view efficiency.`, `${percent(rate)} interaction rate versus ${percent(benchmarks.interactionRate)} team median.`]);
+    if (number(views) && number(benchmarks.viewEfficiency) && views < benchmarks.viewEfficiency * .8 && number(rate) && number(benchmarks.interactionRate) && rate >= benchmarks.interactionRate) return result('reach', 'Content quality is stronger than content discovery', 'People who see the content respond, but the typical video is not travelling far enough.', [`${views.toFixed(2)}× playback efficiency versus ${benchmarks.viewEfficiency.toFixed(2)}× team median.`, `${percent(rate)} interaction rate.`]);
+    if (number(rate) && number(benchmarks.interactionRate) && rate < benchmarks.interactionRate * .8 && number(views) && number(benchmarks.viewEfficiency) && views >= benchmarks.viewEfficiency) return result('interaction', 'Reach is not converting into enough public response', 'The opening, point of view or call to action needs to create a stronger audience decision.', [`${views.toFixed(2)}× playback efficiency.`, `${percent(rate)} interaction rate versus ${percent(benchmarks.interactionRate)} team median.`]);
     return result('scale-strength', 'No critical performance failure is visible', 'Protect the strongest proven pattern and test one change at a time.', [number(analytics?.postsPerWeek) ? `${analytics.postsPerWeek.toFixed(2)} posts/week.` : null, number(rate) ? `${percent(rate)} personal interaction rate.` : null], posts >= 6 ? 'high' : 'medium');
   }
 
@@ -478,7 +478,7 @@
     const percentiles = block?.teamPercentiles || {};
     const strengths = [];
     const gaps = [];
-    [['postsPerWeek','Cadence'],['interactionRate','Engagement efficiency'],['viewEfficiency','View efficiency'],['followers','Follower context']].forEach(([key,label]) => {
+    [['postsPerWeek','Cadence'],['interactionRate','Engagement efficiency'],['viewEfficiency','Playback efficiency'],['followers','Follower context']].forEach(([key,label]) => {
       const value = percentiles[key];
       if (!number(value)) return;
       if (value >= 70) strengths.push(`${label}: ${value}th percentile.`);

@@ -26,6 +26,14 @@ function toIso(raw) {
   return Number.isFinite(date.getTime()) ? date.toISOString() : null;
 }
 function normalizePost(raw, platform) {
+  // Instagram's legacy view counter and playback counter are not equivalent.
+  // Never fill a missing playback count with legacy views (including old cache
+  // rows whose `views` field was produced by the pre-v2 normalizer).
+  const instagram = platform === 'instagram';
+  const videoPlayCount = n(raw.videoPlayCount) ?? n(raw.playCount);
+  const legacyVideoViewCount = n(raw.legacyVideoViewCount) ?? n(raw.videoViewCount) ??
+    (instagram && raw.postedAt && !raw.viewMetricVersion ? n(raw.views) : null);
+  const playback = videoPlayCount;
   // Instagram rows often say type=Video and productType=clips. Looking at one
   // field only loses the fact that the public URL is a Reel.
   const rawType = [raw.type, raw.mediaType, raw.productType, raw.url, raw.postUrl, raw.permalink]
@@ -47,9 +55,16 @@ function normalizePost(raw, platform) {
     likes: n(raw.likes ?? raw.likeCount ?? raw.likesCount ?? raw.diggCount),
     comments: n(raw.comments ?? raw.commentCount ?? raw.commentsCount),
     shares: n(raw.shares ?? raw.shareCount ?? raw.sharesCount),
-    views: n(raw.views ?? raw.playCount ?? raw.videoViewCount ?? raw.viewCount),
+    views: instagram ? playback : n(raw.views ?? raw.playCount ?? raw.videoViewCount ?? raw.viewCount),
     postedAt: toIso(raw),
   };
+  if (instagram) Object.assign(post, {
+    viewMetricVersion: 2,
+    viewMetric: 'video_plays',
+    videoPlayCount: playback,
+    legacyVideoViewCount,
+    viewSource: playback === null ? null : (raw.viewSource || (n(raw.videoPlayCount) !== null ? 'videoPlayCount' : 'playCount')),
+  });
   const metricsObservedAt = s(raw.metricsObservedAt || raw.scrapedAt);
   if (metricsObservedAt) post.metricsObservedAt = metricsObservedAt;
   return post;

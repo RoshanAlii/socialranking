@@ -39,6 +39,7 @@ jobs:
         run: |
           node test/test.js
           node --test test/company-page.test.js
+          node --test test/view-metrics.test.js
 
       - name: Verify roster integrity
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'

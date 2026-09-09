@@ -361,11 +361,18 @@ class ApifyProvider {
   }
 
   incrementalLookbackDays(handles) {
+    if (this.previousSnapshot?.meta?.playbackBackfillNeeded === true) return INSTAGRAM_POST_LOOKBACK_DAYS;
     const now = new Date(this.capturedAt).getTime();
     if (!Number.isFinite(now)) return INSTAGRAM_POST_LOOKBACK_DAYS;
     let required = INSTAGRAM_INCREMENTAL_MIN_DAYS;
     for (const handle of handles || []) {
       const prior = this.previousRecord(handle);
+      // One bounded migration refresh restores plays lost by the old cache.
+      // Subsequent runs resume the normal incremental lookback.
+      if (prior && (prior.recentPosts || []).some(post =>
+        ['video', 'reel'].includes(post.type) && post.viewMetricVersion !== 2)) {
+        return INSTAGRAM_POST_LOOKBACK_DAYS;
+      }
       const at = prior?.capturedAt ? new Date(prior.capturedAt).getTime() : NaN;
       if (!Number.isFinite(at)) return INSTAGRAM_POST_LOOKBACK_DAYS;
       const age = Math.ceil(Math.max(0, now - at) / dayMs());
@@ -377,7 +384,10 @@ class ApifyProvider {
   mergePosts(handle, freshRows) {
     const cutoff = new Date(this.capturedAt).getTime() - POST_CACHE_RETENTION_DAYS * dayMs();
     const prior = this.previousRecord(handle)?.recentPosts || [];
-    const combined = [...(freshRows || []), ...prior];
+    const priorAt = this.previousRecord(handle)?.capturedAt;
+    const combined = [...(freshRows || []), ...prior.map(post => ({
+      ...post, metricsObservedAt: post.metricsObservedAt || priorAt,
+    }))];
     const seen = new Set();
     return combined.filter(item => {
       const key = item?.id ? `id:${item.id}` : item?.url ? `url:${item.url}` : `fallback:${item?.postedAt || item?.timestamp || ''}|${item?.caption || ''}`;
