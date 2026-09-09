@@ -27,7 +27,7 @@ async function main() {
   let state = await api('GET', key) || {seen:{}, daily:{}, accounts:{}, checks:[], spend:{}, runs:[]};
   state.spend ||= {}; state.runs ||= [];
   const month = dubaiDate(now).slice(0,7), cap = pilot ? 0.10 : config.maxRunChargeUsd;
-  const maxResults = pilot ? 30 : config.maxResults;
+  const maxResults = pilot ? 150 : config.maxResults;
   const save = async () => { await api('PUT', key, state); fs.writeFileSync('data/stories.json', JSON.stringify(publicSummary(state, config, all, new Date().toISOString()), null, 2)+'\n'); };
   // Reserve before the paid request: ambiguous failures/interruptions cannot
   // silently reset the allowance. No automatic retries of paid starts.
