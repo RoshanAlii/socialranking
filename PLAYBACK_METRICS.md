@@ -14,8 +14,10 @@ feeds video totals, efficiency, post comparisons and personal analytics.
 - Every normalized Instagram post preserves `videoPlayCount`,
   `legacyVideoViewCount`, `viewMetric`, `viewMetricVersion` and `viewSource`.
 - Old normalized `views` cannot be reinterpreted as plays. Reused counters keep
-  their original observation time. One 31-day migration pull backfills the old
-  cache; subsequent pulls use the existing incremental schedule and cost caps.
+  their original observation time. Each four-day refresh re-observes the bounded
+  31-day reporting window: merely discovering new posts cannot refresh the
+  engagement counters on older posts. IDs remain deduplicated; older historical
+  evidence and transcripts are retained, not re-fetched or re-transcribed.
 - Month and week select **publication cohorts** in Asia/Dubai: calendar month
   starts on the 1st and week on Monday. Metrics are accumulated counters on
   those published posts, not events earned within the selected date range.
@@ -39,6 +41,17 @@ with today's counters or interpret the metric switch as audience growth.
 New refreshes record metric definitions/version and validate the company raw
 counter mapping as well as individual accounts. Regression checks are in
 `test/view-metrics.test.js` and run in snapshot and company-feed workflows.
+
+The combined `instagram-scraper` run returned only 326 rows on September 9,
+leaving most previous rows cached. Collection now uses the detailed
+`instagram-post-scraper` in separate per-account requests (three concurrent),
+while still batching the inexpensive profile lookup. Each request is limited
+to 200 posts and $0.75; total refresh reservations cannot exceed $5, and unknown
+charges conservatively consume their reservation. There are no automatic paid
+retries. Capped, invalid or preview-omitting feeds are marked incomplete; a
+preview cannot manufacture a complete window. Current-period deleted/omitted
+historical posts are not silently reintroduced as fresh. Publication still
+requires the existing coverage and source-validation gates.
 
 ## Remaining reconciliation boundary
 

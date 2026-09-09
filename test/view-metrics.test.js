@@ -59,3 +59,28 @@ test('dashboard inline scripts compile',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
   for(const match of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)) if(match[1].trim()) new vm.Script(match[1]);
 });
+test('one account reaching the cap cannot silently truncate another account',async()=>{
+  const p=new P.ApifyProvider('test-only',{capturedAt:at,runSync:async(actor,input,token,opts)=>{
+    opts.onAttempt({actor,ok:true,costUsd:0.01});
+    if(actor===P.PROFILE_ACTOR)return [{username:'a'},{username:'b'}];
+    assert.equal(input.dataDetailLevel,'detailedData');assert.equal(input.username.length,1);
+    const rows=[raw({ownerUsername:input.username[0],videoPlayCount:123})];
+    if(input.username[0]==='a')Object.defineProperty(rows,'_apifyRun',{value:{statusMessage:'Maximum charge limit reached'}});
+    return rows;
+  }});
+  const rows=await p.fetchProfiles('instagram',['a','b']);
+  assert.equal(rows.get('a')._postsQuerySucceeded,false);assert.equal(rows.get('a')._postsTruncated,true);
+  assert.equal(rows.get('b')._postsQuerySucceeded,true);
+});
+test('concurrent requests reserve spending and never run beyond the refresh cap',async()=>{
+  let called=0;
+  const p=new P.ApifyProvider('test-only',{refreshBudgetUsd:0.75,runSync:async()=>{called++;return []}});
+  const results=await Promise.allSettled([p.call('test',{}),p.call('test',{})]);
+  assert.equal(called,1);assert.equal(results.filter(r=>r.status==='rejected').length,1);
+  assert.equal(p.conservativeSpentUsd,0.75);
+});
+test('verified empty employee feed is distinct from an unexplained empty result',async()=>{
+  const p=new P.ApifyProvider('test-only',{capturedAt:at,runSync:async(actor)=>actor===P.PROFILE_ACTOR ? [{username:'a',postsCount:0}] : []});
+  const r=(await p.fetchProfiles('instagram',['a'])).get('a');
+  assert.equal(r._postsQuerySucceeded,true);assert.equal(r.recentPosts.length,0);
+});

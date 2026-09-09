@@ -119,6 +119,7 @@ function normalizeRecord(entry, raw, capturedAt) {
       profileFallbackPostCount: 0,
       historyRecoveredPostCount: 0,
       historyOldestMetricsObservedAt: null,
+      pageCapture: null,
     },
     warnings: [],
   };
@@ -146,6 +147,13 @@ function normalizeRecord(entry, raw, capturedAt) {
     profileFallbackPostCount: n(raw._profileFallbackPostCount) ?? 0,
     historyRecoveredPostCount: n(raw._historyRecoveredPostCount) ?? 0,
     historyOldestMetricsObservedAt: s(raw._historyOldestMetricsObservedAt),
+    pageCapture: raw._pageCapture ? {
+      source:raw._pageCapture.source, runId:raw._pageCapture.runId,
+      from:raw._pageCapture.from, to:raw._pageCapture.to,
+      complete:raw._pageCapture.complete, returnedRows:raw._pageCapture.returnedRows,
+      rejectedRows:raw._pageCapture.rejectedRows, omittedPreviewPosts:raw._pageCapture.omittedPreviewPosts,
+      truncated:raw._pageCapture.truncated,
+    } : null,
   });
   if (base.isPrivate) return base;
   if (raw._companyPage) {
