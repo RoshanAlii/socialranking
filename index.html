@@ -2383,7 +2383,7 @@
         <div>
           <div class="section-label">Performance stage</div>
           <h2 id="arena-title">What do we know right now?</h2>
-          <p>Usable signals stay visible while incomplete comparisons remain clearly withheld.</p>
+          <p>Public feed performance, with Story publishing tracked separately. Not private Instagram Insights.</p>
         </div>
         <div class="section-note" id="arena-note">Latest captured public data</div>
       </div>
@@ -2404,6 +2404,7 @@
           <div class="rank-list" id="performance-rank-list"></div>
         </div>
       </article>
+      <article class="panel" id="story-activity" aria-label="Public Story publishing activity"><h3>Public Story activity</h3><p>Loading separate Story observations…</p></article>
       <article class="panel" id="crm-results" aria-label="CRM social leads and sales"></article>
       <div class="hero-grid">
         <article class="panel champ" id="champ" aria-live="polite">
@@ -4915,10 +4916,11 @@
             <div><b>${personCalendar ? esc(calendarViews(personCalendar.month, personCalendar.complete)) : 'No data'}</b><span>Video plays this month<br>${personCalendar ? `${fmt(personCalendar.month.viewsReporting)}/${fmt(personCalendar.month.videoPosts)} videos reporting` : ''}</span></div>
             <div><b>${personCalendar ? esc(calendarViews(personCalendar.week, personCalendar.complete)) : 'No data'}</b><span>Video plays this week<br>${personCalendar ? `${fmt(personCalendar.week.viewsReporting)}/${fmt(personCalendar.week.videoPosts)} videos reporting` : ''}</span></div>
           </div>
-          <small class="analytics-calendar-note">Calendar month = 1st through month-end; current totals stop at the snapshot. Week = Monday through Sunday, Dubai time.</small>
+          <small class="analytics-calendar-note">Feed posts only. Calendar month = 1st through month-end; current totals stop at the snapshot. Week = Monday through Sunday, Dubai time. Plays are accumulated counters on the selected posts, not plays earned during the period.</small>
         </div>
         <div class="analytics-body">
           <div class="analytics-note">${esc(note)} ${isLegacy() ? 'Use it to inspect this account, not to declare a team winner.' : ''}</div>
+          <section data-story-person="${esc(person.handle)}" aria-label="Personal Story publishing activity" hidden></section>
           <div class="person-kpis">
             ${analyticsKpi('Momentum score', isNumber(personBlock(person.handle)?.score?.value) ? `${Math.round(personBlock(person.handle).score.value * 100)}/100` : noPosts ? 'Activity needed' : 'Building sample', personBlock(person.handle)?.score?.rank ? `Team rank #${personBlock(person.handle).score.rank}` : personBlock(person.handle)?.score?.eligibilityReasons?.join(' · ') || 'Comparable inputs are still being collected')}
             ${analyticsKpi('Followers', fmt(analytics?.followers), 'Point-in-time public count')}
@@ -5726,6 +5728,9 @@
     load();
   </script>
   <script src="./personal-coach.js"></script>
+  <link rel="stylesheet" href="./story-activity.css">
+  <script src="./story-metrics.js"></script>
+  <script src="./story-activity.js"></script>
   <script src="./crm/metrics.js"></script>
   <script src="./crm/dashboard.js"></script>
 </body>

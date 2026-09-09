@@ -1,0 +1,74 @@
+name: Public Story activity
+on:
+  push:
+    branches: [main]
+    paths: [src/stories.js, src/collect-stories.js, config/stories.json, story-metrics.js, story-activity.js, test/stories.test.js, .github/workflows/stories.yml]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      pilot:
+        description: Run the three-account cost-capped pilot
+        type: boolean
+        default: false
+  schedule:
+    - cron: '20 4,16 * * *'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: public-story-activity
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: node --test test/stories.test.js
+      - run: node --check story-activity.js
+  collect:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: node --test test/stories.test.js
+      - name: Collect public Story observations
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN_MENTION_COUNT || secrets.APIFY_TOKEN }}
+          PILOT: ${{ inputs.pilot == true }}
+        run: |
+          if [ "$PILOT" = true ]; then
+            node src/collect-stories.js --pilot
+          else
+            node src/collect-stories.js
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: story-summary-${{ github.run_id }}
+          path: data/stories.json
+          retention-days: 7
+      - name: Publish derived activity only
+        id: publish
+        if: always() && github.ref == 'refs/heads/main' && inputs.pilot != true
+        run: |
+          if [ ! -f data/stories.json ]; then exit 0; fi
+          git config user.name 'kirpa-social-bot'
+          git config user.email 'kirpa-social-bot@users.noreply.github.com'
+          git add data/stories.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: update public Story observations and coverage'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Rebuild the existing GitHub Pages site
+        if: always() && steps.publish.outcome == 'success' && github.ref == 'refs/heads/main' && inputs.pilot != true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
