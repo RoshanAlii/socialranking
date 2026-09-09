@@ -1,6 +1,6 @@
 # Kirpa Employee Portal Accuracy Report
 
-Generated: **2026-09-07T13:06:22.582074Z**
+Generated: **2026-09-09T07:25:39.328245Z**
 
 > This report measures internal identity consistency, route coverage, deterministic snapshot validation and per-account measurement completeness. It is not an independent scrape-by-scrape verification against Instagram's live first-party systems.
 
@@ -21,7 +21,7 @@ Generated: **2026-09-07T13:06:22.582074Z**
 
 - Roster: **44 employees** — 38 dashboard-relevant and 6 outside the current ranking scope.
 - Confirmed relevant Instagram handles: **31**; awaiting confirmed handle: **7**.
-- Snapshot: **2026-09-02T13:10:50.190Z**, age **119.9 hours**, classification **archived_refresh_due**.
+- Snapshot: **2026-09-09T07:05:48.556Z**, age **0.3 hours**, classification **current**.
 - Validation: **passed**, measurement version **3**, validator version **2**.
 - Snapshot records: **38 / 38 expected relevant rows**; complete windows: **31**.
 - Momentum-ranked profiles: **25**; recommendation-ready profiles: **31**.
@@ -57,7 +57,7 @@ The grade describes measurement confidence, not the employee's social-media perf
 | Sahil Bedi | @sahilbedi.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
 | Riya Bhardwaj | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
 | Geethika Sri Vyshnavi | @geethika.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Kavita Choudhary | @kavita.kirpa.dxb | Match | Complete validated account data | B | inferred from role and measured content |
+| Kavita Choudhary | @kavita.kirpa.dxb | Match | Complete validated account data | A | inferred from role and measured content |
 | Sarvnihal Singh | @sarvnihal.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
 | Aasfa Wahab Shaikh | @aasfa.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
 | Jagraaj Singh | @jagraaj.kirpa | Match | Complete validated account data | B | inferred from role and measured content |
@@ -88,7 +88,6 @@ The grade describes measurement confidence, not the employee's social-media perf
 
 ## Open issues and qualifications
 
-- **HIGH** — The validated snapshot is outside the 108-hour present-tense window or has no valid timestamp.
 - **EXPECTED** — 7 dashboard-relevant employees still have no confirmed Instagram handle.
 - **SECURITY** — 2 first-name password groups are shared by multiple employees.
 - **SECURITY** — Employee portals currently load the full same-origin dashboard in an iframe and hide non-selected content visually; this is not server-side data isolation.
