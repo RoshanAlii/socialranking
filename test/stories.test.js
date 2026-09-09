@@ -1,7 +1,7 @@
 'use strict';
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
-const {targets, normalize, applyCapture, publicSummary, dubaiDate} = require('../src/stories');
+const {targets, normalize, applyCapture, publicSummary, dubaiDate, pruneSeen} = require('../src/stories');
 const metrics = require('../story-metrics');
 const at = '2026-09-09T09:00:00Z';
 const accounts = [{handle:'kirpa.properties', name:'Kirpa Properties', company:true}];
@@ -42,7 +42,14 @@ test('failures retain last good observations and successful timestamp',()=>{
 test('limits and rejected data prevent claims of full coverage',()=>{
   assert.equal(capture({}, {maxResults:1}).checks[0].checked,0);
   assert.equal(capture({}, {run:{id:'capped',status:'SUCCEEDED',statusMessage:'Maximum total charge reached'}}).checks[0].checked,0);
+  assert.equal(capture({}, {maxChargeUsd:0.5,run:{id:'near-cap',status:'SUCCEEDED',usageTotalUsd:0.499}}).checks[0].checked,0);
   assert.equal(capture({}, {rows:[{...row,is_private:true}]}).checks[0].checked,0);
+});
+test('retention cleanup also works on paused checks without discarding derived history',()=>{
+  const state={seen:{old:'2026-07-01T00:00:00Z',recent:at},daily:{historic:{date:'2026-07-01',video:1}}};
+  pruneSeen(state,at);
+  assert.deepEqual(state.seen,{recent:at});
+  assert.equal(state.daily.historic.video,1);
 });
 test('public summary exposes aggregates, never raw stories or private metrics',()=>{
   const state=capture();

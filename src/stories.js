@@ -21,7 +21,12 @@ function normalize(row, wanted, observedAt) {
   return { key: `${handle}:${row.story_pk}`, handle, at: new Date(at).toISOString(), type: row.media_type };
 }
 
-function applyCapture(prior, { rows, output, run, accounts, observedAt, maxResults }) {
+function pruneSeen(state, now) {
+  state.seen = Object.fromEntries(Object.entries(state.seen || {}).filter(([,at]) => Date.parse(at) >= Date.parse(now) - 30 * DAY));
+  return state;
+}
+
+function applyCapture(prior, { rows, output, run, accounts, observedAt, maxResults, maxChargeUsd }) {
   const state = structuredClone(prior);
   state.seen ||= {}; state.daily ||= {}; state.accounts ||= {}; state.checks ||= [];
   const wanted = new Set(accounts.map(a => a.handle));
@@ -31,7 +36,8 @@ function applyCapture(prior, { rows, output, run, accounts, observedAt, maxResul
   const controlsValid = output?.outcome === 'ok' && Array.isArray(output.failed_targets) &&
     Number(output.delivered) === rows.length && Number(output.granted_targets) >= accounts.length;
   const limited = rows.length >= maxResults || (Number.isFinite(Number(output?.granted_results)) && rows.length >= Number(output.granted_results)) ||
-    /max.*charge|charge.*limit|budget.*reached|payment.*limit/i.test(String(run.statusMessage || ''));
+    /max.*charge|charge.*limit|budget.*reached|payment.*limit/i.test(String(run.statusMessage || '')) ||
+    (Number.isFinite(maxChargeUsd) && Number.isFinite(run.usageTotalUsd) && run.usageTotalUsd >= maxChargeUsd - 0.01);
   const healthy = run.status === 'SUCCEEDED' && controlsValid && !limited && !rejected.length;
   // Keep observed evidence even when some targets failed. Never turn a failed or
   // capped empty response into a confirmed zero for any account.
@@ -59,7 +65,7 @@ function applyCapture(prior, { rows, output, run, accounts, observedAt, maxResul
     checked: accounts.filter(a => healthy && !failed.has(a.handle)).length,
     failed: accounts.filter(a => !healthy || failed.has(a.handle)).map(a => a.handle),
     returned: rows.length, rejected: rejected.length, limited });
-  state.seen = Object.fromEntries(Object.entries(state.seen).filter(([, at]) => Date.parse(at) >= Date.parse(observedAt) - 30 * DAY));
+  pruneSeen(state, observedAt);
   state.checks = state.checks.filter(c => Date.parse(c.at) >= Date.parse(observedAt) - 32 * DAY);
   state.updatedAt = observedAt;
   return state;
@@ -78,4 +84,4 @@ function publicSummary(state, config, accounts, now) {
     runs: state.runs || [] };
 }
 
-module.exports = { targets, normalize, applyCapture, publicSummary, dubaiDate };
+module.exports = { targets, normalize, applyCapture, publicSummary, dubaiDate, pruneSeen };

@@ -8,6 +8,7 @@ This surface reports public marketing publishing observations, not private Insta
 - Confirmed resolved public Instagram roster from the validated snapshot, plus the company account. Never expand targets using Story mentions or co-authors.
 - Scheduled checks at 08:20 and 20:20 Dubai, separate from the four-day feed collector. GitHub schedules can be delayed.
 - Pilot: three confirmed marketing accounts; initial 30-result limit correctly marked partial. Follow-up returned 41 validated records with all three target checks confirmed and no truncation.
+- First production run on 9 September 2026: 184 accepted Story records, 32/32 confirmed target checks, no rejected rows or reported truncation, run `b5rhO3yQUgk2k1cIO`, reported charge $0.47205. At this one-run rate, 60 checks would cost about $28.32; the $8 allowance would pause after roughly 16–17 runs, not provide continuous full-month coverage. Actual future volume and charges vary.
 - Maximum $0.50 per production run; $8 monthly Story allowance, configured in `config/stories.json`. Budget is reserved before each paid start. No automatic paid retries. Unknown outcomes retain the reservation and require review before another run.
 - Costs shown are Apify run-reported charges/reservations, not the account's invoice or a guarantee against other platform storage/compute charges. Existing feed and developer-analysis budgets remain separate.
 

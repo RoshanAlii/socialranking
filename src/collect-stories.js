@@ -1,6 +1,6 @@
 'use strict';
 const fs = require('node:fs');
-const {targets, applyCapture, publicSummary, dubaiDate} = require('./stories');
+const {targets, applyCapture, publicSummary, dubaiDate, pruneSeen} = require('./stories');
 const config = require('../config/stories.json');
 const {waitForApifyRun} = require('./provider');
 
@@ -28,7 +28,7 @@ async function main() {
   state.spend ||= {}; state.runs ||= [];
   const month = dubaiDate(now).slice(0,7), cap = pilot ? 0.10 : config.maxRunChargeUsd;
   const maxResults = pilot ? 150 : config.maxResults;
-  const save = async () => { await api('PUT', key, state); fs.writeFileSync('data/stories.json', JSON.stringify(publicSummary(state, config, all, new Date().toISOString()), null, 2)+'\n'); };
+  const save = async () => { pruneSeen(state, new Date().toISOString()); await api('PUT', key, state); fs.writeFileSync('data/stories.json', JSON.stringify(publicSummary(state, config, all, new Date().toISOString()), null, 2)+'\n'); };
   // Reserve before the paid request: ambiguous failures/interruptions cannot
   // silently reset the allowance. No automatic retries of paid starts.
   if (state.inFlight || state.pending || (!pilot && state.lastAttemptAt && Date.now()-Date.parse(state.lastAttemptAt)<11.5*3600000)) {
@@ -48,7 +48,7 @@ async function main() {
     const rows = await api('GET', `/v2/datasets/${run.defaultDatasetId}/items?clean=true&format=json&limit=${maxResults+1}`);
     const output = await api('GET', `/v2/key-value-stores/${run.defaultKeyValueStoreId}/records/OUTPUT`);
     if (!Array.isArray(rows)) throw new Error('Story results were not a list');
-    state = applyCapture(state, {rows, output, run, accounts, observedAt:new Date().toISOString(), maxResults});
+    state = applyCapture(state, {rows, output, run, accounts, observedAt:new Date().toISOString(), maxResults, maxChargeUsd:cap});
     state.lastStatus = state.checks.at(-1).checked === accounts.length ? 'Collection checked' : 'Partial collection; coverage gaps recorded';
     state.inFlight = null;
     if (Number.isFinite(run.usageTotalUsd)) state.spend[month] += run.usageTotalUsd - cap;
