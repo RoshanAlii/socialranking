@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-09T07:25:39.328245Z",
+  "generatedAt": "2026-09-09T08:58:23.997531Z",
   "scope": {
     "company": "Kirpa Properties L.L.C",
     "rosterVersion": "2026-07-30-kirpa-workbook-v1",
@@ -41,8 +41,8 @@
     "isolationModel": "same-origin iframe plus visual DOM isolation"
   },
   "snapshot": {
-    "capturedAt": "2026-09-09T07:05:48.556Z",
-    "ageHoursAtAudit": 0.3,
+    "capturedAt": "2026-09-09T07:25:41.987Z",
+    "ageHoursAtAudit": 1.5,
     "freshness": "current",
     "presentTenseMaximumAgeHours": 108,
     "source": "live",
@@ -63,8 +63,8 @@
     "recommendationReadyAccounts": 31,
     "rankedMomentumProfiles": 25,
     "refreshOutcome": "success",
-    "refreshAttemptedAt": "2026-09-09T07:05:48.556Z",
-    "lastValidSnapshotAt": "2026-09-09T07:05:48.556Z",
+    "refreshAttemptedAt": "2026-09-09T07:25:41.987Z",
+    "lastValidSnapshotAt": "2026-09-09T07:25:41.987Z",
     "seriesProfiles": 36,
     "seriesPoints": 453,
     "validatedSeriesPoints": 287,
@@ -134,15 +134,15 @@
         "likes": 74,
         "comments": 74,
         "videos": 65,
-        "videoViews": 65
+        "videoViews": 17
       },
       "momentumRank": 14,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Dr. Jai Chatha",
@@ -166,15 +166,15 @@
         "likes": 66,
         "comments": 66,
         "videos": 59,
-        "videoViews": 59
+        "videoViews": 18
       },
       "momentumRank": 11,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Kamalpreet Kaur",
@@ -198,15 +198,15 @@
         "likes": 51,
         "comments": 51,
         "videos": 47,
-        "videoViews": 47
+        "videoViews": 11
       },
       "momentumRank": 1,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Saloni Bedi",
@@ -230,15 +230,15 @@
         "likes": 48,
         "comments": 48,
         "videos": 38,
-        "videoViews": 38
+        "videoViews": 4
       },
       "momentumRank": 12,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Lipika Madan",
@@ -262,15 +262,15 @@
         "likes": 59,
         "comments": 59,
         "videos": 51,
-        "videoViews": 51
+        "videoViews": 16
       },
       "momentumRank": 15,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Priyanka Jayanna",
@@ -287,22 +287,22 @@
       "resolved": true,
       "private": false,
       "windowComplete": true,
-      "postsInWindow": 44,
-      "comparablePosts": 44,
+      "postsInWindow": 43,
+      "comparablePosts": 43,
       "metricCoverage": {
-        "posts": 44,
-        "likes": 44,
-        "comments": 44,
-        "videos": 34,
-        "videoViews": 34
+        "posts": 43,
+        "likes": 43,
+        "comments": 43,
+        "videos": 33,
+        "videoViews": 10
       },
       "momentumRank": 13,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Mohammad Mubeen",
@@ -326,7 +326,7 @@
         "likes": 2,
         "comments": 2,
         "videos": 2,
-        "videoViews": 2
+        "videoViews": 1
       },
       "momentumRank": null,
       "personalCoachDataPresent": true,
@@ -358,15 +358,15 @@
         "likes": 16,
         "comments": 16,
         "videos": 16,
-        "videoViews": 16
+        "videoViews": 7
       },
       "momentumRank": 23,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Puja Maheshwari",
@@ -390,15 +390,15 @@
         "likes": 13,
         "comments": 13,
         "videos": 12,
-        "videoViews": 12
+        "videoViews": 2
       },
       "momentumRank": 24,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Vaishali Arora",
@@ -422,15 +422,15 @@
         "likes": 24,
         "comments": 24,
         "videos": 22,
-        "videoViews": 22
+        "videoViews": 6
       },
       "momentumRank": 10,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Sukhpreet Kaur",
@@ -447,22 +447,22 @@
       "resolved": true,
       "private": false,
       "windowComplete": true,
-      "postsInWindow": 6,
-      "comparablePosts": 6,
+      "postsInWindow": 7,
+      "comparablePosts": 7,
       "metricCoverage": {
-        "posts": 6,
-        "likes": 6,
-        "comments": 6,
+        "posts": 7,
+        "likes": 7,
+        "comments": 7,
         "videos": 6,
-        "videoViews": 6
+        "videoViews": 3
       },
       "momentumRank": 19,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Barkha Kalia",
@@ -486,15 +486,15 @@
         "likes": 12,
         "comments": 12,
         "videos": 11,
-        "videoViews": 11
+        "videoViews": 2
       },
       "momentumRank": 21,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Kirti Anil Walke",
@@ -518,7 +518,7 @@
         "likes": 0,
         "comments": 75,
         "videos": 65,
-        "videoViews": 65
+        "videoViews": 20
       },
       "momentumRank": null,
       "personalCoachDataPresent": true,
@@ -550,15 +550,15 @@
         "likes": 6,
         "comments": 6,
         "videos": 5,
-        "videoViews": 5
+        "videoViews": 0
       },
       "momentumRank": 18,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Riya Bhardwaj",
@@ -614,15 +614,15 @@
         "likes": 63,
         "comments": 63,
         "videos": 55,
-        "videoViews": 55
+        "videoViews": 11
       },
       "momentumRank": 7,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Kavita Choudhary",
@@ -678,15 +678,15 @@
         "likes": 6,
         "comments": 6,
         "videos": 3,
-        "videoViews": 3
+        "videoViews": 1
       },
       "momentumRank": 8,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Aasfa Wahab Shaikh",
@@ -710,15 +710,15 @@
         "likes": 55,
         "comments": 55,
         "videos": 47,
-        "videoViews": 47
+        "videoViews": 15
       },
       "momentumRank": 20,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Jagraaj Singh",
@@ -742,7 +742,7 @@
         "likes": 1,
         "comments": 1,
         "videos": 1,
-        "videoViews": 1
+        "videoViews": 0
       },
       "momentumRank": null,
       "personalCoachDataPresent": true,
@@ -774,15 +774,15 @@
         "likes": 16,
         "comments": 16,
         "videos": 16,
-        "videoViews": 16
+        "videoViews": 5
       },
       "momentumRank": 9,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Kirat Singh Sapra",
@@ -806,15 +806,15 @@
         "likes": 7,
         "comments": 7,
         "videos": 7,
-        "videoViews": 7
+        "videoViews": 3
       },
       "momentumRank": 22,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Sara Banu",
@@ -838,15 +838,15 @@
         "likes": 13,
         "comments": 13,
         "videos": 7,
-        "videoViews": 7
+        "videoViews": 4
       },
       "momentumRank": 25,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Ritika Kodwani",
@@ -870,7 +870,7 @@
         "likes": 2,
         "comments": 2,
         "videos": 2,
-        "videoViews": 2
+        "videoViews": 0
       },
       "momentumRank": null,
       "personalCoachDataPresent": true,
@@ -902,15 +902,15 @@
         "likes": 47,
         "comments": 47,
         "videos": 41,
-        "videoViews": 41
+        "videoViews": 11
       },
       "momentumRank": 4,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Arbaaz Ali Khan",
@@ -966,15 +966,15 @@
         "likes": 15,
         "comments": 15,
         "videos": 13,
-        "videoViews": 13
+        "videoViews": 7
       },
       "momentumRank": 16,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Nikita Lal Tekwani",
@@ -1062,15 +1062,15 @@
         "likes": 90,
         "comments": 90,
         "videos": 73,
-        "videoViews": 73
+        "videoViews": 19
       },
       "momentumRank": 3,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Mona Shah",
@@ -1094,15 +1094,15 @@
         "likes": 34,
         "comments": 34,
         "videos": 31,
-        "videoViews": 31
+        "videoViews": 7
       },
       "momentumRank": 5,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Spoorthi Hassan",
@@ -1126,15 +1126,15 @@
         "likes": 74,
         "comments": 74,
         "videos": 68,
-        "videoViews": 68
+        "videoViews": 21
       },
       "momentumRank": 2,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Faiyaz Mohmedfaruk",
@@ -1158,15 +1158,15 @@
         "likes": 22,
         "comments": 22,
         "videos": 22,
-        "videoViews": 22
+        "videoViews": 8
       },
       "momentumRank": 6,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Ameer Agha Shirazi",
@@ -1222,15 +1222,15 @@
         "likes": 48,
         "comments": 48,
         "videos": 44,
-        "videoViews": 44
+        "videoViews": 10
       },
       "momentumRank": 17,
       "personalCoachDataPresent": true,
       "strategyBasis": "inferred from role and measured content",
       "status": "complete",
       "statusLabel": "Complete validated account data",
-      "measurementConfidenceGrade": "A",
-      "measurementConfidenceReason": "Complete validated window, sufficient engagement sample and complete public view reporting."
+      "measurementConfidenceGrade": "A-",
+      "measurementConfidenceReason": "Complete validated window and sufficient engagement sample; some public view values are unavailable."
     },
     {
       "name": "Param Singh",

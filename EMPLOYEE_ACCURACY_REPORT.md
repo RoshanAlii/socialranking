@@ -1,6 +1,6 @@
 # Kirpa Employee Portal Accuracy Report
 
-Generated: **2026-09-09T07:25:39.328245Z**
+Generated: **2026-09-09T08:58:23.997531Z**
 
 > This report measures internal identity consistency, route coverage, deterministic snapshot validation and per-account measurement completeness. It is not an independent scrape-by-scrape verification against Instagram's live first-party systems.
 
@@ -21,7 +21,7 @@ Generated: **2026-09-09T07:25:39.328245Z**
 
 - Roster: **44 employees** — 38 dashboard-relevant and 6 outside the current ranking scope.
 - Confirmed relevant Instagram handles: **31**; awaiting confirmed handle: **7**.
-- Snapshot: **2026-09-09T07:05:48.556Z**, age **0.3 hours**, classification **current**.
+- Snapshot: **2026-09-09T07:25:41.987Z**, age **1.5 hours**, classification **current**.
 - Validation: **passed**, measurement version **3**, validator version **2**.
 - Snapshot records: **38 / 38 expected relevant rows**; complete windows: **31**.
 - Momentum-ranked profiles: **25**; recommendation-ready profiles: **31**.
@@ -41,41 +41,41 @@ The grade describes measurement confidence, not the employee's social-media perf
 
 | Employee | Instagram | Portal | Snapshot status | Grade | Recommendation basis |
 |---|---|---|---|---:|---|
-| Manpreet Kaur | @manpreet.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Dr. Jai Chatha | @jai.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Kamalpreet Kaur | @kamalpreet.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Saloni Bedi | @saloni.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Lipika Madan | @lipika.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Priyanka Jayanna | @priyanka.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Manpreet Kaur | @manpreet.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Dr. Jai Chatha | @jai.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Kamalpreet Kaur | @kamalpreet.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Saloni Bedi | @saloni.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Lipika Madan | @lipika.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Priyanka Jayanna | @priyanka.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Mohammad Mubeen | @mubeen.iqbal.kirpa | Match | Complete validated account data | B | inferred from role and measured content |
-| Preety Vijayvargiya | @preety.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Puja Maheshwari | @dxb.pooja.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Vaishali Arora | @vaishali.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Sukhpreet Kaur | @sukhpreetbal.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Barkha Kalia | @barkha.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Preety Vijayvargiya | @preety.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Puja Maheshwari | @dxb.pooja.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Vaishali Arora | @vaishali.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Sukhpreet Kaur | @sukhpreetbal.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Barkha Kalia | @barkha.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Kirti Anil Walke | @kirti.kirpa | Match | Complete validated account data | B | inferred from role and measured content |
-| Sahil Bedi | @sahilbedi.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Sahil Bedi | @sahilbedi.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Riya Bhardwaj | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
-| Geethika Sri Vyshnavi | @geethika.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Geethika Sri Vyshnavi | @geethika.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Kavita Choudhary | @kavita.kirpa.dxb | Match | Complete validated account data | A | inferred from role and measured content |
-| Sarvnihal Singh | @sarvnihal.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Aasfa Wahab Shaikh | @aasfa.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Sarvnihal Singh | @sarvnihal.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Aasfa Wahab Shaikh | @aasfa.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Jagraaj Singh | @jagraaj.kirpa | Match | Complete validated account data | B | inferred from role and measured content |
-| Akshay Rajendra | @akshay.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Kirat Singh Sapra | @kirat.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Sara Banu | @sarafaisal.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Akshay Rajendra | @akshay.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Kirat Singh Sapra | @kirat.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Sara Banu | @sarafaisal.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Ritika Kodwani | @ritika.kirpa | Match | Complete validated account data | B | inferred from role and measured content |
-| Jitendra Makhija | @jeet.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Jitendra Makhija | @jeet.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Arbaaz Ali Khan | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
-| Sahil Mendiratta | @sahil.kirpaa | Match | Complete validated account data | A | inferred from role and measured content |
+| Sahil Mendiratta | @sahil.kirpaa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Nikita Lal Tekwani | @nikitaa.kirpa | Match | Complete validated account data | B | inferred from role and measured content |
 | Sleeja Misra | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
-| Lovepreet Singh | @lovepreet.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Mona Shah | @mona.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Spoorthi Hassan | @spoorthi.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
-| Faiyaz Mohmedfaruk | @faiyaz.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Lovepreet Singh | @lovepreet.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Mona Shah | @mona.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Spoorthi Hassan | @spoorthi.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
+| Faiyaz Mohmedfaruk | @faiyaz.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Ameer Agha Shirazi | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
-| Samaksh Malhotra | @samaksh.kirpa | Match | Complete validated account data | A | inferred from role and measured content |
+| Samaksh Malhotra | @samaksh.kirpa | Match | Complete validated account data | A- | inferred from role and measured content |
 | Param Singh | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
 | Anmol Singh | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
 | Amandeep Singh | Not confirmed | Match | Confirmed handle required | N/A | inferred from role and measured content |
