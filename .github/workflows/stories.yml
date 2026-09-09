@@ -1,8 +1,9 @@
 name: Public Story activity
 on:
   push:
-    branches: [feat/apify-stories]
-    paths: [src/stories.js, src/collect-stories.js, config/stories.json, .github/workflows/stories.yml]
+    branches: [main]
+    paths: [src/stories.js, src/collect-stories.js, config/stories.json, story-metrics.js, story-activity.js, test/stories.test.js, .github/workflows/stories.yml]
+  pull_request:
   workflow_dispatch:
     inputs:
       pilot:
@@ -17,7 +18,17 @@ concurrency:
   group: public-story-activity
   cancel-in-progress: false
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: node --test test/stories.test.js
+      - run: node --check story-activity.js
   collect:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -29,7 +40,7 @@ jobs:
       - name: Collect public Story observations
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN_MENTION_COUNT || secrets.APIFY_TOKEN }}
-          PILOT: ${{ github.event_name == 'push' || inputs.pilot == true }}
+          PILOT: ${{ inputs.pilot == true }}
         run: |
           if [ "$PILOT" = true ]; then
             node src/collect-stories.js --pilot

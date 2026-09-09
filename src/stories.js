@@ -16,7 +16,7 @@ function normalize(row, wanted, observedAt) {
   const handle = canonical(row?.username);
   const at = Date.parse(row?.taken_at), end = Date.parse(row?.expiring_at), now = Date.parse(observedAt);
   if (!wanted.has(handle) || row.is_private !== false || typeof row.story_pk !== 'string' || !/^\d+$/.test(row.story_pk) ||
-      !Number.isFinite(at) || !Number.isFinite(end) || at > now || at < now - 2 * DAY || end <= at ||
+      !Number.isFinite(at) || !Number.isFinite(end) || at > now || at < now - 2 * DAY || end <= at || end > at + 2 * DAY ||
       !['image', 'video'].includes(row.media_type)) return null;
   return { key: `${handle}:${row.story_pk}`, handle, at: new Date(at).toISOString(), type: row.media_type };
 }
@@ -30,7 +30,8 @@ function applyCapture(prior, { rows, output, run, accounts, observedAt, maxResul
   const failed = new Set((output?.failed_targets || []).map(canonical));
   const controlsValid = output?.outcome === 'ok' && Array.isArray(output.failed_targets) &&
     Number(output.delivered) === rows.length && Number(output.granted_targets) >= accounts.length;
-  const limited = rows.length >= maxResults || (Number.isFinite(Number(output?.granted_results)) && rows.length >= Number(output.granted_results));
+  const limited = rows.length >= maxResults || (Number.isFinite(Number(output?.granted_results)) && rows.length >= Number(output.granted_results)) ||
+    /max.*charge|charge.*limit|budget.*reached|payment.*limit/i.test(String(run.statusMessage || ''));
   const healthy = run.status === 'SUCCEEDED' && controlsValid && !limited && !rejected.length;
   // Keep observed evidence even when some targets failed. Never turn a failed or
   // capped empty response into a confirmed zero for any account.

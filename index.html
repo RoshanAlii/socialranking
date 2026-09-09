@@ -4920,7 +4920,7 @@
         </div>
         <div class="analytics-body">
           <div class="analytics-note">${esc(note)} ${isLegacy() ? 'Use it to inspect this account, not to declare a team winner.' : ''}</div>
-          <section data-story-person="${esc(person.handle)}" aria-label="Personal Story publishing activity"></section>
+          <section data-story-person="${esc(person.handle)}" aria-label="Personal Story publishing activity" hidden></section>
           <div class="person-kpis">
             ${analyticsKpi('Momentum score', isNumber(personBlock(person.handle)?.score?.value) ? `${Math.round(personBlock(person.handle).score.value * 100)}/100` : noPosts ? 'Activity needed' : 'Building sample', personBlock(person.handle)?.score?.rank ? `Team rank #${personBlock(person.handle).score.rank}` : personBlock(person.handle)?.score?.eligibilityReasons?.join(' · ') || 'Comparable inputs are still being collected')}
             ${analyticsKpi('Followers', fmt(analytics?.followers), 'Point-in-time public count')}

@@ -9,7 +9,7 @@
     else local.setUTCDate(local.getUTCDate()-29);
     return local.toISOString().slice(0,10);
   }
-  function summarize(data,handle,period='month'){
+  function summarize(data,handle,period='month',wallNow=Date.now()){
     if(!data?.generatedAt)return null;
     const now=data.generatedAt,from=periodStart(now,period),to=day(now);
     const accounts=(data.accounts||[]).filter(a=>handle==='team'?!a.company:a.handle===handle);
@@ -17,7 +17,7 @@
     const rows=(data.daily||[]).filter(r=>wanted.has(r.handle)&&r.date>=from&&r.date<=to);
     const counts=rows.reduce((s,r)=>({image:s.image+r.image,video:s.video+r.video}),{image:0,video:0});
     const checks=(data.checks||[]).filter(c=>day(c.at)>=from&&day(c.at)<=to);
-    const fresh=accounts.filter(a=>a.status==='checked'&&a.lastSuccessAt&&Date.parse(now)-Date.parse(a.lastSuccessAt)<=13*3600000).length;
+    const fresh=accounts.filter(a=>a.status==='checked'&&a.lastSuccessAt&&wallNow-Date.parse(a.lastSuccessAt)>=0&&wallNow-Date.parse(a.lastSuccessAt)<=13*3600000).length;
     const started=accounts.map(a=>a.monitoringSince).filter(Boolean).sort();
     return {...counts,total:counts.image+counts.video,activeDays:new Set(rows.map(r=>r.date)).size,
       from,to,rows,accounts,fresh,monitoringSince:started[0]||null,

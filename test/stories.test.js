@@ -2,6 +2,7 @@
 const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const {targets, normalize, applyCapture, publicSummary, dubaiDate} = require('../src/stories');
+const metrics = require('../story-metrics');
 const at = '2026-09-09T09:00:00Z';
 const accounts = [{handle:'kirpa.properties', name:'Kirpa Properties', company:true}];
 const row = {username:'kirpa.properties', is_private:false, story_pk:'1234567890123456789', taken_at:'2026-09-08T21:00:00Z', expiring_at:'2026-09-09T21:00:00Z', media_type:'video'};
@@ -40,6 +41,7 @@ test('failures retain last good observations and successful timestamp',()=>{
 });
 test('limits and rejected data prevent claims of full coverage',()=>{
   assert.equal(capture({}, {maxResults:1}).checks[0].checked,0);
+  assert.equal(capture({}, {run:{id:'capped',status:'SUCCEEDED',statusMessage:'Maximum total charge reached'}}).checks[0].checked,0);
   assert.equal(capture({}, {rows:[{...row,is_private:true}]}).checks[0].checked,0);
 });
 test('public summary exposes aggregates, never raw stories or private metrics',()=>{
@@ -50,4 +52,17 @@ test('public summary exposes aggregates, never raw stories or private metrics',(
   assert.ok(!json.includes('media_url'));
   assert.equal(summary.daily[0].video,1);
   assert.equal(summary.accounts.length,1);
+});
+test('Story period filters use Dubai calendar month and Monday week across month boundaries',()=>{
+  assert.equal(metrics.periodStart('2026-08-31T21:00:00Z','month'),'2026-09-01');
+  assert.equal(metrics.periodStart('2026-08-31T21:00:00Z','week'),'2026-08-31');
+  assert.equal(metrics.periodStart('2026-09-09T09:00:00Z','30'),'2026-08-11');
+});
+test('company and team Story counts are separate; freshness ages with browser time',()=>{
+  const state=capture();
+  const data=publicSummary(state,{enabled:true,intervalHours:12,monthlyBudgetUsd:8},accounts,at);
+  assert.equal(metrics.summarize(data,'team','month',Date.parse(at)).total,0);
+  assert.equal(metrics.summarize(data,'kirpa.properties','month',Date.parse(at)).total,1);
+  assert.equal(metrics.summarize(data,'kirpa.properties','month',Date.parse(at)).fresh,1);
+  assert.equal(metrics.summarize(data,'kirpa.properties','month',Date.parse(at)+14*3600000).fresh,0);
 });

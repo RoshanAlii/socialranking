@@ -27,6 +27,7 @@
     if(!data)return;
     for(const node of document.querySelectorAll('[data-story-person]:not([data-story-mounted])')){
       node.dataset.storyMounted='true';
+      node.hidden=false;
       const s=KirpaStoryMetrics.summarize(data,node.dataset.storyPerson,'month');
       node.innerHTML=`<h3>Story publishing · this month</h3>${cards(s)}<p class="story-note">${esc(date(s.from))}–${esc(date(s.to))} · Dubai. Collection began ${esc(date(s.monitoringSince))}. Captured counts are a minimum; Story views, reach and profile visits are not public. Excluded from momentum scoring.</p>`;
     }
