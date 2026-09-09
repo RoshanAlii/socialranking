@@ -247,6 +247,11 @@ function validateSnapshot(snapshot, registry, opts = {}) {
     if (records.some(record => record.handle === account.handle)) {
       errors.push(`brand account ${account.handle} also appears in the ranked record set`);
     }
+    if (account.companyPage) {
+      const issues = require('../company-page').errors(account);
+      for (const issue of issues) errors.push(`brand account ${account.handle}: ${issue}`);
+      if (account.companyPage.complete !== account.fetchMeta.postsQuerySucceeded) errors.push(`brand account ${account.handle}: inconsistent coverage flags`);
+    }
   }
 
   if (opts.series) {

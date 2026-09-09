@@ -4,6 +4,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive">
   <script src="./crm/secure.js"></script>
   <script src="./access-gate.js"></script>
+  <script src="./company-page.js"></script>
   <link rel="stylesheet" href="./crm/dashboard.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -3404,7 +3405,7 @@
       const range = calendarRange();
       if (!range || !record?.resolved || record.isPrivate) return null;
       const seen = new Set();
-      const posts = (record.recentPosts || []).filter(post => {
+      const posts = (record.isBrand ? window.KirpaCompanyPage.posts(record) : record.recentPosts || []).filter(post => {
         const key = post.id ? `id:${post.id}` : post.url ? `url:${post.url}` : `${post.postedAt}|${post.caption}`;
         if (seen.has(key)) return false;
         seen.add(key);
@@ -3420,6 +3421,8 @@
         const interactions = periodPosts.filter(post => isNumber(post.likes) && isNumber(post.comments)).map(post => post.likes + post.comments);
         return {
           posts: periodPosts.length,
+          owned: periodPosts.filter(post => !post.pageRelation || post.pageRelation === 'owned').length,
+          shared: periodPosts.filter(post => post.pageRelation && post.pageRelation !== 'owned').length,
           reels: periodPosts.filter(post => post.type === 'reel').length,
           standaloneVideos: periodPosts.filter(post => post.type === 'video').length,
           images: periodPosts.filter(post => post.type === 'image').length,
@@ -3438,8 +3441,10 @@
         };
       };
       return {
-        complete: record.fetchMeta?.postsQuerySucceeded === true &&
-          record.fetchMeta?.postsOwnershipComplete !== false && record.fetchMeta?.postsLookbackDays >= 30,
+        complete: record.isBrand ? window.KirpaCompanyPage.complete(record, Math.min(range.monthStart, range.weekStart), range.now) :
+          record.fetchMeta?.postsQuerySucceeded === true && record.fetchMeta?.postsOwnershipComplete !== false &&
+          record.fetchMeta?.postsLookbackDays >= 31 && !record.fetchMeta?.postsTruncated,
+        companyPage: record.isBrand === true,
         month: summarize(range.monthStart),
         week: summarize(range.weekStart),
       };
@@ -3499,10 +3504,10 @@
       return `<div class="calendar-group">
         <div class="calendar-group-head"><div><b>${esc(title)}</b><span>${esc(subtitle)}</span></div><span class="calendar-badge">${esc(badge)}</span></div>
         <div class="calendar-metrics">
-          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.posts)}</b><span>Posts this month<br>${esc(calendarDateLabel(range.monthStart))}</span></div>
-          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.week.posts)}</b><span>Posts this week<br>${esc(calendarDateLabel(range.weekStart))}</span></div>
-          <div class="calendar-metric"><b>${fmt(calendar.month.reels || 0)}</b><span>Reels this month<br>${fmt(calendar.week.reels || 0)} this week</span></div>
-          <div class="calendar-metric"><b>${isNumber(calendar.month.interactions) ? `${calendar.month.interactionsComplete ? '' : '≥'}${fmt(calendar.month.interactions)}` : '—'}</b><span>Attention this month<br>${isNumber(calendar.week.interactions) ? `${calendar.week.interactionsComplete ? '' : '≥'}${fmt(calendar.week.interactions)}` : '—'} this week</span></div>
+          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.posts)}</b><span>Posts this month<br>${esc(calendarDateLabel(range.monthStart))}${calendar.companyPage ? `<br>${calendar.month.owned} company-owned + ${calendar.month.shared} shared / collaborative` : ''}</span></div>
+          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.week.posts)}</b><span>Posts this week<br>${esc(calendarDateLabel(range.weekStart))}${calendar.companyPage ? `<br>${calendar.week.owned} company-owned + ${calendar.week.shared} shared / collaborative` : ''}</span></div>
+          <div class="calendar-metric"><b>${postPrefix}${fmt(calendar.month.reels || 0)}</b><span>Reels this month<br>${postPrefix}${fmt(calendar.week.reels || 0)} this week</span></div>
+          <div class="calendar-metric"><b>${isNumber(calendar.month.interactions) ? `${calendar.complete && calendar.month.interactionsComplete ? '' : '≥'}${fmt(calendar.month.interactions)}` : '—'}</b><span>Attention this month<br>${isNumber(calendar.week.interactions) ? `${calendar.complete && calendar.week.interactionsComplete ? '' : '≥'}${fmt(calendar.week.interactions)}` : '—'} this week</span></div>
           <div class="calendar-metric"><b>${esc(calendarViews(calendar.month, calendar.complete))}</b><span>Video views this month<br>${fmt(calendar.month.viewsReporting)}/${fmt(calendar.month.videoPosts)} reporting</span></div>
           <div class="calendar-metric"><b>${esc(calendarViews(calendar.week, calendar.complete))}</b><span>Video views this week<br>${fmt(calendar.week.viewsReporting)}/${fmt(calendar.week.videoPosts)} reporting</span></div>
         </div>
@@ -3635,13 +3640,30 @@
       const brandCalendar = calendarForRecord(brand);
       byId('calendar-pulse').innerHTML = [
         calendarGroupMarkup('Kirpa team', `${people.length} measured Instagram profiles · owned posts only`, teamCalendar, 'Team total'),
-        calendarGroupMarkup('@kirpa.properties', 'Main Kirpa Properties Instagram account', brandCalendar, 'Company account'),
+        calendarGroupMarkup('@kirpa.properties', 'Page posts: company-owned plus evidenced shared / collaborative posts', brandCalendar, 'Company account') + companyPostAudit(brand),
       ].join('');
       const select = byId('performance-person');
       const previous = select.value;
       select.innerHTML = people.slice().sort((a, b) => a.name.localeCompare(b.name)).map(record => `<option value="${esc(record.handle)}">${esc(record.name)} · @${esc(record.handle)}</option>`).join('');
       if (people.some(record => record.handle === previous)) select.value = previous;
       renderPerformancePerson();
+    }
+
+    function companyPostAudit(record) {
+      const range = calendarRange();
+      if (!record || !range) return '';
+      const complete = window.KirpaCompanyPage.complete(record, range.monthStart, range.now);
+      const posts = window.KirpaCompanyPage.posts(record).filter(p => Date.parse(p.postedAt) >= range.monthStart && Date.parse(p.postedAt) <= range.now).sort((a,b) => Date.parse(b.postedAt)-Date.parse(a.postedAt));
+      const days = new Map();
+      for (const post of posts) {
+        const day = new Date(Date.parse(post.postedAt)+4*3600000).toISOString().slice(0,10);
+        if (!days.has(day)) days.set(day, []);
+        days.get(day).push(post);
+      }
+      return `<div class="calendar-group" style="grid-column:1/-1"><details><summary>Company post audit · ${complete ? '' : 'at least '}${posts.length} posts this month · Dubai dates</summary>
+        <p>${complete ? 'Full date-bounded public feed reconciled with the latest profile preview.' : esc(record.companyPage?.reason || 'Historical preview-only data: full coverage is not yet verified.')} ${record.companyPage?.observedAt ? `Observed ${esc(new Date(record.companyPage.observedAt).toLocaleString('en-GB',{timeZone:'Asia/Dubai'}))} Dubai.` : ''}</p>
+        <p>One carousel counts as one post. Pinned posts use their original publication date. Stories are not included. Shared posts can also appear in the team total—do not add the two totals together. Views and interactions are observed lifetime totals on posts published in this period, not views gained during the period.</p>
+        ${Array.from(days, ([day, rows]) => `<details><summary>${day} · ${rows.length} posts</summary>${rows.map(p => `<p><a href="${esc(safeUrl(p.url)||'#')}" target="_blank" rel="noopener">${esc(new Date(p.postedAt).toLocaleTimeString('en-GB',{timeZone:'Asia/Dubai',hour:'2-digit',minute:'2-digit'}))} · ${esc(p.type)} · ${esc(p.pageRelation === 'owned' ? 'Company-owned' : 'Shared / collaborative')} · @${esc(p.ownerUsername)}</a> — ${fmt(p.likes)} likes · ${fmt(p.comments)} comments · ${fmt(p.views)} views</p>`).join('')}</details>`).join('')}</details></div>`;
     }
 
     function validMentionReport(report = MENTIONS) {

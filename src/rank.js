@@ -170,6 +170,9 @@ function windowCoverage(record, now, days = WINDOW_DAYS) {
   if (!isUsable(record)) return { complete: false, reason: 'profile unavailable' };
 
   const meta = record.fetchMeta || {};
+  if (record.isBrand && (!record.companyPage?.complete || record.companyPage.version !== 1)) {
+    return { complete: false, reason: record.companyPage?.reason || 'company feed has not been fully reconciled' };
+  }
   const dated = uniquePosts(record).filter(post => Number.isFinite(ts(post))).sort((a, b) => ts(a) - ts(b));
   const oldestFetchedAt = dated[0]?.postedAt || null;
   const reachesCutoff = dated.length > 0 && ts(dated[0]) <= cutoff;
