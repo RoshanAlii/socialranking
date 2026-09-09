@@ -14,6 +14,7 @@ on:
     - cron: '20 4,16 * * *'
 permissions:
   contents: write
+  pages: write
 concurrency:
   group: public-story-activity
   cancel-in-progress: false
@@ -54,6 +55,7 @@ jobs:
           path: data/stories.json
           retention-days: 7
       - name: Publish derived activity only
+        id: publish
         if: always() && github.ref == 'refs/heads/main' && inputs.pilot != true
         run: |
           if [ ! -f data/stories.json ]; then exit 0; fi
@@ -65,3 +67,8 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+      - name: Rebuild the existing GitHub Pages site
+        if: always() && steps.publish.outcome == 'success' && github.ref == 'refs/heads/main' && inputs.pilot != true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
