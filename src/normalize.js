@@ -133,6 +133,14 @@ function normalizeRecord(entry, raw, capturedAt) {
     historyOldestMetricsObservedAt: s(raw._historyOldestMetricsObservedAt),
   });
   if (base.isPrivate) return base;
+  if (raw._companyPage) {
+    base.companyPage = Object.assign({}, raw._companyPage, {
+      posts: dedupePosts((raw._companyPage.posts || []).map(post => Object.assign(normalizePost(post, entry.platform), {
+        pageRelation: post._pageRelation || post.pageRelation,
+        pageEvidence: post._pageEvidence || post.pageEvidence,
+      }))),
+    });
+  }
 
   const rawPosts = Array.isArray(raw.recentPosts) ? raw.recentPosts
     : Array.isArray(raw.posts) ? raw.posts

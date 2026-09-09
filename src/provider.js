@@ -4,6 +4,7 @@ const https = require('https');
 
 const PROFILE_ACTOR = process.env.APIFY_IG_PROFILE_ACTOR || 'apify~instagram-profile-scraper';
 const POSTS_ACTOR = process.env.APIFY_IG_POSTS_ACTOR || 'apify~instagram-scraper';
+const BRAND_POSTS_ACTOR = 'apify~instagram-post-scraper';
 const TIKTOK_ACTOR = process.env.APIFY_TIKTOK_ACTOR || 'clockworks~tiktok-scraper';
 // A run-sync call that never returns holds the whole scheduled job hostage until the
 // workflow's 45-minute ceiling kills it, which reads as "the board is broken"
@@ -476,45 +477,81 @@ class ApifyProvider {
     return out;
   }
 
-  /*
-   * The company account's profile payload already includes its newest owned
-   * posts. The general post Actor also returns hundreds of tagged/collaborator
-   * rows for this account, most of which are rejected by ownership filtering;
-   * that wastes almost a full capped run and can outlive the GitHub job.
-   * Merge the owner-verified profile rows into the last valid brand window
-   * instead. With the four-day cadence, the profile payload comfortably spans
-   * the incremental gap while immutable post ids keep the history deduplicated.
-   */
+  // Full bounded feed reconciliation: previews/history cannot prove completeness.
   async fetchBrandProfile(platform, handle) {
     if (platform !== 'instagram') return this.fetchProfile(platform, handle);
     const items = await this.call(PROFILE_ACTOR, instagramProfileInput([handle]));
     const details = groupProfileItems([handle], items).get(handle);
     if (!details) return { notFound: true };
 
-    const freshPosts = groupPostItems(handle, details.latestPosts || []);
-    const priorPosts = this.previousBrand(handle)?.recentPosts || [];
-    const cutoff = new Date(this.capturedAt).getTime() - POST_CACHE_RETENTION_DAYS * dayMs();
-    const posts = dedupeRawPosts([...freshPosts, ...priorPosts]).filter(item => {
-      const at = new Date(item?.postedAt || item?.timestamp || item?.takenAtIso || 0).getTime();
-      return !Number.isFinite(at) || at >= cutoff;
+    const now = Date.parse(this.capturedAt);
+    const cutoff = now - INSTAGRAM_POST_LOOKBACK_DAYS * dayMs();
+    const prior = this.previousBrand(handle);
+    let feed = [], queryError = null;
+    try {
+      feed = await this.call(BRAND_POSTS_ACTOR, {
+        username: [handle], resultsLimit: INSTAGRAM_POST_RESULTS_LIMIT,
+        onlyPostsNewerThan: new Date(cutoff).toISOString(), skipPinnedPosts: false,
+        dataDetailLevel: 'detailedData',
+      });
+      if (!Array.isArray(feed)) throw new Error('Company feed was not a list');
+    } catch (error) { queryError = 'Company post collection failed; previous evidence retained'; }
+    const preview = details.latestPosts || [];
+    const previewKeys = new Set(preview.map(rawPostKey));
+    const normalizedHandle = canonicalHandle(handle);
+    const valid = [], rejected = [];
+    for (const post of dedupeRawPosts(feed)) {
+      const at = Date.parse(post.postedAt || post.timestamp || '');
+      const owner = postOwner(post);
+      const coauthors = (post.coauthorProducers || post.coauthors || []).map(p => canonicalHandle(typeof p === 'string' ? p : p.username));
+      const input = postInputHandle(post);
+      const onPage = owner === normalizedHandle || coauthors.includes(normalizedHandle) ||
+        input === normalizedHandle || previewKeys.has(rawPostKey(post));
+      if (!(post.id || post.shortCode) || !owner || !Number.isFinite(at) || !onPage ||
+          (input && input !== normalizedHandle)) { rejected.push(post); continue; }
+      if (at >= cutoff && at <= now) valid.push(Object.assign({}, post, {
+        metricsObservedAt: this.capturedAt,
+        _pageRelation: owner === normalizedHandle ? 'owned' : coauthors.includes(normalizedHandle) ? 'collaboration' : 'shared',
+        _pageEvidence: owner === normalizedHandle ? 'owner' : coauthors.includes(normalizedHandle) ? 'coauthor' : 'profile-feed',
+      }));
+    }
+    const keys = new Set(valid.map(rawPostKey));
+    const omittedPreview = preview.filter(post => {
+      const at = Date.parse(post.timestamp || post.postedAt || '');
+      return at >= cutoff && at <= now && !keys.has(rawPostKey(post));
     });
+    const capped = feed.length >= INSTAGRAM_POST_RESULTS_LIMIT ||
+      feed._apifyRun?.usageTotalUsd >= APIFY_MAX_RUN_CHARGE_USD ||
+      /max.*(charge|cost)|charge.*limit/i.test(feed._apifyRun?.statusMessage || '');
+    const complete = !queryError && !capped && rejected.length === 0 && omittedPreview.length === 0 && valid.length > 0;
+    const reason = queryError || (capped ? 'Company feed reached its safety limit' : rejected.length ? 'Company feed contains unverifiable rows' : omittedPreview.length ? 'Company feed omitted posts present in the profile preview' : !valid.length ? 'An empty company feed cannot prove a complete window' : null);
+    const freshPosts = groupPostItems(handle, valid);
+    // Never silently count a deleted/omitted historical post as freshly observed.
+    const older = (prior?.recentPosts || []).filter(p => Date.parse(p.postedAt) < cutoff && Date.parse(p.postedAt) >= now - POST_CACHE_RETENTION_DAYS * dayMs());
+    const posts = queryError ? (prior?.recentPosts || []) : dedupeRawPosts([...freshPosts, ...older]);
+    const pagePosts = queryError ? (prior?.companyPage?.posts || []).filter(p => Date.parse(p.postedAt) >= cutoff && Date.parse(p.postedAt) <= now) : valid;
     return Object.assign({}, details, {
       recentPosts: posts,
       _profileSource: PROFILE_ACTOR,
-      _postSource: `${PROFILE_ACTOR}:latestPosts`,
-      _postsQuerySucceeded: true,
-      _postsQueryError: null,
+      _postSource: BRAND_POSTS_ACTOR,
+      _postsQuerySucceeded: complete,
+      _postsQueryError: reason,
       _postsLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
       _postsResultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
-      _postsTruncated: false,
+      _postsTruncated: capped,
       _postsOwnershipComplete: true,
       _missingOwnerCount: 0,
       _rawPostCount: posts.length,
-      _incremental: true,
-      _incrementalLookbackDays: this.incrementalLookbackDays([handle]),
+      _incremental: false,
+      _incrementalLookbackDays: INSTAGRAM_POST_LOOKBACK_DAYS,
       _freshPostCount: freshPosts.length,
       _reusedPostCount: Math.max(0, posts.length - freshPosts.length),
-      _profileFallbackPostCount: freshPosts.length,
+      _profileFallbackPostCount: 0,
+      _companyPage: { version: 1, complete, reason, observedAt: queryError ? prior?.companyPage?.observedAt || null : this.capturedAt,
+        requestedAt: this.capturedAt, from: new Date(cutoff).toISOString(), to: this.capturedAt,
+        source: BRAND_POSTS_ACTOR, runId: feed._apifyRun?.id || null, resultLimit: INSTAGRAM_POST_RESULTS_LIMIT,
+        returnedRows: feed.length, rejectedRows: rejected.length, omittedPreviewPosts: omittedPreview.length,
+        truncated: capped, posts: pagePosts },
     });
   }
 

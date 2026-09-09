@@ -36,7 +36,9 @@ jobs:
 
       - name: Verify formulas and release guards
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
-        run: node test/test.js
+        run: |
+          node test/test.js
+          node --test test/company-page.test.js
 
       - name: Verify roster integrity
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
