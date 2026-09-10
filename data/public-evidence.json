@@ -118,10 +118,12 @@
           "pageRelation": "owned",
           "likes": 1062,
           "comments": 21,
-          "shares": null,
+          "shares": 41,
           "videoPlayCount": 41194,
           "metricsObservedAt": "2026-09-10T03:46:43.573Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:55:54.464Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3981753073238396307",
@@ -132,10 +134,12 @@
           "pageRelation": "owned",
           "likes": 836,
           "comments": 27,
-          "shares": null,
+          "shares": 35,
           "videoPlayCount": 29594,
           "metricsObservedAt": "2026-09-10T03:46:43.573Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:55:54.464Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3980591141407027954",
@@ -160,10 +164,12 @@
           "pageRelation": "owned",
           "likes": 889,
           "comments": 18,
-          "shares": null,
+          "shares": 24,
           "videoPlayCount": 38458,
           "metricsObservedAt": "2026-09-10T03:46:43.573Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:55:54.464Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3977032733955579013",
@@ -188,10 +194,12 @@
           "pageRelation": "owned",
           "likes": 891,
           "comments": 20,
-          "shares": null,
+          "shares": 44,
           "videoPlayCount": 33309,
           "metricsObservedAt": "2026-09-10T03:46:43.573Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:55:54.464Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3981094556085572568",
@@ -216,10 +224,12 @@
           "pageRelation": "owned",
           "likes": 562,
           "comments": 18,
-          "shares": null,
+          "shares": 42,
           "videoPlayCount": 33988,
           "metricsObservedAt": "2026-09-10T03:46:43.573Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:55:54.464Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3976901397298502583",
@@ -4163,6 +4173,49 @@
             "source": "apify~instagram-post-scraper"
           }
         ]
+      },
+      "sharesPilot": {
+        "at": "2026-09-10T03:55:54.464Z",
+        "runId": "tfAlYnhu6GIJZIvNy",
+        "requested": 5,
+        "matched": 5,
+        "reporting": 5,
+        "fields": [
+          "inputUrl",
+          "id",
+          "type",
+          "shortCode",
+          "caption",
+          "hashtags",
+          "mentions",
+          "url",
+          "commentsCount",
+          "firstComment",
+          "latestComments",
+          "dimensionsHeight",
+          "dimensionsWidth",
+          "originalHeight",
+          "originalWidth",
+          "displayUrl",
+          "images",
+          "videoUrl",
+          "audioUrl",
+          "alt",
+          "likesCount",
+          "videoViewCount",
+          "timestamp",
+          "childPosts",
+          "ownerFullName",
+          "ownerUsername",
+          "ownerId",
+          "productType",
+          "videoDuration",
+          "musicInfo",
+          "isCommentsDisabled",
+          "videoPlayCount",
+          "paidPartnership",
+          "sharesCount"
+        ]
       }
     },
     {
@@ -4197,10 +4250,12 @@
           "pageRelation": "owned",
           "likes": 66,
           "comments": 2,
-          "shares": null,
+          "shares": 2,
           "videoPlayCount": 2528,
           "metricsObservedAt": "2026-09-10T03:48:32.272Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:08.056Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3980815848409706791",
@@ -4239,10 +4294,12 @@
           "pageRelation": "owned",
           "likes": 109,
           "comments": 7,
-          "shares": null,
+          "shares": 11,
           "videoPlayCount": 4732,
           "metricsObservedAt": "2026-09-10T03:48:32.272Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:08.056Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3980263092804461867",
@@ -4267,10 +4324,12 @@
           "pageRelation": "owned",
           "likes": 104,
           "comments": 4,
-          "shares": null,
+          "shares": 9,
           "videoPlayCount": 2194,
           "metricsObservedAt": "2026-09-10T03:48:32.272Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:08.056Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3981056649333158711",
@@ -4281,10 +4340,12 @@
           "pageRelation": "owned",
           "likes": 275,
           "comments": 11,
-          "shares": null,
+          "shares": 20,
           "videoPlayCount": 13839,
           "metricsObservedAt": "2026-09-10T03:48:32.272Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:08.056Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3977626537444564306",
@@ -4421,10 +4482,12 @@
           "pageRelation": "owned",
           "likes": 6,
           "comments": 0,
-          "shares": null,
+          "shares": 0,
           "videoPlayCount": 90,
           "metricsObservedAt": "2026-09-10T03:48:32.272Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:08.056Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3979981762017388127",
@@ -7738,6 +7801,51 @@
             "source": "apify~instagram-post-scraper"
           }
         ]
+      },
+      "sharesPilot": {
+        "at": "2026-09-10T03:56:08.056Z",
+        "runId": "jx78oouTtjM1p2mQ5",
+        "requested": 5,
+        "matched": 5,
+        "reporting": 5,
+        "fields": [
+          "inputUrl",
+          "id",
+          "type",
+          "shortCode",
+          "caption",
+          "hashtags",
+          "mentions",
+          "url",
+          "commentsCount",
+          "firstComment",
+          "latestComments",
+          "dimensionsHeight",
+          "dimensionsWidth",
+          "originalHeight",
+          "originalWidth",
+          "displayUrl",
+          "images",
+          "videoUrl",
+          "audioUrl",
+          "alt",
+          "likesCount",
+          "videoViewCount",
+          "timestamp",
+          "childPosts",
+          "locationName",
+          "locationId",
+          "ownerFullName",
+          "ownerUsername",
+          "ownerId",
+          "productType",
+          "videoDuration",
+          "musicInfo",
+          "isCommentsDisabled",
+          "videoPlayCount",
+          "paidPartnership",
+          "sharesCount"
+        ]
       }
     },
     {
@@ -7814,10 +7922,12 @@
           "pageRelation": "owned",
           "likes": 198,
           "comments": 7,
-          "shares": null,
+          "shares": 2,
           "videoPlayCount": 8373,
           "metricsObservedAt": "2026-09-10T03:52:03.285Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:43.379Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3982595194549509426",
@@ -7828,10 +7938,12 @@
           "pageRelation": "owned",
           "likes": 133,
           "comments": 5,
-          "shares": null,
+          "shares": 1,
           "videoPlayCount": 3118,
           "metricsObservedAt": "2026-09-10T03:52:03.285Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:43.379Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3982274390951084772",
@@ -7842,10 +7954,12 @@
           "pageRelation": "owned",
           "likes": 117,
           "comments": 5,
-          "shares": null,
+          "shares": 1,
           "videoPlayCount": 4162,
           "metricsObservedAt": "2026-09-10T03:52:03.285Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:43.379Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3972969197326610908",
@@ -7884,10 +7998,12 @@
           "pageRelation": "owned",
           "likes": 635,
           "comments": 7,
-          "shares": null,
+          "shares": 8,
           "videoPlayCount": 39028,
           "metricsObservedAt": "2026-09-10T03:52:03.285Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:43.379Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3972794609314430670",
@@ -8010,10 +8126,12 @@
           "pageRelation": "owned",
           "likes": 103,
           "comments": 2,
-          "shares": null,
+          "shares": 7,
           "videoPlayCount": 5387,
           "metricsObservedAt": "2026-09-10T03:52:03.285Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:43.379Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3969295558728228456",
@@ -10472,6 +10590,48 @@
             "metricsObservedAt": "2026-09-09T09:10:15.510Z",
             "source": "apify~instagram-post-scraper"
           }
+        ]
+      },
+      "sharesPilot": {
+        "at": "2026-09-10T03:56:43.379Z",
+        "runId": "eezmSU1d2Zas3eKUo",
+        "requested": 5,
+        "matched": 5,
+        "reporting": 5,
+        "fields": [
+          "inputUrl",
+          "id",
+          "type",
+          "shortCode",
+          "hashtags",
+          "mentions",
+          "url",
+          "commentsCount",
+          "firstComment",
+          "latestComments",
+          "dimensionsHeight",
+          "dimensionsWidth",
+          "originalHeight",
+          "originalWidth",
+          "displayUrl",
+          "images",
+          "videoUrl",
+          "audioUrl",
+          "alt",
+          "likesCount",
+          "videoViewCount",
+          "timestamp",
+          "childPosts",
+          "ownerFullName",
+          "ownerUsername",
+          "ownerId",
+          "productType",
+          "videoDuration",
+          "musicInfo",
+          "isCommentsDisabled",
+          "videoPlayCount",
+          "paidPartnership",
+          "sharesCount"
         ]
       }
     },
@@ -22132,10 +22292,12 @@
           "pageRelation": "owned",
           "likes": 70,
           "comments": 8,
-          "shares": null,
+          "shares": 0,
           "videoPlayCount": 2180,
           "metricsObservedAt": "2026-09-10T03:49:47.439Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:20.063Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3980965876055429087",
@@ -22146,10 +22308,12 @@
           "pageRelation": "owned",
           "likes": 88,
           "comments": 2,
-          "shares": null,
+          "shares": 3,
           "videoPlayCount": 6970,
           "metricsObservedAt": "2026-09-10T03:49:47.439Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:20.063Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3973115379664971918",
@@ -22216,10 +22380,12 @@
           "pageRelation": "owned",
           "likes": 45,
           "comments": 9,
-          "shares": null,
+          "shares": 2,
           "videoPlayCount": 2302,
           "metricsObservedAt": "2026-09-10T03:49:47.439Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:20.063Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3981009139445792259",
@@ -22230,10 +22396,12 @@
           "pageRelation": "owned",
           "likes": 190,
           "comments": 13,
-          "shares": null,
+          "shares": 10,
           "videoPlayCount": 9596,
           "metricsObservedAt": "2026-09-10T03:49:47.439Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:20.063Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3938131050570764076",
@@ -22300,10 +22468,12 @@
           "pageRelation": "owned",
           "likes": 44,
           "comments": 5,
-          "shares": null,
+          "shares": 1,
           "videoPlayCount": 2382,
           "metricsObservedAt": "2026-09-10T03:49:47.439Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:20.063Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3975188907015538192",
@@ -23517,6 +23687,51 @@
             "source": "apify~instagram-post-scraper"
           }
         ]
+      },
+      "sharesPilot": {
+        "at": "2026-09-10T03:56:20.063Z",
+        "runId": "O67c4zUqxAaLgB6oq",
+        "requested": 5,
+        "matched": 5,
+        "reporting": 5,
+        "fields": [
+          "inputUrl",
+          "id",
+          "type",
+          "shortCode",
+          "caption",
+          "hashtags",
+          "mentions",
+          "url",
+          "commentsCount",
+          "firstComment",
+          "latestComments",
+          "dimensionsHeight",
+          "dimensionsWidth",
+          "originalHeight",
+          "originalWidth",
+          "displayUrl",
+          "images",
+          "videoUrl",
+          "audioUrl",
+          "alt",
+          "likesCount",
+          "videoViewCount",
+          "timestamp",
+          "childPosts",
+          "locationName",
+          "locationId",
+          "ownerFullName",
+          "ownerUsername",
+          "ownerId",
+          "productType",
+          "videoDuration",
+          "musicInfo",
+          "isCommentsDisabled",
+          "videoPlayCount",
+          "paidPartnership",
+          "sharesCount"
+        ]
       }
     },
     {
@@ -23579,10 +23794,12 @@
           "pageRelation": "owned",
           "likes": 858,
           "comments": 8,
-          "shares": null,
+          "shares": 52,
           "videoPlayCount": 31404,
           "metricsObservedAt": "2026-09-10T03:50:28.854Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:33.145Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3981839402246567335",
@@ -23593,10 +23810,12 @@
           "pageRelation": "owned",
           "likes": 151,
           "comments": 3,
-          "shares": null,
+          "shares": 11,
           "videoPlayCount": 7691,
           "metricsObservedAt": "2026-09-10T03:50:28.854Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:33.145Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3980980288301723788",
@@ -23607,10 +23826,12 @@
           "pageRelation": "owned",
           "likes": 154,
           "comments": 4,
-          "shares": null,
+          "shares": 12,
           "videoPlayCount": 9329,
           "metricsObservedAt": "2026-09-10T03:50:28.854Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:33.145Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3980227676947427593",
@@ -23649,10 +23870,12 @@
           "pageRelation": "collaboration",
           "likes": 275,
           "comments": 11,
-          "shares": null,
+          "shares": 20,
           "videoPlayCount": 13841,
           "metricsObservedAt": "2026-09-10T03:50:28.854Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:33.145Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3982125828733525125",
@@ -23663,10 +23886,12 @@
           "pageRelation": "owned",
           "likes": 159,
           "comments": 2,
-          "shares": null,
+          "shares": 21,
           "videoPlayCount": 10539,
           "metricsObservedAt": "2026-09-10T03:50:28.854Z",
-          "source": "apify~instagram-post-scraper"
+          "source": "apify~instagram-post-scraper",
+          "sharesObservedAt": "2026-09-10T03:56:33.145Z",
+          "sharesSource": "apify~instagram-reel-scraper"
         },
         {
           "id": "3964008661637991511",
@@ -27148,13 +27373,56 @@
             "source": "apify~instagram-post-scraper"
           }
         ]
+      },
+      "sharesPilot": {
+        "at": "2026-09-10T03:56:33.145Z",
+        "runId": "oeGQWsCE47uUbGqp6",
+        "requested": 5,
+        "matched": 5,
+        "reporting": 5,
+        "fields": [
+          "inputUrl",
+          "id",
+          "type",
+          "shortCode",
+          "caption",
+          "hashtags",
+          "mentions",
+          "url",
+          "commentsCount",
+          "firstComment",
+          "latestComments",
+          "dimensionsHeight",
+          "dimensionsWidth",
+          "originalHeight",
+          "originalWidth",
+          "displayUrl",
+          "images",
+          "videoUrl",
+          "audioUrl",
+          "alt",
+          "likesCount",
+          "videoViewCount",
+          "timestamp",
+          "childPosts",
+          "ownerFullName",
+          "ownerUsername",
+          "ownerId",
+          "productType",
+          "videoDuration",
+          "musicInfo",
+          "isCommentsDisabled",
+          "videoPlayCount",
+          "paidPartnership",
+          "sharesCount"
+        ]
       }
     }
   ],
   "backfill": {
     "budgetUsd": 8,
-    "spentOrReservedUsd": 1.8768,
-    "mode": "pilot",
+    "spentOrReservedUsd": 1.8807999999999998,
+    "mode": "shares",
     "runs": [
       {
         "actor": "apify~instagram-profile-scraper",
@@ -27191,6 +27459,36 @@
         "runId": "IVxwKMEphAifRAvl2",
         "costUsd": 0.3381,
         "items": 148
+      },
+      {
+        "actor": "apify~instagram-reel-scraper",
+        "runId": "tfAlYnhu6GIJZIvNy",
+        "costUsd": 0,
+        "items": 5
+      },
+      {
+        "actor": "apify~instagram-reel-scraper",
+        "runId": "jx78oouTtjM1p2mQ5",
+        "costUsd": 0.001,
+        "items": 5
+      },
+      {
+        "actor": "apify~instagram-reel-scraper",
+        "runId": "O67c4zUqxAaLgB6oq",
+        "costUsd": 0.001,
+        "items": 5
+      },
+      {
+        "actor": "apify~instagram-reel-scraper",
+        "runId": "oeGQWsCE47uUbGqp6",
+        "costUsd": 0.001,
+        "items": 5
+      },
+      {
+        "actor": "apify~instagram-reel-scraper",
+        "runId": "eezmSU1d2Zas3eKUo",
+        "costUsd": 0.001,
+        "items": 5
       }
     ],
     "completed": 5,
