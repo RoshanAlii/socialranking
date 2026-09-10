@@ -11,6 +11,28 @@ test('Dubai month and week boundaries are calendar aligned',()=>{
   assert.deepEqual(M.bounds('2026-08-31T21:00:00Z','month'),{from:'2026-09-01',to:'2026-09-01'});
   assert.deepEqual(M.bounds('2026-08-31T21:00:00Z','week'),{from:'2026-08-31',to:'2026-09-01'});
 });
+test('last month covers the entire previous Dubai calendar month',()=>{
+  for(const [capture,from,to] of [
+    [at,'2026-08-01','2026-08-31'],
+    ['2026-01-15T00:00:00Z','2025-12-01','2025-12-31'],
+    ['2024-03-01T00:00:00Z','2024-02-01','2024-02-29'],
+    ['2026-03-01T00:00:00Z','2026-02-01','2026-02-28'],
+    ['2026-08-31T19:59:59Z','2026-07-01','2026-07-31'],
+    ['2026-08-31T20:00:00Z','2026-08-01','2026-08-31'],
+  ]) assert.deepEqual(M.bounds(capture,'last-month'),{from,to});
+});
+test('last-month totals include both Dubai boundary dates and exclude adjacent months',()=>{
+  const posts=['2026-07-31T19:59:59Z','2026-07-31T20:00:00Z',
+    '2026-08-31T19:59:59Z','2026-08-31T20:00:00Z']
+    .map((postedAt,i)=>post({id:String(i),url:`https://www.instagram.com/reel/BOUNDARY${i}/`,postedAt}));
+  const b=M.bounds(at,'last-month');
+  const s=M.summarize({generatedAt:at,accounts:[account({posts})]},'team',b.from,b.to);
+  assert.deepEqual(s.posts.map(p=>p.id).sort(),['1','2']);
+  assert.equal(s.reels,2);
+  assert.equal(s.attention.value,24);
+  assert.equal(s.plays.value,200);
+  assert.ok(fs.readFileSync('public-evidence.js','utf8').includes('<option value="last-month">Last calendar month</option>'));
+});
 test('same shortcode across URL formats deduplicates; unsafe links rejected',()=>{
   assert.equal(M.unique([post(),post({id:'2',url:'https://www.instagram.com/p/ABC/'})]).length,1);
   assert.equal(M.safeUrl('javascript:alert(1)'),null);
