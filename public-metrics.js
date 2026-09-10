@@ -34,6 +34,8 @@
       }));
   }
   function mergeAccount(old, fresh) {
+    // A replay of an older feed snapshot must not roll a newer backfill back.
+    if (old && Date.parse(old.capturedAt) > Date.parse(fresh.capturedAt)) return old;
     const prior = new Map((old?.posts || []).map(p => [key(p), p]));
     const current = fresh.posts.map(p => {
       const prev = prior.get(key(p));
@@ -42,15 +44,15 @@
           prev?.sharesObservedAt ? {sharesObservedAt:prev.sharesObservedAt, sharesSource:prev.sharesSource} : {})};
     });
     const cutoff = Date.parse(fresh.capturedAt) - 90 * DAY;
-    return {...fresh, historyCoverage:old?.historyCoverage || null,
+    return {...fresh, historyCoverage:old?.historyCoverage || null, sharesPilot:old?.sharesPilot || null,
       posts:unique([...current, ...(old?.posts || [])]).filter(p => Date.parse(p.postedAt) >= cutoff),
       previous:old && old.capturedAt !== fresh.capturedAt ? {capturedAt:old.capturedAt, followers:old.followers,
         posts:old.posts.filter(p => p.metricsObservedAt === old.capturedAt)} : old?.previous || null};
   }
   function mergeSnapshot(archive, snapshot) {
     const old = new Map((archive?.accounts || []).map(a => [a.handle, a]));
-    return {...archive, version:1, generatedAt:snapshot.meta.capturedAt,
-      accounts:fromSnapshot(snapshot).map(a => mergeAccount(old.get(a.handle), a))};
+    const accounts = fromSnapshot(snapshot).map(a => mergeAccount(old.get(a.handle), a));
+    return {...archive, version:1, generatedAt:accounts.map(a=>a.capturedAt).sort().at(-1) || snapshot.meta.capturedAt, accounts};
   }
   function bounds(at, period) {
     const today = date(at), end = Date.parse(today+'T00:00:00+04:00');

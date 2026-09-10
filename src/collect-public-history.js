@@ -32,7 +32,7 @@ async function main() {
   const file = 'data/public-evidence.json';
   let output = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file,'utf8')) : M.mergeSnapshot(null,snapshot);
   // Rehydrate completed work after an interrupted workflow; do not pay twice.
-  output.accounts = output.accounts.map(a => state.accounts[a.handle] || a);
+  output.accounts = output.accounts.map(a => Date.parse(state.accounts[a.handle]?.capturedAt) >= Date.parse(a.capturedAt) ? state.accounts[a.handle] : a);
   const save = async () => {
     await api('PUT',path,state);
     output.backfill = {budgetUsd:8, spentOrReservedUsd:state.spent, mode, runs:state.runs,
