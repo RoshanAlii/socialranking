@@ -13,12 +13,12 @@
   function render(){
     const from=field('from').value,to=field('to').value;
     if(!from||!to||from>to){field('output').textContent='Choose a start date on or before the end date.';return;}
-    const s=M.summarize(data,field('account').value,from,to);
+    const s=M.summarize(data,field('account').value,from,to,field('basis').value);
     const maxPage=Math.max(0,Math.ceil(s.posts.length/50)-1);page=Math.min(page,maxPage);
     field('output').innerHTML=`<div class="evidence-cards">
       ${metric('Feed posts captured',fmt(s.posts.length),`${s.reels} Reels · ${s.images} images · ${s.carousels} carousels · ${s.videos} videos`)}
       ${counter('Public video plays',s.plays)}${counter('Attention · likes + comments',s.attention)}${counter('Reported shares',s.shares)}</div>
-      <p>Published ${esc(from)} to ${esc(to)}, Dubai time. These are accumulated counters on those posts, <strong>not activity earned within the dates</strong>. Stories are shown separately below. ${s.stalePosts?`${s.stalePosts} older posts retain counters from an earlier capture; check each row’s capture date.`:''}</p>
+      <p>Published ${esc(from)} to ${esc(to)}, Dubai time. These are accumulated counters on those posts, <strong>not activity earned within the dates</strong>. Stories are shown separately below. ${s.retainedPosts?`${s.retainedPosts} posts are retained from an earlier capture and were not re-observed in the latest collection; they may be outside its window, omitted or removed. Choose “Latest capture only” to exclude them.`:''} ${s.stalePosts?`${s.stalePosts} posts have counters older than 108 hours.`:''}</p>
       <details><summary>Coverage, definitions & collection evidence</summary><p>Reel = Instagram Reel format. Video = a source-labelled video post. A carousel counts as one feed post. Drafts, deleted content and private Insights are not available. No profile visits, unique reach, Story views or saves are estimated.</p>
       <ul>${s.accounts.map(a=>{const c=a.coverage,h=a.historyCoverage;return `<li><strong>@${esc(a.handle)}</strong> · ${c?.complete?'Feed checks passed':'Feed coverage incomplete'} · ${esc(timestamp(a.capturedAt))}<br>${esc(c?.from||'Unknown start')} → ${esc(c?.to||a.capturedAt)}${h?` · 90-day backfill ${h.complete?'checked':'incomplete'}`:' · 90-day backfill not yet verified'}${a.lastHistoryAttempt?` · Latest backfill attempt: ${esc(a.lastHistoryAttempt.reason)}`:''}${a.sharesPilot?` · Shares sample: ${a.sharesPilot.reporting}/${a.sharesPilot.requested} reporting`:''}</li>`;}).join('')}</ul>
       <p>“Checks passed” means the returned feed passed ownership, date, duplicate, preview and safety-limit checks. Public scraping still cannot prove that Instagram exposed every post. Any ≥ total is a confirmed minimum.</p></details>
@@ -41,7 +41,7 @@
       host.innerHTML=`<div class="evidence-head"><div><div class="section-label">Public performance · evidence explorer</div><h3>Count it. Check it.</h3><p>Exact reported counters, transparent coverage. Feed refresh: every four days.</p></div></div>
       <div class="evidence-controls"><label>Account<select data-evidence-account><option value="team">Kirpa team · owned posts</option>${data.accounts.map(a=>`<option value="${esc(a.handle)}">${esc(a.name)} · @${esc(a.handle)}${a.company?' · company page':''}</option>`).join('')}</select></label>
       <label>Period<select data-evidence-period><option value="month">This calendar month</option><option value="week">This calendar week</option><option value="90">Last 90 calendar days</option><option value="custom">Custom dates</option></select></label>
-      <label>From<input type="date" data-evidence-from value="${b.from}" max="${b.to}"></label><label>Through<input type="date" data-evidence-to value="${b.to}" max="${b.to}"></label></div><div data-evidence-output aria-live="polite"></div>`;
+      <label>From<input type="date" data-evidence-from value="${b.from}" max="${b.to}"></label><label>Through<input type="date" data-evidence-to value="${b.to}" max="${b.to}"></label><label>Evidence basis<select data-evidence-basis><option value="archive">All captured history</option><option value="latest">Latest capture only</option></select></label></div><div data-evidence-output aria-live="polite"></div>`;
       host.addEventListener('change',e=>{page=0;if(e.target===field('period')&&e.target.value!=='custom'){const b=M.bounds(data.generatedAt,e.target.value);field('from').value=b.from;field('to').value=b.to;}else if(e.target.matches('input'))field('period').value='custom';render();});
       host.addEventListener('click',e=>{if(e.target.matches('[data-evidence-prev]')){page--;render();}if(e.target.matches('[data-evidence-next]')){page++;render();}});
       render();

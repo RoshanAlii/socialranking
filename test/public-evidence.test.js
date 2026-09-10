@@ -45,6 +45,12 @@ test('rebuilding the same snapshot does not destroy the previous baseline',()=>{
   const old=account({previous:{capturedAt:before,followers:99,posts:[]}});
   assert.equal(M.mergeAccount(old,account()).previous.capturedAt,before);
 });
+test('historical omissions are explicit and can be excluded from latest-only totals',()=>{
+  const d={generatedAt:at,accounts:[account({posts:[post(),post({id:'2',url:'https://www.instagram.com/p/OLD/',metricsObservedAt:before})]})]};
+  assert.equal(M.summarize(d,'team','2026-09-01','2026-09-30').retainedPosts,1);
+  const latest=M.summarize(d,'team','2026-09-01','2026-09-30','latest');
+  assert.equal(latest.posts.length,1);assert.equal(latest.retainedPosts,0);
+});
 test('older snapshot replay cannot roll back newer evidence or lose shares audit',()=>{
   const current=account({sharesPilot:{reporting:5,requested:5}});
   assert.equal(M.mergeAccount(current,account({capturedAt:before})),current);

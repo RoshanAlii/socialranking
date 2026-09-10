@@ -67,9 +67,10 @@
     return {value:reporting.length ? reporting.reduce((n,p) => n+p[field],0) : posts.length ? null : 0,
       reporting:reporting.length, expected:posts.length};
   }
-  function summarize(data, handle, from, to) {
+  function summarize(data, handle, from, to, basis = 'archive') {
     const accounts = data.accounts.filter(a => handle === 'team' ? !a.company : a.handle === handle);
-    let posts = accounts.flatMap(a => a.posts.map(p => ({...p, handle:a.handle, name:a.name})));
+    let posts = accounts.flatMap(a => a.posts.map(p => ({...p, handle:a.handle, name:a.name, accountCapturedAt:a.capturedAt})));
+    if (basis === 'latest') posts = posts.filter(p=>p.metricsObservedAt === p.accountCapturedAt);
     if (handle === 'team') posts = posts.filter(p => p.ownerUsername === p.handle);
     posts = unique(posts).filter(p => date(p.postedAt) >= from && date(p.postedAt) <= to)
       .sort((a,b) => Date.parse(b.postedAt)-Date.parse(a.postedAt));
@@ -79,6 +80,7 @@
       images:posts.filter(p => p.type === 'image').length, carousels:posts.filter(p => p.type === 'carousel').length,
       videos:posts.filter(p => p.type === 'video').length, likes:total(posts,'likes'), comments:total(posts,'comments'),
       shares:total(posts.filter(p=>p.type==='reel'),'shares'), plays:total(videos,'videoPlayCount'), attention:total(attention,'attention'),
+      retainedPosts:posts.filter(p=>p.metricsObservedAt !== p.accountCapturedAt).length,
       stalePosts:posts.filter(p => Date.parse(p.metricsObservedAt) < Date.parse(data.generatedAt)-108*3600000).length};
   }
   function compare(account) {
