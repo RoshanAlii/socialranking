@@ -6,7 +6,7 @@ on:
       mode:
         description: Bounded one-time collection; already completed accounts are skipped
         type: choice
-        options: [pilot, remaining, shares]
+        options: [pilot, remaining, shares, reconcile]
         default: pilot
 permissions:
   contents: write
