@@ -39,6 +39,55 @@ test('same shortcode across URL formats deduplicates; unsafe links rejected',()=
   assert.equal(M.safeUrl('https://evil.test/reel/A/'),null);
   assert.equal(M.key({id:3979490680606881446}),null);
 });
+test('calendar grids align Monday-first and navigate year and leap-month boundaries',()=>{
+  const aug=M.calendarMonth('2026-08');
+  assert.equal(aug.padding,5);assert.equal(aug.days.length,31);
+  assert.equal(M.calendarMonth('2026-01',-1).month,'2025-12');
+  assert.equal(M.calendarMonth('2025-12',1).month,'2026-01');
+  assert.equal(M.calendarMonth('2024-02').days.at(-1),'2024-02-29');
+  assert.equal(M.calendarMonth('2026-02').days.at(-1),'2026-02-28');
+});
+test('calendar selects inclusive ranges without reversed or future dates',()=>{
+  const range={from:'2026-08-01',to:'2026-08-31'},max='2026-09-10';
+  assert.deepEqual(M.selectCalendarDate(range,'to','2026-09-02',max),{from:'2026-08-01',to:'2026-09-02'});
+  assert.deepEqual(M.selectCalendarDate(range,'from','2026-09-02',max),{from:'2026-09-02',to:'2026-09-02'});
+  assert.equal(M.selectCalendarDate(range,'to','2026-07-31',max),null);
+  assert.equal(M.selectCalendarDate(range,'to','2026-09-11',max),null);
+  assert.equal(M.selectCalendarDate(range,'from','2026-02-30',max),null);
+});
+test('calendar UI updates saved-data results, presets and manual dates without additional fetches',async()=>{
+  const vm=require('node:vm'),events={},fields={},requests=[];
+  for(const name of ['from','to','period','account','basis','calendar','output'])
+    fields[name]={value:({from:'2026-09-01',to:'2026-09-10',period:'month',account:'team',basis:'archive'})[name],innerHTML:'',textContent:'',
+      matches:s=>s==='input'&&['from','to'].includes(name),querySelector:()=>({focus(){},disabled:false})};
+  const host={innerHTML:'',querySelector:s=>fields[s.match(/data-evidence-(\w+)/)[1]],addEventListener:(type,fn)=>events[type]=fn};
+  const d={version:1,generatedAt:at,accounts:[account({posts:[post(),post({id:'2',url:'https://www.instagram.com/reel/AUG/',postedAt:'2026-08-15T12:00:00Z'})]})]};
+  vm.runInNewContext(fs.readFileSync('public-evidence.js','utf8'),{
+    document:{getElementById:()=>host},KirpaPublicMetrics:M,
+    fetch:async url=>{requests.push(url);return{ok:true,json:async()=>d};}
+  });
+  await new Promise(resolve=>setImmediate(resolve));
+  const click=dataset=>events.click({target:{closest:()=>({dataset,disabled:false,matches:()=>false})}});
+  assert.ok(fields.calendar.innerHTML.includes('August 2026'));
+  assert.ok(fields.calendar.innerHTML.includes('September 2026'));
+  click({calendarDay:'2026-08-01'});
+  assert.equal(fields.from.value,'2026-08-01');assert.equal(fields.period.value,'custom');
+  assert.ok(fields.calendar.innerHTML.includes('Choose the <strong>To</strong>'));
+  click({calendarDay:'2026-08-31'});
+  assert.equal(fields.to.value,'2026-08-31');
+  assert.ok(fields.output.innerHTML.includes('Every captured post · 1 results'));
+  assert.ok(fields.output.innerHTML.includes('/reel/AUG/'));
+  assert.ok(!fields.output.innerHTML.includes('/reel/ABC/'));
+  click({calendarStep:'-1'});assert.ok(fields.calendar.innerHTML.includes('July 2026'));
+  fields.period.value='last-month';events.change({target:fields.period});
+  assert.equal(fields.from.value,'2026-08-01');assert.equal(fields.to.value,'2026-08-31');
+  fields.from.value='2026-09-01';fields.to.value='2026-09-10';events.change({target:fields.to});
+  assert.ok(fields.calendar.innerHTML.includes('September 2026'));
+  assert.ok(fields.output.innerHTML.includes('/reel/ABC/'));
+  fields.to.value='2026-09-11';events.change({target:fields.to});
+  assert.ok(fields.output.textContent.includes('latest saved capture'));
+  assert.deepEqual(requests,['data/public-evidence.json']);
+});
 test('team excludes company and shared posts; company retains evidenced collaboration',()=>{
   const data={generatedAt:at,accounts:[account(),account({handle:'kirpa.properties',company:true,posts:[post()]})]};
   assert.equal(M.summarize(data,'team','2026-09-01','2026-09-30').posts.length,1);
