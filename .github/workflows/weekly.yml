@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: four-day-social-snapshot
@@ -76,12 +77,18 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         run: node test/test.js
 
+      - name: Update public counter evidence without another paid request
+        if: steps.ingest.outputs.published == 'true'
+        run: |
+          node --test test/public-evidence.test.js
+          node src/update-public-evidence.js
+
       - name: Commit validated snapshot, history, cache telemetry, and refresh state
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true'
         run: |
           git config user.name "kirpa-social-bot"
           git config user.email "kirpa-social-bot@users.noreply.github.com"
-          git add -- data/latest.json data/history data/series.json data/apify-usage.json data/refresh-status.json
+          git add -- data/latest.json data/history data/series.json data/apify-usage.json data/refresh-status.json data/public-evidence.json
           if git diff --cached --quiet; then
             echo "No snapshot changes to commit."
           else
@@ -93,6 +100,12 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+
+      - name: Publish the validated four-day snapshot to GitHub Pages
+        if: steps.ingest.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
 
       - name: Announce failed refresh
         if: failure() && (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || steps.due.outputs.due == 'true')

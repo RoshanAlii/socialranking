@@ -1,0 +1,64 @@
+name: Public performance evidence
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Bounded one-time collection; already completed accounts are skipped
+        type: choice
+        options: [pilot, remaining, shares]
+        default: pilot
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: public-performance-evidence
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: node --test test/public-evidence.test.js
+      - run: node --check src/collect-public-history.js && node --check public-evidence.js
+  collect:
+    needs: validate
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - name: Capture public feed history or Reel share sample
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN_MENTION_COUNT || secrets.APIFY_TOKEN }}
+          HISTORY_MODE: ${{ inputs.mode }}
+        run: node src/collect-public-history.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-evidence-${{ github.run_id }}
+          path: data/public-evidence.json
+          retention-days: 7
+      - name: Publish checked public evidence
+        if: always() && github.ref == 'refs/heads/main'
+        run: |
+          node --test test/public-evidence.test.js
+          git config user.name kirpa-social-bot
+          git config user.email kirpa-social-bot@users.noreply.github.com
+          git add data/public-evidence.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: retain checked public performance evidence'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Rebuild existing GitHub Pages
+        if: success() && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds"
