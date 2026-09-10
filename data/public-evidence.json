@@ -55843,7 +55843,7 @@
   "backfill": {
     "budgetUsd": 8,
     "spentOrReservedUsd": 7.441399999999998,
-    "costsCheckedAt": "2026-09-10T04:24:22.592Z",
+    "costsCheckedAt": "2026-09-10T04:29:01.418Z",
     "mode": "reconcile",
     "runs": [
       {
