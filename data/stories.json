@@ -3,7 +3,7 @@
   "provider": "Apify",
   "actor": "intropix~instagram-stories-scraper",
   "updatedAt": "2026-09-10T04:25:16.738Z",
-  "generatedAt": "2026-09-10T09:00:32.055Z",
+  "generatedAt": "2026-09-10T19:10:08.856Z",
   "enabled": true,
   "intervalHours": 12,
   "timezone": "Asia/Dubai",
@@ -690,8 +690,8 @@
   "budget": {
     "month": "2026-09",
     "limitUsd": 8,
-    "reservedOrSpentUsd": 0.8590499999999999,
-    "lastStatus": "Next 12-hour check is not due"
+    "reservedOrSpentUsd": 1.3590499999999999,
+    "lastStatus": "Collection failed; previous observations retained. Review required before another paid run."
   },
   "runs": [
     {
