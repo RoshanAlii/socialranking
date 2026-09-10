@@ -12,7 +12,9 @@ permissions:
   contents: write
   pages: write
 concurrency:
-  group: public-performance-evidence
+  # Paid/evidence writers serialize with the four-day feed workflow. PR checks
+  # must not queue behind long collections or cancel pending data jobs.
+  group: ${{ github.event_name == 'pull_request' && format('public-evidence-check-{0}', github.ref) || 'four-day-social-snapshot' }}
   cancel-in-progress: false
 jobs:
   validate:
@@ -31,6 +33,10 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
+        with:
+          # A queued dispatch pins its original SHA by default. Resolve the
+          # current branch after waiting so the prior job's data is included.
+          ref: ${{ github.ref }}
       - uses: actions/setup-node@v5
         with:
           node-version: '24'

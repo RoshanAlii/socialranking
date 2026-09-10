@@ -46,6 +46,23 @@ batch, completed-run charges are re-read and the ledger adjusted; the manual
 `reconcile` mode performs just this accounting refresh. `costsCheckedAt` records
 that check. Final invoiced usage remains authoritative.
 
+Manual evidence writers serialize with the four-day feed workflow and resolve
+the current branch when the job starts (not the SHA pinned when it was queued).
+This prevents a queued collection from rebasing an old evidence file over a
+preceding collection. PR validation uses a separate concurrency group. A saved
+collection can be republished using `reconcile` without another paid scrape.
+
+## Initial rollout verification — 10 September 2026
+
+- 32/32 confirmed public accounts passed the bounded history checks.
+- Archive contains 2,786 distinct post identities across the account views.
+- Share pilot: 25/25 requested Reels returned numeric share counts.
+- Reconciled history/share charges: $7.4414 against the $8 allowance.
+- Separate due Story check: 32/32 accounts checked, 149 observations, no rejected
+  rows or result cap. Story allowance remains $8/month; it was not increased.
+- One queued publication conflict was recovered from saved checkpoints without
+  paid re-collection; branch checkout and writer serialization were corrected.
+
 Feed checks reject missing identity/owner/date, mismatched profile evidence,
 preview omissions and results/charge caps. “Checked” is source validation, not a
 guarantee that Instagram exposes every post. Failed backfills do not replace

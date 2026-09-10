@@ -73,6 +73,9 @@ test('live evidence is minimal, valid, deduplicated and reconciles',()=>{
 test('paid history is manual, budget-reserved and cannot alter scoring snapshot',()=>{
   const workflow=fs.readFileSync('.github/workflows/public-evidence.yml','utf8');
   assert.ok(!workflow.includes('schedule:'));
+  assert.ok(workflow.includes("'four-day-social-snapshot'"));
+  assert.ok(workflow.includes('ref: ${{ github.ref }}'));
+  assert.ok(workflow.includes('public-evidence-check-'));
   const source=fs.readFileSync('src/collect-public-history.js','utf8');
   assert.ok(source.includes('state.spent + 0.75 > 8'));
   assert.ok(source.includes('state.pending'));
