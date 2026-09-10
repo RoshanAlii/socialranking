@@ -45,6 +45,11 @@ test('rebuilding the same snapshot does not destroy the previous baseline',()=>{
   const old=account({previous:{capturedAt:before,followers:99,posts:[]}});
   assert.equal(M.mergeAccount(old,account()).previous.capturedAt,before);
 });
+test('older snapshot replay cannot roll back newer evidence or lose shares audit',()=>{
+  const current=account({sharesPilot:{reporting:5,requested:5}});
+  assert.equal(M.mergeAccount(current,account({capturedAt:before})),current);
+  assert.equal(M.mergeAccount(current,account()).sharesPilot.reporting,5);
+});
 test('live evidence is minimal, valid, deduplicated and reconciles',()=>{
   if(!fs.existsSync('data/public-evidence.json'))return;
   const d=JSON.parse(fs.readFileSync('data/public-evidence.json','utf8'));
