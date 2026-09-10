@@ -68,6 +68,21 @@
     else start -= 89*DAY;
     return {from:date(new Date(start).toISOString()), to:today};
   }
+  function calendarMonth(month, offset = 0) {
+    const [year, m] = month.split('-').map(Number);
+    const first = new Date(Date.UTC(year,m-1+offset,1));
+    const last = new Date(Date.UTC(first.getUTCFullYear(),first.getUTCMonth()+1,0));
+    return {month:first.toISOString().slice(0,7),
+      label:first.toLocaleDateString('en-GB',{month:'long',year:'numeric',timeZone:'UTC'}),
+      padding:(first.getUTCDay()+6)%7,
+      days:Array.from({length:last.getUTCDate()},(_,i)=>first.toISOString().slice(0,7)+'-'+String(i+1).padStart(2,'0'))};
+  }
+  function selectCalendarDate(range, target, day, max) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !calendarMonth(day.slice(0,7)).days.includes(day) || day>max) return null;
+    if (target === 'from') return {from:day,to:range.to && range.to>=day ? range.to : day};
+    if (target === 'to' && (!range.from || day>=range.from)) return {from:range.from || day,to:day};
+    return null;
+  }
   function total(posts, field) {
     const reporting = posts.filter(p => number(p[field]));
     return {value:reporting.length ? reporting.reduce((n,p) => n+p[field],0) : posts.length ? null : 0,
@@ -103,5 +118,5 @@
     return {from:prev.capturedAt, to:account.capturedAt, matched:matched.length, fields,
       followerChange:number(account.followers) && number(prev.followers) ? account.followers-prev.followers : null};
   }
-  return {key, safeUrl, unique, date, fromSnapshot, mergeAccount, mergeSnapshot, bounds, total, summarize, compare};
+  return {key, safeUrl, unique, date, fromSnapshot, mergeAccount, mergeSnapshot, bounds, calendarMonth, selectCalendarDate, total, summarize, compare};
 });
