@@ -1,0 +1,10 @@
+'use strict';
+const fs = require('node:fs');
+const M = require('../public-metrics');
+const file = 'data/public-evidence.json';
+const snapshot = JSON.parse(fs.readFileSync('data/latest.json','utf8'));
+if (snapshot.meta?.validation?.status !== 'passed') throw new Error('Only validated snapshots may update public evidence');
+const old = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file,'utf8')) : null;
+const updated = M.mergeSnapshot(old, snapshot);
+fs.writeFileSync(file, JSON.stringify(updated,null,2)+'\n');
+console.log(JSON.stringify({accounts:updated.accounts.length, capturedAt:updated.generatedAt}));
