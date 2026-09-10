@@ -56,6 +56,12 @@
   }
   function bounds(at, period) {
     const today = date(at), end = Date.parse(today+'T00:00:00+04:00');
+    if (period === 'last-month') {
+      // Calendar arithmetic on the capture's Dubai date, independent of browser timezone.
+      const [year, month] = today.split('-').map(Number);
+      return {from:new Date(Date.UTC(year, month-2, 1)).toISOString().slice(0,10),
+        to:new Date(Date.UTC(year, month-1, 0)).toISOString().slice(0,10)};
+    }
     let start = end;
     if (period === 'month') start = Date.parse(today.slice(0,7)+'-01T00:00:00+04:00');
     else if (period === 'week') start -= ((new Date(end + 4*3600000).getUTCDay()+6)%7)*DAY;
