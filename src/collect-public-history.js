@@ -11,7 +11,7 @@ async function main() {
   const token = process.env.APIFY_TOKEN;
   if (!token) throw new Error('Apify access is not configured');
   const mode = process.env.HISTORY_MODE || 'pilot';
-  if (!['pilot','remaining','shares'].includes(mode)) throw new Error('Unsupported collection mode');
+  if (!['pilot','remaining','shares','reconcile'].includes(mode)) throw new Error('Unsupported collection mode');
   const snapshot = JSON.parse(fs.readFileSync('data/latest.json','utf8'));
   const candidates = M.fromSnapshot(snapshot);
   const pilotHandles = ['kirpa.properties','jai.kirpa','manpreet.kirpa','samaksh.kirpa','roshan.kirpa'];
@@ -35,12 +35,25 @@ async function main() {
   output.accounts = output.accounts.map(a => Date.parse(state.accounts[a.handle]?.capturedAt) >= Date.parse(a.capturedAt) ? state.accounts[a.handle] : a);
   const save = async () => {
     await api('PUT',path,state);
-    output.backfill = {budgetUsd:8, spentOrReservedUsd:state.spent, mode, runs:state.runs,
+    output.backfill = {budgetUsd:8, spentOrReservedUsd:state.spent, costsCheckedAt:state.costsCheckedAt || null, mode, runs:state.runs,
       completed:Object.keys(state.done).length, requested:candidates.length};
     output.generatedAt = output.accounts.map(a=>a.capturedAt).sort().at(-1);
     fs.writeFileSync(file,JSON.stringify(output,null,2)+'\n');
   };
   if (state.pending) throw new Error('A previous paid request needs review before another run');
+  // Billing can settle after an Actor first reaches SUCCEEDED. Re-read known
+  // runs before spending again; this never starts or retries an Actor.
+  for (const event of state.runs) {
+    if (!event.runId) continue;
+    const run = (await api('GET',`/v2/actor-runs/${event.runId}`))?.data;
+    if (Number.isFinite(run?.usageTotalUsd)) {
+      state.spent += run.usageTotalUsd - (event.costUsd ?? 0.75);
+      event.costUsd = run.usageTotalUsd;
+    }
+  }
+  state.costsCheckedAt = new Date().toISOString();
+  await save();
+  if (mode === 'reconcile') { console.log(JSON.stringify(output.backfill)); return; }
   async function runSync(actor,input,_token,opts) {
     // Reserve before POST, including interrupted/unknown-cost requests.
     if (state.spent + 0.75 > 8) throw new Error('One-time $8 history allowance reached');

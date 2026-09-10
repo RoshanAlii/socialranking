@@ -76,5 +76,6 @@ test('paid history is manual, budget-reserved and cannot alter scoring snapshot'
   const source=fs.readFileSync('src/collect-public-history.js','utf8');
   assert.ok(source.includes('state.spent + 0.75 > 8'));
   assert.ok(source.includes('state.pending'));
+  assert.ok(source.indexOf("if (mode === 'reconcile')") < source.indexOf('async function runSync'));
   assert.ok(!source.includes("writeFileSync('data/latest.json'"));
 });

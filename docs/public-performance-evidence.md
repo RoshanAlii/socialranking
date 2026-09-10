@@ -30,6 +30,7 @@ Manual `Public performance evidence` workflow modes:
 - `pilot`: five confirmed public accounts, 90-day bounded feed.
 - `remaining`: accounts not already completed by this one-time backfill.
 - `shares`: five recent Reel URLs per pilot account with public share counts.
+- `reconcile`: re-read charges for already completed runs; starts no Actors.
 
 The backfill and share pilot share a persistent **$8 total allowance**, reserve
 **$0.75 before each paid call**, never retry paid calls automatically, and pause
@@ -39,6 +40,11 @@ This is not a recurring monthly allowance. Source files/captions/media are not
 included in the published evidence file. The share pilot disables transcription
 and video downloads. Additional recurring share collection requires a validated
 pilot and a separately scoped budget decision.
+
+Charges reported immediately on completion can be provisional. Before any later
+batch, completed-run charges are re-read and the ledger adjusted; the manual
+`reconcile` mode performs just this accounting refresh. `costsCheckedAt` records
+that check. Final invoiced usage remains authoritative.
 
 Feed checks reject missing identity/owner/date, mismatched profile evidence,
 preview omissions and results/charge caps. “Checked” is source validation, not a
