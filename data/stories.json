@@ -2,8 +2,8 @@
   "version": 1,
   "provider": "Apify",
   "actor": "intropix~instagram-stories-scraper",
-  "updatedAt": "2026-09-09T10:39:56.520Z",
-  "generatedAt": "2026-09-09T19:19:57.968Z",
+  "updatedAt": "2026-09-10T04:25:16.738Z",
+  "generatedAt": "2026-09-10T04:25:16.987Z",
   "enabled": true,
   "intervalHours": 12,
   "timezone": "Asia/Dubai",
@@ -15,63 +15,63 @@
       "name": "Manpreet Kaur",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 49
+      "activeAtCheck": 31
     },
     {
       "handle": "jai.kirpa",
       "name": "Dr. Jai Chatha",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 27
+      "activeAtCheck": 9
     },
     {
       "handle": "kamalpreet.kirpa",
       "name": "Kamalpreet Kaur",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 9
+      "activeAtCheck": 3
     },
     {
       "handle": "saloni.kirpa",
       "name": "Saloni Bedi",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 4
+      "activeAtCheck": 2
     },
     {
       "handle": "lipika.kirpa",
       "name": "Lipika Madan",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 4
+      "activeAtCheck": 2
     },
     {
       "handle": "priyanka.kirpa",
       "name": "Priyanka Jayanna",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 1
@@ -81,8 +81,8 @@
       "name": "Mohammad Mubeen",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 0
@@ -92,74 +92,74 @@
       "name": "Preety Vijayvargiya",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 1
+      "activeAtCheck": 4
     },
     {
       "handle": "dxb.pooja.kirpa",
       "name": "Puja Maheshwari",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 1
+      "activeAtCheck": 0
     },
     {
       "handle": "vaishali.kirpa",
       "name": "Vaishali Arora",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 6
+      "activeAtCheck": 8
     },
     {
       "handle": "sukhpreetbal.kirpa",
       "name": "Sukhpreet Kaur",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 3
+      "activeAtCheck": 1
     },
     {
       "handle": "barkha.kirpa",
       "name": "Barkha Kalia",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 5
+      "activeAtCheck": 2
     },
     {
       "handle": "kirti.kirpa",
       "name": "Kirti Anil Walke",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 4
+      "activeAtCheck": 13
     },
     {
       "handle": "sahilbedi.kirpa",
       "name": "Sahil Bedi",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 0
@@ -169,52 +169,52 @@
       "name": "Geethika Sri Vyshnavi",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 2
+      "activeAtCheck": 1
     },
     {
       "handle": "kavita.kirpa.dxb",
       "name": "Kavita Choudhary",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 3
+      "activeAtCheck": 0
     },
     {
       "handle": "sarvnihal.kirpa",
       "name": "Sarvnihal Singh",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 2
+      "activeAtCheck": 0
     },
     {
       "handle": "aasfa.kirpa",
       "name": "Aasfa Wahab Shaikh",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 3
+      "activeAtCheck": 4
     },
     {
       "handle": "jagraaj.kirpa",
       "name": "Jagraaj Singh",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 0
@@ -224,19 +224,19 @@
       "name": "Akshay Rajendra",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 1
+      "activeAtCheck": 0
     },
     {
       "handle": "kirat.kirpa",
       "name": "Kirat Singh Sapra",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 2
@@ -246,19 +246,19 @@
       "name": "Sara Banu",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 8
+      "activeAtCheck": 5
     },
     {
       "handle": "ritika.kirpa",
       "name": "Ritika Kodwani",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 0
@@ -268,30 +268,30 @@
       "name": "Jitendra Makhija",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 8
+      "activeAtCheck": 6
     },
     {
       "handle": "sahil.kirpaa",
       "name": "Sahil Mendiratta",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 3
+      "activeAtCheck": 2
     },
     {
       "handle": "nikitaa.kirpa",
       "name": "Nikita Lal Tekwani",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
       "activeAtCheck": 0
@@ -301,66 +301,66 @@
       "name": "Lovepreet Singh",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 20
+      "activeAtCheck": 15
     },
     {
       "handle": "mona.kirpa",
       "name": "Mona Shah",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 1
+      "activeAtCheck": 9
     },
     {
       "handle": "spoorthi.kirpa",
       "name": "Spoorthi Hassan",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 12
+      "activeAtCheck": 25
     },
     {
       "handle": "faiyaz.kirpa",
       "name": "Faiyaz Mohmedfaruk",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 0
+      "activeAtCheck": 1
     },
     {
       "handle": "samaksh.kirpa",
       "name": "Samaksh Malhotra",
       "company": false,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 4
+      "activeAtCheck": 3
     },
     {
       "handle": "kirpa.properties",
       "name": "Kirpa Properties",
       "company": true,
       "monitoringSince": "2026-09-09T10:39:56.520Z",
-      "lastAttemptAt": "2026-09-09T10:39:56.520Z",
-      "lastSuccessAt": "2026-09-09T10:39:56.520Z",
+      "lastAttemptAt": "2026-09-10T04:25:16.738Z",
+      "lastSuccessAt": "2026-09-10T04:25:16.738Z",
       "status": "checked",
       "reason": null,
-      "activeAtCheck": 1
+      "activeAtCheck": 0
     }
   ],
   "daily": [
@@ -506,13 +506,19 @@
       "handle": "aasfa.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 1
+      "video": 4
     },
     {
       "handle": "barkha.kirpa",
       "date": "2026-09-09",
       "image": 0,
       "video": 2
+    },
+    {
+      "handle": "faiyaz.kirpa",
+      "date": "2026-09-09",
+      "image": 0,
+      "video": 1
     },
     {
       "handle": "geethika.kirpa",
@@ -524,13 +530,13 @@
       "handle": "jai.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 8
+      "video": 12
     },
     {
       "handle": "jeet.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 5
+      "video": 6
     },
     {
       "handle": "kamalpreet.kirpa",
@@ -548,7 +554,7 @@
       "handle": "kirti.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 3
+      "video": 13
     },
     {
       "handle": "lipika.kirpa",
@@ -560,19 +566,25 @@
       "handle": "lovepreet.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 9
+      "video": 18
     },
     {
       "handle": "manpreet.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 9
+      "video": 27
     },
     {
       "handle": "mona.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 1
+      "video": 8
+    },
+    {
+      "handle": "preety.kirpa",
+      "date": "2026-09-09",
+      "image": 0,
+      "video": 3
     },
     {
       "handle": "priyanka.kirpa",
@@ -584,19 +596,25 @@
       "handle": "sahil.kirpaa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 1
+      "video": 2
     },
     {
-      "handle": "sarafaisal.kirpa",
+      "handle": "samaksh.kirpa",
       "date": "2026-09-09",
       "image": 0,
       "video": 3
     },
     {
+      "handle": "sarafaisal.kirpa",
+      "date": "2026-09-09",
+      "image": 0,
+      "video": 5
+    },
+    {
       "handle": "spoorthi.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 7
+      "video": 25
     },
     {
       "handle": "sukhpreetbal.kirpa",
@@ -608,7 +626,43 @@
       "handle": "vaishali.kirpa",
       "date": "2026-09-09",
       "image": 0,
-      "video": 4
+      "video": 9
+    },
+    {
+      "handle": "jai.kirpa",
+      "date": "2026-09-10",
+      "image": 0,
+      "video": 1
+    },
+    {
+      "handle": "lovepreet.kirpa",
+      "date": "2026-09-10",
+      "image": 0,
+      "video": 1
+    },
+    {
+      "handle": "manpreet.kirpa",
+      "date": "2026-09-10",
+      "image": 0,
+      "video": 9
+    },
+    {
+      "handle": "mona.kirpa",
+      "date": "2026-09-10",
+      "image": 0,
+      "video": 1
+    },
+    {
+      "handle": "preety.kirpa",
+      "date": "2026-09-10",
+      "image": 0,
+      "video": 1
+    },
+    {
+      "handle": "saloni.kirpa",
+      "date": "2026-09-10",
+      "image": 0,
+      "video": 2
     }
   ],
   "checks": [
@@ -621,13 +675,23 @@
       "returned": 184,
       "rejected": 0,
       "limited": false
+    },
+    {
+      "at": "2026-09-10T04:25:16.738Z",
+      "runId": "3eY0b8QktWYNwGihg",
+      "requested": 32,
+      "checked": 32,
+      "failed": [],
+      "returned": 149,
+      "rejected": 0,
+      "limited": false
     }
   ],
   "budget": {
     "month": "2026-09",
     "limitUsd": 8,
-    "reservedOrSpentUsd": 0.47204999999999997,
-    "lastStatus": "Next 12-hour check is not due"
+    "reservedOrSpentUsd": 0.8590499999999999,
+    "lastStatus": "Collection checked"
   },
   "runs": [
     {
@@ -637,6 +701,14 @@
       "costUsd": 0.47204999999999997,
       "reservedUsd": 0.5,
       "returned": 184
+    },
+    {
+      "id": "3eY0b8QktWYNwGihg",
+      "at": "2026-09-10T04:23:39.529Z",
+      "status": "SUCCEEDED",
+      "costUsd": 0.38699999999999996,
+      "reservedUsd": 0.5,
+      "returned": 149
     }
   ]
 }
