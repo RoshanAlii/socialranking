@@ -3,7 +3,7 @@
   "provider": "Apify",
   "actor": "intropix~instagram-stories-scraper",
   "updatedAt": "2026-09-10T04:25:16.738Z",
-  "generatedAt": "2026-09-12T08:41:52.709Z",
+  "generatedAt": "2026-09-12T18:29:13.461Z",
   "enabled": true,
   "intervalHours": 12,
   "timezone": "Asia/Dubai",
