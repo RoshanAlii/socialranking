@@ -41,6 +41,8 @@ window.VISIBILITY_DATA = Object.freeze({
       type: "Attribution",
       status: "Open",
       owner: "Unassigned",
+      dueDate: "2026-09-15",
+      expectedImpact: "High — enables source-to-qualified-lead reporting",
       title: "Create the visibility-to-Bitrix attribution spine",
       observation: "Social performance is visible, but leads and deals cannot be traced back to the agent, content, project or campaign that influenced them.",
       evidence: "Social Ranking is live; GA4, tracked links and Bitrix24 are not connected.",
@@ -55,6 +57,8 @@ window.VISIBILITY_DATA = Object.freeze({
       type: "Data foundation",
       status: "Open",
       owner: "Data",
+      dueDate: "2026-09-30",
+      expectedImpact: "High — improves cross-channel attribution confidence",
       title: "Normalise developer, project and community names",
       observation: "The same entity can appear under spelling variants across captions, transcripts, forms and CRM records.",
       evidence: "The current social workflow already uses a developer dictionary; the wider product needs a governed master taxonomy.",
@@ -69,6 +73,8 @@ window.VISIBILITY_DATA = Object.freeze({
       type: "Demand capture",
       status: "Open",
       owner: "Marketing",
+      dueDate: "2026-09-15",
+      expectedImpact: "High — makes agent demand capture measurable",
       title: "Give every agent a measurable conversion path",
       observation: "Agent content can generate attention without a unique route into WhatsApp, forms or the CRM.",
       evidence: "Current ranking measures social performance; deterministic agent-level conversion IDs are not yet part of the workflow.",
@@ -83,6 +89,8 @@ window.VISIBILITY_DATA = Object.freeze({
       type: "Search",
       status: "Open",
       owner: "Marketing",
+      dueDate: "2026-10-01",
+      expectedImpact: "Medium — exposes near-win search demand",
       title: "Connect Search Console before defining SEO priorities",
       observation: "The product cannot yet distinguish branded demand, project demand and high-intent non-branded discovery.",
       evidence: "Search Console is not connected in the prototype workspace.",
@@ -97,6 +105,8 @@ window.VISIBILITY_DATA = Object.freeze({
       type: "Social",
       status: "Open",
       owner: "Social",
+      dueDate: "2026-10-15",
+      expectedImpact: "Medium — improves social diagnosis and fairness",
       title: "Separate public metrics from owned-account insights",
       observation: "Public views and engagement are useful for ranking, but they do not reveal verified reach, non-follower reach, saves or profile actions.",
       evidence: "The current live module is based on the established Social Ranking data pipeline.",
@@ -111,6 +121,8 @@ window.VISIBILITY_DATA = Object.freeze({
       type: "Governance",
       status: "Open",
       owner: "Management",
+      dueDate: "2026-09-30",
+      expectedImpact: "Medium — reduces score gaming and adoption risk",
       title: "Define score ownership and anti-gaming rules",
       observation: "A composite score can create the wrong behaviour when teams do not understand its components or can optimise superficial activity.",
       evidence: "The current Momentum formula is transparent, but the broader platform introduces multiple commercial and confidence scores.",
@@ -134,11 +146,11 @@ window.VISIBILITY_DATA = Object.freeze({
     { prompt: "Real estate agencies in Dubai with international roadshows", mentioned: "Yes", cited: "Yes", competitors: 2, status: "Sample" }
   ],
   agents: [
-    { handle: "aasfa.kirpa", visibility: 78, momentum: 86, brand: 72, capture: 38, trend: 14, status: "Sample enrichment" },
-    { handle: "akshay.kirpa", visibility: 74, momentum: 68, brand: 81, capture: 44, trend: 8, status: "Sample enrichment" },
-    { handle: "barkha.kirpa", visibility: 69, momentum: 75, brand: 67, capture: 35, trend: 11, status: "Sample enrichment" },
-    { handle: "geethika.kirpa", visibility: 82, momentum: 79, brand: 76, capture: 48, trend: 17, status: "Sample enrichment" },
-    { handle: "jai.kirpa", visibility: 71, momentum: 63, brand: 70, capture: 41, trend: 5, status: "Sample enrichment" }
+    { handle: "aasfa.kirpa", visibility: 78, momentum: 86, brand: 72, project: 74, consistency: 81, capture: "Not connected", pipeline: "Not connected", confidence: "Sample", trend: 14, status: "Sample enrichment" },
+    { handle: "akshay.kirpa", visibility: 74, momentum: 68, brand: 81, project: 70, consistency: 76, capture: "Not connected", pipeline: "Not connected", confidence: "Sample", trend: 8, status: "Sample enrichment" },
+    { handle: "barkha.kirpa", visibility: 69, momentum: 75, brand: 67, project: 63, consistency: 78, capture: "Not connected", pipeline: "Not connected", confidence: "Sample", trend: 11, status: "Sample enrichment" },
+    { handle: "geethika.kirpa", visibility: 82, momentum: 79, brand: 76, project: 80, consistency: 84, capture: "Not connected", pipeline: "Not connected", confidence: "Sample", trend: 17, status: "Sample enrichment" },
+    { handle: "jai.kirpa", visibility: 71, momentum: 63, brand: 70, project: 69, consistency: 71, capture: "Not connected", pipeline: "Not connected", confidence: "Sample", trend: 5, status: "Sample enrichment" }
   ],
   projects: [
     { name: "DAMAC content cluster", demand: 81, coverage: 58, competitor: 76, conversion: 42, opportunity: 84, status: "Sample" },
@@ -184,13 +196,17 @@ window.VISIBILITY_DATA = Object.freeze({
   },
   integrations: [
     { id: "social-ranking", name: "Kirpa Social Ranking", category: "Social", status: "Connected", freshness: "Live module", coverage: 100, action: "Open module" },
-    { id: "meta-insights", name: "Meta owned-account insights", category: "Social", status: "Not connected", freshness: "—", coverage: 0, action: "Plan connection" },
-    { id: "search-console", name: "Google Search Console", category: "Search", status: "Not connected", freshness: "—", coverage: 0, action: "Plan connection" },
-    { id: "ga4", name: "Google Analytics 4", category: "Website", status: "Not connected", freshness: "—", coverage: 0, action: "Plan connection" },
-    { id: "business-profile", name: "Google Business Profile", category: "Local", status: "Not connected", freshness: "—", coverage: 0, action: "Plan connection" },
-    { id: "bitrix", name: "Bitrix24 CRM", category: "CRM", status: "Not connected", freshness: "—", coverage: 0, action: "Plan connection" },
-    { id: "meta-ads", name: "Meta Ads", category: "Paid media", status: "Not connected", freshness: "—", coverage: 0, action: "Plan connection" },
-    { id: "tracking", name: "Visibility tracking links", category: "Attribution", status: "Not configured", freshness: "—", coverage: 0, action: "Configure" }
+    { id: "meta-insights", name: "Meta owned-account insights", category: "Social", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "search-console", name: "Google Search Console", category: "Search", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "ga4", name: "Google Analytics 4", category: "Website", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "business-profile", name: "Google Business Profile", category: "Local", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "bitrix", name: "Bitrix24 CRM", category: "CRM", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "meta-ads", name: "Meta Ads", category: "Paid media", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "tracking", name: "Visibility tracking links", category: "Attribution", status: "Not configured", freshness: "Unknown", coverage: null, action: "Configure" },
+    { id: "website-forms", name: "Website forms", category: "Attribution", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "whatsapp", name: "WhatsApp tracking links", category: "Attribution", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "call-tracking", name: "Call tracking", category: "Attribution", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" },
+    { id: "property-portals", name: "Authorised property portals", category: "Market", status: "Not connected", freshness: "Unknown", coverage: null, action: "Plan connection" }
   ],
   methodology: [
     { label: "Verified", definition: "Direct first-party data or an observed system state." },
@@ -198,6 +214,8 @@ window.VISIBILITY_DATA = Object.freeze({
     { label: "Public", definition: "Publicly visible platform data, not private reach or conversion data." },
     { label: "Estimated", definition: "Calculated using sampling or explicit assumptions." },
     { label: "Modelled", definition: "Inferred by a statistical or machine-learning method." },
-    { label: "Sample", definition: "Prototype data used to demonstrate the product before a source is connected." }
+    { label: "Experimental", definition: "An emerging measurement with a method still being evaluated, such as repeated AI-answer testing." },
+    { label: "Sample", definition: "Prototype data used to demonstrate the product before a source is connected." },
+    { label: "Not connected", definition: "No source data exists; unknown values are never replaced with zero." }
   ]
 });
