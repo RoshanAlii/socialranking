@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-15T19:27:48.890Z",
+  "updatedAt": "2026-09-16T09:00:19.588Z",
   "softLimitUsd": 23.2,
   "planLimitUsd": 29,
   "observations": [
@@ -1230,6 +1230,19 @@
       "runId": null,
       "itemCount": null,
       "durationMs": 98,
+      "costUsd": null,
+      "error": "Apify 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Monthly usage hard limit exceeded\"\n  }\n}"
+    },
+    {
+      "at": "2026-09-16T09:00:20.184Z",
+      "captureAt": "2026-09-16T09:00:19.588Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "FAILED",
+      "ok": false,
+      "runId": null,
+      "itemCount": null,
+      "durationMs": 326,
       "costUsd": null,
       "error": "Apify 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Monthly usage hard limit exceeded\"\n  }\n}"
     }

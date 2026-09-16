@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "outcome": "preserved",
-  "attemptedAt": "2026-09-15T19:27:48.890Z",
+  "attemptedAt": "2026-09-16T09:00:19.588Z",
   "lastValidSnapshotAt": "2026-09-09T09:10:15.510Z",
   "reason": "Apify 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Monthly usage hard limit exceeded\"\n  }\n}",
   "dataPreserved": true,
@@ -16,11 +16,11 @@
     "planLimitUsd": 29,
     "remainingToSoftLimitUsd": 15.9139,
     "softWarning": false,
-    "runs": 76,
+    "runs": 77,
     "successfulRuns": 69,
-    "failedRuns": 7,
+    "failedRuns": 8,
     "costKnownRuns": 69,
-    "unknownCostRuns": 7,
+    "unknownCostRuns": 8,
     "observedAt": null,
     "periodStart": null,
     "periodEnd": null
