@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-21T09:32:06.020Z",
+  "updatedAt": "2026-09-21T20:14:15.460Z",
   "softLimitUsd": 23.2,
   "planLimitUsd": 29,
   "observations": [
@@ -1373,6 +1373,19 @@
       "runId": null,
       "itemCount": null,
       "durationMs": 210,
+      "costUsd": null,
+      "error": "Apify 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Too many outstanding invoices\"\n  }\n}"
+    },
+    {
+      "at": "2026-09-21T20:14:16.101Z",
+      "captureAt": "2026-09-21T20:14:15.460Z",
+      "actor": "apify~instagram-profile-scraper",
+      "attempt": 1,
+      "status": "FAILED",
+      "ok": false,
+      "runId": null,
+      "itemCount": null,
+      "durationMs": 350,
       "costUsd": null,
       "error": "Apify 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Too many outstanding invoices\"\n  }\n}"
     }
