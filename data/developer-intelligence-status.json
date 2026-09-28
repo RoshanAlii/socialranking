@@ -1,9 +1,8 @@
 {
   "schemaVersion": 1,
-  "outcome": "partial",
-  "attemptedAt": "2026-09-14T07:55:08Z",
+  "outcome": "preserved",
+  "attemptedAt": "2026-09-28T08:43:05Z",
   "lastSuccessfulAt": "2026-09-14T07:55:08Z",
-  "reason": null,
-  "processingCoverage": 0.8956,
-  "failedReels": 59
+  "reason": "Apify returned HTTP 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Too many outstanding invoices\"\n  }\n}",
+  "dataPreserved": true
 }
