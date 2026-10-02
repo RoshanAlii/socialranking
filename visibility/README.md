@@ -1,4 +1,4 @@
-# Visibility OS — standalone MVP
+# Visibility OS — standalone product interface
 
 Visibility OS is a visibility-to-revenue intelligence product for distributed sales organisations. Kirpa Properties is the first design-partner workspace, and the existing Kirpa Social Ranking is integrated as its first live module.
 
@@ -9,11 +9,20 @@ Visibility OS is a visibility-to-revenue intelligence product for distributed sa
 - Search and AI visibility module.
 - Live embedded Kirpa Social Ranking module without modifying its existing code, data, calculations, filters or workflows.
 - Agent contribution, project coverage, competitor intelligence, attribution, reputation, source health and integration modules.
-- Evidence labels that separate Verified, Derived, Public, Estimated, Modelled and Sample data.
+- Evidence labels that separate Verified, Derived, Public, Estimated, Modelled, Experimental, Sample and Not connected data.
 - Exportable executive snapshot.
 - “Ask Visibility” evidence-linked prototype analyst.
 - Responsive desktop, tablet and mobile layouts.
 - Zero runtime dependencies: HTML, CSS and JavaScript only.
+
+## Implementation audit
+
+- GitHub Pages serves the repository root from `main`; `/visibility/` is therefore a standalone sub-application while the root Social Ranking remains unchanged.
+- The original prototype fetched three base64 gzip fragments, decompressed them with `DecompressionStream`, injected CSS and executed JavaScript from a blob URL. This introduced unnecessary asset requests, browser compatibility risk, opaque source and CSP fragility.
+- The product now loads ordinary `styles.css`, `data.js` and `app.js` files directly. There is no browser-side decompression or generated blob script.
+- The Social Ranking integration remains a relative `../index.html` iframe plus a direct-link fallback, so Pages project-path deployment and local HTTP preview both work.
+- No Pages deployment workflow exists in the repository; the existing scheduled workflows update Social Ranking data only and were not changed.
+- The public live URLs and dependent assets returned successfully during the audit, and the existing live build produced no browser console warnings or errors.
 
 ## Critical data boundary
 
@@ -49,6 +58,7 @@ The live Social Ranking iframe resolves to `../index.html`, so preview from the 
 ```bash
 node visibility/validate.mjs
 node --check visibility/app.js
+node --check visibility/data.js
 ```
 
 ## Deployment
