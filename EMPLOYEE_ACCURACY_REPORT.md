@@ -1,6 +1,6 @@
 # Kirpa Employee Portal Accuracy Report
 
-Generated: **2026-10-06T14:21:59.026327Z**
+Generated: **2026-10-06T14:25:41.217246Z**
 
 > This report measures internal identity consistency, route coverage, deterministic snapshot validation and per-account measurement completeness. It is not an independent scrape-by-scrape verification against Instagram's live first-party systems.
 
@@ -21,7 +21,7 @@ Generated: **2026-10-06T14:21:59.026327Z**
 
 - Roster: **44 employees** — 38 dashboard-relevant and 6 outside the current ranking scope.
 - Confirmed relevant Instagram handles: **31**; awaiting confirmed handle: **7**.
-- Snapshot: **2026-09-09T09:10:15.510Z**, age **653.2 hours**, classification **archived_refresh_due**.
+- Snapshot: **2026-09-09T09:10:15.510Z**, age **653.3 hours**, classification **archived_refresh_due**.
 - Validation: **passed**, measurement version **3**, validator version **2**.
 - Snapshot records: **38 / 38 expected relevant rows**; complete windows: **31**.
 - Momentum-ranked profiles: **25**; recommendation-ready profiles: **31**.
