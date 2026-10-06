@@ -47,19 +47,20 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           python - <<'PY'
+          import re
           from pathlib import Path
 
           path = Path('index.html')
           text = path.read_text(encoding='utf-8')
           marker = '<script src="./personal-coach.js"></script>'
-          if marker not in text:
+          if not re.search(r'src="\./personal-coach\.js(?:\?[^"\s]*)?"', text):
               closing = text.lower().rfind('</body>')
               if closing < 0:
                   raise SystemExit('index.html has no closing body tag')
               text = text[:closing] + f'  {marker}\n' + text[closing:]
               path.write_text(text, encoding='utf-8')
           PY
-          grep -F '<script src="./personal-coach.js"></script>' index.html
+          grep -E '<script src="./personal-coach\.js(\?[^"]*)?"></script>' index.html
 
       - name: Publish dashboard loader
         if: github.event_name != 'pull_request'
