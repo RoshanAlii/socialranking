@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T06:32:26.896729Z",
+  "generatedAt": "2026-10-06T14:21:59.026327Z",
   "scope": {
     "company": "Kirpa Properties L.L.C",
     "rosterVersion": "2026-07-30-kirpa-workbook-v1",
@@ -42,8 +42,8 @@
   },
   "snapshot": {
     "capturedAt": "2026-09-09T09:10:15.510Z",
-    "ageHoursAtAudit": 21.4,
-    "freshness": "current",
+    "ageHoursAtAudit": 653.2,
+    "freshness": "archived_refresh_due",
     "presentTenseMaximumAgeHours": 108,
     "source": "live",
     "provider": "Apify",
@@ -62,16 +62,12 @@
     "personalCoachRows": 31,
     "recommendationReadyAccounts": 31,
     "rankedMomentumProfiles": 25,
-    "refreshOutcome": "success",
-    "refreshAttemptedAt": "2026-09-09T09:10:15.510Z",
+    "refreshOutcome": "preserved",
+    "refreshAttemptedAt": "2026-10-06T10:58:45.130Z",
     "lastValidSnapshotAt": "2026-09-09T09:10:15.510Z",
     "seriesProfiles": 36,
     "seriesPoints": 453,
-    "validatedSeriesPoints": 287,
-    "developerIntelligenceGeneratedAt": "2026-08-30T08:19:56Z",
-    "developerIntelligenceStatus": "partial",
-    "developerReelsProcessed": 436,
-    "developerTotalReels": 486
+    "validatedSeriesPoints": 287
   },
   "accuracy": {
     "portalIdentityAccuracyPct": 100.0,
@@ -85,6 +81,10 @@
   },
   "identityIssues": [],
   "issues": [
+    {
+      "severity": "high",
+      "issue": "The validated snapshot is outside the 108-hour present-tense window or has no valid timestamp."
+    },
     {
       "severity": "expected",
       "issue": "7 dashboard-relevant employees still have no confirmed Instagram handle."

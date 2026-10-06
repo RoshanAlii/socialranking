@@ -1,6 +1,6 @@
 # Kirpa Employee Portal Accuracy Report
 
-Generated: **2026-09-10T06:32:26.896729Z**
+Generated: **2026-10-06T14:21:59.026327Z**
 
 > This report measures internal identity consistency, route coverage, deterministic snapshot validation and per-account measurement completeness. It is not an independent scrape-by-scrape verification against Instagram's live first-party systems.
 
@@ -21,11 +21,10 @@ Generated: **2026-09-10T06:32:26.896729Z**
 
 - Roster: **44 employees** — 38 dashboard-relevant and 6 outside the current ranking scope.
 - Confirmed relevant Instagram handles: **31**; awaiting confirmed handle: **7**.
-- Snapshot: **2026-09-09T09:10:15.510Z**, age **21.4 hours**, classification **current**.
+- Snapshot: **2026-09-09T09:10:15.510Z**, age **653.2 hours**, classification **archived_refresh_due**.
 - Validation: **passed**, measurement version **3**, validator version **2**.
 - Snapshot records: **38 / 38 expected relevant rows**; complete windows: **31**.
 - Momentum-ranked profiles: **25**; recommendation-ready profiles: **31**.
-- Developer intelligence: **partial**, 436/486 Reels processed, generated 2026-08-30T08:19:56Z.
 
 ## Portal implementation checks
 
@@ -88,6 +87,7 @@ The grade describes measurement confidence, not the employee's social-media perf
 
 ## Open issues and qualifications
 
+- **HIGH** — The validated snapshot is outside the 108-hour present-tense window or has no valid timestamp.
 - **EXPECTED** — 7 dashboard-relevant employees still have no confirmed Instagram handle.
 - **SECURITY** — 2 first-name password groups are shared by multiple employees.
 - **SECURITY** — Employee portals currently load the full same-origin dashboard in an iframe and hide non-selected content visually; this is not server-side data isolation.
