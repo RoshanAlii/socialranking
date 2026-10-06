@@ -250,7 +250,6 @@ def build_report() -> dict[str, Any]:
     registry = read_json(ROOT / "handles.json", {"employees": []})
     snapshot = read_json(ROOT / "data" / "latest.json", {})
     series = read_json(ROOT / "data" / "series.json", {})
-    developer = read_json(ROOT / "data" / "developer-intelligence.json", {})
     refresh = read_json(ROOT / "data" / "refresh-status.json", {})
     index_text = read_text(ROOT / "index.html")
     accounts_text = read_text(ROOT / "accounts" / "index.html")
@@ -535,10 +534,6 @@ def build_report() -> dict[str, Any]:
             "seriesProfiles": len(observations),
             "seriesPoints": total_series_points,
             "validatedSeriesPoints": validated_series_points,
-            "developerIntelligenceGeneratedAt": developer.get("generatedAt"),
-            "developerIntelligenceStatus": developer.get("status"),
-            "developerReelsProcessed": developer.get("processedReels"),
-            "developerTotalReels": developer.get("totalReels"),
         },
         "accuracy": {
             "portalIdentityAccuracyPct": percentage(portal_identity_matches, identity_accuracy_denominator),
@@ -607,7 +602,6 @@ def markdown_report(report: dict[str, Any]) -> str:
         f"- Validation: **{shown(snapshot['validationStatus'])}**, measurement version **{shown(snapshot['measurementVersion'])}**, validator version **{shown(snapshot['validatorVersion'])}**.",
         f"- Snapshot records: **{snapshot['recordRows']} / {snapshot['expectedRelevantRecordRows']} expected relevant rows**; complete windows: **{shown(snapshot['completeWindowProfiles'])}**.",
         f"- Momentum-ranked profiles: **{snapshot['rankedMomentumProfiles']}**; recommendation-ready profiles: **{snapshot['recommendationReadyAccounts']}**.",
-        f"- Developer intelligence: **{shown(snapshot['developerIntelligenceStatus'])}**, {shown(snapshot['developerReelsProcessed'])}/{shown(snapshot['developerTotalReels'])} Reels processed, generated {shown(snapshot['developerIntelligenceGeneratedAt'])}.",
         "",
         "## Portal implementation checks",
         "",

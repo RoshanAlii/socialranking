@@ -440,7 +440,6 @@
   function buildRecommendations(input, strategy, confidence, performance) {
     const analytics = input.analytics || {};
     const block = input.block || {};
-    const mentions = input.mentions || null;
     const team = input.team || {};
     const candidates = [];
     const add = candidate => {
@@ -593,29 +592,6 @@
       evidenceCount: analytics.viewsReporting || 0, impact: 82, strategyFit: 88, feasibility: 82, reviewAfterDays: 14
     });
 
-    if (mentions && (mentions.processedReels || 0) >= 2) {
-      if ((mentions.developerShare || 0) === 0 && isNumber(team.developerShare) && /offplan|developer|investment|market/.test(strategy.key)) add({
-        rule: 'developer-test', category: 'Developer coverage',
-        action: 'Test one evidence-led developer comparison within the next four Reels.',
-        why: `None of ${mentions.processedReels} processed Reels named a configured developer, while the team median share is ${round(team.developerShare * 100, 1)}%.`,
-        evidence: [`0/${mentions.processedReels} Reels with a developer mention`, `${round(team.developerShare * 100, 1)}% team median share`],
-        steps: ['Choose a developer relevant to the audience.', 'Compare delivery, price, payment plan and buyer fit.', `End with: “${strategy.conversionRoute}”.`],
-        successMetric: 'One processed developer-led Reel compared against personal median views and interactions.',
-        primaryMetric: 'developerShare', targetValue: 1 / Math.max(1, mentions.processedReels + 1),
-        evidenceCount: mentions.processedReels, strategyFit: 90, feasibility: 80, reviewAfterDays: 14
-      });
-      else if (isNumber(team.developerDiversity) && (mentions.developerDiversity || 0) > 0 && mentions.developerDiversity < team.developerDiversity) add({
-        rule: 'developer-diversity', category: 'Developer coverage',
-        action: 'Add one different relevant developer to the next content cycle.',
-        why: `${mentions.developerDiversity} developers are covered versus a team median of ${round(team.developerDiversity, 1)}.`,
-        evidence: [`${mentions.developerDiversity} personal developers`, `${round(team.developerDiversity, 1)} team median`],
-        steps: ['Select a developer matching the buyer segment.', 'Use a comparison rather than a purely promotional mention.', 'Measure whether it reaches a different audience.'],
-        successMetric: 'Increase developer diversity by one while maintaining interaction rate.',
-        primaryMetric: 'developerDiversity', targetValue: mentions.developerDiversity + 1,
-        evidenceCount: mentions.processedReels, strategyFit: 75, feasibility: 85, reviewAfterDays: 21
-      });
-    }
-
     if (!candidates.length || (performance.strengths.length >= 2 && !performance.constraints.length)) add({
       rule: 'maintain', category: 'Maintain',
       action: `Protect the current rhythm and repeat the strongest ${(strategy.strongestPillar?.label || 'content').toLowerCase()} pattern.`,
@@ -714,7 +690,6 @@
       data: typeof DATA !== 'undefined' ? DATA : null,
       registry: typeof REGISTRY !== 'undefined' ? REGISTRY : null,
       series: typeof SERIES !== 'undefined' ? SERIES : null,
-      mentions: typeof MENTIONS !== 'undefined' ? MENTIONS : null
     };
   }
 
@@ -744,15 +719,11 @@
     try { if (typeof profilePoints === 'function') points = profilePoints(handle); } catch (_) {}
     if (!points.length) points = profilePointsFallback(globals.series, globals.registry, handle);
     const canonical = value => String(value || '').replace(/^@/, '').toLowerCase();
-    const creator = (globals.mentions?.creators || []).find(row => canonical(row.handle) === canonical(handle)) || null;
-    const creators = globals.mentions?.creators || [];
     return {
-      person, employee, analytics, block, points, mentions: creator, meta: globals.data.meta || {},
+      person, employee, analytics, block, points, meta: globals.data.meta || {},
       team: {
         engagement: globals.data.leaderboards?.instagram?.teamBenchmarks?.interactionRate ?? null,
         viewEfficiency: globals.data.leaderboards?.instagram?.teamBenchmarks?.viewEfficiency ?? null,
-        developerShare: median(creators.map(row => row.developerShare)),
-        developerDiversity: median(creators.map(row => row.developerDiversity))
       }
     };
   }
@@ -765,8 +736,6 @@
       postsPerWeek: a.postsPerWeek, interactionRate: a.interactionRate ?? a.observedInteractionRate,
       viewEfficiency: a.viewEfficiency, medianInteractions: a.medianInteractions,
       daysSinceLastPost: context.block?.daysSinceLastPost,
-      developerShare: context.mentions?.developerShare,
-      developerDiversity: context.mentions?.developerDiversity
     };
   }
 
@@ -791,7 +760,6 @@
   function fullSnapshot(context, coach) {
     const a = context.analytics || {};
     const b = context.block || {};
-    const m = context.mentions || {};
     const followerChange = coach.movement.drivers.find(row => row.key === 'followers');
     const personalRate = a.interactionRate ?? a.observedInteractionRate;
     const commentRate = a.commentRate ?? a.observedCommentRate;
@@ -826,9 +794,6 @@
       metric('Strongest format', coach.strategy.strongestFormat?.type ? titleCase(coach.strategy.strongestFormat.type) : 'Building pattern', coach.strategy.strongestFormat ? `${formatNumber(coach.strategy.strongestFormat.medianInteractions)} median interactions` : 'Insufficient repeated evidence'),
       metric('Best measured time', bestTime, 'Dubai time · personal pattern'),
       metric('Current streak', `${b.cadence?.currentStreakWeeks || 0} weeks`, `${b.cadence?.activeWeeks || 0}/${b.cadence?.weeksMeasured || 0} measured weeks active`),
-      metric('Developer share', isNumber(m.developerShare) ? formatPct(m.developerShare) : 'Not processed', isNumber(m.processedReels) ? `${m.reelsWithDeveloperMention || 0}/${m.processedReels} processed Reels` : 'Audio intelligence pending'),
-      metric('Developer diversity', isNumber(m.developerDiversity) ? formatNumber(m.developerDiversity) : '—', isNumber(m.totalDeveloperMentions) ? `${formatNumber(m.totalDeveloperMentions)} spoken mentions` : 'No audio total'),
-      metric('Audio coverage', isNumber(m.processingCoverage) ? formatPct(m.processingCoverage) : '—', isNumber(m.totalReels) ? `${m.processedReels || 0}/${m.totalReels} Reels processed` : 'Not available'),
       metric('Goals', goals.length ? `${goals.filter(goal => goal.met === true).length}/${goals.filter(goal => goal.met !== null).length} met` : 'Not configured', 'Personal targets'),
       metric('Achievements', formatNumber((b.achievements || []).length), (b.achievements || []).map(item => item.label).join(' · ') || 'No current badge')
     ].join('');

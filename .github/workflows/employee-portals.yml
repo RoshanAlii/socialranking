@@ -9,8 +9,6 @@ on:
       - handles.json
       - data/latest.json
       - data/series.json
-      - data/developer-intelligence.json
-      - data/reel-mentions.json
       - personal-coach.js
       - account-coach-ui.js
       - account-coach-snapshot-ui.js

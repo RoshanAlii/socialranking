@@ -432,20 +432,6 @@
     const rawActions = (block?.nextActions || []).map(action => actionDefaults(action, analytics, strategy));
     rawActions.push(strategyAction(strategy, analytics, block));
 
-    const developer = typeof MENTIONS !== 'undefined' && MENTIONS
-      ? (MENTIONS.creators || []).find(row => canonical(row.handle) === canonical(person.handle))
-      : null;
-    if (developer?.processedReels >= 2 && developer.developerShare === 0) {
-      rawActions.push({
-        category: 'Experiment', confidence: 'medium',
-        action: 'Test one evidence-led developer Reel in the next four posts.',
-        because: `0 of ${developer.processedReels} processed Reels names a configured developer.`,
-        instructions: ['Choose one developer relevant to current inventory.', 'Explain buyer fit and one material risk.', 'Use one consistent call to action.'],
-        successMetric: 'Compare the test with the account’s current median view and interaction efficiency.',
-        deadline: 'Within 14 days', reviewAfter: 'Review 7 days after publication',
-      });
-    }
-
     const actions = [];
     const seen = new Set();
     for (const action of rawActions) {

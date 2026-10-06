@@ -75,7 +75,7 @@ test('calendar UI updates saved-data results, presets and manual dates without a
   assert.ok(fields.calendar.innerHTML.includes('Choose the <strong>To</strong>'));
   click({calendarDay:'2026-08-31'});
   assert.equal(fields.to.value,'2026-08-31');
-  assert.ok(fields.output.innerHTML.includes('Every captured post · 1 results'));
+  assert.ok(fields.output.innerHTML.includes('Browse captured posts · 1 results'));
   assert.ok(fields.output.innerHTML.includes('/reel/AUG/'));
   assert.ok(!fields.output.innerHTML.includes('/reel/ABC/'));
   click({calendarStep:'-1'});assert.ok(fields.calendar.innerHTML.includes('July 2026'));

@@ -1064,7 +1064,6 @@ const soloRegistry = {
     assert.match(html, /aria-label="Kirpa Properties"/);
     assert.ok(!html.includes('id="mention-pulse"'), 'the developer summary banner stays removed');
     assert.ok(!html.includes('aria-label="Measurement guardrails"'), 'the guardrail strip stays removed');
-    assert.match(html, /if \(!element\) \{\s*renderMentionEvidence\(\)/, 'detailed developer evidence still renders without the removed summary');
     assert.match(html, /href="\.\/favicon\.svg"/);
     assert.match(html, /aria-label="Dashboard access"/);
     assert.match(html, /href="\.\/visibility\/">Visibility board<\/a>/);
@@ -1074,8 +1073,6 @@ const soloRegistry = {
     assert.match(accessGate, /window\.self !== window\.top/, 'employee bypass is restricted to the embedded personal view');
     assert.match(accounts, /sessionStorage\.setItem\(EMPLOYEE_EMBED_KEY,p\.handle\)/, 'personal portals authorize only their matching embed');
     assert.ok(!accounts.includes("sessionStorage.setItem('kirpa-social-auth-v2'"), 'personal portal passwords must not unlock the main board');
-    assert.match(html, /Developer mention breakdown/);
-    assert.match(html, /row\.totalMentions/);
     assert.match(html, /slice\(0, 3\)/, 'record cards retain the first three results');
     assert.match(html, /Instagram content explicitly identified by Instagram as a Reel/);
     assert.match(html, /standard feed video that Instagram did not label as a Reel/);
@@ -1104,7 +1101,7 @@ const soloRegistry = {
     assert.match(html, /data-performance-period="week"/);
     assert.match(html, /data-performance-period="30"/);
     assert.match(html, /Likes \+ comments · selected posts/);
-    assert.match(html, /Every captured post/);
+    assert.match(html, /captured posts/);
     assert.match(html, /summary\.interactionsReporting === posts\.length/);
     assert.match(html, /Share of observed team video plays/);
     assert.match(html, /id="performance-rank-metric"/);
@@ -1125,18 +1122,15 @@ const soloRegistry = {
     assert.deepStrictEqual(history.meta.validation, latest.meta.validation);
     assert.strictEqual(history.meta.growthBaselineAt, latest.meta.growthBaselineAt);
   });
-  await test('developer intelligence is fortnightly, roster-wide, cached, and configurable', () => {
-    const workflow = fs.readFileSync(path.join(__dirname, '..', '.github', 'workflows', 'reel-mention-count.yml'), 'utf8');
-    const script = fs.readFileSync(path.join(__dirname, '..', 'src', 'developer_intelligence.py'), 'utf8');
-    const dictionary = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'developer-dictionary.json'), 'utf8'));
-    assert.match(workflow, /--check-due/);
-    assert.match(workflow, /src\/developer_intelligence\.py/);
-    assert.match(workflow, /ref: main/, 'a queued run must evaluate the latest successful report');
-    assert.match(script, /RUN_INTERVAL_DAYS = 14/);
-    assert.match(script, /oneTranscriptPerReel/);
-    assert.ok(dictionary.developers.length >= 20);
-    assert.ok(dictionary.developers.some(row => row.key === 'damac'));
-    assert.ok(dictionary.developers.some(row => row.key === 'emaar'));
+  await test('retired developer analysis cannot fetch or schedule paid collection', () => {
+    const root = path.join(__dirname, '..');
+    for (const file of ['.github/workflows/reel-mention-count.yml', 'src/developer_intelligence.py', 'src/reel_mentions.py', 'requirements-mentions.txt', 'developer-dictionary.json']) {
+      assert.ok(!fs.existsSync(path.join(root, file)), `${file} remains retired`);
+    }
+    for (const file of ['index.html', 'personal-coach.js', 'account-coach-ui.js', 'account-coach-snapshot-ui.js']) {
+      const source = fs.readFileSync(path.join(root, file), 'utf8');
+      assert.ok(!/MENTIONS|developer-intelligence|Which Reels mentioned developers/.test(source));
+    }
   });
   await test('usage telemetry produces a soft warning without guessing unknown run costs', () => {
     const ledger = U.emptyLedger();

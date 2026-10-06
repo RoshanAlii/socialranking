@@ -1,6 +1,6 @@
 # Kirpa Social Leaderboard
 
-A four-day leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, output, follower growth, fair engagement and cadence rankings, view efficiency, content records, posting-time and content-pillar patterns, developer coverage, trends, personal bests, achievements, and quantitative next actions.
+A four-day leaderboard of the Kirpa team's **public Instagram** performance — profile coverage, audience, output, follower growth, fair engagement and cadence rankings, view efficiency, content records, posting-time and content-pillar patterns, trends, personal bests, achievements, and quantitative next actions.
 
 It runs on a schedule with **no Instagram logins and no passwords**. It reads only the public surface a logged-out visitor already sees, via a swappable data provider. The dashboard itself is a static page on GitHub Pages; twice-daily no-cost due checks start the paid GitHub Action path only after four complete days since the last validated capture.
 
@@ -22,7 +22,7 @@ It runs on a schedule with **no Instagram logins and no passwords**. It reads on
 - **The headline post board ranks interactions, not views.** Instagram reports view counts on only ~19% of videos here, and mostly older ones (median 63 days old, versus 3 days for posts without). A view-ranked board therefore crowned year-old content and made anyone posting only recently ineligible to win. Views still appear, on their own card, labelled with how little of the data they cover.
 - **Unknown is never scored as zero.** A person with a real profile but no posts yet in the window has no engagement rate — that is missing data, not bad performance. The overall score requires all three inputs; otherwise the person is shown *unranked* with the reason.
 - **Engagement uses comparable public inputs.** Instagram share counts are not consistently public, so supported interactions means likes plus comments. A post missing either value is excluded from engagement, never treated as zero.
-- **Every profile has its own analytics view.** When the 30-day window is complete, the dashboard exposes score/rank, team percentiles and medians, posts/week, active days, follower growth, view efficiency, comment-to-like ratio, top and lowest Reels, posting patterns, content pillars, developer mix, trend history, personal bests, achievements, and metric coverage.
+- **Every profile has its own analytics view.** When the 30-day window is complete, the dashboard exposes score/rank, team percentiles and medians, posts/week, active days, follower growth, view efficiency, comment-to-like ratio, top and lowest Reels, posting patterns, content pillars, trend history, personal bests, achievements, and metric coverage.
 - **Content records answer separate questions.** Highest likes, highest comments, most public video views, top supported interactions, and top video interactions are not collapsed into one opaque “best post” claim.
 - **CSV export is reproducible.** The roster explorer can export all people and all supported analytics, including confidence and metric-coverage columns, for independent checking.
 - **Trends are drawn from a separate, tiny history file.** Every successful capture appends one small numeric point per profile to `data/series.json` — no captions, no post bodies. Failed pulls append nothing. The file is derived state and can be rebuilt from history at any time with `node src/backfill-series.js`.
@@ -115,7 +115,6 @@ src/roster.js         ▼
 - **`src/post-cache.js`** — restores owned post rows from the newest same-roster history when a later provider response omits them. Current profile counts are never rolled back, retained interaction counters carry their real observation date, and foreign collaborator posts are excluded.
 - **`src/resolver.js`** — proposes candidate handles from a name + brand search. Always returns `verified: false`.
 - **`src/content.js`** — content intelligence: hashtags, posting time, caption length, deterministic content pillars, streaks, goal progress and quantitative next actions. Same coverage gate as `rank.js`; every threshold is exported so the page can state it.
-- **`src/developer_intelligence.py`** — every 14 days, collects Reels for every active confirmed `.kirpa` creator in one Actor run, transcribes each unseen Reel once, and matches the reusable word stream against `developer-dictionary.json`. Full transcripts and media are not published.
 - **`src/usage.js`** — persists exact Actor run IDs, known run charges, failures, retries, current-period console observations, and the configurable monthly soft-spend warning.
 - **`src/series.js`** — the compact trend history, plus the validator's `stampValidated` marker. Points are derived with the same gated functions as the live board.
 - **`src/roster.js`** — roster maintenance as a command: `status`, `pending`, `set-handle`, `confirm --evidence`, `unconfirm`, `opt-out`, `opt-in`, `target`, `verify`. Refuses duplicate handles, clears confirmation whenever a handle changes, and bumps the roster version so stale snapshots cannot rank a changed roster.
@@ -124,7 +123,6 @@ src/roster.js         ▼
 - **`src/ingest.js`** — the run: read registry → pull confirmed handles → normalize → build leaderboards, content intelligence and per-person coaching → write `data/latest.json`, a dated history snapshot, and the appended trend series.
 - **`index.html`** — the Kirpa-branded dashboard. Reads `data/latest.json` for measured performance and `handles.json` for the current verified roster. Newly connected profiles display as `Awaiting pull`, never as zero or missing.
 - **`.github/workflows/weekly.yml`** — no-cost due checks at 04:00 and 16:00 UTC plus a manual trigger. The paid path runs only when the validated snapshot is at least 96 hours old: tests → roster integrity → Instagram collection → quality gate → independent validator stamp → explicit data commit. It prefers `APIFY_TOKEN_MENTION_COUNT` while retaining `APIFY_TOKEN` as a rotation fallback.
-- **`.github/workflows/reel-mention-count.yml`** — a cheap daily due check with paid collection/transcription only every 14 days (or manually). It publishes roster-wide developer metrics and Reel evidence to `data/developer-intelligence.json`; failures remain unknown and make coverage partial rather than zero.
 
 ---
 
@@ -135,16 +133,11 @@ src/roster.js         ▼
 3. **Enable Pages.** Settings → Pages → deploy from `main`. The dashboard is `index.html`.
 4. **Run it.** Actions → *Four-day social snapshot* → *Run workflow*. It writes a validated `data/latest.json` and the page goes live. After that, no-cost checks at 08:00 and 20:00 Asia/Dubai start the paid refresh only after four complete days.
 
-### Automatic developer intelligence
+### Compact dashboard
 
-The dashboard's developer evidence board is powered by a separate workflow:
+The post explorer shows 15 results per page; search, sorting and CSV exports cover the complete result set. Public evidence post lists, the date calendar and individual post details are collapsed until requested. Rankings preview the top five accounts with the remaining accounts available on expansion.
 
-1. Add the active Apify account token as `APIFY_TOKEN_MENTION_COUNT`. The normal refresh also prefers this token, fixing the retired token's hard-limit failure.
-2. Run **Fortnightly developer intelligence** once. A cheap due check then starts the paid path on the first day a report is 14 days old.
-3. The job derives targets from the confirmed, active Instagram roster, collects the rolling 30-day Reel window, and transcribes Arabic, Hindi, English and mixed-language audio locally.
-4. Edit `developer-dictionary.json` to add or revise a Dubai developer and its exact multilingual/ASR variants. The dictionary is versioned so changed rules invalidate cached matches safely.
-
-Each Reel is transcribed once and the same word list is checked against every configured developer. No media or full transcript is committed. The public cache keeps only a transcript fingerprint, word count, detected language, exact developer matches and timestamps. Unknown/failed audio is reported as unknown rather than silently becoming zero.
+Developer mention collection and audio transcription were retired on 6 October 2026. The paid collector, workflow, dictionary, caches and UI were removed. Ordinary public feed and Story collection remain separate. The legacy `APIFY_TOKEN_MENTION_COUNT` secret name is still accepted by those collectors for compatibility; it does not enable mention analysis.
 
 ### Live-only policy
 

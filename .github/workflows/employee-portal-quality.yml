@@ -10,7 +10,6 @@ on:
       - handles.json
       - data/latest.json
       - data/series.json
-      - data/developer-intelligence.json
       - data/refresh-status.json
       - scripts/employee_portal_quality.py
       - .github/workflows/employee-portal-quality.yml
@@ -24,7 +23,6 @@ on:
       - handles.json
       - data/latest.json
       - data/series.json
-      - data/developer-intelligence.json
       - data/refresh-status.json
       - scripts/employee_portal_quality.py
       - .github/workflows/employee-portal-quality.yml

@@ -187,10 +187,6 @@
     return values.length ? Math.max(...values) : null;
   }
 
-  function developerFor(handle) {
-    if (typeof MENTIONS === 'undefined' || !MENTIONS) return null;
-    return (MENTIONS.creators || []).find(row => canonical(row.handle) === canonical(handle)) || null;
-  }
 
   function snapshotMarkup(person, analytics, block) {
     const points = pointsFor(person.handle);
@@ -204,7 +200,6 @@
     const strongestPillar = best(pillars.filter(row => (row.comparablePosts || 0) >= 2), 'medianRate') || best(pillars, 'posts');
     const strongestFormat = best(formats.filter(row => (row.ratedPosts || 0) >= 2), 'medianRate') || best(formats, 'posts');
     const timing = block?.postingTime || {};
-    const developer = developerFor(person.handle);
     const goals = block?.goals?.goals || [];
     const achievements = block?.achievements || [];
 
@@ -242,8 +237,6 @@
       strongestFormat ? line('Strongest measured format', `${strongestFormat.type} · ${strongestFormat.posts} posts`) : line('Strongest measured format', 'Not enough comparable posts'),
       timing.bestDay ? line('Best measured day', `${timing.bestDay.dayName} · ${timing.bestDay.posts} posts`) : line('Best measured day', 'Not established'),
       timing.bestBlock ? line('Best Dubai-time block', timing.bestBlock.blockLabel) : line('Best Dubai-time block', 'Not established'),
-      developer ? line('Developer coverage', `${fmt(developer.reelsWithDeveloperMention)}/${fmt(developer.processedReels)} processed Reels`) : line('Developer coverage', 'Audio intelligence pending'),
-      developer ? line('Developer diversity', `${fmt(developer.developerDiversity)} configured developers`) : '',
     ].join('');
 
     const goalChips = goals.map(goal => {
@@ -252,7 +245,6 @@
       return `<span class="coach-snapshot-chip"><b>${esc(label)}</b> · ${esc(result)}</span>`;
     });
     const achievementChips = achievements.map(item => `<span class="coach-snapshot-chip"><b>${esc(item.label)}</b> · ${esc(item.evidence)}</span>`);
-    const developerChips = (developer?.developerMix || []).slice(0, 5).map(item => `<span class="coach-snapshot-chip">${esc(item.name)} · ${fmt(item.reels)} Reels</span>`);
 
     return `<section class="coach-full-snapshot" aria-labelledby="coach-full-snapshot-title">
       <div class="coach-snapshot-title-row">
@@ -263,7 +255,7 @@
         <article class="coach-snapshot-card"><h5>Current performance</h5><div class="coach-snapshot-metrics">${performance}</div></article>
         <article class="coach-snapshot-card"><h5>Team position</h5><div class="coach-snapshot-lines">${teamLines || '<p class="coach-snapshot-empty">Team comparison is held until the account is eligible.</p>'}</div></article>
         <article class="coach-snapshot-card"><h5>Direction and personal records</h5><div class="coach-snapshot-lines">${directionLines}</div></article>
-        <article class="coach-snapshot-card"><h5>Content, timing and developers</h5><div class="coach-snapshot-lines">${contentLines}</div>${developerChips.length ? `<div class="coach-snapshot-chips" style="margin-top:10px">${developerChips.join('')}</div>` : ''}</article>
+        <article class="coach-snapshot-card"><h5>Content and timing</h5><div class="coach-snapshot-lines">${contentLines}</div></article>
         <article class="coach-snapshot-card wide"><h5>Goals and achievements</h5><div class="coach-snapshot-chips">${[...goalChips, ...achievementChips].join('') || '<p class="coach-snapshot-empty">Goals or achievements will appear when the complete inputs support them.</p>'}</div></article>
       </div>
     </section>`;
