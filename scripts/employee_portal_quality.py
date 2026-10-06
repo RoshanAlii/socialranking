@@ -22,7 +22,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 CONTRAST_MARKER = "KIRPA_EMPLOYEE_CONTRAST_GUARD_V1"
 OBSOLETE_SNAPSHOT_TAG = '<script src="./account-coach-snapshot-ui.js"></script>'
-PERSONAL_COACH_TAG = '<script src="./personal-coach.js"></script>'
+PERSONAL_COACH_TAG = re.compile(r'<script\s+src=[\"\']\./personal-coach\.js(?:\?[^\"\']*)?[\"\']\s*></script>')
 MAX_CURRENT_AGE_HOURS = 108
 
 ROW_PATTERN = re.compile(
@@ -500,7 +500,7 @@ def build_report() -> dict[str, Any]:
             "extraDirectoryNames": extra_directory_names,
             "duplicateFirstNamePasswords": duplicate_passwords,
             "contrastGuardInstalled": CONTRAST_MARKER in coach_text,
-            "personalCoachLoaded": PERSONAL_COACH_TAG in index_text,
+            "personalCoachLoaded": bool(PERSONAL_COACH_TAG.search(index_text)),
             "obsoleteSnapshotEnhancerLoaded": OBSOLETE_SNAPSHOT_TAG in index_text,
             "personalSnapshotHeroPresent": has_element_id(coach_text, "kirpa-coach-hero"),
             "fiveQuestionJourneyPresent": has_element_id(coach_text, "kirpa-coach-journey"),
