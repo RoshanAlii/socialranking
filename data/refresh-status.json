@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "outcome": "preserved",
-  "attemptedAt": "2026-10-19T20:50:48.125Z",
+  "attemptedAt": "2026-10-20T09:04:29.938Z",
   "lastValidSnapshotAt": "2026-09-09T09:10:15.510Z",
   "reason": "Apify 403: {\n  \"error\": {\n    \"type\": \"platform-feature-disabled\",\n    \"message\": \"Too many outstanding invoices\"\n  }\n}",
   "dataPreserved": true,
@@ -16,11 +16,11 @@
     "planLimitUsd": 29,
     "remainingToSoftLimitUsd": 23.2,
     "softWarning": false,
-    "runs": 38,
+    "runs": 39,
     "successfulRuns": 0,
-    "failedRuns": 38,
+    "failedRuns": 39,
     "costKnownRuns": 0,
-    "unknownCostRuns": 38,
+    "unknownCostRuns": 39,
     "observedAt": null,
     "periodStart": null,
     "periodEnd": null
